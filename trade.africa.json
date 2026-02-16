@@ -1,0 +1,36 @@
+import json
+import os
+import matplotlib.pyplot as plt
+from datetime import datetime
+
+# === Load Data ===
+today = datetime.today().strftime("%Y-%m-%d")
+file_path = f"data/worldbank/{today}/trade_africa.json"
+
+with open(file_path, "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+# === Extract Data ===
+countries = []
+exports = []
+
+for country, stats in data.items():
+    try:
+        export_pct = float(stats["exports_pct_gdp"])
+        countries.append(country)
+        exports.append(export_pct)
+    except:
+        continue
+
+# === Top 10 Export-Driven Economies ===
+top = sorted(zip(countries, exports), key=lambda x: x[1], reverse=True)[:10]
+top_countries, top_exports = zip(*top)
+
+# === Plot ===
+plt.figure(figsize=(12, 6))
+plt.barh(top_countries[::-1], top_exports[::-1], color='royalblue')
+plt.xlabel("Exports (% of GDP)")
+plt.title(f"Top 10 African Countries by Exports — {today}")
+plt.tight_layout()
+plt.savefig(f"top10_exports_{today}.png")
+plt.show()

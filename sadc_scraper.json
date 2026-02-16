@@ -1,0 +1,27 @@
+# SABIAN SADC SCRAPER — Passive Recon Mode
+# Loops every 7 days, extracts article titles + links
+
+Add-Type -AssemblyName System.Web
+$sadcUrl = "https://www.sadc.int/latest-news"
+$regex = '<a href="(/news/\d+[^"]+)"[^>]*>(.*?)</a>'
+
+while ($true) {
+    try {
+        Write-Host "`n🌐 Connecting to SADC News Portal..."
+        $html = Invoke-WebRequest -Uri $sadcUrl -UseBasicParsing
+        $matches = [regex]::Matches($html.Content, $regex)
+
+        foreach ($match in $matches) {
+            $link = "https://www.sadc.int" + $match.Groups[1].Value
+            $title = ([System.Web.HttpUtility]::HtmlDecode($match.Groups[2].Value)).Trim()
+            Write-Host "📰 $title"
+            Write-Host "🔗 $link`n"
+        }
+
+    } catch {
+        Write-Warning "❌ SADC scrape failed: $_"
+    }
+
+    Write-Host "`n⏳ SLEEPING — 7 DAYS"
+    Start-Sleep -Seconds 604800
+}

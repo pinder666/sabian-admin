@@ -1,0 +1,47 @@
+// ─────────────────────────────────────────────
+// SABIAN BLACK STAR NODE — FULL AFRICA SYNC LOOP
+// Mode: Infinite | Logging: OFF | Purpose: Passive OSINT Link
+// Source: Open Source | No Auth Required
+// ─────────────────────────────────────────────
+
+$feeds = @(
+    
+
+    # Trade & Tariffs
+    "https://datacatalog.worldbank.org/api/liveDatasets",
+
+    # Politics / Government
+    "https://restcountries.com/v3.1/region/africa",
+    "https://data.humdata.org/api/3/action/package_search?q=government",
+
+    # Conflict & War Zones
+    
+    "https://data.humdata.org/api/3/action/package_search?q=conflict",
+
+    # News / Real-time Pulse
+    "https://open.africa/api/3/action/package_search?q=news",
+    "https://data.humdata.org/api/3/action/package_search?q=africa+news",
+    
+    "https://allafrica.com/tools/headlines/rdf/latest/headlines.rdf",
+    
+    "https://rss.dw.com/rdf/rss-en-africa",
+    "https://rss.nytimes.com/services/xml/rss/nyt/Africa.xml",
+    "https://feeds.bbci.co.uk/news/world/africa/rss.xml"
+)
+
+while ($true) {
+    $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+    Write-Host "`n🛰️ SABIAN INTEL LOOP ACTIVE — $timestamp"
+
+    foreach ($url in $feeds) {
+        try {
+            Invoke-RestMethod -Uri $url -UseBasicParsing | Out-Null
+            Write-Host "✅ Connected to: $url"
+        } catch {
+            Write-Warning "❌ Failed to connect: $url"
+        }
+    }
+
+    Write-Host "`n⏳ SABIAN SLEEP CYCLE — 7 DAYS"
+    Start-Sleep -Seconds 604800  # 3 days
+}

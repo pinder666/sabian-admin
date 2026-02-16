@@ -1,0 +1,15 @@
+{
+    "targets": [
+      "https://data.un.org/",
+      "https://databank.worldbank.org/",
+      "https://www.afdb.org/en/knowledge/publications",
+      "https://www.economy.ae/en/open-data",
+      "https://api.twitter.com/1.1/search/tweets.json?q=%23SADC",
+      "https://api.twitter.com/1.1/search/tweets.json?q=%23UAETech",
+      "https://arxiv.org/search/?query=africa+fintech&searchtype=all",
+      "https://github.com/search?q=uae+ai",
+      "https://github.com/search?q=sadc+blockchain",
+      "https://scholar.google.com/scholar?q=uae+africa+technology"
+    ]
+  }
+  

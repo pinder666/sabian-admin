@@ -1,0 +1,47 @@
+{
+  "name": "sabian_core",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "��#\u0000 \u0000s\u0000a\u0000b\u0000i\u0000a\u0000n\u0000_\u0000u\u0000p\u0000d\u0000a\u0000t\u0000e\u0000s\u0000\r\u0000 \u0000",
+  "main": "hive_backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinder666/sabian_updates.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pinder666/sabian_updates/issues"
+  },
+  "homepage": "https://github.com/pinder666/sabian_updates#readme",
+  "dependencies": {
+    "@mozilla/readability": "^0.6.0",
+    "@supabase/supabase-js": "^2.50.0",
+    "axios": "^1.6.7",
+    "cheerio": "^1.0.0",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "helmet": "^8.1.0",
+    "jsdom": "^26.1.0",
+    "morgan": "^1.10.0",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^7.0.5",
+    "openai": "^4.98.0",
+    "play-sound": "^1.1.6",
+    "rss-parser": "^3.13.0",
+    "types-registry": "^0.1.723",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.2"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
+  },
+  "devDependencies": {}
+}

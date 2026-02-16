@@ -1,0 +1,46 @@
+{
+  "users": [],
+  "structure": {
+    "user_id": "unique Supabase user ID",
+    "name": "user's full name",
+    "business_name": "user's business name",
+    "email": "user's email",
+    "membership_status": "one_time, conversational, or boardroom",
+    "crm_connected": "true or false",
+    "csv_uploaded": "true or false",
+    "csv_filename": "name of uploaded file if any",
+    "history": "summary of key past interactions",
+    "preferences": "any saved preferences for tone, style, etc.",
+    
+    "bottlenecks": ["key business bottlenecks identified during sessions"],
+    "repeat_problems": ["recurrent business challenges flagged by Sabian"],
+    
+    "business_link_opt_in": "true or false",
+    "products_services": ["list of products or services user offers for network matchmaking"],
+
+    "account_created_at": "ISO timestamp of account creation",
+    "last_active_at": "ISO timestamp of last meaningful interaction",
+    "account_status": "active, paused, cancelled, flagged",
+
+    "billing_plan": "one_time, monthly_basic, monthly_pro, enterprise",
+    "payment_status": "paid, overdue, cancelled",
+    "lifetime_value_usd": "total amount spent",
+
+    "total_sessions": "number of podcasts/interactions completed",
+    "last_session_type": "boardroom, conversational, one_time",
+    "csv_uploaded_count": "total number of CSVs uploaded",
+
+    "industry": "user's business industry (e.g., SaaS, retail)",
+    "team_size": "approximate team size",
+    "revenue_range": "estimated annual revenue (e.g., <$100k, $100k-$1M, etc.)",
+    "business_stage": "startup, scaling, mature",
+
+    "integrations": ["list of connected tools, e.g., crm, email_marketing, calendar"],
+    
+    "flagged": "true or false",
+    "flag_reason": "if flagged, short reason",
+    
+    "tags": ["high_value", "beta_user", "requires_followup"]
+  },
+  "updatedAt": ""
+}

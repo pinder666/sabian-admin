@@ -1,0 +1,21 @@
+[
+    {
+      "business_name": "Test Company",
+      "revenue": 100000,
+      "expenses": 50000,
+      "growth_goal": [
+        "Expand",
+        "Hire sales team"
+      ],
+      "insights": "",
+      "strategy_ideas": "",
+      "podcast_script": "",
+      "audio_file": "",
+      "metadata": {
+        "source": "curl",
+        "ingested_at": "2025-05-08T22:06:46.284Z",
+        "hash": "c7850ed1953bab879ad899af35ff427aea3de2018bb2b6ed1d67dee7ca870"
+      }
+    }
+  ]
+  

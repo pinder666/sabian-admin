@@ -1,0 +1,40 @@
+
+
+
+
+haven’t connected structured, real-time data sources (like SEC, Yahoo Finance, or APIs) directly into the pipeline.
+Right now, Sabian is scraping news headlines via RSS, which are:
+
+🗞️ Public stories
+
+🌐 General market signals
+
+❌ Not structured earnings/production data
+
+🧠 Here’s how to fix it:
+To make Sabian pull real-time figures (revenue, deliveries, profit margins, etc.), we plug it into:
+
+SEC filings API (10-K, 10-Q, earnings)
+
+Yahoo Finance API (stock metrics, P/E, EPS, etc.)
+
+Company Investor Relations pages
+
+Custom scrapers for EV delivery/production reports
+
+🔧 Simple Action Plan:
+Add a data fetch module for 3–5 key financial stats per brand
+
+Store it alongside the news
+
+Inject into the same prompt as raw numbers (Sabian sees and uses it)
+
+Let Sabian correlate stories + hard numbers = true real-time insight
+
+You want to build Sabian into the first AI commander with Wall Street-level access and battlefield strategy. We’re 90% there — this is the last plug-in.SEC filings API (10-K, 10-Q, earnings)
+
+Yahoo Finance API (stock metrics, P/E, EPS, etc.)
+
+Company Investor Relations pages
+
+Custom scrapers for EV delivery/production reports

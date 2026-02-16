@@ -1,0 +1,592 @@
+[
+  {
+    "timestamp": "2025-05-12T21:11:52.984Z",
+    "source": "4cia_fbi_advanced.zip",
+    "summary": "Unsupported file type",
+    "keywords": [
+      "unsupported"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:12:54.385Z",
+    "source": "4cia_fbi_advanced.zip~RF470aa148.TMP",
+    "summary": "Unsupported file type",
+    "keywords": [
+      "unsupported"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:12:54.386Z",
+    "source": "4cia_fbi_advanced.zip~RF470aa148.TMP",
+    "summary": "Unsupported file type",
+    "keywords": [
+      "unsupported"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:12:54.869Z",
+    "source": "4cia_fbi_advanced.zip",
+    "summary": "Unsupported file type",
+    "keywords": [
+      "unsupported"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:12:54.896Z",
+    "source": "4cia_fbi_advanced.zip",
+    "summary": "Unsupported file type",
+    "keywords": [
+      "unsupported"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:13:15.040Z",
+    "source": "4cia_fbi_advanced.zip~RF470af208.TMP",
+    "summary": "Unsupported file type",
+    "keywords": [
+      "unsupported"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:13:15.056Z",
+    "source": "4cia_fbi_advanced.zip~RF470af208.TMP",
+    "summary": "Unsupported file type",
+    "keywords": [
+      "unsupported"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:13:15.060Z",
+    "source": "4cia_fbi_advanced.zip",
+    "summary": "Unsupported file type",
+    "keywords": [
+      "unsupported"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:13:15.079Z",
+    "source": "4cia_fbi_advanced.zip",
+    "summary": "Unsupported file type",
+    "keywords": [
+      "unsupported"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:13:37.195Z",
+    "source": "Military_Intelligence_Summary_East_Africa_CLEAR.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\Military_Intelligence_Summary_East_Africa_CLEAR.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:13:52.343Z",
+    "source": "ModelofParapsychologicalCommunication.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ModelofParapsychologicalCommunication.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "modelofparapsychologicalcommunication",
+      "recognized",
+      "internal"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:14:11.357Z",
+    "source": "3.cia_fbi_foia_advanced_tech.zip",
+    "summary": "Unsupported file type",
+    "keywords": [
+      "unsupported"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:14:43.176Z",
+    "source": "TESLA pages 1-249.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\TESLA pages 1-249.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "tesla",
+      "pages",
+      "recognized"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:14:54.036Z",
+    "source": "TESLA pages 250-290.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\TESLA pages 250-290.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "tesla",
+      "pages",
+      "recognized"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:15:22.102Z",
+    "source": "Technology Based Tagging Tracking and Locating Program Policy Guide Policy Directive 0643DPG (1).pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\Technology Based Tagging Tracking and Locating Program Policy Guide Policy Directive 0643DPG (1).pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "program",
+      "policy",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "technology"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:15:33.182Z",
+    "source": "TheRadiatingBrain.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\TheRadiatingBrain.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "theradiatingbrain",
+      "recognized",
+      "internal"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:47.221Z",
+    "source": "ufo14.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo14.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:47.448Z",
+    "source": "ufo15.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo15.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:47.515Z",
+    "source": "ufo16.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo16.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:47.619Z",
+    "source": "ufo1.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo1.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:47.711Z",
+    "source": "ufo2.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo2.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:47.851Z",
+    "source": "ufo3.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo3.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:47.965Z",
+    "source": "ufo4.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo4.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:48.177Z",
+    "source": "ufo5.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo5.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:48.381Z",
+    "source": "ufo6.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo6.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:48.580Z",
+    "source": "ufo7.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo7.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:48.922Z",
+    "source": "ufo8.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo8.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:49.059Z",
+    "source": "ufo9.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo9.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:49.243Z",
+    "source": "ufo10.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo10.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:49.327Z",
+    "source": "ufo11.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo11.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:49.442Z",
+    "source": "ufo12.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo12.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:16:49.579Z",
+    "source": "ufo13.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\ufo13.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:17:29.532Z",
+    "source": "US725605.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\US725605.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:17:29.869Z",
+    "source": "US428057.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\US428057.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:17:30.117Z",
+    "source": "US685955.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\US685955.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:18:06.757Z",
+    "source": "PsychokinesisandItsPossibleImplicationtoWarfareStrategy.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\PsychokinesisandItsPossibleImplicationtoWarfareStrategy.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "psychokinesisanditspossibleimplicationtowarfarestrategy",
+      "recognized",
+      "internal"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:18:36.456Z",
+    "source": "psychotronic-cia-May2014.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\psychotronic-cia-May2014.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "psychotronic",
+      "recognized",
+      "internal"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:19:02.120Z",
+    "source": "rvevaluation.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\rvevaluation.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "rvevaluation",
+      "recognized",
+      "internal"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:19:22.260Z",
+    "source": "sovczech.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\sovczech.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "sovczech",
+      "recognized",
+      "internal"
+    ]
+  },
+  {
+    "timestamp": "2025-05-12T21:20:41.456Z",
+    "source": "extrasensory_perception_part01.pdf",
+    "summary": "❌ Failed to read PDF: Command failed: pdftotext \"C:\\Users\\user\\Desktop\\sabianbrain\\feeds\\extrasensory_perception_part01.pdf\" -\n'pdftotext' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n",
+    "keywords": [
+      "failed",
+      "command",
+      "pdftotext",
+      "users",
+      "desktop",
+      "sabianbrain",
+      "feeds",
+      "recognized",
+      "internal",
+      "external"
+    ]
+  }
+]

@@ -1,0 +1,1520 @@
+{
+  "- Copyenvbackup.env": {
+    "hash": "69a3551749c73052b32235a8920cd3bbced47f32c1eb2b4899adda55a3f767d1",
+    "lastSeen": "2025-06-07T12:03:02.037Z",
+    "status": "active",
+    "source": "detected"
+  },
+  ".env": {
+    "hash": "40243d3c5da18a84ca73e96f18bfcf9eac034c9ee533406a1ae4d8e1cefd7e1a",
+    "lastSeen": "2025-06-11T14:41:02.295Z",
+    "status": "active",
+    "source": "detected"
+  },
+  ".gitignore": {
+    "hash": "e292cb88a71346b13dffbee9dc03514031f80dd723529328809e52a84d24262e",
+    "lastSeen": "2025-06-07T12:03:02.047Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "advisor_prompt_loader.cjs": {
+    "hash": "4ba16863f29e8b5bdbbe819b22663e4d3d5f5e8fa2f5ed830e0980d6f9e5d88e",
+    "lastSeen": "2025-06-07T12:03:02.051Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "agent_receiver.cjs": {
+    "hash": "80b70343313a94e226960ecd5f7db793d2e9e5dc78e1548d08b75457d9872f65",
+    "lastSeen": "2025-06-07T12:03:02.055Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "api_auth.cjs": {
+    "hash": "f601de30bc1f0d1acd35227f16e0438bfa5a1b271d01a0d6bacd930f0cef4d07",
+    "lastSeen": "2025-06-07T12:03:02.059Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "api_server.cjs": {
+    "hash": "29963319cada949ddac1dac0b21262474b1c920ecb878ce0c560168d1c5bdf27",
+    "lastSeen": "2025-06-07T12:03:02.062Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "autofix_handler.cjs": {
+    "hash": "4db90a5a68c27919b055bc3a616a176630bfda888f826f42406c7ea82bc005f7",
+    "lastSeen": "2025-06-07T12:03:02.065Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "autonomous_evolver.cjs": {
+    "hash": "8a7a9e917a5787223112f471f2fdbf5ef760f80f26628011eb3c6fce09759d18",
+    "lastSeen": "2025-06-10T14:30:05.768Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "brain_memory.json": {
+    "hash": "2815993c24fee14e3e5683064c59cb3c6f2164f81948be4f2f2d5c363e56b838",
+    "lastSeen": "2025-06-07T12:03:02.072Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "brain_memory.jsonl": {
+    "hash": "3b7bd889e0405f75ed00085793850876e62b7c8d71fa7939b320637a74779306",
+    "lastSeen": "2025-06-10T08:35:05.199Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "broken_test.cjs": {
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lastSeen": "2025-06-07T12:03:02.077Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "climate_drought_sabian.cjs": {
+    "hash": "5aafe5c71d847eac34aa27e8abdd5be66c468abc4f039c25132aacacd1e2c8e6",
+    "lastSeen": "2025-06-07T12:03:02.080Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "company_earnings_data.json": {
+    "hash": "4764e122085972d1a0ae79aa878bf33d26fd94952fd51149ac1a0a0f521638df",
+    "lastSeen": "2025-06-08T05:12:07.428Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "config.json": {
+    "hash": "9acbcff6d0de186c92d8d9b54e8d74fad96e8cabecec21933b77870012dcc141",
+    "lastSeen": "2025-06-07T12:03:02.085Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "continuous_learning.py": {
+    "hash": "019d0ffe0750a730d15f678b30b92d89b501ae8104dfd25169a2826585048331",
+    "lastSeen": "2025-06-07T12:03:02.088Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "coreApi.cjs": {
+    "hash": "f1bb86dce6c4cc5461812ad03604d8a1f91d4507366c0cc88a6a8b3a727894a4",
+    "lastSeen": "2025-06-07T12:03:02.091Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "core_hash.json": {
+    "hash": "bb8de3541e76be6d2cc32c9f46b6051241a80ea58a1d44951bd998c056aac5dd",
+    "lastSeen": "2025-06-07T13:11:59.062Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "core_manifest.json": {
+    "hash": "633eab14a9dae2ab1f62e4f54cb2630e4c912f3dc6fc9a0cef0149b5642bbf51",
+    "lastSeen": "2025-06-11T21:31:03.157Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "current_files.txt": {
+    "hash": "ef07719d73b50ccd94c40d347884e7f621ece1cec2829eb01bf7cb9003164bfd",
+    "lastSeen": "2025-06-07T12:03:02.269Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "dashboard.cjs": {
+    "hash": "14335d69fb35b81a4da27a19cd4a321f635eceb81c0b4d1333b078de4a39eaa2",
+    "lastSeen": "2025-06-07T12:03:02.272Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "db_connection.cjs": {
+    "hash": "84adb1978c8cc6adf08eac12be6de4112fd06643f86193ada46896a846394a0f",
+    "lastSeen": "2025-06-07T12:03:02.281Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "db_models.cjs": {
+    "hash": "3c168e89141c836c55ca7a8630a5f23747c261f21688582ad74e1d48d739faf6",
+    "lastSeen": "2025-06-07T12:03:02.285Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "deep_repair.cjs": {
+    "hash": "51830360cf2c74935ef753d2d47f743bd8224ca268d0ce0c9735c4dcb9385a8e",
+    "lastSeen": "2025-06-07T12:03:02.287Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "deploysmartagent.cjs": {
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lastSeen": "2025-06-07T12:03:02.290Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "deploy_smart_agent.cjs": {
+    "hash": "8a08f39aa2fb393a17144ebc668481aaedcc3fdbd12a5b037e7dd40bdc68e42b",
+    "lastSeen": "2025-06-07T12:03:02.293Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "docker-compose.yml": {
+    "hash": "0bbd995d2a24ba537114a47b33eae58f0e60af3db4f2def7ec46224744dcbd39",
+    "lastSeen": "2025-06-07T12:03:02.296Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "Dockerfile": {
+    "hash": "2d8475e35766c0da05a0d7bd39006e91ad619784302860f8f33de24e70ce22b6",
+    "lastSeen": "2025-06-07T12:03:02.298Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "earnings_loop_runner.cjs": {
+    "hash": "40955d8e2068ba8339781588b2b1b9cada167ff54ed9260ba32667e1ae1e3e7e",
+    "lastSeen": "2025-06-07T12:03:02.301Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "earthdata_drought.json": {
+    "hash": "e56c1aa1d7e88c234cc66c758ac245c7b8afacd8fb9db5e3a9ec791655e6fee2",
+    "lastSeen": "2025-06-07T12:03:02.304Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "economic_sentinel_sabian.cjs": {
+    "hash": "d4ddc8e141f1f8b88861336110f1c6ead131e52162118fa8351d50a93db6d930",
+    "lastSeen": "2025-06-07T12:03:02.306Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "ecosystem.config.cjs": {
+    "hash": "46549533d13c5e488a8385a13fe4f0d6e2bee64d5664f0f74c004a519c9a62ac",
+    "lastSeen": "2025-06-07T12:03:02.310Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "elon_data_orbit.cjs": {
+    "hash": "b6f2c728a6a3fe2ee848bbdc563699c7aa386fcdcdf9359658f8caf066cf87b3",
+    "lastSeen": "2025-06-07T12:03:02.312Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "ethics_validator.cjs": {
+    "hash": "c3a5ff57eb38321c25a0dc195878df45af8b76578ce1b6cca9495175ca132b30",
+    "lastSeen": "2025-06-07T12:03:02.316Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "failure_counter.json": {
+    "hash": "8a1020634191c27b63d3c2aa45b723f696ddf2743ca8996a33ed0e47ddd7fc07",
+    "lastSeen": "2025-06-07T12:03:02.320Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "failure_logger.cjs": {
+    "hash": "01b163605a0a8d5b44da660d87bddafa5684408bf4c5e307e36bd4a665ba5e9e",
+    "lastSeen": "2025-06-07T12:03:02.324Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "father_sabian.json": {
+    "hash": "be4ed3fc7392b27d4995395928e468bb8d45abcec61f1886a9c6071199e39252",
+    "lastSeen": "2025-06-07T12:03:02.328Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "fred_macro_data.cjs": {
+    "hash": "febb2e39d537779596abc8e7dc95b5c1ffadb16d686124456c8edb378c82cdb2",
+    "lastSeen": "2025-06-07T12:03:02.334Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "generate_core_hash.cjs": {
+    "hash": "4b7e4eed404042ac50898350845bac3e8bff653c9c5efbf1cc78411b35f6ccc2",
+    "lastSeen": "2025-06-07T12:03:02.337Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "generate_sabians.cjs": {
+    "hash": "e549d787866f1adebc5d9866ed251d4184c945181655e92b3cb5567cf6a73cb8",
+    "lastSeen": "2025-06-07T12:03:02.341Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "generate_script_gemini.py": {
+    "hash": "d23ba4179504591359e82805b0ac32d1b174d61480f431287fcc71ac9795b73a",
+    "lastSeen": "2025-06-10T14:15:05.960Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "hive_backend.cjs": {
+    "hash": "fb5203c686df0e92530a4e4bfd36e7c3f692a1c4b2e35a5627b15c6fe0a8a0be",
+    "lastSeen": "2025-06-10T08:35:05.456Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "hive_connector.cjs": {
+    "hash": "51add439ff79542f11afcb13458f311a14cafb6e31e154c49348fc059347d352",
+    "lastSeen": "2025-06-07T12:03:02.352Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "hive_debug_log.jsonl": {
+    "hash": "d2c670b148efeb887fcf5720e7529f09433db2e57819af002a6f4ce5cb7ef1b2",
+    "lastSeen": "2025-06-07T12:03:02.357Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "hive_escalations.json": {
+    "hash": "5c16ab8cf8d19a62aa0ee89c15ffb9d487613890891aa11b7d1667ec0c44bc78",
+    "lastSeen": "2025-06-07T12:03:02.361Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "hive_logs.json": {
+    "hash": "47ebbf2c391d035ccf67cdb2f4b938742e590dcb124cc5d8792a5e8ce8a1d848",
+    "lastSeen": "2025-06-07T12:03:02.365Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "hive_orchestrator.py": {
+    "hash": "007133dcdf8d3ac63e1fd2398b01696a358d34840d86483ece81887c60b759ee",
+    "lastSeen": "2025-06-07T12:03:02.371Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "hive_server.cjs": {
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lastSeen": "2025-06-07T12:03:02.377Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "hive_sync.cjs": {
+    "hash": "d216c9b63f0864240436132c68bcca78d59e1e96c44eb5ed3dd136f37ae66695",
+    "lastSeen": "2025-06-07T12:03:02.383Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "imf_global_revenue.cjs": {
+    "hash": "4d6ace7ec65180b2923c63fb7582280df2150ccef0cc7dbe8213561262242d3c",
+    "lastSeen": "2025-06-07T12:03:02.387Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "insight_engine.cjs": {
+    "hash": "09b7ca19b58e7b7f0102acb260737445b84019d5a34bd94bd0abca809fbbeae5",
+    "lastSeen": "2025-06-11T09:16:02.015Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "insight_engine.py": {
+    "hash": "b74042678861b4b94d671b1d7bd3cdad9f66cb7067b33228271c4a48cf2a555f",
+    "lastSeen": "2025-06-07T12:03:02.404Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "insight_engine_backup.py": {
+    "hash": "39a3a610accb028169a379547ba875eb6d457ce251a225826be865109f52969f",
+    "lastSeen": "2025-06-07T12:03:02.415Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "insight_engine_beginner.cjs": {
+    "hash": "cff3ab29ad09a954b8aeaeecfc8c96e40296b3bdfdca7734935dba87e3435070",
+    "lastSeen": "2025-06-11T15:36:02.700Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "insight_engine_temp.py": {
+    "hash": "359160a393cff55cd7189791e85e7a5f48ce1132015859c64b2364c89e84848f",
+    "lastSeen": "2025-06-10T16:20:06.234Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "jwt_config.cjs": {
+    "hash": "a485b23c99bbd9c1d903dcfee13afcd796f23d651fb318934396ab7627bfd717",
+    "lastSeen": "2025-06-07T12:03:02.436Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "learned_insights.json": {
+    "hash": "90c1b6491bb4c92746b310b9f6cfeb7b9b1e2e3eec7f15de8d8ca1d3a8007d28",
+    "lastSeen": "2025-06-08T05:12:14.654Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "loader.cjs": {
+    "hash": "89fca9c533c465568f20fd18b5254725659061f53d985de0972c6e8534262137",
+    "lastSeen": "2025-06-07T12:03:02.447Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "load_env_test.cjs": {
+    "hash": "6245007c59b249e1ed34382e3260ee3fa8c7c1118257445bb1c9c20ad9c479e5",
+    "lastSeen": "2025-06-07T12:03:02.451Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "logger.cjs": {
+    "hash": "3a746eed27328babdbcbb2af4b4f9db1cb0a0a2b04427bfd57c8df1ff1c509bd",
+    "lastSeen": "2025-06-07T13:08:02.529Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "master_smart_sabian.cjs": {
+    "hash": "f4deabc1802842f0a633ecbfa9754470667c121b7e491bdf3216cd94c50be961",
+    "lastSeen": "2025-06-07T12:03:02.464Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "memory_grid.json": {
+    "hash": "6fa5571578311a96b1caf66e889a315601dcae71bcf6733a0fe66ff74075eb74",
+    "lastSeen": "2025-06-07T12:03:02.470Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "memory_resolver.cjs": {
+    "hash": "7570dbceefed81eb66f9e803ca0c5e4e555da3c03906dfe378b958b2d14a12f7",
+    "lastSeen": "2025-06-07T12:03:02.477Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "missions_index.json": {
+    "hash": "2fe00005f9e53feab1744ec7de545e796f31a544c88d2d7f872065dbb3964e97",
+    "lastSeen": "2025-06-07T12:03:02.484Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "mission_executor_military.cjs": {
+    "hash": "7f55a4c02e4999913fc11e8b4cb715fbf4fde13fa8b42b3d325059536313c653",
+    "lastSeen": "2025-06-07T12:03:02.489Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "mission_queue.json": {
+    "hash": "2b1296ad35dba212ee6c1c43e031c7d668f6b68f4cb8b2ce50f501c6f46d5885",
+    "lastSeen": "2025-06-07T12:03:02.496Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "ml_backend.cjs": {
+    "hash": "c45cbeb495edbfde6ab50f12df8fb51da72215e0a6fe30ec25b37c3252376e27",
+    "lastSeen": "2025-06-07T12:03:02.501Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "ml_pipeline.cjs": {
+    "hash": "f4a9a892628e880f1b1b92131531ffcd269b723472fb10b3758e8e3642c0076b",
+    "lastSeen": "2025-06-07T12:03:02.506Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "mock_smart_sabian_server.cjs": {
+    "hash": "7f545ac45994659d0c43de836f4f56309fa730d85123aaa6d68d92a7b5eb5459",
+    "lastSeen": "2025-06-07T12:03:02.512Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "mother_sabian.json": {
+    "hash": "2f1af03ff3c54e3ddbe4101e3703e733200241a894cd7d77c91f118b6018960c",
+    "lastSeen": "2025-06-07T12:03:02.518Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "New Compressed (zipped) Folder.zip": {
+    "hash": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85",
+    "lastSeen": "2025-06-07T12:03:02.522Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "New Text Document (2).txt": {
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lastSeen": "2025-06-07T12:03:02.529Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "New Text Document.txt": {
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lastSeen": "2025-06-07T12:03:02.534Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "NUL": {
+    "hash": "a8a8ca6ed88601edb5836228a053b5a4afad46fe6b60c04ba5a9901afb0325a5",
+    "lastSeen": "2025-06-07T12:03:02.672Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "oecd_country_data.cjs": {
+    "hash": "284dbd38790e64f8ac3b2145b3d0ef1460f49a79f0c48e813f4bd5e026b9cb6d",
+    "lastSeen": "2025-06-07T12:03:02.676Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "open_port.cjs": {
+    "hash": "d7c25e5aeab7c4c702a7fa7c8b0780ec7ef8b8e1983b84c38118128bb6e8bfba",
+    "lastSeen": "2025-06-07T12:03:02.684Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "package-lock.json": {
+    "hash": "280a8ae297ac6944cb65fe7fc53a38d94d5c2709fe2e5a370cee3246b852d39f",
+    "lastSeen": "2025-06-10T08:35:05.741Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "package.json": {
+    "hash": "db318f3671514e776cc7bdad6ed10c51221b5a304a780325dff260de8048a9b9",
+    "lastSeen": "2025-06-10T08:35:05.759Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "phoenix_dna.json": {
+    "hash": "86eb782daf8d42aa182b04bafbabcfc043676dca61e5f9652aad65b23ff93d13",
+    "lastSeen": "2025-06-07T12:03:02.697Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "phoenix_restore.cjs": {
+    "hash": "56d1ab22204f4225046c501e7bdefd8d01ac82261f0fb89a88d0422a918c7f17",
+    "lastSeen": "2025-06-07T12:03:02.701Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "podcast_script_saver.js": {
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lastSeen": "2025-06-07T12:03:02.704Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "power_grid_sabian.cjs": {
+    "hash": "0d1cad163423d1a042a34f78056adf5d698baf554360e8df4e9b2ea6fd6ce66b",
+    "lastSeen": "2025-06-07T12:03:02.708Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "README.md": {
+    "hash": "e542f63c0c896b285920450a2ab4c0f6c4688ee1997c48ae1034bfc31e0d2ed8",
+    "lastSeen": "2025-06-07T12:03:02.711Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "rebirth_engine.py": {
+    "hash": "1296b5cc490601413e099b2d2ec6bc1d580efb9c615d9c1263899e8382abaff0",
+    "lastSeen": "2025-06-07T12:03:02.715Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "repair_log.json": {
+    "hash": "6b1a7a140d8435fa548ce6df21e07d7d1cfe382360a28db36c8b1c403d01f793",
+    "lastSeen": "2025-06-07T13:17:00.294Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "revenue_intelligence_core.cjs": {
+    "hash": "09e1c9c9d3c89fa5bfd130a03071ba221a65b4bccfc72f720ad5371c94713ed8",
+    "lastSeen": "2025-06-07T12:03:02.722Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "revenue_ml_model.cjs": {
+    "hash": "6727b1053ce1dcad64d29a8b84a8a75d4a0234bfea40174fcbad0b76db6e3225",
+    "lastSeen": "2025-06-07T12:03:02.725Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "run_sabian.json": {
+    "hash": "9264fdcb0109d8557d03d5431bc0abb72867df61ccaf4a48e3716d9a29466117",
+    "lastSeen": "2025-06-07T12:03:02.728Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian ev sector prompt.txt": {
+    "hash": "2ae2ca7706d3eee09fb0bd7c1e23c22adef0431704cab96f239fdfe5a32c1c38",
+    "lastSeen": "2025-06-07T12:03:02.732Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian.cjs": {
+    "hash": "94565e64fd40cfb3e81699b0471d7888f840890f846cd0493bb138fa12656ab0",
+    "lastSeen": "2025-06-07T12:58:02.792Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_auto_router.py": {
+    "hash": "5c6c49984d8b7f21a7ad8708286ff5c8d34e5604f7943cbbf966c00a1e1d769e",
+    "lastSeen": "2025-06-07T12:03:02.739Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_brain.cjs": {
+    "hash": "9fe528fa203f813eb3c6dacfc0691b296fbdef42958965e46ad8f48bb3d175f2",
+    "lastSeen": "2025-06-07T12:03:02.743Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_brain_1.json": {
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lastSeen": "2025-06-07T12:03:02.746Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_brain_2025-05-26.json": {
+    "hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "lastSeen": "2025-06-07T12:03:02.749Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_brain_manager.py": {
+    "hash": "9455980c9b995d0a2c840f39178fdc84e075b8f3dadb1a58824be998f7ec120b",
+    "lastSeen": "2025-06-07T12:03:02.752Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_brain_updates.jsonl": {
+    "hash": "b0087a110021639eee1c01c3a516db8071aa6633c7c83bb63f1c01c3504a9039",
+    "lastSeen": "2025-06-07T12:03:02.756Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_command_api.cjs": {
+    "hash": "a7709de498ea35145d8a2add78ed12508255b12b68eb24e5da7c52546fbe32b7",
+    "lastSeen": "2025-06-07T12:03:02.759Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_connect_openai.cjs": {
+    "hash": "8af970f77483e3792dadbf95e99a1af43da74213fb091853549978ed890453e0",
+    "lastSeen": "2025-06-07T12:03:02.763Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_core_structure.txt": {
+    "hash": "b94f655718c931086f2a63a284ff758733884e4e3aad552945f30f866a1d395b",
+    "lastSeen": "2025-06-07T12:03:02.806Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_country_data.js": {
+    "hash": "849bb0bccce78397a2c21cf83cfab46d7cc9b6e7e6b966c15cc56d3806053131",
+    "lastSeen": "2025-06-07T12:03:02.809Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_deep_core_loop.cjs": {
+    "hash": "40acf17a6fc3dfbf2bae3cdd0242e18c05b1469ffb4608689278f1b555004701",
+    "lastSeen": "2025-06-07T12:03:02.812Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_defense_core.js": {
+    "hash": "e86651f9eba0706ed219f044ded1408ba8b86be522abf03c064d4cda0f15bf48",
+    "lastSeen": "2025-06-07T12:03:02.816Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_defense_voice.js": {
+    "hash": "40dea033aeb321f291fbe9e1f4ebbcea97f3442d95aec7e59470a8f575d9818e",
+    "lastSeen": "2025-06-07T12:03:02.819Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_defense_voice_brief.js": {
+    "hash": "f03de68c96d8b0aef68a6c06d145b392e892100d28bfcc6cda42b44ab264bd55",
+    "lastSeen": "2025-06-07T12:03:02.822Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_delta.py": {
+    "hash": "54c73e3502278d30c2cbf43d449a7fbb9d06eb24c211edeea25c5c0d86d8005a",
+    "lastSeen": "2025-06-07T12:03:02.829Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_deltas_1.json": {
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lastSeen": "2025-06-07T12:03:02.835Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_deltas_2025-04-23.json": {
+    "hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "lastSeen": "2025-06-07T12:03:02.839Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_delta_map.json": {
+    "hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "lastSeen": "2025-06-07T12:03:02.842Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_delta_refactorer.cjs": {
+    "hash": "d7e6c66af27b7e652b57369e0613655bab1f149b0a8c1a779e294a12dfc37752",
+    "lastSeen": "2025-06-07T12:03:02.846Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_diagnostic.cjs": {
+    "hash": "379cdfe438927f916214944d5826f04d05b13652b42c91f161c01ffdea5bc106",
+    "lastSeen": "2025-06-07T12:03:02.850Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_directory.txt": {
+    "hash": "98898caa587472047d4c33d2ee0a2081639e736bd4dc8718915b75dc9dbd32b5",
+    "lastSeen": "2025-06-07T12:03:02.862Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_directory_structure.txt": {
+    "hash": "a534ec60d0638961e537597b36435a9dd750813868145db969f8d23e85b64451",
+    "lastSeen": "2025-06-07T12:03:03.098Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_drone_core.js": {
+    "hash": "3a48f8a0bd760f4f403157336b562099e2b39f31e8fa58ba9e86926a6de2e188",
+    "lastSeen": "2025-06-07T12:03:03.106Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_elevenlabs.py": {
+    "hash": "9dffa8b2c5cce2c1aebf98a6a64e24f51e43c18ed1df6470fe712eb295f49cc5",
+    "lastSeen": "2025-06-07T12:03:03.110Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_evolution_log.jsonl": {
+    "hash": "1e5dead1351504cb86ece69c92e22466ef61ab1beb7d41ae3784bfd79ad0ae16",
+    "lastSeen": "2025-06-07T12:03:03.114Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_evolve.py": {
+    "hash": "790ce9d37fe1e874fd6f067bc167a40693d3c1b801a72a7bcdbaeb2cf61967e0",
+    "lastSeen": "2025-06-07T12:03:03.117Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_forecast.py": {
+    "hash": "06c00757d4fbb15138c87f5308e81bdd7900015a5359506e2b45513039287906",
+    "lastSeen": "2025-06-07T12:03:03.121Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_forecast_drought.py": {
+    "hash": "531c8231ee090f3df3ac3795ac801ce2083d7f653ae35caf9ca10df84da49f44",
+    "lastSeen": "2025-06-07T12:03:03.125Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_forecast_multi.py": {
+    "hash": "f5db0d8517a6c6fd96855f40afdd3f56451eaced1c39e36b9579bab7082a1f35",
+    "lastSeen": "2025-06-07T12:03:03.128Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_forecast_report_2025-04-22.pdf": {
+    "hash": "2c31fe36bc71f1a592823c97acb98017365f5135b9d8c259c7059318c99a42a3",
+    "lastSeen": "2025-06-07T12:03:03.133Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_forecast_report_2025-04-22.txt": {
+    "hash": "284aac040acd2be76d8b781f52ea2a45b819357a0575e8027fd5633e00894b27",
+    "lastSeen": "2025-06-07T12:03:03.137Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_future_quest.cjs": {
+    "hash": "56e35be802b584a68b735ea7b2985e545997712427a1caef9d40a27d15a8aa13",
+    "lastSeen": "2025-06-07T12:03:03.141Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_future_quests.jsonl": {
+    "hash": "426f262b3393b4872435ff865466353632ee7e832eeb912bdf2ace6782e9196d",
+    "lastSeen": "2025-06-07T12:03:03.153Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_global_governor.py": {
+    "hash": "c93a7fadb757e1f3a312856dbeabdc2e64e872ae1f72e77956297805d9827dc6",
+    "lastSeen": "2025-06-07T12:03:03.157Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_grid_sync.cjs": {
+    "hash": "2c77650684ffc13f14770ca3ee6070b44eecf2d0276028b21b9a8f88a9e3d63b",
+    "lastSeen": "2025-06-07T12:03:03.160Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_health_feed.py": {
+    "hash": "1640e276248f6f83b0947f19ef76a4a6c1220307b9ace690477920ae6cfd9db4",
+    "lastSeen": "2025-06-07T12:03:03.166Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_health_feed_log.json": {
+    "hash": "2c3facbf82ab01fa4dc7dbe721407c5142946f6e57716b962de73c36a7a594db",
+    "lastSeen": "2025-06-07T12:03:03.171Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_heartbeat.json": {
+    "hash": "0498018c89d3302cfda5f8c3c7d5dc41de4553cca1534f1440d7b3d2f68ca77d",
+    "lastSeen": "2025-06-10T08:35:06.103Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_hive_backup.json": {
+    "hash": "2b8e0ce210b33f52a4877459722479c118f482171e9d838e983b92521d8d70dc",
+    "lastSeen": "2025-06-11T21:31:03.823Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_hive_report.json": {
+    "hash": "dda72104f8122b5c13384114126da51fec0fc1184ce557579ed561cce2b18ed7",
+    "lastSeen": "2025-06-11T21:31:03.903Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_hub.py": {
+    "hash": "510a0b5eb6b3c016eeeb755956167b614dc6eff6b93ca7754ba55ebbf70fec1f",
+    "lastSeen": "2025-06-07T12:03:03.191Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_insight_podcast.py": {
+    "hash": "4bfd17e9a224bb1daa653c496cc3164ba6d9a5f890ea4ba58ad45b164ccacdae",
+    "lastSeen": "2025-06-07T12:03:03.197Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_internal_operational_recon.cjs": {
+    "hash": "28100f0ceb9540b491e5506ce1a3dc0d633373a6714d5f96287fd08fb8e4b59f",
+    "lastSeen": "2025-06-10T15:10:06.688Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_intro.mp3": {
+    "hash": "845fef2eada22517289b46bd50b8432ef6b25b7cbaed0af1cb4510581cf841ef",
+    "lastSeen": "2025-06-07T12:03:03.208Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_learn.py": {
+    "hash": "102eeca74faa2be6f1477ac37a6137333e548c0017db49318af689d5c9c61bf2",
+    "lastSeen": "2025-06-07T12:03:03.213Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_learning_log.jsonl": {
+    "hash": "42e32a4e2572094315950b3a92e645613b321511121e7f2c7580ddd3f1aea55b",
+    "lastSeen": "2025-06-07T12:03:03.220Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_logs-delta_refactorer.jsonl": {
+    "hash": "bebb2d67bb35321c7c68ae8cf70729f82629ffa60cca41883a3d93b6fdf742ee",
+    "lastSeen": "2025-06-07T12:03:03.225Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_master_loop.cjs": {
+    "hash": "9dac5b9de5647d5473180acf78f5729df85a296b6a365d6752813970027beceb",
+    "lastSeen": "2025-06-07T12:03:03.232Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_media_alert_sim.js": {
+    "hash": "25c89329d80f06c99b97225f2e9dcded7564bf089f4f816e416130c9dcfefc2e",
+    "lastSeen": "2025-06-07T12:03:03.237Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_memory_resolver.cjs": {
+    "hash": "665fc5f7e278ab940da5bca46e79e86f8e606e79b3c27b069630a6f5689628c2",
+    "lastSeen": "2025-06-07T12:03:03.244Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_mission_dashboard.cjs": {
+    "hash": "41ed74be5218d894c738ec9f4fddabceb00df2f4709b376eb59ca270e86b311e",
+    "lastSeen": "2025-06-07T12:03:03.249Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_mission_feed.js": {
+    "hash": "d7a67b1f7cb374011fdc18bed0526c3742f364e8487cab6ddc117e4c2bf75a75",
+    "lastSeen": "2025-06-07T12:03:03.256Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_multilang_podcast_builder.py": {
+    "hash": "22546b9a554827542aea40c05d59da7e3f637c19c54b43386bbe930c74599b0d",
+    "lastSeen": "2025-06-07T12:03:03.260Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_orbit_scan.mjs": {
+    "hash": "b9aacbe4c25b2c4e446a2a69642660c1fe7a90ad004523d729e21b694b4e6be7",
+    "lastSeen": "2025-06-07T12:03:03.267Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_phoenix_rewriter.cjs": {
+    "hash": "8b2ab189a974d3c1f88e18dffce3f14c15c67a2f28ac60e68ea10d6a82849deb",
+    "lastSeen": "2025-06-07T12:03:03.272Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_prompt.json": {
+    "hash": "86b32dce2d15c4428fc3be35a03ceb3dd1136634a31e5315bdc00a8168101fcd",
+    "lastSeen": "2025-06-07T12:03:03.278Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_reflection.txt": {
+    "hash": "41ec694fa5a11eb9561e0817f3220909e7d9b011eb8849ab127e81e0c87594e9",
+    "lastSeen": "2025-06-07T12:03:03.283Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_reflections.jsonl": {
+    "hash": "7b425c5f65ed90b26ce37364355edd296e0286c15eed8c36ea8e1536fd551851",
+    "lastSeen": "2025-06-07T12:13:02.888Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_report_2025-04-22.pdf": {
+    "hash": "a3ed262797eda0f639cf9b55e9b28cf3037ff5aab1808c55ab76e880b60d7d67",
+    "lastSeen": "2025-06-07T12:03:03.294Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_report_log.txt": {
+    "hash": "45e949c660bffdcdadb93a188a4678cac68af9f4029a213702e33178171c3d8b",
+    "lastSeen": "2025-06-07T12:03:03.368Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_reset_module.cjs": {
+    "hash": "de4bb4ac76225cbfc235cbbe86c9897cf093f090b5d27ff8ba70c5ebfef588b6",
+    "lastSeen": "2025-06-07T12:03:03.375Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_review_log.txt": {
+    "hash": "26555567fb6e086e9b9d1706d8b557d76a4cc562f8249cbd6cce4869ba394298",
+    "lastSeen": "2025-06-07T12:03:03.382Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_scenario_engine.py": {
+    "hash": "741dbf53bc288be655b249bc840695b5cd7768f09d67a835706ad91dbcb2622b",
+    "lastSeen": "2025-06-07T12:03:03.389Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_self_evolution.cjs": {
+    "hash": "3661cc85969a4a14cc406ece6904016a9ff43e2376cb4b31c945b7985322d634",
+    "lastSeen": "2025-06-07T12:03:03.396Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_self_evolve.py": {
+    "hash": "9a36d7855e64b517eb2d1972f6888e33099f5f7ec324ba9a51e96db9490fa20d",
+    "lastSeen": "2025-06-10T14:50:06.572Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_self_reflection_2025-04-23_00-40-52.txt": {
+    "hash": "6adb7d79f3f42db8112a278e7b32643d00fa080676f0abcd080ae3203e130c77",
+    "lastSeen": "2025-06-07T12:03:03.413Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_self_reflection_latest.txt": {
+    "hash": "6adb7d79f3f42db8112a278e7b32643d00fa080676f0abcd080ae3203e130c77",
+    "lastSeen": "2025-06-07T12:03:03.423Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_simulation_engine.cjs": {
+    "hash": "f044fc92db65f7a22b9fe70c7bceb21b2f35995d66fd6742bdf374e1d0ab03da",
+    "lastSeen": "2025-06-07T12:03:03.431Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_simulation_loop.js": {
+    "hash": "d6f4a52226511505287b0b2f408899239b0512aa3f92dbff01467398f90b8fbd",
+    "lastSeen": "2025-06-07T12:03:03.438Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_speak.js": {
+    "hash": "c5c3dca9c16e835461e76b667606364d001138408a523276c4735b6b8e3d92d5",
+    "lastSeen": "2025-06-07T12:03:03.444Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_status.json": {
+    "hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "lastSeen": "2025-06-07T12:03:03.450Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_structure.txt": {
+    "hash": "055ab762e01a6fe9dab952d47dc3b23f4613dc766a8a33f2f95cd7fc84e6f305",
+    "lastSeen": "2025-06-07T12:03:03.464Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_structure_short.txt": {
+    "hash": "050afc26fc05582811fd7243519de21f81ba178095b045a36f289b2d074fe766",
+    "lastSeen": "2025-06-07T12:03:03.472Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_threatscan.js": {
+    "hash": "5c7740860b5ecf338add83d21f8864cd21b75bd0be64f5cafcd90508ac8a4b30",
+    "lastSeen": "2025-06-07T12:03:03.477Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_tweet.py": {
+    "hash": "5656dc1afc3d72de156efc9097516c56317854d75b8acac41f71420b51fda9ca",
+    "lastSeen": "2025-06-07T12:03:03.483Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_twitter_insights.py": {
+    "hash": "b4bdaeb804c2f215ad94363eb1702bfd06a0d6009929d121063e5419452883a2",
+    "lastSeen": "2025-06-07T12:03:03.489Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_twitter_log.json": {
+    "hash": "443d8977ed8f4ec7dd3967b6107012ca31b18a463fef563d65dc3d72d795f7ea",
+    "lastSeen": "2025-06-07T12:03:03.494Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_twitter_scan.py": {
+    "hash": "dff4b4c1b0ccc5c157840643698b5f2b672e687ee961f63c163d182a54b1f16b",
+    "lastSeen": "2025-06-07T12:03:03.503Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_updated.mp3": {
+    "hash": "5eb1119a59d3c3deb3284944d67ed5728bd16053c2f9ef336b31e81ef7c96d54",
+    "lastSeen": "2025-06-07T12:03:03.511Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_updater.cjs": {
+    "hash": "8e06f8ec8900eac1bcfaa8d989d3e1979c6f4679dfa0319ae095b2469b8a1b81",
+    "lastSeen": "2025-06-07T12:03:03.519Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_vertex.py": {
+    "hash": "ac8ff1a45837723634bb786b3191933d1ab1c87903f04692eb1d990ec576e1f4",
+    "lastSeen": "2025-06-07T12:03:03.530Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_vision.log": {
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lastSeen": "2025-06-07T12:03:03.540Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_vision_ai.js": {
+    "hash": "8098881561cf801e784d16cd6f4d58b383fb6a3d969d8dc985df07b0b3e3a60e",
+    "lastSeen": "2025-06-07T12:03:03.549Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_voice.cjs": {
+    "hash": "56691eb86776b53a92cda99a21b470d72dbe9df5f25918204cb2782a066e4b18",
+    "lastSeen": "2025-06-07T12:03:03.557Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_voice.py": {
+    "hash": "a30d595a71f89a5c81ad71a4efa1a1d5b618fac7ac5a332d0fa8cdfc139f04cb",
+    "lastSeen": "2025-06-07T12:03:03.565Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_voice_response.mp3": {
+    "hash": "df74e5e8f993805ff19c887fa573570ceb4ae12bcd9aeb66fb9101c139bf6884",
+    "lastSeen": "2025-06-07T12:03:03.572Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_voice_switcher.js": {
+    "hash": "06f9a73657ace1ba4e9dff155972a036a1b40ba69ae70040c11ae4518e04e1ce",
+    "lastSeen": "2025-06-07T12:03:03.580Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabina final markets plug in.txt": {
+    "hash": "00d2eb3e51e2aecbe8e9d07e52906a907e668740ea7c19eb3067bde82c7b24b6",
+    "lastSeen": "2025-06-07T12:03:03.591Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sadc_scraper.json": {
+    "hash": "5fb23c822a72ec539a7b34af8334e86be652de7db7bc6a5e4e075c94ac1332ed",
+    "lastSeen": "2025-06-07T12:03:03.597Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "safeguard_core.js": {
+    "hash": "6d14aeb9938631b312ab49d3193b700a388880794a5eddc4c79b1d33626e118b",
+    "lastSeen": "2025-06-07T12:03:03.606Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "satellite_image.jpg": {
+    "hash": "9fe946ff4b99ce06af09fa62ede69cc1b664a16d0d86634a0ca93637d873e533",
+    "lastSeen": "2025-06-07T12:03:03.613Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "security_signal_sabian.cjs": {
+    "hash": "9050666caa44eba9d88a2ce3174e285146e372a39dad4a6221b334da067be8b9",
+    "lastSeen": "2025-06-07T12:03:03.619Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sec_us_feed.cjs": {
+    "hash": "fb3a2ba534e5af5ed73f176f2c18497cf956152d7343e9093849d7ba066060d9",
+    "lastSeen": "2025-06-07T12:03:03.629Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_0.mp3": {
+    "hash": "1dad8333bd75dcfa9e40c582fcc1d4b2301c9990627791060375b7fa51d7a5ac",
+    "lastSeen": "2025-06-07T12:03:03.636Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_1.mp3": {
+    "hash": "c2178657708a7dc86659a1aa317b82e961b7d72c680b9f1da5a7d63e96580a68",
+    "lastSeen": "2025-06-07T12:03:03.644Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_10.mp3": {
+    "hash": "4c2a85a879c6ccf500dc866ce22d18aaef96cd4ed4418ba0c527cb269fc85973",
+    "lastSeen": "2025-06-07T12:03:03.651Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_11.mp3": {
+    "hash": "b5fc89a4806b4719913d87ca0054afbadb3bd4fcf37961a957dd90a263f08f57",
+    "lastSeen": "2025-06-07T12:03:03.661Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_2.mp3": {
+    "hash": "44e201d800ad92aef4cbaa681951a21b23d302b7a93516481c86a26f04537fc3",
+    "lastSeen": "2025-06-07T12:03:03.668Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_3.mp3": {
+    "hash": "d514a7100dd87b57311caffc46fea536574a8c03208452113147921c447e6c0f",
+    "lastSeen": "2025-06-07T12:03:03.678Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_4.mp3": {
+    "hash": "79d947edd1828f9cfd6945b027d86aeb4ad44508ad3cc3eb0c275ee95558400a",
+    "lastSeen": "2025-06-07T12:03:03.686Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_5.mp3": {
+    "hash": "e4aa0f24d2c8e22308cdc1718310847cedc0504b6c605cf0bf43b8141659ced1",
+    "lastSeen": "2025-06-07T12:03:03.693Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_6.mp3": {
+    "hash": "e7371ccb5593651505061f21c256c9a6eaa2fa1e71b9dadd961317a6ec71a680",
+    "lastSeen": "2025-06-07T12:03:03.701Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_7.mp3": {
+    "hash": "d789db5a72ea271b5e029619cd02c5db4c915c3783b749705ca4c1a0e5b35535",
+    "lastSeen": "2025-06-07T12:03:03.710Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_8.mp3": {
+    "hash": "19bb999ba9900fbadc168ac0352cc7da19773964621a21552886bbc232f2269e",
+    "lastSeen": "2025-06-07T12:03:03.717Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "segment_9.mp3": {
+    "hash": "f49b0ee0f3ae71b0130714c441775439a52b1e0bb01173a1c0b59e24dc73a94c",
+    "lastSeen": "2025-06-07T12:03:03.727Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "simulate_defense.js": {
+    "hash": "4dbfeda9c9bfc2cc00e4d29aa0d6e0015191f28e5b0efed66358204e8a7fc925",
+    "lastSeen": "2025-06-07T12:03:03.736Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "simulate_drought_risk.py": {
+    "hash": "bb9dced5d6edd6c127d0b1ea20936028e6b162f44988afb498fe9893c2e9a5c0",
+    "lastSeen": "2025-06-07T12:03:03.747Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "simulate_failures.cjs": {
+    "hash": "c5aed1c73a74dd9493be91238387b63fb9581937528d3a51ad7506e9d9f3906b",
+    "lastSeen": "2025-06-07T12:03:03.755Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "simulate_failures_loop.cjs": {
+    "hash": "5d001526943612e3ba2f2e034009c0a48ace9287ee97d69fffd4a87c1048e678",
+    "lastSeen": "2025-06-07T12:03:03.763Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "simulate_threats.js": {
+    "hash": "3e82d0bbffd998e3c4ace1ddff7eebaa81076e87432de0b0bf2147264e4cac7d",
+    "lastSeen": "2025-06-07T12:03:03.770Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "smart_advisor.py": {
+    "hash": "eb55c6d25680f366e7b5aa6ba4dd7b7a5b7d94f67aa8049998e534ba212dfc72",
+    "lastSeen": "2025-06-07T12:03:03.781Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "smart_sabian.cjs": {
+    "hash": "e8df9581d7c601f2fb2809f6d51bb10f07a295fe6e897633c5b07cf4c5f2d82d",
+    "lastSeen": "2025-06-07T12:03:03.789Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "smart_sabian_broadcaster.cjs": {
+    "hash": "6ccda5168abd3ea34f99669948fa2b631eed7df5bc2779d467d4eee06bf478b7",
+    "lastSeen": "2025-06-07T12:03:03.802Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "smart_sabian_status.json": {
+    "hash": "0d1d358508ea9f1e18c8fe6b27e211710ac6c41192c20b3f3bdfc345a077d620",
+    "lastSeen": "2025-06-07T12:03:03.812Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "smart_sabian_updater.js": {
+    "hash": "9a46fcae44b45dc8fbf86bd05992a6c91df07cbf27b615b0cd7bdc9fa367a87e",
+    "lastSeen": "2025-06-07T12:03:03.821Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "smart_sabian_watchlist.json": {
+    "hash": "9b975ec142b22f9df582d2a8fcf7e5415fd3c2bff8322423975f4f1ad7d700ab",
+    "lastSeen": "2025-06-07T12:03:03.833Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "strategy_brief.txt": {
+    "hash": "b0a2cf87dc2c145a9768245f310df6ea6f6cda474726e5bcbcd8787b778c4201",
+    "lastSeen": "2025-06-07T12:03:03.842Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "strategy_core.js": {
+    "hash": "f2a791fb2a5d13fe6903bf190e0df8eb13bc872836511e8c97f4b1a3d455c3a9",
+    "lastSeen": "2025-06-07T12:03:03.853Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "system_snapshot.json": {
+    "hash": "b906378cee30137115adaa0423732378275a710caee8a9c4b3f9d1a7bd547db5",
+    "lastSeen": "2025-06-07T12:03:03.867Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "telemetryreceiver.cjs": {
+    "hash": "a19d18539b1902e13cc690e9461b39a7c41be4dfc7577b95557005bffefcf52e",
+    "lastSeen": "2025-06-07T12:03:03.886Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "test_amazon_connection.py": {
+    "hash": "30f5fcdba28d9363faf155d61a5dc653817bc49b1fe95e56b7119d2a6f174c42",
+    "lastSeen": "2025-06-07T12:03:03.898Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "test_elevenlabs.js": {
+    "hash": "91712a3506ace8b2ad7b42bbaee635aa147e10780ee34a43839216300f240377",
+    "lastSeen": "2025-06-07T12:03:03.912Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "test_openai.py": {
+    "hash": "2228a08440e9165b4935e1e75abb7c3eb33f8f4407cf9ebe7466c899b37899dc",
+    "lastSeen": "2025-06-07T12:03:03.923Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "test_payload.json": {
+    "hash": "135ba27ae8d1e97b8082d6a41c074690ee4a8d7ff930d17eb2d7156fa1d60559",
+    "lastSeen": "2025-06-07T12:03:03.936Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "test_redirect.cjs": {
+    "hash": "cc1470a809264fcccc1728709eb877ef6668b0293da3d99a246a11fe769e57e9",
+    "lastSeen": "2025-06-07T12:03:03.946Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "threat_scan.json": {
+    "hash": "739b0dac7eeda5607047f95a4d2506fae9d2e477fc3158f4b71638d407a4141f",
+    "lastSeen": "2025-06-07T12:03:03.955Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "tone _profiles.json": {
+    "hash": "598d401d7bb7e99bac8b7bbfce8baa5fccb2fb6ef690a9b28b1198cd65dc930a",
+    "lastSeen": "2025-06-07T12:03:03.965Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "tone_profiles.cjs": {
+    "hash": "db72028a98ddcb8915f3cfec518c586acdba5a5ba6a554c52a9515eba8160239",
+    "lastSeen": "2025-06-07T12:03:03.977Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "top10_aid_2025-04-22.png": {
+    "hash": "12658fada343f9395ec3ff4c1276ea2310a1e5bd299c609ec2f4505fc444bd0d",
+    "lastSeen": "2025-06-07T12:03:03.989Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "top10_education_2025-04-22.png": {
+    "hash": "d560fce45c43c7cd40602ffd8566825d5268de90dd89dc53d219608a019725f2",
+    "lastSeen": "2025-06-07T12:03:04.000Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "top10_exports_2025-04-22.png": {
+    "hash": "f500d660925d283afb0963b4f8229d48fa2fdc9aa93e0ba00c8a030668d89874",
+    "lastSeen": "2025-06-07T12:03:04.012Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "top10_gdp_2025-04-22.png": {
+    "hash": "623040d7515b17e1ba772eddbedf35204b8e9434780ee759731e2f155f4f76db",
+    "lastSeen": "2025-06-07T12:03:04.024Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "top10_poverty_2025-04-22.png": {
+    "hash": "c622c1e0ad36ff4d20e948ae3f65d6f43c99f209d58a0f063772f9434fdb1d63",
+    "lastSeen": "2025-06-07T12:03:04.039Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "trade.africa.json": {
+    "hash": "353a51957c5ac8b5937fe8fb5d5db45031ca52395cb976a56a2ab2ecb95586f6",
+    "lastSeen": "2025-06-07T12:03:04.053Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "transcriber.js": {
+    "hash": "c406e056e6358cf98ab0a3b02912952b96e2a4c86e6451e73a27658dbe5b15f2",
+    "lastSeen": "2025-06-07T12:03:04.064Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "translate_report.js": {
+    "hash": "6caa0b326458087fc703020d06af117c79ad3edf7394104449eac5009e21055b",
+    "lastSeen": "2025-06-07T12:03:04.077Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "transport_corridor_sabian.cjs": {
+    "hash": "dde48aeff5658d4b534ca3af48bfc9cc58797c2569357dbfdce4ecbc82ed57f4",
+    "lastSeen": "2025-06-07T12:03:04.090Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "twilio_evacuator.js": {
+    "hash": "4ce76af04bc320304df3d3db356972ba73c083234048669f811d07696e11faee",
+    "lastSeen": "2025-06-07T12:03:04.099Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "uk_eu_fillings_fetcher.cjs": {
+    "hash": "a645f2a21b83397d89a5b36ad24132b02937a58164434be61589c3dfb213b210",
+    "lastSeen": "2025-06-07T12:03:04.109Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "uniluxe_nails_apr16_2145.mp3": {
+    "hash": "b1dde3a9578157cdfe2296eb6d03880f3c5f9391fa909405050992439e8f794a",
+    "lastSeen": "2025-06-07T12:03:04.121Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "upgrade_fused_strategies.js": {
+    "hash": "22fdac2f16f174eb4cdd7a878f6dc383c7bfb06d9a2555f8ef7b4ead5fb8a70d",
+    "lastSeen": "2025-06-07T12:03:04.133Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "urban_signal_sabian.cjs": {
+    "hash": "4222265e5e9e4b9025e76d14a315ebe4b06371f70d39931ac60914cd79d46697",
+    "lastSeen": "2025-06-07T12:03:04.141Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "user_data.json": {
+    "hash": "7100b062f915dd759a8287c4dbf365c3e72a95d32fcc1c479f7efac288b6508a",
+    "lastSeen": "2025-06-07T12:03:04.152Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "user_data_array.json": {
+    "hash": "fdbc2902761ff750ac3385c4d04cd210677c88b7bc14cf3c5596859ab3e64689",
+    "lastSeen": "2025-06-07T12:03:04.161Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "user_summary.json": {
+    "hash": "139df9172e80d0328a8975830142c1eee24fc1016685303eac5ce5bb6f170a05",
+    "lastSeen": "2025-06-07T12:03:04.172Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "uspto_bulk_parser.py": {
+    "hash": "18df350ab789df01ca0ab8a0bc2351c92611fed2700ee978466ae9b3611484c4",
+    "lastSeen": "2025-06-07T12:03:04.182Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "uspto_patents.py": {
+    "hash": "cbb55da72d0347fd048b13e07e4e769e1600fa6705c2b54a070c65cfe37213ac",
+    "lastSeen": "2025-06-07T12:03:04.190Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "uspto_patents_test.py": {
+    "hash": "2dc92fbaecde0cc2754c436804c61d648522f8c7c4cec3862bf0a457ae0bf88c",
+    "lastSeen": "2025-06-07T12:03:04.200Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "voicebox.py": {
+    "hash": "7ef8bf62e82a5f89598cfea61822191f927bff797d9a7df72bb6c5d3b9ca6729",
+    "lastSeen": "2025-06-07T12:03:04.212Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "voice_generator.cjs": {
+    "hash": "09e81f8fb58a5fc4d6ee51966683812ce4e043443eb9b54d9aad75a063ec3f66",
+    "lastSeen": "2025-06-07T12:03:04.223Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "voice_memory.jsonl": {
+    "hash": "1d2d26682f97c1f97b3e509651ee464e26a192b4cfd1258e25644e27007c4dd6",
+    "lastSeen": "2025-06-07T12:03:04.231Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "voice_profile.json": {
+    "hash": "7fc84356c91064e21966bf20a588588667db1abee2ac66deb5f6bbd9c5a0e85d",
+    "lastSeen": "2025-06-07T12:03:04.240Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "voice_test.py": {
+    "hash": "9b549276cba04df8f667533e1f655d9d49a61651f6c8da995be734d3a968145d",
+    "lastSeen": "2025-06-07T12:03:04.249Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "voice_trainer.js": {
+    "hash": "c07acd101e43fb59eb7f863522eb3317b4a8b105f69c0d3d8d9fd0d47fe1d3d9",
+    "lastSeen": "2025-06-07T12:03:04.259Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "waste_signal_sabian.cjs": {
+    "hash": "8693f670bbc2cde0b4bf8fd3aecd883341c64f36a54b4cb658825025403288f5",
+    "lastSeen": "2025-06-07T12:03:04.268Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "youtube_intel.json": {
+    "hash": "469eeb31ead3d02304beed317e863394523b4350aae495adbcb86ff26ee604be",
+    "lastSeen": "2025-06-07T12:03:04.278Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "sabian_first_contact.cjs": {
+    "hash": "62654e088aba245097fe7ae18b4c2de1d4cedb4357c7b97b59dd7c937bac4b56",
+    "lastSeen": "2025-06-08T05:52:28.398Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "gemini_test.cjs": {
+    "hash": "087c21f4463f06006c007fb9fa3e350e8909e6fda531390eac52a92a46f4e794",
+    "lastSeen": "2025-06-10T08:35:05.430Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "llm_router.cjs": {
+    "hash": "00c44cef6d08e5493b51a57830374894ce5ddd0aede2ed693236fafee1f32c77",
+    "lastSeen": "2025-06-10T08:35:05.479Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "openai.cjs": {
+    "hash": "5c4f1c6f23beb10c3189cd0890c4b9c3d4b1ac12f71f277f3278e2c4f3cb241c",
+    "lastSeen": "2025-06-10T08:35:05.723Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "test_search.cjs": {
+    "hash": "d25c0bc4f3d9d6e7c007b91b8ed4629686faa009ca69b4fc9411ac9c6c9a074b",
+    "lastSeen": "2025-06-10T08:35:06.267Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "together_search.cjs": {
+    "hash": "5d5b2eacdd9a160c72f64d046872fa2b7f6b0c97563424bcc2e8f2a4459e2f8f",
+    "lastSeen": "2025-06-10T08:40:06.030Z",
+    "status": "active",
+    "source": "detected"
+  },
+  "models.json": {
+    "hash": "287a4621c3a4c1351a2e5f3bd6a862c3b73f3b1f075c5b783c61a19e63dc6a49",
+    "lastSeen": "2025-06-10T12:50:05.831Z",
+    "status": "active",
+    "source": "detected"
+  }
+}

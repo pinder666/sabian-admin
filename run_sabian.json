@@ -1,0 +1,2 @@
+Start-Process powershell -WindowStyle Hidden -ArgumentList "-ExecutionPolicy Bypass -File `".\source_africa.ps1`""
+Start-Process powershell -WindowStyle Hidden -ArgumentList "-ExecutionPolicy Bypass -File `".\sadc_scraper.ps1`""

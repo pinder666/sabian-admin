@@ -1,0 +1,13 @@
+{
+    "geometry": {
+      "coordinates": [0.02, 37.90]
+    },
+    "properties": {
+      "parameter": {
+        "T2M": 28,
+        "RH2M": 65,
+        "PRECTOTCORR": 0.2
+      }
+    }
+  }
+  

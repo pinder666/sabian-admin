@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  sabian:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DB_USER: sabianuser
+      DB_PASSWORD: sabianpass
+      DB_NAME: sabiandb
+      DB_HOST: db
+      DB_PORT: 5432
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: sabianuser
+      POSTGRES_PASSWORD: sabianpass
+      POSTGRES_DB: sabiandb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  db_data:

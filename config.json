@@ -1,0 +1,9 @@
+{
+  "systemName": "Sabian Core",
+  "version": "1.0.0",
+  "lastUpdated": "2025-05-14T20:29:03.144Z",
+  "settings": {
+    "autoRepair": true,
+    "checkInterval": 300
+  }
+}

@@ -1,0 +1,126 @@
+[
+  {
+    "source": "sec_us_feed",
+    "error": "Cannot find module 'C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\revenue_streams\\sec_us_feed.cjs'\nRequire stack:\n- C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\revenue_intelligence_core.cjs\n- C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\[eval]",
+    "timestamp": "2025-06-24T12:36:12.457Z"
+  },
+  {
+    "source": "fred_macro_data",
+    "error": "Cannot find module 'C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\revenue_streams\\fred_macro_data.cjs'\nRequire stack:\n- C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\revenue_intelligence_core.cjs\n- C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\[eval]",
+    "timestamp": "2025-06-24T12:36:12.459Z"
+  },
+  {
+    "source": "imf_global_revenue",
+    "error": "Cannot find module 'C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\revenue_streams\\imf_global_revenue.cjs'\nRequire stack:\n- C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\revenue_intelligence_core.cjs\n- C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\[eval]",
+    "timestamp": "2025-06-24T12:36:12.459Z"
+  },
+  {
+    "source": "oecd_country_data",
+    "error": "Cannot find module 'C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\revenue_streams\\oecd_country_data.cjs'\nRequire stack:\n- C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\revenue_intelligence_core.cjs\n- C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\[eval]",
+    "timestamp": "2025-06-24T12:36:12.459Z"
+  },
+  {
+    "source": "uk_eu_filings_fetcher",
+    "error": "Cannot find module 'C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\revenue_streams\\uk_eu_filings_fetcher.cjs'\nRequire stack:\n- C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\revenue_intelligence_core.cjs\n- C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\[eval]",
+    "timestamp": "2025-06-24T12:36:12.460Z"
+  },
+  {
+    "company": "TestCorp272",
+    "indicator": "inventory",
+    "value": 203600,
+    "fiscal_period": "Q2 2024",
+    "date": "2025-06-24",
+    "source": "inventory_levels",
+    "url": "N/A",
+    "currency": "USD",
+    "timestamp": "2025-06-24T12:36:12.464Z"
+  },
+  {
+    "company": "TestCorp70",
+    "indicator": "inventory",
+    "value": 733470,
+    "fiscal_period": "Q2 2024",
+    "date": "2025-06-24",
+    "source": "inventory_levels",
+    "url": "N/A",
+    "currency": "USD",
+    "timestamp": "2025-06-24T12:36:12.464Z"
+  },
+  {
+    "company": "TestCorp532",
+    "indicator": "inventory",
+    "value": 782835,
+    "fiscal_period": "Q2 2024",
+    "date": "2025-06-24",
+    "source": "inventory_levels",
+    "url": "N/A",
+    "currency": "USD",
+    "timestamp": "2025-06-24T12:36:12.464Z"
+  },
+  {
+    "company": "TestCorp987",
+    "indicator": "bottleneck",
+    "value": 994222,
+    "fiscal_period": "Q2 2024",
+    "date": "2025-06-24",
+    "source": "inventory_levels",
+    "url": "N/A",
+    "currency": "USD",
+    "timestamp": "2025-06-24T12:36:12.468Z"
+  },
+  {
+    "company": "TestCorp156",
+    "indicator": "bottleneck",
+    "value": 645102,
+    "fiscal_period": "Q2 2024",
+    "date": "2025-06-24",
+    "source": "inventory_levels",
+    "url": "N/A",
+    "currency": "USD",
+    "timestamp": "2025-06-24T12:36:12.468Z"
+  },
+  {
+    "company": "TestCorp326",
+    "indicator": "bottleneck",
+    "value": 723193,
+    "fiscal_period": "Q2 2024",
+    "date": "2025-06-24",
+    "source": "inventory_levels",
+    "url": "N/A",
+    "currency": "USD",
+    "timestamp": "2025-06-24T12:36:12.468Z"
+  },
+  {
+    "company": "TestCorp720",
+    "indicator": "inventory",
+    "value": 12904,
+    "fiscal_period": "Q2 2024",
+    "date": "2025-06-24",
+    "source": "inventory_levels",
+    "url": "N/A",
+    "currency": "USD",
+    "timestamp": "2025-06-24T12:36:12.471Z"
+  },
+  {
+    "company": "TestCorp116",
+    "indicator": "inventory",
+    "value": 977510,
+    "fiscal_period": "Q2 2024",
+    "date": "2025-06-24",
+    "source": "inventory_levels",
+    "url": "N/A",
+    "currency": "USD",
+    "timestamp": "2025-06-24T12:36:12.471Z"
+  },
+  {
+    "company": "TestCorp358",
+    "indicator": "inventory",
+    "value": 732664,
+    "fiscal_period": "Q2 2024",
+    "date": "2025-06-24",
+    "source": "inventory_levels",
+    "url": "N/A",
+    "currency": "USD",
+    "timestamp": "2025-06-24T12:36:12.471Z"
+  }
+]

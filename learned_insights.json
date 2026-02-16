@@ -1,0 +1,52 @@
+[
+  {
+    "company": "N/A",
+    "indicator": "N/A",
+    "fiscal_period": "N/A",
+    "source": "sec_us_feed",
+    "tags": [],
+    "confidence": 0.9259133926116547,
+    "hash": "b59e48eefa95a8c7418de655a89528126b1a6d0f10c99940161d0df9c8739252",
+    "timestamp": "2025-06-08T05:11:54.019Z"
+  },
+  {
+    "company": "N/A",
+    "indicator": "N/A",
+    "fiscal_period": "N/A",
+    "source": "fred_macro_data",
+    "tags": [],
+    "confidence": 0.7800319986015469,
+    "hash": "f06f4646ccdd0c51a47927a78946926580b1df9840716fb205f22739e9cd98ca",
+    "timestamp": "2025-06-08T05:11:54.019Z"
+  },
+  {
+    "company": "N/A",
+    "indicator": "N/A",
+    "fiscal_period": "N/A",
+    "source": "imf_global_revenue",
+    "tags": [],
+    "confidence": 0.7587785911191026,
+    "hash": "d4039745ce490af6d0dfe2fd2d05a73e6bc6fa93f7ee7d6587a53709a8399b41",
+    "timestamp": "2025-06-08T05:11:54.020Z"
+  },
+  {
+    "company": "N/A",
+    "indicator": "N/A",
+    "fiscal_period": "N/A",
+    "source": "oecd_country_data",
+    "tags": [],
+    "confidence": 0.7940343638013639,
+    "hash": "74619e06f102e97c927976bbe9e5b4e26de162e365247f4dccfaab052573456f",
+    "timestamp": "2025-06-08T05:11:54.020Z"
+  },
+  {
+    "company": "N/A",
+    "indicator": "N/A",
+    "fiscal_period": "N/A",
+    "source": "uk_eu_filings_fetcher",
+    "tags": [],
+    "confidence": 0.8890261533283379,
+    "hash": "afea8bfd9289eb28c3c54fa50348afb73b78c702ec9a01d13c45a61bf92b14e7",
+    "timestamp": "2025-06-08T05:11:54.021Z"
+  }
+]

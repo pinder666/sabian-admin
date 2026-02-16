@@ -1,0 +1,7 @@
+Status Check: 2025-04-14 16:24:27.817238
+Triton: ❌ Invalid URL 'None': No scheme supplied. Perhaps you meant https://None?
+Google: ❌ Error 400
+Twitter: ❌ Error 401
+NewsAPI: ✅ Connected
+Reddit: ❌ Required configuration setting 'client_id' missing. 
+This setting can be provided in a praw.ini file, as a keyword argument to the Reddit class constructor, or as an environment variable.

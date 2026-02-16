@@ -1,0 +1,162 @@
+[
+  {
+    "country": "Angola",
+    "sector_changes": {
+      "Mining": "-2.53%",
+      "Education": "2.78%",
+      "Finance": "0.28%",
+      "Energy": "-1.81%",
+      "Infrastructure": "3.61%"
+    }
+  },
+  {
+    "country": "Botswana",
+    "sector_changes": {
+      "Mining": "1.46%",
+      "Education": "-2.81%",
+      "Finance": "-1.09%",
+      "Energy": "-0.44%",
+      "Infrastructure": "2.96%"
+    }
+  },
+  {
+    "country": "Comoros",
+    "sector_changes": {
+      "Mining": "1.84%",
+      "Education": "1.34%",
+      "Finance": "-1.11%",
+      "Energy": "2.25%",
+      "Infrastructure": "-1.67%"
+    }
+  },
+  {
+    "country": "Democratic Republic of the Congo",
+    "sector_changes": {
+      "Mining": "4.01%",
+      "Education": "2.31%",
+      "Finance": "-0.88%",
+      "Energy": "-3.67%",
+      "Infrastructure": "-1.30%"
+    }
+  },
+  {
+    "country": "Eswatini",
+    "sector_changes": {
+      "Mining": "2.90%",
+      "Education": "-2.30%",
+      "Finance": "1.37%",
+      "Energy": "0.05%",
+      "Infrastructure": "1.65%"
+    }
+  },
+  {
+    "country": "Lesotho",
+    "sector_changes": {
+      "Mining": "-0.01%",
+      "Education": "-1.15%",
+      "Finance": "3.04%",
+      "Energy": "1.47%",
+      "Infrastructure": "0.62%"
+    }
+  },
+  {
+    "country": "Madagascar",
+    "sector_changes": {
+      "Mining": "0.54%",
+      "Education": "1.02%",
+      "Finance": "-0.61%",
+      "Energy": "2.22%",
+      "Infrastructure": "-0.51%"
+    }
+  },
+  {
+    "country": "Malawi",
+    "sector_changes": {
+      "Mining": "-1.43%",
+      "Education": "3.92%",
+      "Finance": "3.05%",
+      "Energy": "-2.43%",
+      "Infrastructure": "3.99%"
+    }
+  },
+  {
+    "country": "Mauritius",
+    "sector_changes": {
+      "Mining": "0.79%",
+      "Education": "1.05%",
+      "Finance": "0.72%",
+      "Energy": "0.41%",
+      "Infrastructure": "0.20%"
+    }
+  },
+  {
+    "country": "Mozambique",
+    "sector_changes": {
+      "Mining": "-0.66%",
+      "Education": "-0.97%",
+      "Finance": "-1.21%",
+      "Energy": "1.46%",
+      "Infrastructure": "-2.61%"
+    }
+  },
+  {
+    "country": "Namibia",
+    "sector_changes": {
+      "Mining": "-1.62%",
+      "Education": "-1.89%",
+      "Finance": "2.79%",
+      "Energy": "2.18%",
+      "Infrastructure": "-3.87%"
+    }
+  },
+  {
+    "country": "Seychelles",
+    "sector_changes": {
+      "Mining": "-0.84%",
+      "Education": "-0.48%",
+      "Finance": "0.93%",
+      "Energy": "-0.98%",
+      "Infrastructure": "-0.18%"
+    }
+  },
+  {
+    "country": "South Africa",
+    "sector_changes": {
+      "Mining": "3.02%",
+      "Education": "0.05%",
+      "Finance": "2.16%",
+      "Energy": "0.26%",
+      "Infrastructure": "-1.38%"
+    }
+  },
+  {
+    "country": "Tanzania",
+    "sector_changes": {
+      "Mining": "-1.55%",
+      "Education": "2.45%",
+      "Finance": "4.14%",
+      "Energy": "1.22%",
+      "Infrastructure": "0.56%"
+    }
+  },
+  {
+    "country": "Zambia",
+    "sector_changes": {
+      "Mining": "0.66%",
+      "Education": "0.72%",
+      "Finance": "0.37%",
+      "Energy": "-3.70%",
+      "Infrastructure": "3.21%"
+    }
+  },
+  {
+    "country": "Zimbabwe",
+    "sector_changes": {
+      "Mining": "-0.04%",
+      "Education": "-0.57%",
+      "Finance": "3.34%",
+      "Energy": "-2.59%",
+      "Infrastructure": "-2.77%"
+    }
+  }
+]

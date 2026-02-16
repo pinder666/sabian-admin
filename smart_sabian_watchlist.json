@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Elon Intel Sweep",
+    "script": "sabian_core/elon_data_orbit.cjs",
+    "interval_minutes": 60,
+    "enabled": true,
+    "auto_feed": true
+  },
+  {
+    "name": "BYD Intel Sweep",
+    "script": "sabian_core/ev_byd_orbit.cjs",
+    "interval_minutes": 60,
+    "enabled": true,
+    "auto_feed": true
+  },
+  {
+    "name": "Lucid Intel Sweep",
+    "script": "sabian_core/ev_lucid_orbit.cjs",
+    "interval_minutes": 60,
+    "enabled": true,
+    "auto_feed": true
+  },
+  {
+    "name": "Rivian Intel Sweep",
+    "script": "sabian_core/ev_rivian_orbit.cjs",
+    "interval_minutes": 60,
+    "enabled": true,
+    "auto_feed": true
+  }
+]
+{
+  "name": "EV Sector Sweep",
+  "script": "sabian_core/ev_sector_orbit.cjs",
+  "interval_minutes": 60,
+  "enabled": true
+}

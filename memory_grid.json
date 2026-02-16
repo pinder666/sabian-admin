@@ -1,0 +1,75 @@
+{
+  "roadmap_annual": [],
+  "roadmap_quarter": {
+    "active": true,
+    "start_date": "",
+    "end_date": "",
+    "goals": [],
+    "problems": [],
+    "solutions": [],
+    "alignment_score": 100
+  },
+  "transcripts": [],
+  "session_log": [],
+  "tags": ["needs_follow_up", "high_risk", "stalled"],
+  "strategic_drift_detection": {
+    "alignment_score": 100,
+    "drift_flags": []
+  },
+  "execution_fatigue_tracker": {
+    "stalled_sessions": 0,
+    "alert_threshold": 3
+  },
+  "repeat_objection_memory": [],
+  "goal_volatility_index": 0,
+  "opportunity_blind_spot_tracker": [],
+  "leadership_consistency_score": 100,
+  "department_memory_walls": [],
+  "hidden_risk_carryover": [],
+  "silent_failure_pattern_log": [],
+  "memory_compression_system": {
+    "enabled": true,
+    "purge_cycle_days": 90
+  },
+  "user_memory": {
+    "roadmap_annual": [],
+    "roadmap_quarter": {
+      "active": true,
+      "start_date": "",
+      "end_date": "",
+      "goals": [],
+      "problems": [],
+      "solutions": [],
+      "alignment_score": 100
+    },
+    "transcripts": [],
+    "session_log": [],
+    "tags": ["needs_follow_up", "high_risk", "stalled"],
+    "strategic_drift_detection": {
+      "alignment_score": 100,
+      "drift_flags": []
+    },
+    "execution_fatigue_tracker": {
+      "stalled_sessions": 0,
+      "alert_threshold": 3
+    },
+    "repeat_objection_memory": [],
+    "goal_volatility_index": 0,
+    "opportunity_blind_spot_tracker": [],
+    "leadership_consistency_score": 100,
+    "department_memory_walls": [],
+    "hidden_risk_carryover": [],
+    "silent_failure_pattern_log": [],
+    "memory_compression_system": {
+      "enabled": true,
+      "purge_cycle_days": 90
+    }
+  },
+  "hive_memory": {
+    "problem_solution_db": [],
+    "insight_patterns": [],
+    "common_failure_signals": [],
+    "solution_success_rates": [],
+    "global_transcript_archive": []
+  }
+}

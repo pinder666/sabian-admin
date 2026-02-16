@@ -1,0 +1,42 @@
+{
+  "user_id": "abc123",
+  "name": "Alex Smith",
+  "business_name": "Smith Tech",
+  "email": "alex@smithtech.com",
+  "membership_status": "conversational",
+  "crm_connected": "true",
+  "csv_uploaded": "true",
+  "csv_filename": "client_list_march.csv",
+  "history": "User discussed low conversion rates. Sabian suggested landing page redesign. User agreed to implement.",
+  "preferences": "prefers concise responses, no humor",
+  
+  "bottlenecks": ["unclear pricing", "limited lead sources"],
+  "repeat_problems": ["low conversion", "poor follow-up process"],
+  
+  "business_link_opt_in": "true",
+  "products_services": ["custom software development", "IT consulting"],
+  
+  "account_created_at": "2025-06-01T10:00:00Z",
+  "last_active_at": "2025-06-26T14:30:00Z",
+  "account_status": "active",
+  
+  "billing_plan": "monthly_basic",
+  "payment_status": "paid",
+  "lifetime_value_usd": "1200",
+  
+  "total_sessions": "5",
+  "last_session_type": "conversational",
+  "csv_uploaded_count": "2",
+  
+  "industry": "Technology",
+  "team_size": "15",
+  "revenue_range": "$100k-$1M",
+  "business_stage": "scaling",
+  
+  "integrations": ["crm", "email_marketing"],
+  
+  "flagged": "false",
+  "flag_reason": "",
+  
+  "tags": ["high_value", "beta_user"]
+}

@@ -1,0 +1,162 @@
+[
+  {
+    "country": "Angola",
+    "sectors": {
+      "Mining": "3.40% growth",
+      "Education": "2.97% growth",
+      "Finance": "3.84% growth",
+      "Energy": "4.64% growth",
+      "Infrastructure": "2.03% growth"
+    }
+  },
+  {
+    "country": "Botswana",
+    "sectors": {
+      "Mining": "3.15% growth",
+      "Education": "1.13% growth",
+      "Finance": "2.05% growth",
+      "Energy": "1.68% growth",
+      "Infrastructure": "3.55% growth"
+    }
+  },
+  {
+    "country": "Comoros",
+    "sectors": {
+      "Mining": "2.58% growth",
+      "Education": "2.42% growth",
+      "Finance": "1.51% growth",
+      "Energy": "3.34% growth",
+      "Infrastructure": "4.04% growth"
+    }
+  },
+  {
+    "country": "Democratic Republic of the Congo",
+    "sectors": {
+      "Mining": "2.44% growth",
+      "Education": "4.35% growth",
+      "Finance": "0.06% growth",
+      "Energy": "0.57% growth",
+      "Infrastructure": "4.73% growth"
+    }
+  },
+  {
+    "country": "Eswatini",
+    "sectors": {
+      "Mining": "1.63% growth",
+      "Education": "3.28% growth",
+      "Finance": "0.33% growth",
+      "Energy": "4.96% growth",
+      "Infrastructure": "1.02% growth"
+    }
+  },
+  {
+    "country": "Lesotho",
+    "sectors": {
+      "Mining": "0.51% growth",
+      "Education": "0.54% growth",
+      "Finance": "4.04% growth",
+      "Energy": "1.59% growth",
+      "Infrastructure": "1.74% growth"
+    }
+  },
+  {
+    "country": "Madagascar",
+    "sectors": {
+      "Mining": "0.47% growth",
+      "Education": "3.85% growth",
+      "Finance": "0.74% growth",
+      "Energy": "3.77% growth",
+      "Infrastructure": "2.67% growth"
+    }
+  },
+  {
+    "country": "Malawi",
+    "sectors": {
+      "Mining": "1.60% growth",
+      "Education": "3.02% growth",
+      "Finance": "1.71% growth",
+      "Energy": "4.26% growth",
+      "Infrastructure": "3.04% growth"
+    }
+  },
+  {
+    "country": "Mauritius",
+    "sectors": {
+      "Mining": "3.56% growth",
+      "Education": "3.60% growth",
+      "Finance": "3.85% growth",
+      "Energy": "3.44% growth",
+      "Infrastructure": "2.29% growth"
+    }
+  },
+  {
+    "country": "Mozambique",
+    "sectors": {
+      "Mining": "3.00% growth",
+      "Education": "0.12% growth",
+      "Finance": "4.11% growth",
+      "Energy": "3.79% growth",
+      "Infrastructure": "2.39% growth"
+    }
+  },
+  {
+    "country": "Namibia",
+    "sectors": {
+      "Mining": "4.14% growth",
+      "Education": "2.25% growth",
+      "Finance": "3.45% growth",
+      "Energy": "3.91% growth",
+      "Infrastructure": "2.96% growth"
+    }
+  },
+  {
+    "country": "Seychelles",
+    "sectors": {
+      "Mining": "1.82% growth",
+      "Education": "4.61% growth",
+      "Finance": "3.18% growth",
+      "Energy": "3.10% growth",
+      "Infrastructure": "1.97% growth"
+    }
+  },
+  {
+    "country": "South Africa",
+    "sectors": {
+      "Mining": "3.18% growth",
+      "Education": "0.00% growth",
+      "Finance": "1.97% growth",
+      "Energy": "3.41% growth",
+      "Infrastructure": "1.53% growth"
+    }
+  },
+  {
+    "country": "Tanzania",
+    "sectors": {
+      "Mining": "0.64% growth",
+      "Education": "0.97% growth",
+      "Finance": "2.55% growth",
+      "Energy": "2.72% growth",
+      "Infrastructure": "3.99% growth"
+    }
+  },
+  {
+    "country": "Zambia",
+    "sectors": {
+      "Mining": "4.09% growth",
+      "Education": "4.09% growth",
+      "Finance": "3.18% growth",
+      "Energy": "0.56% growth",
+      "Infrastructure": "2.78% growth"
+    }
+  },
+  {
+    "country": "Zimbabwe",
+    "sectors": {
+      "Mining": "0.63% growth",
+      "Education": "0.48% growth",
+      "Finance": "4.16% growth",
+      "Energy": "3.71% growth",
+      "Infrastructure": "0.76% growth"
+    }
+  }
+]

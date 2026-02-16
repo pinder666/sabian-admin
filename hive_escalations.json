@@ -1,0 +1,81 @@
+
+const fs = require('fs');
+const https = require('https');
+const path = require('path');
+const { logToHive } = require('./logger.cjs');
+
+const ESCALATION_FILE = './sabian_escalation_trigger.json';
+const BACKEND_URL = 'https://your-backend-domain.com/api/escalate'; // Replace with real backend
+
+function sendEscalation(payload) {
+  const data = JSON.stringify(payload);
+  const options = {
+    hostname: 'your-backend-domain.com', // Replace this
+    path: '/api/escalate',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': data.length
+    }
+  };
+
+  const req = https.request(options, res => {
+    let response = '';
+    res.on('data', d => response += d);
+    res.on('end', () => {
+      logToHive({
+        source: 'hive_escalation',
+        level: 'critical',
+        event: 'Escalation sent successfully',
+        data: { payload, backendResponse: response },
+        tags: ['escalation', 'sent']
+      });
+      console.log('🚨 Escalation sent successfully.');
+    });
+  });
+
+  req.on('error', error => {
+    logToHive({
+      source: 'hive_escalation',
+      level: 'error',
+      event: 'Escalation transmission failed',
+      data: { error: error.message, payload },
+      tags: ['escalation', 'failure']
+    });
+    console.error('❌ Escalation failed:', error);
+  });
+
+  req.write(data);
+  req.end();
+}
+
+function triggerEscalation() {
+  if (!fs.existsSync(ESCALATION_FILE)) {
+    console.log('⚠️ No escalation file found.');
+    return;
+  }
+
+  try {
+    const escalationData = JSON.parse(fs.readFileSync(ESCALATION_FILE, 'utf8'));
+
+    logToHive({
+      source: 'hive_escalation',
+      level: 'critical',
+      event: 'Escalation triggered',
+      data: escalationData,
+      tags: ['escalation', 'trigger']
+    });
+
+    sendEscalation(escalationData);
+  } catch (err) {
+    logToHive({
+      source: 'hive_escalation',
+      level: 'error',
+      event: 'Failed to process escalation file',
+      data: { error: err.message },
+      tags: ['escalation', 'parse-error']
+    });
+  }
+}
+
+triggerEscalation();

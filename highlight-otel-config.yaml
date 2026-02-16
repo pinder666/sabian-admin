@@ -1,0 +1,20 @@
+receivers:
+    filelog:
+        include: [/watch.log]
+        start_at: beginning
+exporters:
+    otlp/highlight:
+        endpoint: 'https://otel.highlight.io:4317'
+processors:
+    attributes/highlight-project:
+        actions:
+            - key: highlight.project_id
+              value: '4d7y1p1d'
+              action: insert
+    batch:
+service:
+    pipelines:
+        logs:
+            receivers: [filelog]
+            processors: [attributes/highlight-project, batch]
+            exporters: [otlp/highlight]

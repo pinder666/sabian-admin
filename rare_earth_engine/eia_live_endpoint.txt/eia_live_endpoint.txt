@@ -1,0 +1,18 @@
+SOURCE: Energy Information Administration (EIA)
+
+ENDPOINT:
+https://api.eia.gov/v2/electricity/rto/daily-region-data/data/
+
+METHOD: GET
+
+DATA:
+Daily demand
+Day-ahead demand forecast
+Net generation
+Interchange by balancing authority
+
+PURPOSE:
+Live electricity constraint signal for rare earth processing insights
+
+USAGE:
+Called live when Sabian evaluates processing, refining, or capacity risk
