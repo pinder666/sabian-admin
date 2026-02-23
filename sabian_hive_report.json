@@ -111638,5 +111638,449 @@
     ],
     "trace": null,
     "integrity": "89aa5687ceb8c34096b2dd6fd19a382ab156118335c19b03f9771e1aaa40ad7c"
+  },
+  {
+    "id": "fbf2c85a-e2d8-4707-99b8-caf626e434a0",
+    "timestamp": "2026-02-19T03:12:26.054Z",
+    "source": "sabian_test_demo",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "✅ EV Audio Demo Complete",
+    "data": {
+      "experience": "EV",
+      "session_id": "91fecd66-ecbc-474d-8225-f2b124821f9f"
+    },
+    "tags": [
+      "demo",
+      "audio"
+    ],
+    "trace": null,
+    "integrity": "270c840b0b969732548c5c741482b95805b8906e61238bd85b9f76b94c767a6b"
+  },
+  {
+    "id": "048f282f-79cb-4750-80c7-4eb97ab8f819",
+    "timestamp": "2026-02-20T15:33:35.696Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "fdeb255b-76d0-4dd0-8664-ddde211a6d6a"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "d60a4e75217c867b771ef14e06a78f2924082a30e2f434301cf3d72249db5214"
+  },
+  {
+    "id": "628fdb98-3a92-461d-bf30-a1bd9b118692",
+    "timestamp": "2026-02-20T15:41:50.098Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "6f814b6b-24a1-4e53-aa5b-f98d15dd89d4"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "41de12a472d630ef0b938847601c9786e5ae37de61765e522ec5806105586e61"
+  },
+  {
+    "id": "98770993-b56d-4507-9599-5b741762879d",
+    "timestamp": "2026-02-20T15:43:16.440Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "6f814b6b-24a1-4e53-aa5b-f98d15dd89d4",
+      "business_name": "mark smith",
+      "business_problem": "need more customers for my business which is event hosting",
+      "user_name": "mark",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping mark’s business, mark smith. The challenge: need more customers for my business which is event hosting. Sabian, we have 60 seconds.\nSabian: Mark, immediate focus: direct event planner outreach. Target local corporate and perso...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-20T15-42-51-005Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "8bee9bcd576dcc7e461224fa91cbf321aa679d3a7f8c486989b355b7ea0d0731"
+  },
+  {
+    "id": "721f6a15-400c-4f7c-b791-f048bdd8f62f",
+    "timestamp": "2026-02-20T16:43:15.222Z",
+    "source": "sabian_test_demo",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "✅ EV Audio Demo Complete",
+    "data": {
+      "experience": "EV",
+      "session_id": "c9c181e5-34c8-4ffc-b0b0-a0ac44814272"
+    },
+    "tags": [
+      "demo",
+      "audio"
+    ],
+    "trace": null,
+    "integrity": "e95075d4aaef51fea5275f0127fb3ec657131ac8fd6f36c4881f9f92e8043cf8"
+  },
+  {
+    "id": "990ceb46-f07b-4746-b131-66179e79777d",
+    "timestamp": "2026-02-21T00:16:40.965Z",
+    "source": "sabian_insight_feed",
+    "level": "ERROR",
+    "system": "LT-JBGRPJ2",
+    "event": "engine_failure",
+    "data": {
+      "message": "Request failed with status code 404",
+      "details": {
+        "error": {
+          "message": "No endpoints found for deepseek/deepseek-r1-0528-qwen3-8b:free.",
+          "code": 404
+        },
+        "user_id": "user_2yH2Wce3LxpksdLwweWabGhl5un"
+      }
+    },
+    "tags": [
+      "error"
+    ],
+    "trace": null,
+    "integrity": "c68d02509689e9d8d21da316d17662c191381525c5c4b129f253cdf02c988453"
+  },
+  {
+    "id": "d735a536-a9dc-404c-9489-2a21f8a3c6e9",
+    "timestamp": "2026-02-21T00:47:05.188Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "4d4039d8-a7ea-4f1a-adbe-4b5f4607c751"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "933245e224776a4a73f249e2819e26881a494c7ba791a12c8fe6dd1708908263"
+  },
+  {
+    "id": "dbe0481f-824f-47ea-b327-c1f964bbda47",
+    "timestamp": "2026-02-21T00:48:07.803Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "4d4039d8-a7ea-4f1a-adbe-4b5f4607c751",
+      "business_name": "mar davids",
+      "business_problem": "need customers",
+      "user_name": "mark",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping mark’s business, mar davids. The challenge: need customers. Sabian, we have 60 seconds.\n\nSabian: Mark. To gain customers, immediately pinpoint your single most profitable, lowest-effort offering. Concentrate resources there.\n\n...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-21T00-47-49-753Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "ba1531462a5f024d126863517bef5f82c54a1bd9e89080da4521777a1927db14"
+  },
+  {
+    "id": "3abafe43-32c5-4d08-9777-0526f173c356",
+    "timestamp": "2026-02-21T01:01:14.945Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "2270b3d5-3665-465e-bd85-ffc847a2fdba"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "8d2728a260ca601e1533b7999ac4af75934917f12ea85c9346f576293610cfbd"
+  },
+  {
+    "id": "98865e3f-a0c8-4a89-8415-9e2aa873c726",
+    "timestamp": "2026-02-21T01:03:51.307Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "2270b3d5-3665-465e-bd85-ffc847a2fdba",
+      "business_name": "women empowerment",
+      "business_problem": "I want more publicity and attract more influential speakers at our womens luncheon empowerment events",
+      "user_name": "Soomer and Charlotte",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping Soomer and Charlotte’s business, women empowerment. The challenge: I want more publicity and attract more influential speakers at our womens luncheon empowerment events. Sabian, we have 60 seconds.\n\nSabian: Publicity: Target l...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-21T01-03-31-729Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "5f43030483f8e92014869e2a310769d108df29f8eb6368bf47d19fdc57b38472"
+  },
+  {
+    "id": "f3e6a64a-095d-4076-9f1b-2dab2b1cba41",
+    "timestamp": "2026-02-21T01:07:45.607Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "dc7e53ae-cc1a-4819-b822-913c75a11430"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "fdbf1e2bd67125feb04d645275d8ccd2d214ee09c7865d991394c5dc93c9396d"
+  },
+  {
+    "id": "6efcdc95-411d-4d1e-93ce-a3204b0cb602",
+    "timestamp": "2026-02-21T01:08:53.060Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "dc7e53ae-cc1a-4819-b822-913c75a11430",
+      "business_name": "",
+      "business_problem": "mark davis",
+      "user_name": "jason",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping jason’s business, . The challenge: mark davis. Sabian, we have 60 seconds.\nSabian: Mark Davis. Acknowledge pressure. Jason, find Davis's *specific* market edge. His strength?\nHost A: \"Market edge\" is vague. How to pinpoint, fa...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-21T01-08-33-695Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "f8e2fc25230f02db4db30ed0575134b282fa82ef8db1c8ef6d272a5f46c68e3e"
+  },
+  {
+    "id": "ed402324-d1ce-44b9-8a49-72eb2a893b01",
+    "timestamp": "2026-02-21T01:10:02.339Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "a3df2a39-e560-44a7-aaba-92cf21f359b0"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "f79f2fd62ebcfe8b47edebdfbdad4c7be335aebb4651bd6081774cc3698d9f31"
+  },
+  {
+    "id": "0a0dda52-518f-426b-97d8-35cd4bb313f0",
+    "timestamp": "2026-02-21T01:11:59.009Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "a3df2a39-e560-44a7-aaba-92cf21f359b0",
+      "business_name": "VRTX",
+      "business_problem": "I NEED fitbit users to subscribe to my human perfomnce system thats monitors they body metrics and get 60 second insghts daily",
+      "user_name": "jason",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: \"Welcome to 60 Second Insights. I’m your host. Today we’re helping jason’s business, VRTX. The challenge: I NEED fitbit users to subscribe to my human perfomnce system thats monitors they body metrics and get 60 second insghts daily. Sabian, we have 60 seconds.\"\nSabian: \"Integrate VRTX direc...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-21T01-11-38-850Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "dc46a3d882ea243ed462d797079bfb34ab50d019b75d533db07c40c5652112c8"
+  },
+  {
+    "id": "451407ea-3b6a-4197-af58-86505e3fa9ca",
+    "timestamp": "2026-02-21T01:16:30.424Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "2b842b4d-423f-49bb-a0bb-d88377553cc7"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "3654b2e4eb032387a44427653b3461e192d2ae7e9e9edc832762d7335f7ad32d"
+  },
+  {
+    "id": "2f4c0af8-ee5e-4b9c-a7cf-42414240b7da",
+    "timestamp": "2026-02-21T01:18:13.525Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "2b842b4d-423f-49bb-a0bb-d88377553cc7",
+      "business_name": "VRTX",
+      "business_problem": "I NEED fitbit users to subscribe to my human perfomnce system thats monitors they body metrics and get 60 second insghts daily",
+      "user_name": "Jason",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping Jason’s business, VRTX. The challenge: I NEED fitbit users to subscribe to my human perfomance system thats monitors they body metrics and get 60 second insghts daily. Sabian, we have 60 seconds.\n\nSabian: Jason, direct Fitbit ...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-21T01-17-52-472Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "087ab174669f1f075e9f6ae40541e0c2ea9c89b1547a8ae382a4c5551f0ec154"
+  },
+  {
+    "id": "812e285e-7f96-4bb5-92ca-61fa06a95c7a",
+    "timestamp": "2026-02-22T17:47:31.252Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "f018bc61-9359-409d-a465-dfd8fcdd7926"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "374b62131d712aca16c12e7ca03c1abbc11c01131fdf9cff25591f0f617057f7"
+  },
+  {
+    "id": "e279fa26-92c3-4fba-9534-977aeb9f2505",
+    "timestamp": "2026-02-22T17:48:40.814Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "f018bc61-9359-409d-a465-dfd8fcdd7926",
+      "business_name": "mark smith",
+      "business_problem": "need more customers for nail business",
+      "user_name": "mark",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping mark’s business, mark smith. The challenge: need more customers for nail business. Sabian, we have 60 seconds.\n\nSabian: Mark, immediate priority is local visibility. Optimize your Google My Business. Photos, services, accurate...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-22T17-48-21-851Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "2c80104be2cac664534180c0a0483c346e49b0f3c23bd2b048b3523e54a5b3d9"
+  },
+  {
+    "id": "ebbd4842-7403-444d-8b17-d1667f0a92f0",
+    "timestamp": "2026-02-22T17:51:50.371Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "61ee91bf-17b7-4c21-b297-bdf6777560f6"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "e964912bde439c952bf8b2d8ba0d0c8470f027504bbc6b91a034c686dc2e7653"
+  },
+  {
+    "id": "4613f202-3af1-4407-b2fe-2c4d0202447b",
+    "timestamp": "2026-02-22T17:54:27.091Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "61ee91bf-17b7-4c21-b297-bdf6777560f6",
+      "business_name": "VRTX",
+      "business_problem": "I need 500 fitbit users to subscribe to my human perfromance app so its gives clearer user data from there wearables devices in podcast format",
+      "user_name": "jason",
+      "user_email": "jasontrade@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping jason’s business, VRTX. The challenge: I need 500 fitbit users to subscribe to my human perfromance app so its gives clearer user data from there wearables devices in podcast format. Sabian, we have 60 seconds.\nSabian: Jason, ...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-22T17-54-05-844Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "0209e540097d257bce2e854ddc058bef5556f1b37feac7c9ef174899b15ef9df"
+  },
+  {
+    "id": "84741c2e-c1bf-4afb-8487-eb19f3da2300",
+    "timestamp": "2026-02-23T00:03:37.068Z",
+    "source": "sabian_insight_feed",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "script_generated",
+    "data": {
+      "business_name": "VRTX",
+      "business_problem": "I NEED 500 fitbit users to subscribe to our human performance operating system",
+      "preview": "Host A: Welcome to Sabian Insights. We've got VRTX needing 500 Fitbit users subscribing to their human performance OS within tight margins. Sabian, map the vector.\n\nSabian: Host A, targeting niche gaps elevates yield. Primary vector: Exploit overlapping cohorts where Fitbit data interfaces with corp"
+    },
+    "tags": [
+      "script",
+      "openrouter"
+    ],
+    "trace": null,
+    "integrity": "c4fa357282f7bbd20297364e63e1ef12def367599017149417a62179a3c41860"
+  },
+  {
+    "id": "a619e8e9-3d5c-446f-8a73-0827cfba4263",
+    "timestamp": "2026-02-23T00:03:52.964Z",
+    "source": "sabian_insight_feed",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "audio_generated",
+    "data": {
+      "business_name": "VRTX",
+      "business_problem": "I NEED 500 fitbit users to subscribe to our human performance operating system",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_openrouter_2026-02-23T00-03-37-105Z.mp3",
+      "scriptPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\script_openrouter_2026-02-23T00-03-37-105Z.txt"
+    },
+    "tags": [
+      "audio",
+      "elevenlabs",
+      "ffmpeg"
+    ],
+    "trace": null,
+    "integrity": "77336fbd603115639ef47e61f5cee068adf6308818d4cbe4d1b721067d93a7f2"
   }
 ]

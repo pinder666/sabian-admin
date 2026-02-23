@@ -77,7 +77,7 @@ Host A — Not the business owner. She may say "${user_name}’s business" or "t
 
 Sabian — No fluff. Speaks directly to ${user_name}. Only mention ${user_name} once if it feels natural. Tailors insight strictly to the problem. Acknowledges pressure. No enterprise solutions if business is small. Keeps logic actionable.
 
-🔹 Host A opens with a fixed intro: "Welcome to 60 Second Insights. I’m your host. Today we’re helping ${user_name}’s business, ${business_name}. The challenge: ${business_problem}. Sabian, we have 60 seconds."
+🔹 Host A opens with a fixed intro: "Welcome to 60 Second Insights. Today we’re helping ${user_name}’s business, ${business_name}. The challenge: ${business_problem}. Sabian, we have 60 seconds."
 Sabian responds first, directly referencing the problem. Host A challenges vague logic. Both push for sharp insight.
 
 📊 RULES:
@@ -114,28 +114,15 @@ Now write the script.`;
   const scriptPath = path.join(audioFolder, `script_${ts}.txt`);
   fs.writeFileSync(scriptPath, raw, 'utf8');
 
-  // 3) Intro/outro
-  const intro =
-    `Welcome to 60 Second Insights. I’m your host, Natalie, joined by Sabian. Today, we’re helping ${user_name}’s business, ${business_name}. ` +
-    `Their challenge: ${business_problem}. Sabian, care to shed some light in 60 seconds?`;
-
-  const outro =
-    `Time's up. If you like what you heard, share this with friends. Then sign up and become a member so we can give you real insights.`;
-
-  // 4) Segment generation
+  // 3) Segment generation (NO hardcoded intro/outro)
   const allLines = raw.split('\n').map(l => l.trim()).filter(Boolean);
   const audioSegments = [];
 
-  const introPath = path.join(audioFolder, `intro_${ts}.mp3`);
-  const outroPath = path.join(audioFolder, `outro_${ts}.mp3`);
   const mergedPath = path.join(audioFolder, `sabian_podcast_full_${ts}.mp3`);
 
   // Ensure voice IDs exist
   if (!process.env.HOST_A_US_ID) throw new Error("Missing HOST_A_US_ID in .env");
   if (!process.env.SABIAN_VOICE_ID) throw new Error("Missing SABIAN_VOICE_ID in .env");
-
-  await generateSpeech(intro, process.env.HOST_A_US_ID, introPath);
-  audioSegments.push(introPath);
 
   for (let i = 0; i < allLines.length; i++) {
     const line = allLines[i];
@@ -163,10 +150,7 @@ Now write the script.`;
     }
   }
 
-  await generateSpeech(outro, process.env.HOST_A_US_ID, outroPath);
-  audioSegments.push(outroPath);
-
-  // 5) Merge
+  // 4) Merge
   await new Promise((resolve, reject) => {
     const ffmpegChain = ffmpeg();
     audioSegments.forEach(seg => ffmpegChain.input(seg));
@@ -181,16 +165,15 @@ Now write the script.`;
   console.log("- Merged Podcast:", mergedPath);
   console.log("- Script:", scriptPath);
 
-  // 6) Cleanup segments (keep merged + script)
+  // 5) Cleanup segments (keep merged + script)
   audioSegments.forEach(file => {
-    // keep mergedPath, and keep scriptPath (not in audioSegments anyway)
     if (file === mergedPath) return;
     fs.unlink(file, err => {
       if (err) console.error("❌ Failed to delete " + file + ":", err.message);
     });
   });
 
-  // 7) Hive log
+  // 6) Hive log
   logToHive({
     source: 'sabian_wizard',
     level: 'complete',

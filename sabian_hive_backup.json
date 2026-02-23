@@ -1,429 +1,5 @@
 [
   {
-    "id": "baf8ac8f-7a78-4c57-91c6-62d5b712f37a",
-    "timestamp": "2025-06-11T15:16:02.338Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "Auto-monitor loop running",
-    "data": null,
-    "tags": [
-      "monitor",
-      "loop"
-    ],
-    "trace": null,
-    "integrity": "bbc36b03cc859bafdd602b8c4112d2f8aa3295020721ea23fa697a0ea4d21674"
-  },
-  {
-    "id": "7549fb86-4f1a-49cd-b51f-8efe6c1f24c6",
-    "timestamp": "2025-06-11T15:16:02.506Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File registered or updated in manifest",
-    "data": {
-      "file": "core_manifest.json",
-      "hash": "868a25c85b6ac88616488da6ee61079ce8cb8ce5efebb86d3fffffc7f2982002"
-    },
-    "tags": [
-      "manifest",
-      "watch",
-      "assimilation"
-    ],
-    "trace": null,
-    "integrity": "530faa1371b92e51bc322645bedd842f7846b9ba3e69c35f062197580c00a18b"
-  },
-  {
-    "id": "6faabe48-fce6-457a-bbe8-c8427d9efb93",
-    "timestamp": "2025-06-11T15:16:04.236Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File registered or updated in manifest",
-    "data": {
-      "file": "sabian_hive_backup.json",
-      "hash": "42574a3fb880d9d137a939488c3bd6b0d0c409d2ab6a46cf5d340af021b1f644"
-    },
-    "tags": [
-      "manifest",
-      "watch",
-      "assimilation"
-    ],
-    "trace": null,
-    "integrity": "ead5cbe95f0d29d96e7092f15be8dbbd11314980a1c556f1fb435c54743217d6"
-  },
-  {
-    "id": "eedea759-82d3-4085-aaf6-1027aa42f37c",
-    "timestamp": "2025-06-11T15:16:04.377Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File registered or updated in manifest",
-    "data": {
-      "file": "sabian_hive_report.json",
-      "hash": "151ad829b6858e477a286c71cf52d9c1f5063349312f1dddcafc2b5a1350903f"
-    },
-    "tags": [
-      "manifest",
-      "watch",
-      "assimilation"
-    ],
-    "trace": null,
-    "integrity": "d1a88e79cf1b4436ddc34e5c98d147b6f6bff32c84ff0c1cf9e5a4c754d3eb68"
-  },
-  {
-    "id": "2c23a85f-c8b1-4ac2-b714-b8fd4ef05edc",
-    "timestamp": "2025-06-11T15:16:04.740Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "Core manifest updated",
-    "data": {
-      "count": 253
-    },
-    "tags": [
-      "manifest",
-      "sync"
-    ],
-    "trace": null,
-    "integrity": "9493b8bb0d12f1033106efe63c65b60cd600251658fa4d3863f76ade3676fcfd"
-  },
-  {
-    "id": "02cb183f-b1f5-44bb-bbd8-f0174475e127",
-    "timestamp": "2025-06-11T15:16:04.887Z",
-    "source": "sabian_wizard",
-    "level": "WARN",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File hash mismatch detected",
-    "data": {
-      "file": "core_manifest.json",
-      "currentHash": "b4c77633068c8c0b4064b4b6992122ceba7a831a50b552b691a775f886214100",
-      "expected": "868a25c85b6ac88616488da6ee61079ce8cb8ce5efebb86d3fffffc7f2982002",
-      "timestamp": "2025-06-11T15:16:04.810Z"
-    },
-    "tags": [
-      "integrity",
-      "hash",
-      "mismatch"
-    ],
-    "trace": null,
-    "integrity": "a26c407940932e867801b05fd49bc96452dc6c4e48a719441c535f0c96bd7972"
-  },
-  {
-    "id": "bd2d180e-ef33-4574-adf4-4c1846803845",
-    "timestamp": "2025-06-11T15:16:05.249Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "Autofix triggered for hash mismatch",
-    "data": {
-      "file": "core_manifest.json",
-      "missionId": "a03d7e06-0721-4bcf-8a1f-528ec73e57eb",
-      "status": "Autofix dispatched successfully"
-    },
-    "tags": [
-      "autofix",
-      "wizard",
-      "recovery"
-    ],
-    "trace": null,
-    "integrity": "8ef26c94d5ebc86004dd3a0c37b2a1e6518b4eae3e5f5d775bc1350f82c02252"
-  },
-  {
-    "id": "d095e384-e69d-4925-a98e-cf581969ad88",
-    "timestamp": "2025-06-11T15:16:07.001Z",
-    "source": "sabian_wizard",
-    "level": "WARN",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File hash mismatch detected",
-    "data": {
-      "file": "sabian_hive_backup.json",
-      "currentHash": "10a5283d82fa16757f18a23c82f4668098df8795b4259b3ab3208b6dbc1732ec",
-      "expected": "42574a3fb880d9d137a939488c3bd6b0d0c409d2ab6a46cf5d340af021b1f644",
-      "timestamp": "2025-06-11T15:16:06.862Z"
-    },
-    "tags": [
-      "integrity",
-      "hash",
-      "mismatch"
-    ],
-    "trace": null,
-    "integrity": "04143b2fecec041fc654cb1c7d5d20549566f1c0cac7a519668b8916612e7f91"
-  },
-  {
-    "id": "77f0baec-6bf7-4fa6-a2a9-9c513ecd7a98",
-    "timestamp": "2025-06-11T15:16:07.441Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "Autofix triggered for hash mismatch",
-    "data": {
-      "file": "sabian_hive_backup.json",
-      "missionId": "0f796dd5-3625-4ce0-af01-fe355fa2915c",
-      "status": "Autofix dispatched successfully"
-    },
-    "tags": [
-      "autofix",
-      "wizard",
-      "recovery"
-    ],
-    "trace": null,
-    "integrity": "08549b84d36d4657931775580c59ec97b8bced7ec281d43557e0ecf7177c8636"
-  },
-  {
-    "id": "56fe2862-d0ec-43cd-a18b-3716cbc9f865",
-    "timestamp": "2025-06-11T15:16:07.576Z",
-    "source": "sabian_wizard",
-    "level": "WARN",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File hash mismatch detected",
-    "data": {
-      "file": "sabian_hive_report.json",
-      "currentHash": "c2ead2c15e9f33cf82064b51b9bc0226b7fd744b1ba9961a98339af555a0e029",
-      "expected": "151ad829b6858e477a286c71cf52d9c1f5063349312f1dddcafc2b5a1350903f",
-      "timestamp": "2025-06-11T15:16:07.520Z"
-    },
-    "tags": [
-      "integrity",
-      "hash",
-      "mismatch"
-    ],
-    "trace": null,
-    "integrity": "8518bfdf2ad424472134bfb4a3fdafc82fa8f1cf2be709705c2974266a88d981"
-  },
-  {
-    "id": "9354bc04-9f5d-46f0-9601-4380a0690fec",
-    "timestamp": "2025-06-11T15:16:07.897Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "Autofix triggered for hash mismatch",
-    "data": {
-      "file": "sabian_hive_report.json",
-      "missionId": "f7a8e200-30fa-4d47-8481-ea762c158f1c",
-      "status": "Autofix dispatched successfully"
-    },
-    "tags": [
-      "autofix",
-      "wizard",
-      "recovery"
-    ],
-    "trace": null,
-    "integrity": "850f5d12126f74e59429b5f25faf91c234181e08bb743c806291871388d31339"
-  },
-  {
-    "id": "bc117aaa-b39f-43e5-8be8-93e747c99663",
-    "timestamp": "2025-06-11T15:21:02.373Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "Auto-monitor loop running",
-    "data": null,
-    "tags": [
-      "monitor",
-      "loop"
-    ],
-    "trace": null,
-    "integrity": "cc50fa0ac919afa892c19e1130bd96bef2503394ff6b697d2016a1d67a0f09db"
-  },
-  {
-    "id": "e51ae145-c4b7-4669-871a-00e7b653f129",
-    "timestamp": "2025-06-11T15:21:02.511Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File registered or updated in manifest",
-    "data": {
-      "file": "core_manifest.json",
-      "hash": "b4c77633068c8c0b4064b4b6992122ceba7a831a50b552b691a775f886214100"
-    },
-    "tags": [
-      "manifest",
-      "watch",
-      "assimilation"
-    ],
-    "trace": null,
-    "integrity": "93509d0bdfe28b04fec6f30c5164a21149e35480e3cd7a0d5b35d808f7e9e76e"
-  },
-  {
-    "id": "0bfe19ac-0e64-4d7a-9c2d-10f0cb4e37dc",
-    "timestamp": "2025-06-11T15:21:03.811Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File registered or updated in manifest",
-    "data": {
-      "file": "sabian_hive_backup.json",
-      "hash": "07edbaccfe17e59aeb7aca688132b0f995d97095d3ff311a7c06b2d9fce0e031"
-    },
-    "tags": [
-      "manifest",
-      "watch",
-      "assimilation"
-    ],
-    "trace": null,
-    "integrity": "40c751cd4b1578eaeb557eecdc57242ea12ba9bf005cb4006b9beacb4bf42743"
-  },
-  {
-    "id": "7ad0f4fe-571a-45d3-a18b-7d85218b4a3b",
-    "timestamp": "2025-06-11T15:21:03.942Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File registered or updated in manifest",
-    "data": {
-      "file": "sabian_hive_report.json",
-      "hash": "2fb3733a6e8faf10448441641c653f750112ba79fd522b731885cdecfae86424"
-    },
-    "tags": [
-      "manifest",
-      "watch",
-      "assimilation"
-    ],
-    "trace": null,
-    "integrity": "4ab4b3b9ad8bdfbdf8a456339e84ea9156bafc7e6447edcd6b674efd2fd19c97"
-  },
-  {
-    "id": "e8fa675b-ce27-460d-ac11-618c812da821",
-    "timestamp": "2025-06-11T15:21:04.158Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "Core manifest updated",
-    "data": {
-      "count": 253
-    },
-    "tags": [
-      "manifest",
-      "sync"
-    ],
-    "trace": null,
-    "integrity": "090387fb2189d21871023dc818d8a14b1ce72f3ee641bcaaf888a9084b81d433"
-  },
-  {
-    "id": "7fc737f9-f836-406d-bd90-20d7df191292",
-    "timestamp": "2025-06-11T15:21:04.271Z",
-    "source": "sabian_wizard",
-    "level": "WARN",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File hash mismatch detected",
-    "data": {
-      "file": "core_manifest.json",
-      "currentHash": "3ba2443554ab064e90849e2b6c987c62b76f3740131a08fca05d6632206c398c",
-      "expected": "b4c77633068c8c0b4064b4b6992122ceba7a831a50b552b691a775f886214100",
-      "timestamp": "2025-06-11T15:21:04.230Z"
-    },
-    "tags": [
-      "integrity",
-      "hash",
-      "mismatch"
-    ],
-    "trace": null,
-    "integrity": "7c21ade9208e959a7babca8b55a2e0f3c9954001f07eb3b005ac70ec39d48285"
-  },
-  {
-    "id": "44cfe49e-74f6-44f4-bf23-47295d795494",
-    "timestamp": "2025-06-11T15:21:04.659Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "Autofix triggered for hash mismatch",
-    "data": {
-      "file": "core_manifest.json",
-      "missionId": "71429875-521b-456a-a0b6-2ab5befda1ec",
-      "status": "Autofix dispatched successfully"
-    },
-    "tags": [
-      "autofix",
-      "wizard",
-      "recovery"
-    ],
-    "trace": null,
-    "integrity": "05ee9df4e73f4b4728b5edb9c68d21bf57e64cd329d4cf9bf04a456e1118c2c9"
-  },
-  {
-    "id": "08bfcc09-cda2-4ce1-897f-3a99cce977c8",
-    "timestamp": "2025-06-11T15:21:05.846Z",
-    "source": "sabian_wizard",
-    "level": "WARN",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File hash mismatch detected",
-    "data": {
-      "file": "sabian_hive_backup.json",
-      "currentHash": "6c3b5d3e4ddf1ed158e7391f82b789e28aa0017254d02dbfa6a6ad6aec4a87c2",
-      "expected": "07edbaccfe17e59aeb7aca688132b0f995d97095d3ff311a7c06b2d9fce0e031",
-      "timestamp": "2025-06-11T15:21:05.811Z"
-    },
-    "tags": [
-      "integrity",
-      "hash",
-      "mismatch"
-    ],
-    "trace": null,
-    "integrity": "e7b0fbd4ec9209e80ccc7d94429c0596a85f668e707dab4126fdd642aa55ea26"
-  },
-  {
-    "id": "857f0727-3b8d-4df3-9df8-3040a48d72b3",
-    "timestamp": "2025-06-11T15:21:06.174Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "Autofix triggered for hash mismatch",
-    "data": {
-      "file": "sabian_hive_backup.json",
-      "missionId": "2210b51a-3919-460f-9695-16f8fdcf6601",
-      "status": "Autofix dispatched successfully"
-    },
-    "tags": [
-      "autofix",
-      "wizard",
-      "recovery"
-    ],
-    "trace": null,
-    "integrity": "cce5bbf4b1d869ff83c1a06c64766e022989fa4af19e5164c3d085a52fdb3427"
-  },
-  {
-    "id": "866ff9ad-2c17-4ca2-b427-8b3918c0ef11",
-    "timestamp": "2025-06-11T15:21:06.252Z",
-    "source": "sabian_wizard",
-    "level": "WARN",
-    "system": "DESKTOP-T5V11A7",
-    "event": "File hash mismatch detected",
-    "data": {
-      "file": "sabian_hive_report.json",
-      "currentHash": "59c9a4e5f02b8fa66066c0365a839b74037f35cf88d83a5d1e9e7b0a763e80d4",
-      "expected": "2fb3733a6e8faf10448441641c653f750112ba79fd522b731885cdecfae86424",
-      "timestamp": "2025-06-11T15:21:06.220Z"
-    },
-    "tags": [
-      "integrity",
-      "hash",
-      "mismatch"
-    ],
-    "trace": null,
-    "integrity": "0d629fe0d04d595f2db2296accbbd224f328d1229278a9eca13d868619fd68fb"
-  },
-  {
-    "id": "32dbcf0d-469c-46f1-a158-2b628d779be6",
-    "timestamp": "2025-06-11T15:21:06.578Z",
-    "source": "sabian_wizard",
-    "level": "INFO",
-    "system": "DESKTOP-T5V11A7",
-    "event": "Autofix triggered for hash mismatch",
-    "data": {
-      "file": "sabian_hive_report.json",
-      "missionId": "512b167f-374c-4979-9e56-3376490a55f8",
-      "status": "Autofix dispatched successfully"
-    },
-    "tags": [
-      "autofix",
-      "wizard",
-      "recovery"
-    ],
-    "trace": null,
-    "integrity": "d23b5ca740d88a077760551fabc98c5976ce8052baca74631ff4320b8df1dc40"
-  },
-  {
     "id": "447bcf8c-7097-40f2-8ee6-c61e0f1658af",
     "timestamp": "2025-06-11T15:26:02.356Z",
     "source": "sabian_wizard",
@@ -19086,5 +18662,449 @@
     ],
     "trace": null,
     "integrity": "89aa5687ceb8c34096b2dd6fd19a382ab156118335c19b03f9771e1aaa40ad7c"
+  },
+  {
+    "id": "fbf2c85a-e2d8-4707-99b8-caf626e434a0",
+    "timestamp": "2026-02-19T03:12:26.054Z",
+    "source": "sabian_test_demo",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "✅ EV Audio Demo Complete",
+    "data": {
+      "experience": "EV",
+      "session_id": "91fecd66-ecbc-474d-8225-f2b124821f9f"
+    },
+    "tags": [
+      "demo",
+      "audio"
+    ],
+    "trace": null,
+    "integrity": "270c840b0b969732548c5c741482b95805b8906e61238bd85b9f76b94c767a6b"
+  },
+  {
+    "id": "048f282f-79cb-4750-80c7-4eb97ab8f819",
+    "timestamp": "2026-02-20T15:33:35.696Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "fdeb255b-76d0-4dd0-8664-ddde211a6d6a"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "d60a4e75217c867b771ef14e06a78f2924082a30e2f434301cf3d72249db5214"
+  },
+  {
+    "id": "628fdb98-3a92-461d-bf30-a1bd9b118692",
+    "timestamp": "2026-02-20T15:41:50.098Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "6f814b6b-24a1-4e53-aa5b-f98d15dd89d4"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "41de12a472d630ef0b938847601c9786e5ae37de61765e522ec5806105586e61"
+  },
+  {
+    "id": "98770993-b56d-4507-9599-5b741762879d",
+    "timestamp": "2026-02-20T15:43:16.440Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "6f814b6b-24a1-4e53-aa5b-f98d15dd89d4",
+      "business_name": "mark smith",
+      "business_problem": "need more customers for my business which is event hosting",
+      "user_name": "mark",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping mark’s business, mark smith. The challenge: need more customers for my business which is event hosting. Sabian, we have 60 seconds.\nSabian: Mark, immediate focus: direct event planner outreach. Target local corporate and perso...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-20T15-42-51-005Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "8bee9bcd576dcc7e461224fa91cbf321aa679d3a7f8c486989b355b7ea0d0731"
+  },
+  {
+    "id": "721f6a15-400c-4f7c-b791-f048bdd8f62f",
+    "timestamp": "2026-02-20T16:43:15.222Z",
+    "source": "sabian_test_demo",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "✅ EV Audio Demo Complete",
+    "data": {
+      "experience": "EV",
+      "session_id": "c9c181e5-34c8-4ffc-b0b0-a0ac44814272"
+    },
+    "tags": [
+      "demo",
+      "audio"
+    ],
+    "trace": null,
+    "integrity": "e95075d4aaef51fea5275f0127fb3ec657131ac8fd6f36c4881f9f92e8043cf8"
+  },
+  {
+    "id": "990ceb46-f07b-4746-b131-66179e79777d",
+    "timestamp": "2026-02-21T00:16:40.965Z",
+    "source": "sabian_insight_feed",
+    "level": "ERROR",
+    "system": "LT-JBGRPJ2",
+    "event": "engine_failure",
+    "data": {
+      "message": "Request failed with status code 404",
+      "details": {
+        "error": {
+          "message": "No endpoints found for deepseek/deepseek-r1-0528-qwen3-8b:free.",
+          "code": 404
+        },
+        "user_id": "user_2yH2Wce3LxpksdLwweWabGhl5un"
+      }
+    },
+    "tags": [
+      "error"
+    ],
+    "trace": null,
+    "integrity": "c68d02509689e9d8d21da316d17662c191381525c5c4b129f253cdf02c988453"
+  },
+  {
+    "id": "d735a536-a9dc-404c-9489-2a21f8a3c6e9",
+    "timestamp": "2026-02-21T00:47:05.188Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "4d4039d8-a7ea-4f1a-adbe-4b5f4607c751"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "933245e224776a4a73f249e2819e26881a494c7ba791a12c8fe6dd1708908263"
+  },
+  {
+    "id": "dbe0481f-824f-47ea-b327-c1f964bbda47",
+    "timestamp": "2026-02-21T00:48:07.803Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "4d4039d8-a7ea-4f1a-adbe-4b5f4607c751",
+      "business_name": "mar davids",
+      "business_problem": "need customers",
+      "user_name": "mark",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping mark’s business, mar davids. The challenge: need customers. Sabian, we have 60 seconds.\n\nSabian: Mark. To gain customers, immediately pinpoint your single most profitable, lowest-effort offering. Concentrate resources there.\n\n...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-21T00-47-49-753Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "ba1531462a5f024d126863517bef5f82c54a1bd9e89080da4521777a1927db14"
+  },
+  {
+    "id": "3abafe43-32c5-4d08-9777-0526f173c356",
+    "timestamp": "2026-02-21T01:01:14.945Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "2270b3d5-3665-465e-bd85-ffc847a2fdba"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "8d2728a260ca601e1533b7999ac4af75934917f12ea85c9346f576293610cfbd"
+  },
+  {
+    "id": "98865e3f-a0c8-4a89-8415-9e2aa873c726",
+    "timestamp": "2026-02-21T01:03:51.307Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "2270b3d5-3665-465e-bd85-ffc847a2fdba",
+      "business_name": "women empowerment",
+      "business_problem": "I want more publicity and attract more influential speakers at our womens luncheon empowerment events",
+      "user_name": "Soomer and Charlotte",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping Soomer and Charlotte’s business, women empowerment. The challenge: I want more publicity and attract more influential speakers at our womens luncheon empowerment events. Sabian, we have 60 seconds.\n\nSabian: Publicity: Target l...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-21T01-03-31-729Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "5f43030483f8e92014869e2a310769d108df29f8eb6368bf47d19fdc57b38472"
+  },
+  {
+    "id": "f3e6a64a-095d-4076-9f1b-2dab2b1cba41",
+    "timestamp": "2026-02-21T01:07:45.607Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "dc7e53ae-cc1a-4819-b822-913c75a11430"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "fdbf1e2bd67125feb04d645275d8ccd2d214ee09c7865d991394c5dc93c9396d"
+  },
+  {
+    "id": "6efcdc95-411d-4d1e-93ce-a3204b0cb602",
+    "timestamp": "2026-02-21T01:08:53.060Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "dc7e53ae-cc1a-4819-b822-913c75a11430",
+      "business_name": "",
+      "business_problem": "mark davis",
+      "user_name": "jason",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping jason’s business, . The challenge: mark davis. Sabian, we have 60 seconds.\nSabian: Mark Davis. Acknowledge pressure. Jason, find Davis's *specific* market edge. His strength?\nHost A: \"Market edge\" is vague. How to pinpoint, fa...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-21T01-08-33-695Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "f8e2fc25230f02db4db30ed0575134b282fa82ef8db1c8ef6d272a5f46c68e3e"
+  },
+  {
+    "id": "ed402324-d1ce-44b9-8a49-72eb2a893b01",
+    "timestamp": "2026-02-21T01:10:02.339Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "a3df2a39-e560-44a7-aaba-92cf21f359b0"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "f79f2fd62ebcfe8b47edebdfbdad4c7be335aebb4651bd6081774cc3698d9f31"
+  },
+  {
+    "id": "0a0dda52-518f-426b-97d8-35cd4bb313f0",
+    "timestamp": "2026-02-21T01:11:59.009Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "a3df2a39-e560-44a7-aaba-92cf21f359b0",
+      "business_name": "VRTX",
+      "business_problem": "I NEED fitbit users to subscribe to my human perfomnce system thats monitors they body metrics and get 60 second insghts daily",
+      "user_name": "jason",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: \"Welcome to 60 Second Insights. I’m your host. Today we’re helping jason’s business, VRTX. The challenge: I NEED fitbit users to subscribe to my human perfomnce system thats monitors they body metrics and get 60 second insghts daily. Sabian, we have 60 seconds.\"\nSabian: \"Integrate VRTX direc...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-21T01-11-38-850Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "dc46a3d882ea243ed462d797079bfb34ab50d019b75d533db07c40c5652112c8"
+  },
+  {
+    "id": "451407ea-3b6a-4197-af58-86505e3fa9ca",
+    "timestamp": "2026-02-21T01:16:30.424Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "2b842b4d-423f-49bb-a0bb-d88377553cc7"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "3654b2e4eb032387a44427653b3461e192d2ae7e9e9edc832762d7335f7ad32d"
+  },
+  {
+    "id": "2f4c0af8-ee5e-4b9c-a7cf-42414240b7da",
+    "timestamp": "2026-02-21T01:18:13.525Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "2b842b4d-423f-49bb-a0bb-d88377553cc7",
+      "business_name": "VRTX",
+      "business_problem": "I NEED fitbit users to subscribe to my human perfomnce system thats monitors they body metrics and get 60 second insghts daily",
+      "user_name": "Jason",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping Jason’s business, VRTX. The challenge: I NEED fitbit users to subscribe to my human perfomance system thats monitors they body metrics and get 60 second insghts daily. Sabian, we have 60 seconds.\n\nSabian: Jason, direct Fitbit ...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-21T01-17-52-472Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "087ab174669f1f075e9f6ae40541e0c2ea9c89b1547a8ae382a4c5551f0ec154"
+  },
+  {
+    "id": "812e285e-7f96-4bb5-92ca-61fa06a95c7a",
+    "timestamp": "2026-02-22T17:47:31.252Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "f018bc61-9359-409d-a465-dfd8fcdd7926"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "374b62131d712aca16c12e7ca03c1abbc11c01131fdf9cff25591f0f617057f7"
+  },
+  {
+    "id": "e279fa26-92c3-4fba-9534-977aeb9f2505",
+    "timestamp": "2026-02-22T17:48:40.814Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "f018bc61-9359-409d-a465-dfd8fcdd7926",
+      "business_name": "mark smith",
+      "business_problem": "need more customers for nail business",
+      "user_name": "mark",
+      "user_email": "jasontradefx@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping mark’s business, mark smith. The challenge: need more customers for nail business. Sabian, we have 60 seconds.\n\nSabian: Mark, immediate priority is local visibility. Optimize your Google My Business. Photos, services, accurate...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-22T17-48-21-851Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "2c80104be2cac664534180c0a0483c346e49b0f3c23bd2b048b3523e54a5b3d9"
+  },
+  {
+    "id": "ebbd4842-7403-444d-8b17-d1667f0a92f0",
+    "timestamp": "2026-02-22T17:51:50.371Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🌀 First Contact Sequence Initiated",
+    "data": {
+      "session_id": "61ee91bf-17b7-4c21-b297-bdf6777560f6"
+    },
+    "tags": [
+      "onboarding",
+      "first_contact"
+    ],
+    "trace": null,
+    "integrity": "e964912bde439c952bf8b2d8ba0d0c8470f027504bbc6b91a034c686dc2e7653"
+  },
+  {
+    "id": "4613f202-3af1-4407-b2fe-2c4d0202447b",
+    "timestamp": "2026-02-22T17:54:27.091Z",
+    "source": "sabian_wizard",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "🧠 60 Second Insight Ritual Complete",
+    "data": {
+      "session_id": "61ee91bf-17b7-4c21-b297-bdf6777560f6",
+      "business_name": "VRTX",
+      "business_problem": "I need 500 fitbit users to subscribe to my human perfromance app so its gives clearer user data from there wearables devices in podcast format",
+      "user_name": "jason",
+      "user_email": "jasontrade@gmail.com",
+      "preview": "Host A: Welcome to 60 Second Insights. I’m your host. Today we’re helping jason’s business, VRTX. The challenge: I need 500 fitbit users to subscribe to my human perfromance app so its gives clearer user data from there wearables devices in podcast format. Sabian, we have 60 seconds.\nSabian: Jason, ...",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_podcast_full_2026-02-22T17-54-05-844Z.mp3"
+    },
+    "tags": [
+      "first_contact",
+      "audio",
+      "insight"
+    ],
+    "trace": null,
+    "integrity": "0209e540097d257bce2e854ddc058bef5556f1b37feac7c9ef174899b15ef9df"
+  },
+  {
+    "id": "84741c2e-c1bf-4afb-8487-eb19f3da2300",
+    "timestamp": "2026-02-23T00:03:37.068Z",
+    "source": "sabian_insight_feed",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "script_generated",
+    "data": {
+      "business_name": "VRTX",
+      "business_problem": "I NEED 500 fitbit users to subscribe to our human performance operating system",
+      "preview": "Host A: Welcome to Sabian Insights. We've got VRTX needing 500 Fitbit users subscribing to their human performance OS within tight margins. Sabian, map the vector.\n\nSabian: Host A, targeting niche gaps elevates yield. Primary vector: Exploit overlapping cohorts where Fitbit data interfaces with corp"
+    },
+    "tags": [
+      "script",
+      "openrouter"
+    ],
+    "trace": null,
+    "integrity": "c4fa357282f7bbd20297364e63e1ef12def367599017149417a62179a3c41860"
+  },
+  {
+    "id": "a619e8e9-3d5c-446f-8a73-0827cfba4263",
+    "timestamp": "2026-02-23T00:03:52.964Z",
+    "source": "sabian_insight_feed",
+    "level": "INFO",
+    "system": "LT-JBGRPJ2",
+    "event": "audio_generated",
+    "data": {
+      "business_name": "VRTX",
+      "business_problem": "I NEED 500 fitbit users to subscribe to our human performance operating system",
+      "mergedPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\sabian_openrouter_2026-02-23T00-03-37-105Z.mp3",
+      "scriptPath": "C:\\Users\\user\\Desktop\\sabian.ai\\sabian_core\\my_audio\\script_openrouter_2026-02-23T00-03-37-105Z.txt"
+    },
+    "tags": [
+      "audio",
+      "elevenlabs",
+      "ffmpeg"
+    ],
+    "trace": null,
+    "integrity": "77336fbd603115639ef47e61f5cee068adf6308818d4cbe4d1b721067d93a7f2"
   }
 ]

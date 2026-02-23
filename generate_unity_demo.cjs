@@ -18,27 +18,8 @@ const script = [
   
   "Host A: Translate that directly into a vendor sales angle.",
   
-  "Sabian: The vendor does not sell hardware. The vendor sells stabilization. Specifically, transfer-point control logic review, interlock sequencing validation, and automated restart recovery. Those services become sellable because the mine has already admitted instability publicly.",
   
-  "Host A: How does that change how the vendor approaches the site?",
   
-  "Sabian: It eliminates generic discovery. The vendor enters the conversation already aligned to the failure mode. Instead of asking what the problem is, they validate whether oscillating feed, nuisance trips, and manual restart procedures are occurring. That shifts the conversation from selling to confirming.",
-  
-  "Host A: Give me a second example earlier in the lifecycle.",
-  
-  "Sabian: First Quantum disclosed that a project reached approximately ninety-two percent completion of control system configuration, with remaining work focused on live sequence and functionality testing. That wording only appears when control logic exists but has not yet proven stable under live operating conditions.",
-  
-  "Host A: What does a vendor sell in that window?",
-  
-  "Sabian: Commissioning support, sequence validation, alarm rationalization, and control trust recovery. This is the phase where vendors sell services with margin, before delays harden into schedule overruns.",
-  
-  "Host A: What happens if the vendor misses that signal?",
-  
-  "Sabian: They enter after instability shows up in KPIs. At that point procurement controls the engagement, scope is defensive, and margins compress. The opportunity shifts from enablement to recovery.",
-  
-  "Host A: Summarize the commercial value of Sabian in one sentence.",
-  
-  "Sabian: My technology converts public operational admissions into precise timing and targeting intelligence, so automation vendors engage only when mines are already prepared to buy."
 ];
 
 
