@@ -1,0 +1,71 @@
+{
+  "total_pdfs": 13,
+  "total_chunks": 8068,
+  "files": [
+    {
+      "source": "Advanced Nutrition and Human Metabolism.pdf",
+      "chunks_file": "Advanced Nutrition and Human Metabolism.jsonl",
+      "chunk_count": 1947
+    },
+    {
+      "source": "Dr sebi approved food list.pdf",
+      "chunks_file": "Dr sebi approved food list.jsonl",
+      "chunk_count": 2
+    },
+    {
+      "source": "Fluid-and-Electrolyte-ppt1-by-Dr.-Mohsin.pdf",
+      "chunks_file": "Fluid-and-Electrolyte-ppt1-by-Dr.-Mohsin.jsonl",
+      "chunk_count": 7
+    },
+    {
+      "source": "Food_10014670.pdf",
+      "chunks_file": "Food_10014670.jsonl",
+      "chunk_count": 289
+    },
+    {
+      "source": "guyton and hall.pdf",
+      "chunks_file": "guyton and hall.jsonl",
+      "chunk_count": 3669
+    },
+    {
+      "source": "Joy_In_Living_TheAlkalineWay.pdf",
+      "chunks_file": "Joy_In_Living_TheAlkalineWay.jsonl",
+      "chunk_count": 127
+    },
+    {
+      "source": "list_of_acid-alkaline_forming_foods_-_need_print.pdf",
+      "chunks_file": "list_of_acid-alkaline_forming_foods_-_need_print.jsonl",
+      "chunk_count": 0
+    },
+    {
+      "source": "Mucous-Reducing-Alkaline-Diet-5cb659b6e9c28.pdf",
+      "chunks_file": "Mucous-Reducing-Alkaline-Diet-5cb659b6e9c28.jsonl",
+      "chunk_count": 9
+    },
+    {
+      "source": "Sport-and-Exercise-Nutrition-Susan-Lanham-New-Samantha-Stear-etc.-z-lib.org_.pdf",
+      "chunks_file": "Sport-and-Exercise-Nutrition-Susan-Lanham-New-Samantha-Stear-etc.-z-lib.org_.jsonl",
+      "chunk_count": 1256
+    },
+    {
+      "source": "The Circadian Code PDF.pdf",
+      "chunks_file": "The Circadian Code PDF.jsonl",
+      "chunk_count": 19
+    },
+    {
+      "source": "The Obesity Code PDF.pdf",
+      "chunks_file": "The Obesity Code PDF.jsonl",
+      "chunk_count": 87
+    },
+    {
+      "source": "understanding-electrolytes-hydration.pdf",
+      "chunks_file": "understanding-electrolytes-hydration.jsonl",
+      "chunk_count": 3
+    },
+    {
+      "source": "Why-We-Sleep-Unlocking-the-Power-of-Sleep.pdf",
+      "chunks_file": "Why-We-Sleep-Unlocking-the-Power-of-Sleep.jsonl",
+      "chunk_count": 653
+    }
+  ]
+}
