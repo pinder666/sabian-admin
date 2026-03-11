@@ -1,0 +1,26 @@
+{
+  "vta_name": "Founding VTA 01",
+  "members": [
+    {
+      "name": "Jason",
+      "slug": "jason",
+      "token_env": "FITBIT_TOKEN_JASON"
+    },
+    {
+      "name": "Shelly",
+      "slug": "shelly",
+      "token_env": "FITBIT_TOKEN_SHELLY"
+    },
+    {
+      "name": "Jus",
+      "slug": "jus",
+      "token_env": "FITBIT_TOKEN_JUS"
+    },
+    {
+      "name": "Uni",
+      "slug": "uni",
+      "token_env": "FITBIT_TOKEN_UNI",
+      "status": "no_device_yet"
+    }
+  ]
+}

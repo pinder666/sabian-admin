@@ -1,0 +1,14 @@
+{
+  "sleep_mean": 0,
+  "sleep_std": null,
+  "hrv_mean": null,
+  "hrv_std": null,
+  "rhr_mean": null,
+  "rhr_std": null,
+  "steps_mean": 4294,
+  "steps_std": null,
+  "circadian_window_start": null,
+  "circadian_window_end": null,
+  "recovery_elasticity": null,
+  "sleep_variability": null
+}
