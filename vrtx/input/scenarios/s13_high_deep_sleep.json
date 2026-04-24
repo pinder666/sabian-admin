@@ -1,0 +1,12 @@
+{
+  "_scenario": "s13_high_deep_sleep",
+  "_description": "Exceptional deep sleep (130min), good HRV, low RHR — growth hormone window maximized",
+  "pulled_at": "2026-05-06T07:30:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 30600000, "efficiency": 94, "endTime": "2026-05-06T07:30:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 130 }, "light": { "minutes": 228 }, "rem": { "minutes": 102 }, "wake": { "minutes": 20 } } }, "minutesAsleep": 460, "minutesAwake": 20, "minutesToFallAsleep": 9, "startTime": "2026-05-05T22:30:00.000", "timeInBed": 510 }], "summary": { "totalMinutesAsleep": 460, "totalTimeInBed": 510 } },
+  "activity": { "summary": { "caloriesOut": 2980, "steps": 11400, "sedentaryMinutes": 595, "lightlyActiveMinutes": 195, "fairlyActiveMinutes": 68, "veryActiveMinutes": 42 } },
+  "heart": { "restingHeartRate": 60 },
+  "hrv": { "dailyRmssd": 63 },
+  "spo2": { "avg": 98 }
+}

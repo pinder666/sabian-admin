@@ -1,0 +1,28 @@
+{
+  "_scenario": "steady",
+  "_description": "Normal sleep, normal RHR, mid-range HRV — all signals nominal, baseline day",
+  "pulled_at": "2026-04-23T08:00:00.000Z",
+  "source": "mock",
+  "date": "2026-04-23",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-04-23",
+      "duration": 28800000,
+      "efficiency": 89,
+      "endTime": "2026-04-23T07:00:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 80 }, "light": { "minutes": 240 }, "rem": { "minutes": 108 }, "wake": { "minutes": 32 } } },
+      "minutesAsleep": 480,
+      "minutesAwake": 32,
+      "minutesToFallAsleep": 11,
+      "startTime": "2026-04-22T23:00:00.000",
+      "timeInBed": 512
+    }],
+    "summary": { "totalMinutesAsleep": 480, "totalTimeInBed": 512 }
+  },
+  "activity": { "summary": { "caloriesOut": 2800, "steps": 9800, "sedentaryMinutes": 660, "lightlyActiveMinutes": 172, "fairlyActiveMinutes": 55, "veryActiveMinutes": 30 } },
+  "heart": { "restingHeartRate": 72 },
+  "hrv": { "dailyRmssd": 38 },
+  "spo2": { "avg": 97 }
+}

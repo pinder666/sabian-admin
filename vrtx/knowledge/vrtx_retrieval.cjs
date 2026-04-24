@@ -69,25 +69,37 @@ function retrieveRelevantChunks(options = {}) {
   const chunksDir = options.chunksDir || path.join(__dirname, 'chunks');
   const query = String(options.query || '').trim();
   const topK = Number.isFinite(options.topK) ? options.topK : 4;
+  const maxPerSource = Number.isFinite(options.maxPerSource) ? options.maxPerSource : 2;
   if (!query) return [];
 
   const rows = loadChunks(chunksDir);
   if (!rows.length) return [];
 
   const idf = buildIdf(rows);
-  const ranked = rows
+  const sorted = rows
     .map(row => ({ row, score: score(query, row.text, idf) }))
     .filter(entry => entry.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, topK)
-    .map(entry => ({
-      source: entry.row.source,
-      chunk_id: entry.row.chunk_id,
-      text: String(entry.row.text || '').replace(/\s+/g, ' ').trim(),
-      score: Number(entry.score.toFixed(2))
-    }));
+    .sort((a, b) => b.score - a.score);
 
-  return ranked;
+  // Source diversity: select topK with at most maxPerSource per source
+  const sourceCount = new Map();
+  const selected = [];
+  for (const entry of sorted) {
+    const src = entry.row.source || "unknown";
+    const count = sourceCount.get(src) || 0;
+    if (count < maxPerSource) {
+      selected.push(entry);
+      sourceCount.set(src, count + 1);
+    }
+    if (selected.length >= topK) break;
+  }
+
+  return selected.map(entry => ({
+    source: entry.row.source,
+    chunk_id: entry.row.chunk_id,
+    text: String(entry.row.text || '').replace(/\s+/g, ' ').trim(),
+    score: Number(entry.score.toFixed(2))
+  }));
 }
 
 module.exports = { retrieveRelevantChunks };

@@ -2,9 +2,8 @@ const axios = require('axios');
 const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg'); // Add this if not already at the top
 
-const elevenLabsAPIKey = process.env.ELEVENLABS_API_KEY || 'YOUR_API_KEY_HERE';
-
 async function generateSpeech(insightText, voiceId, outputFile) {
+    const elevenLabsAPIKey = process.env.ELEVENLABS_API_KEY || '';
     try {
         const response = await axios({
             method: 'POST',

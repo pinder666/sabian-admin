@@ -1,0 +1,12 @@
+{
+  "_scenario": "s07_anxiety_night",
+  "_description": "Long time to fall asleep, lots of wake time, RHR elevated, HRV crushed — anxious night",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 22800000, "efficiency": 78, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 40 }, "light": { "minutes": 245 }, "rem": { "minutes": 65 }, "wake": { "minutes": 90 } } }, "minutesAsleep": 350, "minutesAwake": 90, "minutesToFallAsleep": 48, "startTime": "2026-05-05T23:00:00.000", "timeInBed": 480 }], "summary": { "totalMinutesAsleep": 350, "totalTimeInBed": 480 } },
+  "activity": { "summary": { "caloriesOut": 2700, "steps": 7900, "sedentaryMinutes": 700, "lightlyActiveMinutes": 140, "fairlyActiveMinutes": 38, "veryActiveMinutes": 16 } },
+  "heart": { "restingHeartRate": 89 },
+  "hrv": { "dailyRmssd": 17 },
+  "spo2": { "avg": 97 }
+}

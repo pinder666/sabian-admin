@@ -1,0 +1,28 @@
+{
+  "_scenario": "night_owl",
+  "_description": "Late sleep onset 2:30am, adequate duration, good metrics — circadian phase drift",
+  "pulled_at": "2026-05-06T10:00:00.000Z",
+  "source": "mock",
+  "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-05-06",
+      "duration": 27000000,
+      "efficiency": 91,
+      "endTime": "2026-05-06T10:00:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 82 }, "light": { "minutes": 228 }, "rem": { "minutes": 112 }, "wake": { "minutes": 28 } } },
+      "minutesAsleep": 422,
+      "minutesAwake": 28,
+      "minutesToFallAsleep": 14,
+      "startTime": "2026-05-06T02:30:00.000",
+      "timeInBed": 450
+    }],
+    "summary": { "totalMinutesAsleep": 422, "totalTimeInBed": 450 }
+  },
+  "activity": { "summary": { "caloriesOut": 2810, "steps": 9200, "sedentaryMinutes": 640, "lightlyActiveMinutes": 175, "fairlyActiveMinutes": 52, "veryActiveMinutes": 30 } },
+  "heart": { "restingHeartRate": 67 },
+  "hrv": { "dailyRmssd": 47 },
+  "spo2": { "avg": 98 }
+}

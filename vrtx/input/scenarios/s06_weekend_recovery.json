@@ -1,0 +1,12 @@
+{
+  "_scenario": "s06_weekend_recovery",
+  "_description": "9h sleep after a week of deficits — rebound deep sleep surge, HRV recovering",
+  "pulled_at": "2026-05-06T09:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 32400000, "efficiency": 92, "endTime": "2026-05-06T09:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 102 }, "light": { "minutes": 262 }, "rem": { "minutes": 118 }, "wake": { "minutes": 38 } } }, "minutesAsleep": 482, "minutesAwake": 38, "minutesToFallAsleep": 7, "startTime": "2026-05-06T00:00:00.000", "timeInBed": 540 }], "summary": { "totalMinutesAsleep": 482, "totalTimeInBed": 540 } },
+  "activity": { "summary": { "caloriesOut": 2650, "steps": 6200, "sedentaryMinutes": 740, "lightlyActiveMinutes": 130, "fairlyActiveMinutes": 30, "veryActiveMinutes": 12 } },
+  "heart": { "restingHeartRate": 66 },
+  "hrv": { "dailyRmssd": 52 },
+  "spo2": { "avg": 98 }
+}

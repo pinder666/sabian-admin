@@ -1,8 +1,8 @@
 {
   "user_id": "founder",
-  "calibration_day": 13,
-  "status": "calibration_day_8_14",
-  "baseline_established": false,
+  "calibration_day": 15,
+  "status": "calibrated",
+  "baseline_established": true,
   "patterns_detected": [],
   "confidence_score": 0
 }

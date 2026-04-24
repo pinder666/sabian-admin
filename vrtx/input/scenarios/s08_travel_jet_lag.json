@@ -1,0 +1,12 @@
+{
+  "_scenario": "s08_travel_jet_lag",
+  "_description": "Sleep timing shifted 3h, short duration, RHR up, HRV low — travel disruption",
+  "pulled_at": "2026-05-06T11:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 18000000, "efficiency": 80, "endTime": "2026-05-06T11:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 35 }, "light": { "minutes": 198 }, "rem": { "minutes": 52 }, "wake": { "minutes": 15 } } }, "minutesAsleep": 285, "minutesAwake": 15, "minutesToFallAsleep": 35, "startTime": "2026-05-06T05:45:00.000", "timeInBed": 315 }], "summary": { "totalMinutesAsleep": 285, "totalTimeInBed": 315 } },
+  "activity": { "summary": { "caloriesOut": 2600, "steps": 11800, "sedentaryMinutes": 420, "lightlyActiveMinutes": 220, "fairlyActiveMinutes": 65, "veryActiveMinutes": 38 } },
+  "heart": { "restingHeartRate": 82 },
+  "hrv": { "dailyRmssd": 23 },
+  "spo2": { "avg": 96 }
+}

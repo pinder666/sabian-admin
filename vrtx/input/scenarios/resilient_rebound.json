@@ -1,0 +1,28 @@
+{
+  "_scenario": "resilient_rebound",
+  "_description": "Peak recovery — 8h45m sleep, HRV at ceiling, RHR suppressed, high deep sleep — strongest state possible",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock",
+  "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-05-06",
+      "duration": 31500000,
+      "efficiency": 95,
+      "endTime": "2026-05-06T07:30:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 108 }, "light": { "minutes": 240 }, "rem": { "minutes": 130 }, "wake": { "minutes": 22 } } },
+      "minutesAsleep": 478,
+      "minutesAwake": 22,
+      "minutesToFallAsleep": 7,
+      "startTime": "2026-05-05T22:15:00.000",
+      "timeInBed": 500
+    }],
+    "summary": { "totalMinutesAsleep": 478, "totalTimeInBed": 500 }
+  },
+  "activity": { "summary": { "caloriesOut": 2950, "steps": 12100, "sedentaryMinutes": 580, "lightlyActiveMinutes": 200, "fairlyActiveMinutes": 70, "veryActiveMinutes": 45 } },
+  "heart": { "restingHeartRate": 61 },
+  "hrv": { "dailyRmssd": 72 },
+  "spo2": { "avg": 98 }
+}

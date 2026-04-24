@@ -1,0 +1,28 @@
+{
+  "_scenario": "overtraining",
+  "_description": "High training load yesterday, depressed HRV, elevated RHR — athletic overreach signal",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock",
+  "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-05-06",
+      "duration": 25200000,
+      "efficiency": 85,
+      "endTime": "2026-05-06T07:00:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 62 }, "light": { "minutes": 220 }, "rem": { "minutes": 88 }, "wake": { "minutes": 50 } } },
+      "minutesAsleep": 370,
+      "minutesAwake": 50,
+      "minutesToFallAsleep": 18,
+      "startTime": "2026-05-05T23:50:00.000",
+      "timeInBed": 420
+    }],
+    "summary": { "totalMinutesAsleep": 370, "totalTimeInBed": 420 }
+  },
+  "activity": { "summary": { "caloriesOut": 3820, "steps": 18400, "sedentaryMinutes": 430, "lightlyActiveMinutes": 210, "fairlyActiveMinutes": 95, "veryActiveMinutes": 118 } },
+  "heart": { "restingHeartRate": 86 },
+  "hrv": { "dailyRmssd": 26 },
+  "spo2": { "avg": 97 }
+}

@@ -1,0 +1,12 @@
+{
+  "_scenario": "s15_stable_performer",
+  "_description": "All metrics in healthy range, consistent timing, nothing outstanding — solid baseline execution day",
+  "pulled_at": "2026-05-06T07:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 27000000, "efficiency": 90, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 78 }, "light": { "minutes": 235 }, "rem": { "minutes": 107 }, "wake": { "minutes": 30 } } }, "minutesAsleep": 420, "minutesAwake": 30, "minutesToFallAsleep": 10, "startTime": "2026-05-05T23:30:00.000", "timeInBed": 450 }], "summary": { "totalMinutesAsleep": 420, "totalTimeInBed": 450 } },
+  "activity": { "summary": { "caloriesOut": 2820, "steps": 10100, "sedentaryMinutes": 642, "lightlyActiveMinutes": 175, "fairlyActiveMinutes": 55, "veryActiveMinutes": 32 } },
+  "heart": { "restingHeartRate": 71 },
+  "hrv": { "dailyRmssd": 40 },
+  "spo2": { "avg": 97 }
+}

@@ -1,0 +1,28 @@
+{
+  "_scenario": "high_stress",
+  "_description": "Normal sleep duration but RHR spiked and HRV crashed — autonomic overload, not sleep deficit",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock",
+  "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-05-06",
+      "duration": 27900000,
+      "efficiency": 86,
+      "endTime": "2026-05-06T07:15:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 58 }, "light": { "minutes": 255 }, "rem": { "minutes": 90 }, "wake": { "minutes": 62 } } },
+      "minutesAsleep": 403,
+      "minutesAwake": 62,
+      "minutesToFallAsleep": 22,
+      "startTime": "2026-05-05T23:30:00.000",
+      "timeInBed": 465
+    }],
+    "summary": { "totalMinutesAsleep": 403, "totalTimeInBed": 465 }
+  },
+  "activity": { "summary": { "caloriesOut": 2760, "steps": 7800, "sedentaryMinutes": 710, "lightlyActiveMinutes": 148, "fairlyActiveMinutes": 38, "veryActiveMinutes": 15 } },
+  "heart": { "restingHeartRate": 91 },
+  "hrv": { "dailyRmssd": 19 },
+  "spo2": { "avg": 97 }
+}

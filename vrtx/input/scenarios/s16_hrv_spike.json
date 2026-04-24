@@ -1,0 +1,12 @@
+{
+  "_scenario": "s16_hrv_spike",
+  "_description": "HRV unusually high for this person, sleep adequate, RHR suppressed — unexpected readiness window",
+  "pulled_at": "2026-05-06T07:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 27900000, "efficiency": 91, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 86 }, "light": { "minutes": 236 }, "rem": { "minutes": 113 }, "wake": { "minutes": 30 } } }, "minutesAsleep": 435, "minutesAwake": 30, "minutesToFallAsleep": 11, "startTime": "2026-05-05T23:15:00.000", "timeInBed": 465 }], "summary": { "totalMinutesAsleep": 435, "totalTimeInBed": 465 } },
+  "activity": { "summary": { "caloriesOut": 2870, "steps": 10200, "sedentaryMinutes": 630, "lightlyActiveMinutes": 180, "fairlyActiveMinutes": 58, "veryActiveMinutes": 33 } },
+  "heart": { "restingHeartRate": 63 },
+  "hrv": { "dailyRmssd": 78 },
+  "spo2": { "avg": 98 }
+}

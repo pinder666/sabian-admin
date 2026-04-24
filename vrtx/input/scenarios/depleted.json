@@ -1,0 +1,28 @@
+{
+  "_scenario": "depleted",
+  "_description": "Short sleep, elevated RHR, crashed HRV, low SpO2 — coherent negative, max pressure",
+  "pulled_at": "2026-04-23T08:00:00.000Z",
+  "source": "mock",
+  "date": "2026-04-23",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-04-23",
+      "duration": 19800000,
+      "efficiency": 82,
+      "endTime": "2026-04-23T05:45:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 45 }, "light": { "minutes": 200 }, "rem": { "minutes": 70 }, "wake": { "minutes": 55 } } },
+      "minutesAsleep": 330,
+      "minutesAwake": 55,
+      "minutesToFallAsleep": 15,
+      "startTime": "2026-04-22T23:30:00.000",
+      "timeInBed": 390
+    }],
+    "summary": { "totalMinutesAsleep": 330, "totalTimeInBed": 390 }
+  },
+  "activity": { "summary": { "caloriesOut": 2700, "steps": 8200, "sedentaryMinutes": 720, "lightlyActiveMinutes": 140, "fairlyActiveMinutes": 40, "veryActiveMinutes": 20 } },
+  "heart": { "restingHeartRate": 88 },
+  "hrv": { "dailyRmssd": 28 },
+  "spo2": { "avg": 96 }
+}

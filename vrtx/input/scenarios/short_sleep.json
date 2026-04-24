@@ -1,0 +1,28 @@
+{
+  "_scenario": "short_sleep",
+  "_description": "Sleep mildly below baseline, RHR favorably low — adenosine pathway, steady-with-offset",
+  "pulled_at": "2026-04-23T08:00:00.000Z",
+  "source": "mock",
+  "date": "2026-04-23",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-04-23",
+      "duration": 27000000,
+      "efficiency": 90,
+      "endTime": "2026-04-23T06:45:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 75 }, "light": { "minutes": 230 }, "rem": { "minutes": 105 }, "wake": { "minutes": 40 } } },
+      "minutesAsleep": 410,
+      "minutesAwake": 40,
+      "minutesToFallAsleep": 10,
+      "startTime": "2026-04-22T23:15:00.000",
+      "timeInBed": 450
+    }],
+    "summary": { "totalMinutesAsleep": 410, "totalTimeInBed": 450 }
+  },
+  "activity": { "summary": { "caloriesOut": 2850, "steps": 10500, "sedentaryMinutes": 650, "lightlyActiveMinutes": 180, "fairlyActiveMinutes": 60, "veryActiveMinutes": 35 } },
+  "heart": { "restingHeartRate": 64 },
+  "hrv": { "dailyRmssd": 42 },
+  "spo2": { "avg": 97 }
+}

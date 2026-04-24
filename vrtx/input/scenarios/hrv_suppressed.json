@@ -1,0 +1,28 @@
+{
+  "_scenario": "hrv_suppressed",
+  "_description": "Normal sleep, normal RHR, HRV crashed — autonomic recovery deficit with adequate duration",
+  "pulled_at": "2026-04-23T08:00:00.000Z",
+  "source": "mock",
+  "date": "2026-04-23",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-04-23",
+      "duration": 28500000,
+      "efficiency": 91,
+      "endTime": "2026-04-23T07:00:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 78 }, "light": { "minutes": 238 }, "rem": { "minutes": 110 }, "wake": { "minutes": 35 } } },
+      "minutesAsleep": 475,
+      "minutesAwake": 35,
+      "minutesToFallAsleep": 9,
+      "startTime": "2026-04-22T23:00:00.000",
+      "timeInBed": 510
+    }],
+    "summary": { "totalMinutesAsleep": 475, "totalTimeInBed": 510 }
+  },
+  "activity": { "summary": { "caloriesOut": 2780, "steps": 9100, "sedentaryMinutes": 670, "lightlyActiveMinutes": 165, "fairlyActiveMinutes": 50, "veryActiveMinutes": 28 } },
+  "heart": { "restingHeartRate": 79 },
+  "hrv": { "dailyRmssd": 24 },
+  "spo2": { "avg": 97 }
+}

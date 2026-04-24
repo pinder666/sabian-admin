@@ -1,0 +1,12 @@
+{
+  "_scenario": "s02_fragmented_sleep",
+  "_description": "8h in bed but highly fragmented — many wake episodes, low deep, low efficiency",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 28800000, "efficiency": 74, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 32 }, "light": { "minutes": 298 }, "rem": { "minutes": 62 }, "wake": { "minutes": 108 } } }, "minutesAsleep": 392, "minutesAwake": 108, "minutesToFallAsleep": 28, "startTime": "2026-05-05T23:00:00.000", "timeInBed": 480 }], "summary": { "totalMinutesAsleep": 392, "totalTimeInBed": 480 } },
+  "activity": { "summary": { "caloriesOut": 2720, "steps": 8100, "sedentaryMinutes": 695, "lightlyActiveMinutes": 145, "fairlyActiveMinutes": 40, "veryActiveMinutes": 18 } },
+  "heart": { "restingHeartRate": 80 },
+  "hrv": { "dailyRmssd": 27 },
+  "spo2": { "avg": 96 }
+}

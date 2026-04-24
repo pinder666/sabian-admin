@@ -1,0 +1,28 @@
+{
+  "_scenario": "severe_short_sleep",
+  "_description": "4h40m sleep — severe restriction, high adenosine load, elevated RHR",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock",
+  "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-05-06",
+      "duration": 16800000,
+      "efficiency": 83,
+      "endTime": "2026-05-06T05:40:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 38 }, "light": { "minutes": 175 }, "rem": { "minutes": 55 }, "wake": { "minutes": 12 } } },
+      "minutesAsleep": 268,
+      "minutesAwake": 12,
+      "minutesToFallAsleep": 6,
+      "startTime": "2026-05-06T01:00:00.000",
+      "timeInBed": 280
+    }],
+    "summary": { "totalMinutesAsleep": 268, "totalTimeInBed": 280 }
+  },
+  "activity": { "summary": { "caloriesOut": 2680, "steps": 6400, "sedentaryMinutes": 755, "lightlyActiveMinutes": 110, "fairlyActiveMinutes": 28, "veryActiveMinutes": 10 } },
+  "heart": { "restingHeartRate": 84 },
+  "hrv": { "dailyRmssd": 22 },
+  "spo2": { "avg": 96 }
+}

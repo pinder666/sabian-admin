@@ -1,6 +1,6 @@
 {
-  "total_pdfs": 13,
-  "total_chunks": 8068,
+  "total_pdfs": 14,
+  "total_chunks": 8221,
   "files": [
     {
       "source": "Advanced Nutrition and Human Metabolism.pdf",
@@ -26,6 +26,11 @@
       "source": "guyton and hall.pdf",
       "chunks_file": "guyton and hall.jsonl",
       "chunk_count": 3669
+    },
+    {
+      "source": "HIDDEN FACTS 2.pdf",
+      "chunks_file": "HIDDEN FACTS 2.jsonl",
+      "chunk_count": 153
     },
     {
       "source": "Joy_In_Living_TheAlkalineWay.pdf",

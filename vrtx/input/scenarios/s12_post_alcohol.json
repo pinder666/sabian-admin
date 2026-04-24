@@ -1,0 +1,12 @@
+{
+  "_scenario": "s12_post_alcohol",
+  "_description": "Adequate sleep hours but REM gutted, HRV crashed, RHR elevated — alcohol suppression pattern",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 25200000, "efficiency": 80, "endTime": "2026-05-06T07:30:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 52 }, "light": { "minutes": 310 }, "rem": { "minutes": 28 }, "wake": { "minutes": 70 } } }, "minutesAsleep": 390, "minutesAwake": 70, "minutesToFallAsleep": 4, "startTime": "2026-05-06T00:30:00.000", "timeInBed": 420 }], "summary": { "totalMinutesAsleep": 390, "totalTimeInBed": 420 } },
+  "activity": { "summary": { "caloriesOut": 2680, "steps": 7200, "sedentaryMinutes": 715, "lightlyActiveMinutes": 135, "fairlyActiveMinutes": 35, "veryActiveMinutes": 14 } },
+  "heart": { "restingHeartRate": 87 },
+  "hrv": { "dailyRmssd": 16 },
+  "spo2": { "avg": 95 }
+}

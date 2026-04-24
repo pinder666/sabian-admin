@@ -1,0 +1,28 @@
+{
+  "_scenario": "low_spo2",
+  "_description": "Sleep adequate, metrics otherwise normal, but SpO2 dropped to 93 — respiratory suppression during sleep",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock",
+  "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-05-06",
+      "duration": 28200000,
+      "efficiency": 88,
+      "endTime": "2026-05-06T07:00:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 55 }, "light": { "minutes": 248 }, "rem": { "minutes": 98 }, "wake": { "minutes": 69 } } },
+      "minutesAsleep": 401,
+      "minutesAwake": 69,
+      "minutesToFallAsleep": 13,
+      "startTime": "2026-05-05T23:10:00.000",
+      "timeInBed": 470
+    }],
+    "summary": { "totalMinutesAsleep": 401, "totalTimeInBed": 470 }
+  },
+  "activity": { "summary": { "caloriesOut": 2740, "steps": 8900, "sedentaryMinutes": 680, "lightlyActiveMinutes": 158, "fairlyActiveMinutes": 44, "veryActiveMinutes": 22 } },
+  "heart": { "restingHeartRate": 76 },
+  "hrv": { "dailyRmssd": 31 },
+  "spo2": { "avg": 93 }
+}

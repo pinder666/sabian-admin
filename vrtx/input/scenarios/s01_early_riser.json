@@ -1,0 +1,12 @@
+{
+  "_scenario": "s01_early_riser",
+  "_description": "Early bedtime, long sleep, modest HRV — well rested but not peak",
+  "pulled_at": "2026-05-06T06:30:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 30600000, "efficiency": 90, "endTime": "2026-05-06T06:30:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 88 }, "light": { "minutes": 245 }, "rem": { "minutes": 115 }, "wake": { "minutes": 32 } } }, "minutesAsleep": 448, "minutesAwake": 32, "minutesToFallAsleep": 10, "startTime": "2026-05-05T22:00:00.000", "timeInBed": 480 }], "summary": { "totalMinutesAsleep": 448, "totalTimeInBed": 480 } },
+  "activity": { "summary": { "caloriesOut": 2810, "steps": 9600, "sedentaryMinutes": 645, "lightlyActiveMinutes": 170, "fairlyActiveMinutes": 52, "veryActiveMinutes": 28 } },
+  "heart": { "restingHeartRate": 70 },
+  "hrv": { "dailyRmssd": 44 },
+  "spo2": { "avg": 97 }
+}

@@ -1,0 +1,12 @@
+{
+  "_scenario": "s11_sedentary_day",
+  "_description": "Good sleep, good HRV, but barely moved yesterday — very low steps, low activity",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 28800000, "efficiency": 91, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 85 }, "light": { "minutes": 238 }, "rem": { "minutes": 112 }, "wake": { "minutes": 25 } } }, "minutesAsleep": 435, "minutesAwake": 25, "minutesToFallAsleep": 11, "startTime": "2026-05-05T23:00:00.000", "timeInBed": 480 }], "summary": { "totalMinutesAsleep": 435, "totalTimeInBed": 480 } },
+  "activity": { "summary": { "caloriesOut": 2200, "steps": 1800, "sedentaryMinutes": 840, "lightlyActiveMinutes": 68, "fairlyActiveMinutes": 10, "veryActiveMinutes": 2 } },
+  "heart": { "restingHeartRate": 68 },
+  "hrv": { "dailyRmssd": 49 },
+  "spo2": { "avg": 98 }
+}

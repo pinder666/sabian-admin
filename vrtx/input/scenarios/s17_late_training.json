@@ -1,0 +1,12 @@
+{
+  "_scenario": "s17_late_training",
+  "_description": "Hard training session at 9pm, delayed sleep onset, HRV suppressed from sympathetic activity",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 23400000, "efficiency": 84, "endTime": "2026-05-06T07:30:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 65 }, "light": { "minutes": 228 }, "rem": { "minutes": 78 }, "wake": { "minutes": 55 } } }, "minutesAsleep": 371, "minutesAwake": 55, "minutesToFallAsleep": 38, "startTime": "2026-05-06T01:00:00.000", "timeInBed": 390 }], "summary": { "totalMinutesAsleep": 371, "totalTimeInBed": 390 } },
+  "activity": { "summary": { "caloriesOut": 3450, "steps": 14200, "sedentaryMinutes": 480, "lightlyActiveMinutes": 195, "fairlyActiveMinutes": 72, "veryActiveMinutes": 90 } },
+  "heart": { "restingHeartRate": 78 },
+  "hrv": { "dailyRmssd": 29 },
+  "spo2": { "avg": 97 }
+}

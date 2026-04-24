@@ -1,0 +1,28 @@
+{
+  "_scenario": "momentum",
+  "_description": "Sleep above baseline, RHR low, HRV high — fully recovered, leverage day",
+  "pulled_at": "2026-04-23T08:00:00.000Z",
+  "source": "mock",
+  "date": "2026-04-23",
+  "profile": { "displayName": "JASON" },
+  "sleep": {
+    "sleep": [{
+      "dateOfSleep": "2026-04-23",
+      "duration": 30600000,
+      "efficiency": 93,
+      "endTime": "2026-04-23T07:00:00.000",
+      "isMainSleep": true,
+      "levels": { "summary": { "deep": { "minutes": 95 }, "light": { "minutes": 235 }, "rem": { "minutes": 120 }, "wake": { "minutes": 30 } } },
+      "minutesAsleep": 510,
+      "minutesAwake": 30,
+      "minutesToFallAsleep": 8,
+      "startTime": "2026-04-22T22:30:00.000",
+      "timeInBed": 540
+    }],
+    "summary": { "totalMinutesAsleep": 510, "totalTimeInBed": 540 }
+  },
+  "activity": { "summary": { "caloriesOut": 2900, "steps": 11200, "sedentaryMinutes": 600, "lightlyActiveMinutes": 195, "fairlyActiveMinutes": 65, "veryActiveMinutes": 40 } },
+  "heart": { "restingHeartRate": 68 },
+  "hrv": { "dailyRmssd": 58 },
+  "spo2": { "avg": 98 }
+}

@@ -1,0 +1,12 @@
+{
+  "_scenario": "s20_perfect_week",
+  "_description": "7th consecutive night of optimal sleep, HRV trending up all week, RHR at personal low",
+  "pulled_at": "2026-05-06T07:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 30600000, "efficiency": 94, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 98 }, "light": { "minutes": 238 }, "rem": { "minutes": 124 }, "wake": { "minutes": 20 } } }, "minutesAsleep": 460, "minutesAwake": 20, "minutesToFallAsleep": 8, "startTime": "2026-05-05T22:30:00.000", "timeInBed": 510 }], "summary": { "totalMinutesAsleep": 460, "totalTimeInBed": 510 } },
+  "activity": { "summary": { "caloriesOut": 3050, "steps": 12800, "sedentaryMinutes": 570, "lightlyActiveMinutes": 205, "fairlyActiveMinutes": 72, "veryActiveMinutes": 48 } },
+  "heart": { "restingHeartRate": 58 },
+  "hrv": { "dailyRmssd": 82 },
+  "spo2": { "avg": 99 }
+}

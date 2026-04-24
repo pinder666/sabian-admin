@@ -1,0 +1,12 @@
+{
+  "_scenario": "s19_mid_week_grind",
+  "_description": "Wednesday pattern — cumulative mild deficit from Mon-Tue, HRV drifting down, still functional",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 23400000, "efficiency": 86, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 66 }, "light": { "minutes": 222 }, "rem": { "minutes": 90 }, "wake": { "minutes": 32 } } }, "minutesAsleep": 378, "minutesAwake": 32, "minutesToFallAsleep": 16, "startTime": "2026-05-06T00:30:00.000", "timeInBed": 390 }], "summary": { "totalMinutesAsleep": 378, "totalTimeInBed": 390 } },
+  "activity": { "summary": { "caloriesOut": 2810, "steps": 9700, "sedentaryMinutes": 648, "lightlyActiveMinutes": 168, "fairlyActiveMinutes": 50, "veryActiveMinutes": 28 } },
+  "heart": { "restingHeartRate": 76 },
+  "hrv": { "dailyRmssd": 32 },
+  "spo2": { "avg": 97 }
+}

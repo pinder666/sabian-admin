@@ -1,0 +1,12 @@
+{
+  "_scenario": "s14_low_deep_sleep",
+  "_description": "7h sleep but deep crushed to 28min — physical restoration deficit despite adequate duration",
+  "pulled_at": "2026-05-06T07:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 25200000, "efficiency": 87, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 28 }, "light": { "minutes": 310 }, "rem": { "minutes": 98 }, "wake": { "minutes": 44 } } }, "minutesAsleep": 436, "minutesAwake": 44, "minutesToFallAsleep": 13, "startTime": "2026-05-06T00:00:00.000", "timeInBed": 480 }], "summary": { "totalMinutesAsleep": 436, "totalTimeInBed": 480 } },
+  "activity": { "summary": { "caloriesOut": 2740, "steps": 8800, "sedentaryMinutes": 668, "lightlyActiveMinutes": 158, "fairlyActiveMinutes": 45, "veryActiveMinutes": 22 } },
+  "heart": { "restingHeartRate": 75 },
+  "hrv": { "dailyRmssd": 33 },
+  "spo2": { "avg": 97 }
+}

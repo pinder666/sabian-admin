@@ -1,0 +1,12 @@
+{
+  "_scenario": "s10_deadline_mode",
+  "_description": "5h sleep from late work session, RHR elevated, HRV low — cognitive demand with no recovery",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 18000000, "efficiency": 86, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 48 }, "light": { "minutes": 188 }, "rem": { "minutes": 58 }, "wake": { "minutes": 6 } } }, "minutesAsleep": 294, "minutesAwake": 6, "minutesToFallAsleep": 5, "startTime": "2026-05-06T02:00:00.000", "timeInBed": 300 }], "summary": { "totalMinutesAsleep": 294, "totalTimeInBed": 300 } },
+  "activity": { "summary": { "caloriesOut": 2650, "steps": 4800, "sedentaryMinutes": 790, "lightlyActiveMinutes": 95, "fairlyActiveMinutes": 22, "veryActiveMinutes": 8 } },
+  "heart": { "restingHeartRate": 83 },
+  "hrv": { "dailyRmssd": 20 },
+  "spo2": { "avg": 97 }
+}

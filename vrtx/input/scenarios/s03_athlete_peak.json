@@ -1,0 +1,12 @@
+{
+  "_scenario": "s03_athlete_peak",
+  "_description": "Elite recovery state — HRV very high, RHR very low, sleep long and deep",
+  "pulled_at": "2026-05-06T07:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 32400000, "efficiency": 96, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 118 }, "light": { "minutes": 238 }, "rem": { "minutes": 134 }, "wake": { "minutes": 10 } } }, "minutesAsleep": 490, "minutesAwake": 10, "minutesToFallAsleep": 5, "startTime": "2026-05-05T21:30:00.000", "timeInBed": 510 }], "summary": { "totalMinutesAsleep": 490, "totalTimeInBed": 510 } },
+  "activity": { "summary": { "caloriesOut": 3100, "steps": 13500, "sedentaryMinutes": 520, "lightlyActiveMinutes": 215, "fairlyActiveMinutes": 80, "veryActiveMinutes": 55 } },
+  "heart": { "restingHeartRate": 55 },
+  "hrv": { "dailyRmssd": 88 },
+  "spo2": { "avg": 99 }
+}

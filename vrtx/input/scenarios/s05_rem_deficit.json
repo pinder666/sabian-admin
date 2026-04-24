@@ -1,0 +1,12 @@
+{
+  "_scenario": "s05_rem_deficit",
+  "_description": "7h sleep, adequate deep, but REM crushed to 42min — memory consolidation gap",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 25200000, "efficiency": 89, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 84 }, "light": { "minutes": 294 }, "rem": { "minutes": 42 }, "wake": { "minutes": 30 } } }, "minutesAsleep": 420, "minutesAwake": 30, "minutesToFallAsleep": 10, "startTime": "2026-05-06T00:00:00.000", "timeInBed": 450 }], "summary": { "totalMinutesAsleep": 420, "totalTimeInBed": 450 } },
+  "activity": { "summary": { "caloriesOut": 2800, "steps": 9800, "sedentaryMinutes": 650, "lightlyActiveMinutes": 168, "fairlyActiveMinutes": 50, "veryActiveMinutes": 28 } },
+  "heart": { "restingHeartRate": 69 },
+  "hrv": { "dailyRmssd": 41 },
+  "spo2": { "avg": 97 }
+}

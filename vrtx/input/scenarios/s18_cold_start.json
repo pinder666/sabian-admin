@@ -1,0 +1,12 @@
+{
+  "_scenario": "s18_cold_start",
+  "_description": "First day tracked — no baseline context, all metrics mid-range, system has no history",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 26100000, "efficiency": 87, "endTime": "2026-05-06T07:15:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 72 }, "light": { "minutes": 228 }, "rem": { "minutes": 95 }, "wake": { "minutes": 40 } } }, "minutesAsleep": 395, "minutesAwake": 40, "minutesToFallAsleep": 15, "startTime": "2026-05-05T23:30:00.000", "timeInBed": 435 }], "summary": { "totalMinutesAsleep": 395, "totalTimeInBed": 435 } },
+  "activity": { "summary": { "caloriesOut": 2750, "steps": 8600, "sedentaryMinutes": 672, "lightlyActiveMinutes": 155, "fairlyActiveMinutes": 46, "veryActiveMinutes": 24 } },
+  "heart": { "restingHeartRate": 73 },
+  "hrv": { "dailyRmssd": 36 },
+  "spo2": { "avg": 97 }
+}

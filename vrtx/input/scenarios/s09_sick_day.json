@@ -1,0 +1,12 @@
+{
+  "_scenario": "s09_sick_day",
+  "_description": "RHR spiked to 98, HRV near floor, SpO2 dipped, heavy sleep — immune response active",
+  "pulled_at": "2026-05-06T10:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 36000000, "efficiency": 82, "endTime": "2026-05-06T10:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 48 }, "light": { "minutes": 330 }, "rem": { "minutes": 58 }, "wake": { "minutes": 124 } } }, "minutesAsleep": 436, "minutesAwake": 124, "minutesToFallAsleep": 8, "startTime": "2026-05-06T00:00:00.000", "timeInBed": 600 }], "summary": { "totalMinutesAsleep": 436, "totalTimeInBed": 600 } },
+  "activity": { "summary": { "caloriesOut": 2480, "steps": 2200, "sedentaryMinutes": 820, "lightlyActiveMinutes": 65, "fairlyActiveMinutes": 12, "veryActiveMinutes": 4 } },
+  "heart": { "restingHeartRate": 98 },
+  "hrv": { "dailyRmssd": 12 },
+  "spo2": { "avg": 94 }
+}

@@ -1,14 +1,24 @@
 {
-  "sleep_mean": 0,
-  "sleep_std": null,
-  "hrv_mean": null,
-  "hrv_std": null,
-  "rhr_mean": null,
-  "rhr_std": null,
-  "steps_mean": 4294,
-  "steps_std": null,
-  "circadian_window_start": null,
-  "circadian_window_end": null,
-  "recovery_elasticity": null,
-  "sleep_variability": null
+  "sleep_minutes": 472,
+  "sleep_minutes_sd": 1,
+
+  "hrv_ms": 42,
+  "hrv_ms_sd": 1,
+
+  "resting_hr": 80,
+  "resting_hr_sd": 1,
+
+  "steps": 3807.4285714285716,
+  "steps_sd": 1,
+
+  "spo2": 97,
+  "spo2_sd": 1,
+
+  "sleep_consistency": 85,
+
+  "bedtime_minutes_from_midnight": 1380,
+  "bedtime_minutes_sd": 1,
+
+  "wake_minutes_from_midnight": 420,
+  "wake_minutes_sd": 1
 }

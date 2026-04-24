@@ -1,0 +1,12 @@
+{
+  "_scenario": "s04_mild_deficit",
+  "_description": "6h sleep, slightly elevated RHR, borderline HRV — mild deficit, functioning but not optimal",
+  "pulled_at": "2026-05-06T08:00:00.000Z",
+  "source": "mock", "date": "2026-05-06",
+  "profile": { "displayName": "JASON" },
+  "sleep": { "sleep": [{ "dateOfSleep": "2026-05-06", "duration": 21600000, "efficiency": 88, "endTime": "2026-05-06T07:00:00.000", "isMainSleep": true, "levels": { "summary": { "deep": { "minutes": 60 }, "light": { "minutes": 210 }, "rem": { "minutes": 82 }, "wake": { "minutes": 8 } } }, "minutesAsleep": 352, "minutesAwake": 8, "minutesToFallAsleep": 12, "startTime": "2026-05-06T01:00:00.000", "timeInBed": 360 }], "summary": { "totalMinutesAsleep": 352, "totalTimeInBed": 360 } },
+  "activity": { "summary": { "caloriesOut": 2790, "steps": 9400, "sedentaryMinutes": 660, "lightlyActiveMinutes": 162, "fairlyActiveMinutes": 48, "veryActiveMinutes": 25 } },
+  "heart": { "restingHeartRate": 74 },
+  "hrv": { "dailyRmssd": 35 },
+  "spo2": { "avg": 97 }
+}
