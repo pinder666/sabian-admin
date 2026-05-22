@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "Bash(SCENARIO=short_sleep node vrtx/engine/vrtx_engine.cjs)",
+      "Bash(SCENARIO=s20_perfect_week node vrtx/engine/vrtx_engine.cjs)",
+      "Bash(node vrtx/engine/vrtx_engine.cjs)",
+      "Bash(timeout 540 cat \"C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-user-Desktop-sabian-ai-sabian-core\\\\09f80e5d-3258-45f9-9a04-d8ea9708257d\\\\tasks\\\\bu1u7ygc4.output\")",
+      "Bash(node vrtx/engine/vrtx_engine.cjs vrtx/input/scenarios/s01_early_riser.json)",
+      "Bash(node vrtx/engine/vrtx_engine.cjs vrtx/input/scenarios/s11_sedentary_day.json)",
+      "Bash(node vrtx/engine/vrtx_engine.cjs vrtx/input/scenarios/s02_fragmented_sleep.json)",
+      "Bash(node vrtx/engine/vrtx_engine.cjs vrtx/input/scenarios/short_sleep.json)",
+      "Bash(node vrtx/engine/vrtx_engine.cjs vrtx/input/scenarios/momentum.json)",
+      "Bash(node vrtx/engine/vrtx_engine.cjs vrtx/input/scenarios/depleted.json)",
+      "Bash(node vrtx/engine/vrtx_engine.cjs vrtx/input/scenarios/s07_anxiety_night.json)",
+      "Bash(node vrtx/engine/vrtx_engine.cjs vrtx/input/scenarios/s03_athlete_peak.json)",
+      "Bash(node vrtx/engine/vrtx_engine.cjs vrtx/input/scenarios/resilient_rebound.json)",
+      "Bash(node vrtx/engine/vrtx_engine.cjs vrtx/input/scenarios/s20_perfect_week.json)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git -C \"C:\\\\Users\\\\user\\\\Desktop\\\\sabian.ai\\\\sabian_core\" log --oneline -3)",
+      "Bash(git -C \"C:\\\\Users\\\\user\\\\Desktop\\\\sabian.ai\\\\sabian_core\" status --short)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(node *)",
+      "Bash(python3 *)",
+      "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")",
+      "Bash(SCENARIO=depleted node vrtx/engine/vrtx_engine.cjs)",
+      "Bash(tail -f C:\\\\\\\\Users\\\\\\\\user\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-user-Desktop-sabian-ai-sabian-core\\\\\\\\09f80e5d-3258-45f9-9a04-d8ea9708257d\\\\\\\\tasks\\\\\\\\bwkl2ervj.output)",
+      "Bash(cat \"C:\\\\\\\\Users\\\\\\\\user\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-user-Desktop-sabian-ai-sabian-core\\\\\\\\09f80e5d-3258-45f9-9a04-d8ea9708257d\\\\\\\\tasks\\\\\\\\bwkl2ervj.output\")",
+      "Bash(cat \"C:\\\\\\\\Users\\\\\\\\user\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-user-Desktop-sabian-ai-sabian-core\\\\\\\\09f80e5d-3258-45f9-9a04-d8ea9708257d\\\\\\\\tasks\\\\\\\\bpbrot4fj.output\")",
+      "Bash(cat \"C:\\\\\\\\Users\\\\\\\\user\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-user-Desktop-sabian-ai-sabian-core\\\\\\\\09f80e5d-3258-45f9-9a04-d8ea9708257d\\\\\\\\tasks\\\\\\\\bq4r8y054.output\")",
+      "Bash(SCENARIO=s04_mild_deficit node vrtx/engine/vrtx_engine.cjs)",
+      "Bash(SCENARIO=s16_hrv_spike node vrtx/engine/vrtx_engine.cjs)",
+      "Bash(SKIP_AUDIO=1 node vrtx/engine/vrtx_engine.cjs)"
+    ]
+  }
+}

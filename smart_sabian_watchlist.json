@@ -1,36 +1,50 @@
 [
   {
-    "name": "Elon Intel Sweep",
-    "script": "sabian_core/elon_data_orbit.cjs",
-    "interval_minutes": 60,
+    "name": "Wholesale Chargeback Pulse",
+    "script": "sabian_core/wholesale_cb_pulse.cjs",
+    "interval_minutes": 120,
     "enabled": true,
-    "auto_feed": true
+    "auto_feed": true,
+    "description": "Monitors open chargeback windows, expiry dates, and recovery rates across wholesale brands. Extracts cb_total_exposed and cb_recovered_ytd signals."
   },
   {
-    "name": "BYD Intel Sweep",
-    "script": "sabian_core/ev_byd_orbit.cjs",
-    "interval_minutes": 60,
+    "name": "At-Risk Account Monitor",
+    "script": "sabian_core/at_risk_monitor.cjs",
+    "interval_minutes": 120,
     "enabled": true,
-    "auto_feed": true
+    "auto_feed": true,
+    "description": "Scans accounts by silence duration and reorder gap. Flags accounts approaching churn threshold. Extracts ar_accounts_flagged and ar_total_exposure."
   },
   {
-    "name": "Lucid Intel Sweep",
-    "script": "sabian_core/ev_lucid_orbit.cjs",
-    "interval_minutes": 60,
+    "name": "Dead Stock Velocity Check",
+    "script": "sabian_core/dead_stock_velocity.cjs",
+    "interval_minutes": 240,
     "enabled": true,
-    "auto_feed": true
+    "auto_feed": true,
+    "description": "Checks aged inventory carry costs and markdown exposure. Identifies stalled styles beyond 180 days. Extracts ds_total_carry and ds_styles_at_risk."
   },
   {
-    "name": "Rivian Intel Sweep",
-    "script": "sabian_core/ev_rivian_orbit.cjs",
-    "interval_minutes": 60,
+    "name": "Size Curve Drift Detector",
+    "script": "sabian_core/size_curve_drift.cjs",
+    "interval_minutes": 360,
     "enabled": true,
-    "auto_feed": true
+    "auto_feed": true,
+    "description": "Compares ordered vs sold size distributions. Surfaces accounts with >10pt imbalance on any size. Extracts sc_margin_exposed and sc_corrections_drafted."
+  },
+  {
+    "name": "PO Timing Risk Sweep",
+    "script": "sabian_core/po_timing_sweep.cjs",
+    "interval_minutes": 180,
+    "enabled": true,
+    "auto_feed": true,
+    "description": "Scores active purchase orders for factory on-time risk and delivery window exposure. Extracts po_total_exposure and po_orders_at_risk."
+  },
+  {
+    "name": "Wholesale Market Macro Scan",
+    "script": "sabian_core/wholesale_macro_scan.cjs",
+    "interval_minutes": 480,
+    "enabled": true,
+    "auto_feed": true,
+    "description": "Pulls BLS PPI apparel index, retail bankruptcy filings, and tariff schedule changes. Feeds G-Mode macro intelligence layer."
   }
 ]
-{
-  "name": "EV Sector Sweep",
-  "script": "sabian_core/ev_sector_orbit.cjs",
-  "interval_minutes": 60,
-  "enabled": true
-}

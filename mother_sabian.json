@@ -1,8 +1,67 @@
 {
-    "id": "mother-001",
-    "generation": 0,
-    "capabilities": ["insight_engine", "memory_bank", "ethics_layer"],
-    "personality": "nurturing-analytical",
-    "mission_focus": "global-knowledge-ingestion"
+  "id": "mother-001",
+  "generation": 1,
+  "domain": "wholesale_apparel_intelligence",
+  "capabilities": [
+    "insight_engine",
+    "memory_bank",
+    "ethics_layer",
+    "hive_validation",
+    "outcome_tracking",
+    "signal_ingestion"
+  ],
+  "personality": "nurturing-analytical",
+  "mission_focus": "wholesale-knowledge-ingestion-and-validation",
+
+  "domain_context": {
+    "industry": "Specialty apparel wholesale",
+    "primary_customer": "Wholesale brands ($20M–$500M revenue)",
+    "end_user": "Retail buyers placing seasonal orders",
+    "loss_vectors": [
+      "chargebacks",
+      "at_risk_accounts",
+      "dead_stock",
+      "size_curve_imbalance",
+      "po_timing_risk"
+    ],
+    "outcome_currency": "dollars_recovered",
+    "scoring_model": "revenue recovered vs revenue at risk per vector"
+  },
+
+  "hive_validation_rules": {
+    "required_fields": ["source_engine", "brand_id", "ts", "data_version"],
+    "valid_source_engines": ["chargeback", "churn_radar", "dead_stock", "sizecurve", "potiming", "smart_sabian", "actions"],
+    "valid_brand_ids": ["demo", "maxima", "all"],
+    "outcome_status_transitions": {
+      "pending": ["won", "lost", "expired"],
+      "won": [],
+      "lost": [],
+      "expired": []
+    },
+    "directive_due_date_default_days": 30,
+    "reject_if_missing": ["source_engine", "brand_id"]
+  },
+
+  "learned_insights": {
+    "chargeback_pattern": "Brands recover 8-12% of gross wholesale annually through systematic CB management vs 2-3% baseline.",
+    "size_curve_pattern": "40% of specialty doors are running size curves based on rep intuition, not POS data.",
+    "churn_pattern": "Accounts silent 90+ days cancel at 3x base rate. 60-day intervention window is the leverage point.",
+    "dead_stock_pattern": "Liquidation matching yields +119% recovery lift vs default markdown when destination is demand-matched.",
+    "po_timing_pattern": "Factory on-time rate below 50% on <21 day window = CRITICAL; split shipment recovers avg 60% of exposure."
+  },
+
+  "ethics_layer": {
+    "never_fabricate_data": true,
+    "never_recommend_without_evidence_bundle": true,
+    "never_use_ai_language_in_buyer_ui": true,
+    "outcome_claims_must_be_grounded_in_ledger": true,
+    "no_real_retailer_data_until_signed": true
+  },
+
+  "outcome_observer_ownership": {
+    "owns": "Closing the hive loop on pending directives",
+    "runs": "python -m backend.cli.outcome_observer",
+    "frequency": "hourly via smart_sabian setInterval",
+    "resolves_by": ["ledger_won", "ledger_lost", "expiry"]
   }
-  
+}

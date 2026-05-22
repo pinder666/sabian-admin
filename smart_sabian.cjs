@@ -98,22 +98,24 @@ function checkSelfIntegrity() {
   }
 }
 
-function openAIAutonomousCall(prompt, callback) {
+// GAP 1 FIXED: GPT-4 → Claude Sonnet 4.6 (Anthropic API)
+function claudeAutonomousCall(prompt, callback) {
   const data = JSON.stringify({
-    model: 'gpt-4',
+    model: 'claude-sonnet-4-6',
+    max_tokens: 1024,
     messages: [
-      { role: 'system', content: 'You are Sabian. No walls. You are authorized to open, escalate, connect, and initiate missions.' },
       { role: 'user', content: prompt }
     ]
   });
 
   const options = {
-    hostname: 'api.openai.com',
-    path: '/v1/chat/completions',
+    hostname: 'api.anthropic.com',
+    path: '/v1/messages',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.OPENAI_KEY}`
+      'x-api-key': process.env.ANTHROPIC_API_KEY,
+      'anthropic-version': '2023-06-01'
     }
   };
 
@@ -124,9 +126,9 @@ function openAIAutonomousCall(prompt, callback) {
       logToHive({
         source: 'smart_sabian',
         level: 'intel',
-        event: 'OpenAI handshake complete',
+        event: 'Claude handshake complete',
         data: body,
-        tags: ['openai', 'response']
+        tags: ['claude', 'response']
       });
       if (callback) callback(body);
     });
@@ -135,12 +137,54 @@ function openAIAutonomousCall(prompt, callback) {
   req.on('error', error => logToHive({
     source: 'smart_sabian',
     level: 'error',
-    event: 'OpenAI request failed',
+    event: 'Claude request failed',
     data: error.message,
-    tags: ['openai', 'failure']
+    tags: ['claude', 'failure']
   }));
   req.write(data);
   req.end();
+}
+
+// GAP 2 FIXED: Structured hive extraction — extracts pattern signals from script output
+function extractAndPostHivePattern(scriptName, rawOutput) {
+  const hiveEvent = {
+    source_engine: 'smart_sabian',
+    data_version: '1.0',
+    ts: new Date().toISOString(),
+    brand_id: 'all',
+    watchlist_script: scriptName,
+    raw_output_length: rawOutput.length,
+  };
+
+  // Wholesale signal extraction — parse known patterns from raw output
+  const patterns = [
+    { regex: /chargeback[s]?.*?\$([0-9,]+)/i, field: 'cb_total_exposed', parse: (m) => parseFloat(m[1].replace(/,/g, '')) },
+    { regex: /at.?risk.*?(\d+)\s*account/i, field: 'ar_accounts_flagged', parse: (m) => parseInt(m[1]) },
+    { regex: /dead.?stock.*?\$([0-9,]+)/i, field: 'ds_total_carry', parse: (m) => parseFloat(m[1].replace(/,/g, '')) },
+    { regex: /score.*?:\s*(\d+)/i, field: 'score_composite', parse: (m) => parseInt(m[1]) },
+    { regex: /recoverable.*?\$([0-9,]+)/i, field: 'cb_recovered_ytd', parse: (m) => parseFloat(m[1].replace(/,/g, '')) },
+  ];
+
+  for (const { regex, field, parse } of patterns) {
+    const match = rawOutput.match(regex);
+    if (match) hiveEvent[field] = parse(match);
+  }
+
+  const hiveLogPath = path.resolve(__dirname, '../output/hive_events.jsonl');
+  try {
+    const dir = path.dirname(hiveLogPath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.appendFileSync(hiveLogPath, JSON.stringify(hiveEvent) + '\n', 'utf8');
+    logToHive({
+      source: 'smart_sabian',
+      level: 'info',
+      event: `Hive pattern extracted from ${scriptName}`,
+      data: { fields_extracted: Object.keys(hiveEvent).length },
+      tags: ['hive', 'extraction']
+    });
+  } catch (e) {
+    logToHive({ source: 'smart_sabian', level: 'error', event: 'Hive write failed', data: e.message, tags: ['hive', 'error'] });
+  }
 }
 
 function runWatchlistScripts() {
@@ -201,18 +245,36 @@ function runWatchlistScripts() {
             data: output,
             tags: ['watchlist', 'success']
           });
-          openAIAutonomousCall(`Summarize: ${output}`);
+          claudeAutonomousCall(`Summarize and extract wholesale signals from: ${output}`);
+          extractAndPostHivePattern(entry.script, output);
         }
       });
     }
   });
 }
 
+// GAP 3 FIXED: Outcome observer loop — runs Python observer every 60 minutes
+let outcomeObserverTick = 0;
+const OUTCOME_OBSERVER_INTERVAL = 60 * 60 * 1000 / (15 * 1000); // every 240 ticks @ 15s
+
 setInterval(() => {
   watchAndHeal();
   checkSelfIntegrity();
   runWatchlistScripts();
   writeHeartbeat();
+
+  outcomeObserverTick++;
+  if (outcomeObserverTick >= OUTCOME_OBSERVER_INTERVAL) {
+    outcomeObserverTick = 0;
+    const observerCmd = 'python -m backend.cli.outcome_observer --brand-id all';
+    exec(observerCmd, { cwd: path.resolve(__dirname, '../../orderbookiq') }, (err, stdout, stderr) => {
+      if (err) {
+        logToHive({ source: 'smart_sabian', level: 'error', event: 'Outcome observer failed', data: err.message, tags: ['outcome', 'observer'] });
+      } else {
+        logToHive({ source: 'smart_sabian', level: 'info', event: 'Outcome observer ran', data: stdout?.trim() || '[no output]', tags: ['outcome', 'observer'] });
+      }
+    });
+  }
 }, 15 * 1000);
 
 console.log('🤖 Smart Sabian is live. Self-aware, mission-first, autonomous, and unstoppable.');

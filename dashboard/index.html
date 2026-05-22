@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sabian Intelligence Terminal</title>
+
+  <!-- Open MCT core styles — served from Express /openmct/ route -->
+  <link rel="stylesheet" href="/openmct/openmct.css">
+
+  <style>
+    /* Sabian brand overrides */
+    :root {
+      --sabian-critical: #ff4444;
+      --sabian-warning:  #ffaa00;
+      --sabian-elevated: #00ccee;
+      --sabian-stable:   #22dd88;
+      --sabian-bg:       #0a0e1a;
+      --sabian-panel:    #0f1628;
+      --sabian-border:   #1e2d4a;
+      --sabian-text:     #c8d8f0;
+    }
+
+    /* Loading screen — shown until Open MCT is ready */
+    #sabian-loading {
+      position: fixed;
+      inset: 0;
+      background: var(--sabian-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-family: 'Share Tech Mono', monospace, sans-serif;
+    }
+
+    #sabian-loading h1 {
+      color: var(--sabian-elevated);
+      font-size: 2rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin: 0 0 0.5rem;
+    }
+
+    #sabian-loading .sub {
+      color: var(--sabian-text);
+      font-size: 0.9rem;
+      opacity: 0.7;
+      letter-spacing: 0.15em;
+    }
+
+    #sabian-loading .bar {
+      margin-top: 2rem;
+      width: 240px;
+      height: 3px;
+      background: var(--sabian-border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    #sabian-loading .bar-fill {
+      height: 100%;
+      background: var(--sabian-elevated);
+      animation: load-bar 2s ease-in-out infinite;
+    }
+
+    @keyframes load-bar {
+      0%   { width: 0%; }
+      60%  { width: 90%; }
+      100% { width: 100%; }
+    }
+
+    body.mct-ready #sabian-loading {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading screen -->
+  <div id="sabian-loading">
+    <h1>Sabian</h1>
+    <div class="sub">COUNTRY RISK INTELLIGENCE TERMINAL</div>
+    <div class="bar"><div class="bar-fill"></div></div>
+    <div class="sub" style="margin-top:1rem;font-size:0.75rem;">
+      16 SIGNALS &nbsp;·&nbsp; 160 COUNTRIES &nbsp;·&nbsp; 0–100 TRANSPARENT SCORE
+    </div>
+  </div>
+
+  <!-- Open MCT core bundle — served from node_modules/openmct/dist/ -->
+  <script src="/openmct/openmct.js"></script>
+
+  <!-- Sabian telemetry adapter plugin -->
+  <script src="/dashboard/sabian-plugin.js"></script>
+
+  <script>
+    (function () {
+      // Open MCT exposes itself as window.openmct in v3.x
+      // or window.MCT (callable) in v2.x
+      // Handle both patterns
+      const mct = (typeof openmct !== 'undefined') ? openmct
+                : (typeof MCT === 'function')       ? MCT()
+                : null;
+
+      if (!mct) {
+        document.getElementById('sabian-loading').querySelector('.sub').textContent =
+          'ERROR: Open MCT bundle not loaded — check /openmct/openmct.js is accessible';
+        console.error('Open MCT global not found. Run: npm install openmct');
+        return;
+      }
+
+      // ── Install standard Open MCT plugins ─────────────────────────────────
+
+      // Espresso theme (dark — matches Sabian aesthetic)
+      if (mct.plugins.Espresso) mct.install(mct.plugins.Espresso());
+
+      // Clock display in toolbar
+      if (mct.plugins.Clock) mct.install(mct.plugins.Clock({ enableClockIndicator: true }));
+
+      // Timeline view
+      if (mct.plugins.Timeline) mct.install(mct.plugins.Timeline());
+
+      // Plot / Charts
+      if (mct.plugins.Charts) mct.install(mct.plugins.Charts());
+
+      // Overlay plots
+      if (mct.plugins.OverlayPlot) mct.install(mct.plugins.OverlayPlot());
+      if (mct.plugins.StalenessIndicator) mct.install(mct.plugins.StalenessIndicator());
+
+      // Conductor — time range selection
+      if (mct.plugins.Conductor) {
+        mct.install(mct.plugins.Conductor({
+          menuOptions: [
+            { name: '90 days', timeSystem: 'utc',
+              bounds: {
+                start: Date.now() - 90 * 24 * 60 * 60 * 1000,
+                end:   Date.now()
+              }
+            },
+            { name: '30 days', timeSystem: 'utc',
+              bounds: {
+                start: Date.now() - 30 * 24 * 60 * 60 * 1000,
+                end:   Date.now()
+              }
+            },
+            { name: '7 days', timeSystem: 'utc',
+              bounds: {
+                start: Date.now() - 7 * 24 * 60 * 60 * 1000,
+                end:   Date.now()
+              }
+            }
+          ]
+        }));
+      }
+
+      // ── Install Sabian plugin ──────────────────────────────────────────────
+
+      mct.install(SabianPlugin({ apiBase: '/public-api' }));
+
+      // ── Start ──────────────────────────────────────────────────────────────
+
+      mct.start(document.body);
+
+      // Hide loading screen once MCT is ready
+      // MCT fires a 'start' event or we can just use a short timeout
+      setTimeout(() => {
+        document.body.classList.add('mct-ready');
+      }, 800);
+
+    })();
+  </script>
+</body>
+</html>

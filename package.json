@@ -5,7 +5,11 @@
   "description": "��#\u0000 \u0000s\u0000a\u0000b\u0000i\u0000a\u0000n\u0000_\u0000u\u0000p\u0000d\u0000a\u0000t\u0000e\u0000s\u0000\r\u0000 \u0000",
   "main": "hive_backend.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start":   "node sabian_api.cjs",
+    "pm2":     "pm2-runtime start pm2.config.js",
+    "scan":    "node global_scan.cjs",
+    "grade":   "node grading_pass.cjs",
+    "test":    "echo \"no tests\" && exit 0"
   },
   "repository": {
     "type": "git",
@@ -36,7 +40,9 @@
     "rss-parser": "^3.13.0",
     "types-registry": "^0.1.723",
     "uuid": "^11.1.0",
-    "ws": "^8.18.2"
+    "ws": "^8.18.2",
+    "openmct": "^3.0.0",
+    "pm2": "^5.3.0"
   },
   "rnpm": {
     "assets": [

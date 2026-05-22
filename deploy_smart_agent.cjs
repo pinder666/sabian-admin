@@ -1,4 +1,4 @@
-const axios = require('axios');
+, deploy smartconst axios = require('axios');
 
 module.exports = async function deploySmartAgent(targetUrl, agentConfig) {
   try {

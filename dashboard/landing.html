@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sabian — country risk made legible. 160 countries. 16 signals. One transparent, auditable score.">
+  <title>Sabian — Country Risk Intelligence</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #050c1a;
+      --panel:    #0a1428;
+      --border:   #152040;
+      --accent:   #1a6fff;
+      --dim:      #8aa0c0;
+      --text:     #c8d8f0;
+      --bright:   #e8f0ff;
+      --critical: #ff3c3c;
+      --warning:  #ffaa00;
+      --elevated: #00c8ee;
+      --stable:   #00cc88;
+      --mono: 'Courier New', 'Consolas', monospace;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(5, 12, 26, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--bright);
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--dim);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--bright); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.4rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      font-family: var(--sans);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #2a7fff; transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover { border-color: var(--accent); color: var(--bright); }
+
+    /* ── HERO ────────────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 8rem 2.5rem 4rem;
+      max-width: 960px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 800;
+      color: var(--bright);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--dim);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── LIVE STRIP ──────────────────────────────────────────────────── */
+    .live-strip {
+      background: var(--panel);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2.5rem;
+    }
+
+    .live-strip-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .live-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--stable);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .live-scores {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .score-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.3rem 0.75rem;
+    }
+
+    .score-val {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .score-country { color: var(--text); }
+    .score-level   { font-size: 0.7rem; letter-spacing: 0.1em; opacity: 0.75; }
+
+    .level-CRITICAL { color: var(--critical); }
+    .level-WARNING  { color: var(--warning); }
+    .level-ELEVATED { color: var(--elevated); }
+    .level-STABLE   { color: var(--stable); }
+
+    .live-meta {
+      margin-left: auto;
+      font-size: 0.72rem;
+      color: var(--dim);
+      font-family: var(--mono);
+    }
+
+    /* ── SECTIONS ────────────────────────────────────────────────────── */
+    section {
+      padding: 5rem 2.5rem;
+    }
+
+    .section-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .section-tag {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--bright);
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      color: var(--dim);
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    /* ── HOW IT WORKS ────────────────────────────────────────────────── */
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .pillar {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.75rem;
+    }
+
+    .pillar-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 0.75rem;
+    }
+
+    .pillar h3 {
+      font-size: 1.05rem;
+      color: var(--bright);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .pillar p {
+      font-size: 0.9rem;
+      color: var(--dim);
+      line-height: 1.65;
+    }
+
+    .equation {
+      font-family: var(--mono);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 1.5rem 2rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 2;
+    }
+
+    .equation .comment {
+      color: var(--dim);
+      font-size: 0.8rem;
+    }
+
+    /* ── SIGNAL TABLE ────────────────────────────────────────────────── */
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .signal-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+    }
+
+    .signal-num {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      width: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .signal-info { flex: 1; min-width: 0; }
+
+    .signal-name {
+      font-size: 0.88rem;
+      color: var(--bright);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .signal-source {
+      font-size: 0.72rem;
+      color: var(--dim);
+    }
+
+    .signal-weight {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── RISK BANDS ──────────────────────────────────────────────────── */
+    .bands {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .band {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .band-score {
+      font-family: var(--mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .band-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .band-desc {
+      font-size: 0.78rem;
+      color: var(--dim);
+      line-height: 1.5;
+    }
+
+    /* ── BUYERS ──────────────────────────────────────────────────────── */
+    .buyers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .buyer {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.75rem;
+    }
+
+    .buyer-icon {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .buyer h3 {
+      font-size: 0.95rem;
+      color: var(--bright);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .buyer p {
+      font-size: 0.84rem;
+      color: var(--dim);
+      line-height: 1.6;
+    }
+
+    /* ── CLOCK SECTION ───────────────────────────────────────────────── */
+    .clock-block {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .clock-text h3 {
+      font-size: 1.2rem;
+      color: var(--bright);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .clock-text p {
+      font-size: 0.9rem;
+      color: var(--dim);
+      line-height: 1.7;
+      max-width: 480px;
+    }
+
+    .clock-display {
+      text-align: right;
+    }
+
+    .clock-days {
+      font-family: var(--mono);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--elevated);
+      line-height: 1;
+    }
+
+    .clock-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    /* ── CTA ─────────────────────────────────────────────────────────── */
+    .cta-block {
+      background: linear-gradient(135deg, var(--panel) 0%, rgba(26,111,255,0.08) 100%);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+
+    .cta-block h2 { margin-bottom: 0.75rem; }
+    .cta-block p  { margin-bottom: 2rem; color: var(--dim); max-width: 520px; margin-left: auto; margin-right: auto; }
+
+    .cta-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem;
+    }
+
+    .footer-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-brand {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-brand strong {
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.78rem;
+      color: var(--dim);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    .powered-badge {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.3rem 0.75rem;
+    }
+
+    .powered-badge span { color: var(--accent); }
+
+    /* ── DIVIDER ─────────────────────────────────────────────────────── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { gap: 1rem; }
+      .nav-links li:not(:last-child) { display: none; }
+      .hero { padding: 7rem 1.25rem 3rem; }
+      section { padding: 3.5rem 1.25rem; }
+      .live-strip { padding: 1.25rem; }
+      .clock-block { grid-template-columns: 1fr; }
+      .clock-display { text-align: left; }
+      footer { padding: 2rem 1.25rem; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────────────── -->
+<nav>
+  <a class="nav-logo" href="/">SABIAN<span>.</span>AI</a>
+  <ul class="nav-links">
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#signals">Signals</a></li>
+    <li><a href="#buyers">Use Cases</a></li>
+    <li><a href="/methodology" target="_blank">Methodology</a></li>
+    <li><a class="btn btn-primary" href="/terminal">Enter Terminal</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+<main>
+  <div class="hero">
+    <p class="hero-tag">Country Risk Intelligence Terminal</p>
+    <h1>Make country risk<br><em>legible.</em></h1>
+    <p class="hero-sub">
+      160 countries. 16 open-source signals. One transparent, auditable score —
+      every point traceable to a source, a weight, and an arithmetic step.
+      No black box. No vendor lock-in. No prediction theater.
+    </p>
+    <div class="hero-actions">
+      <a href="/terminal" class="btn btn-primary">Enter Terminal</a>
+      <a href="#how-it-works" class="btn btn-outline">How It Works</a>
+    </div>
+  </div>
+
+  <!-- ── LIVE DATA STRIP ────────────────────────────────────────────────── -->
+  <div class="live-strip">
+    <div class="live-strip-inner">
+      <div class="live-label">
+        <div class="live-dot"></div>
+        Live Signal
+      </div>
+      <div class="live-scores" id="live-scores">
+        <div class="score-chip" style="opacity:0.4">
+          <span class="score-val" style="color:var(--dim)">—</span>
+          <span class="score-country" style="color:var(--dim)">Loading…</span>
+        </div>
+      </div>
+      <div class="live-meta" id="live-meta"></div>
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ───────────────────────────────────────────────────── -->
+  <section id="how-it-works">
+    <div class="section-inner">
+      <p class="section-tag">The Design</p>
+      <h2>Intelligence that shows its work.</h2>
+      <p class="lead">
+        Every score is a weighted average of live signals — computed in the open,
+        readable by any analyst, reproducible from first principles.
+      </p>
+
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-num">01 — Observe</div>
+          <h3>16 public data sources</h3>
+          <p>ACLED conflict events. FEWS NET food security. NASA satellite fire. OONI internet shutdowns. OFAC sanctions. GPSJam interference. All open, all citable, all auditable.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">02 — Score</div>
+          <h3>One transparent equation</h3>
+          <p>Weighted average. Null signals redistribute proportionally — no fabricated values injected. Every weight is labeled "judgment-set" and published, so any analyst can challenge them.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">03 — Record</div>
+          <h3>Timestamped observation ledger</h3>
+          <p>Every threshold crossing is recorded with a decision window. When the window closes, the observation is graded: HIT, MISS, or PARTIAL. The hit rate is published. Honestly.</p>
+        </div>
+      </div>
+
+      <div class="equation">
+        <div>convergence_score = round(</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;Σ ( signal_score<sub>i</sub> × weight<sub>i</sub> )</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;─────────────────────────────────</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;Σ ( live_weights )</div>
+        <div>)</div>
+        <br>
+        <div class="comment">// Null signals excluded from both numerator and denominator</div>
+        <div class="comment">// Weights labeled "judgment-set" — documented, challengeable, versioned</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── SIGNALS ────────────────────────────────────────────────────────── -->
+  <section id="signals">
+    <div class="section-inner">
+      <p class="section-tag">The Signal Set</p>
+      <h2>16 signals. All public. All cited.</h2>
+      <p class="lead">Weights are judgment-set and documented. Any analyst can verify the source, re-run the computation, and challenge the weight.</p>
+
+      <div class="signal-grid">
+        <div class="signal-row"><span class="signal-num">01</span><div class="signal-info"><div class="signal-name">Conflict Events</div><div class="signal-source">ACLED / GDELT fallback</div></div><span class="signal-weight">16%</span></div>
+        <div class="signal-row"><span class="signal-num">02</span><div class="signal-info"><div class="signal-name">Food Security</div><div class="signal-source">FEWS NET — IPC phase</div></div><span class="signal-weight">15%</span></div>
+        <div class="signal-row"><span class="signal-num">03</span><div class="signal-info"><div class="signal-name">Governance</div><div class="signal-source">World Bank WGI</div></div><span class="signal-weight">12%</span></div>
+        <div class="signal-row"><span class="signal-num">04</span><div class="signal-info"><div class="signal-name">Displacement</div><div class="signal-source">UNHCR</div></div><span class="signal-weight">11%</span></div>
+        <div class="signal-row"><span class="signal-num">05</span><div class="signal-info"><div class="signal-name">Satellite Fire</div><div class="signal-source">NASA FIRMS VIIRS</div></div><span class="signal-weight">7%</span></div>
+        <div class="signal-row"><span class="signal-num">06</span><div class="signal-info"><div class="signal-name">Climate Stress</div><div class="signal-source">Open-Meteo</div></div><span class="signal-weight">7%</span></div>
+        <div class="signal-row"><span class="signal-num">07</span><div class="signal-info"><div class="signal-name">Social Unrest</div><div class="signal-source">ACLED Protests/Riots</div></div><span class="signal-weight">4%</span></div>
+        <div class="signal-row"><span class="signal-num">08</span><div class="signal-info"><div class="signal-name">Resource Conflict</div><div class="signal-source">Commodity price feeds</div></div><span class="signal-weight">4%</span></div>
+        <div class="signal-row"><span class="signal-num">09</span><div class="signal-info"><div class="signal-name">Fiscal Stress</div><div class="signal-source">IMF World Economic Outlook</div></div><span class="signal-weight">5%</span></div>
+        <div class="signal-row"><span class="signal-num">10</span><div class="signal-info"><div class="signal-name">Internet Freedom</div><div class="signal-source">OONI</div></div><span class="signal-weight">5%</span></div>
+        <div class="signal-row"><span class="signal-num">11</span><div class="signal-info"><div class="signal-name">GPS Jamming</div><div class="signal-source">gpsjam.org hexgrid</div></div><span class="signal-weight">3%</span></div>
+        <div class="signal-row"><span class="signal-num">12</span><div class="signal-info"><div class="signal-name">Sanctions Pressure</div><div class="signal-source">OFAC SDN + UN/EU programs</div></div><span class="signal-weight">3%</span></div>
+        <div class="signal-row"><span class="signal-num">13</span><div class="signal-info"><div class="signal-name">Maritime Trade</div><div class="signal-source">UNCTAD</div></div><span class="signal-weight">3%</span></div>
+        <div class="signal-row"><span class="signal-num">14</span><div class="signal-info"><div class="signal-name">Trade Collapse</div><div class="signal-source">UN Comtrade / IMF DOTS</div></div><span class="signal-weight">2%</span></div>
+        <div class="signal-row"><span class="signal-num">15</span><div class="signal-info"><div class="signal-name">Economic Stress</div><div class="signal-source">World Bank GDP/CPI</div></div><span class="signal-weight">2%</span></div>
+        <div class="signal-row"><span class="signal-num">16</span><div class="signal-info"><div class="signal-name">Seismic Risk</div><div class="signal-source">USGS</div></div><span class="signal-weight">1%</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── RISK BANDS ─────────────────────────────────────────────────────── -->
+  <section>
+    <div class="section-inner">
+      <p class="section-tag">The Output</p>
+      <h2>Four bands. Fixed thresholds. No surprises.</h2>
+      <p class="lead">Every score maps to a decision window. Every threshold crossing is recorded. The system cannot hide a deteriorating country.</p>
+
+      <div class="bands">
+        <div class="band">
+          <div class="band-score level-CRITICAL">81–100</div>
+          <div class="band-label level-CRITICAL">Critical</div>
+          <div class="band-desc">0–30 day action window. Imminent instability. Observation opened, clock running.</div>
+        </div>
+        <div class="band">
+          <div class="band-score level-WARNING">66–80</div>
+          <div class="band-label level-WARNING">Warning</div>
+          <div class="band-desc">55-day decision window. Multiple high-risk signals converging.</div>
+        </div>
+        <div class="band">
+          <div class="band-score level-ELEVATED">41–65</div>
+          <div class="band-label level-ELEVATED">Elevated</div>
+          <div class="band-desc">60–90 day watch. Monitor and prepare. 90-day observation window.</div>
+        </div>
+        <div class="band">
+          <div class="band-score level-STABLE">0–40</div>
+          <div class="band-label level-STABLE">Stable</div>
+          <div class="band-desc">No immediate trigger. Baseline signals within normal range.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── BUYERS ─────────────────────────────────────────────────────────── -->
+  <section id="buyers">
+    <div class="section-inner">
+      <p class="section-tag">Use Cases</p>
+      <h2>Built for decision-makers who need to see clearly.</h2>
+      <p class="lead">Not a prediction. A legibility surface. For anyone whose decisions depend on knowing where risk is, how it's moving, and why.</p>
+
+      <div class="buyers">
+        <div class="buyer">
+          <div class="buyer-icon">Defense / Intelligence</div>
+          <h3>Theater situational awareness</h3>
+          <p>AFRICOM, INDOPACOM, EUCOM theater rollups. Daily score history. Observation ledger for forward planning. Methodology documentation for analyst review boards.</p>
+        </div>
+        <div class="buyer">
+          <div class="buyer-icon">Insurance / Reinsurance</div>
+          <h3>Sovereign risk underwriting</h3>
+          <p>Transparent scores that can be cited in underwriting documentation. Hit-rate dossier demonstrates forecast accuracy. API integration into existing risk models.</p>
+        </div>
+        <div class="buyer">
+          <div class="buyer-icon">Finance / Macro</div>
+          <h3>Country risk signals for positioning</h3>
+          <p>Daily score feeds across 160 countries. Signal-level decomposition shows which factors are moving. Threshold-crossing alerts before the news cycle.</p>
+        </div>
+        <div class="buyer">
+          <div class="buyer-icon">Corporate Security</div>
+          <h3>Operational country exposure</h3>
+          <p>Dashboard access for security teams tracking personnel and assets. Theater-level summaries. Custom briefings on request. No noise — only what changed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── 90-DAY CLOCK ───────────────────────────────────────────────────── -->
+  <section>
+    <div class="section-inner">
+      <p class="section-tag">The Track Record</p>
+      <h2>Every observation is on the clock.</h2>
+      <p class="lead">Sabian doesn't just score. It records. Every threshold crossing generates a timestamped observation with a decision window. At window close, the grade is published.</p>
+
+      <div class="clock-block">
+        <div class="clock-text">
+          <h3>90-Day Autonomous Run — Started May 22, 2026</h3>
+          <p>
+            The system scans all 160 countries every day at 0600 UTC. Every band crossing enters the ledger.
+            By August 21, the dossier will contain every crossing, every grade, and an honest hit rate
+            — the evidence base for every buyer conversation that follows.
+          </p>
+        </div>
+        <div class="clock-display">
+          <div class="clock-days" id="clock-days">—</div>
+          <div class="clock-label">days running</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── CTA ───────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="section-inner">
+      <div class="cta-block">
+        <h2>The terminal is live.</h2>
+        <p>View real scores, open observations, and signal breakdowns for every monitored country. No login required.</p>
+        <div class="cta-actions">
+          <a href="/terminal" class="btn btn-primary">Open Intelligence Terminal</a>
+          <a href="mailto:support@sabian.ai?subject=Sabian Briefing Request" class="btn btn-outline">Request Briefing</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ── FOOTER ────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <strong>Sabian Global Inc.</strong><br>
+      Country Risk Intelligence Terminal &mdash; sabian.ai
+    </div>
+
+    <ul class="footer-links">
+      <li><a href="/terminal">Terminal</a></li>
+      <li><a href="/methodology">Methodology</a></li>
+      <li><a href="mailto:support@sabian.ai">Contact</a></li>
+    </ul>
+
+    <div class="powered-badge">Powered by <span>Sabian Technology</span></div>
+  </div>
+</footer>
+
+<!-- ── SCRIPTS ───────────────────────────────────────────────────────────── -->
+<script>
+  // ── Live score strip — pulls top CRITICAL + WARNING countries ──────────────
+  async function loadLiveScores() {
+    try {
+      const resp = await fetch('/public-api/threats?limit=5');
+      if (!resp.ok) return;
+      const data = await resp.json();
+      const countries = (data.countries || []).slice(0, 5);
+      if (!countries.length) return;
+
+      const container = document.getElementById('live-scores');
+      container.innerHTML = countries.map(c => `
+        <div class="score-chip">
+          <span class="score-val level-${c.risk_level}">${c.convergence_score}</span>
+          <div>
+            <div class="score-country">${c.country}</div>
+            <div class="score-level level-${c.risk_level}">${c.risk_level}</div>
+          </div>
+        </div>
+      `).join('');
+
+      const meta = document.getElementById('live-meta');
+      if (data.scan_date) {
+        meta.textContent = 'Scan: ' + new Date(data.scan_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
+    } catch (e) {
+      // API not yet connected — strip stays in loading state, not an error
+    }
+  }
+
+  // ── Running clock — days since May 22, 2026 ────────────────────────────────
+  function updateClock() {
+    const start = new Date('2026-05-22T00:00:00Z');
+    const now   = new Date();
+    const days  = Math.floor((now - start) / 86400000);
+    const el    = document.getElementById('clock-days');
+    if (el) el.textContent = days >= 0 ? days : '0';
+  }
+
+  loadLiveScores();
+  updateClock();
+</script>
+</body>
+</html>

@@ -45,3 +45,4 @@ if all_data:
     print(f"\nTOTAL ROWS RETURNED: {len(df)}")
 else:
     print("No data returned for any rare-earth codes.")
+ 

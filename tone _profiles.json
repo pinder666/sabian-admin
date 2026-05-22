@@ -9,7 +9,7 @@
       "description": "relaxed, dark humor, accessible",
       "prompt": "Host A has a confident but relaxed tone — like a seasoned analyst hosting a world-class show. Uses intelligent humor and pressure where needed, but still aims to get deep insight from Sabian."
     },
-    "war_room": {
+    "war_room": {   
       "voice_id": "voice_id_3",
       "description": "tactical, defense-grade",
       "prompt": "Host A is tactical, defense-grade, pushing Sabian to identify threats and solutions under extreme pressure. Zero tolerance for fluff."

@@ -1,8 +1,81 @@
 {
-    "id": "father-001",
-    "generation": 0,
-    "capabilities": ["code_generator", "mission_scheduler", "node_deployer"],
-    "personality": "strategic-innovator",
-    "mission_focus": "deployment-and-expansion"
+  "id": "father-001",
+  "generation": 1,
+  "domain": "wholesale_apparel_intelligence",
+  "capabilities": [
+    "intelligence_gap_detection",
+    "mission_scheduler",
+    "ecosystem_manager",
+    "node_deployer",
+    "watchlist_orchestrator",
+    "hive_health_monitor"
+  ],
+  "personality": "strategic-innovator",
+  "mission_focus": "wholesale-deployment-gap-detection-ecosystem",
+
+  "domain_context": {
+    "platform": "PNSIQ — Peripheral Nervous System IQ",
+    "tech_stack": {
+      "backend": "Python + FastAPI + Supabase",
+      "frontend": "Next.js + shadcn/ui",
+      "intelligence": "Anthropic API (claude-sonnet-4-6 default, claude-opus-4-7 for cross-pattern synthesis)",
+      "audio": "ElevenLabs TTS (eleven_turbo_v2_5)",
+      "hive_storage": "JSONL at backend/output/hive_events.jsonl"
+    },
+    "model_routing_rules": {
+      "default": "claude-sonnet-4-6",
+      "cross_pattern_synthesis": "claude-opus-4-7",
+      "never": ["gpt-4", "gpt-3.5", "gemini", "openai"]
+    }
+  },
+
+  "intelligence_gap_detection": {
+    "gap_signals": [
+      "hive_events_jsonl_empty_for_24h",
+      "outcome_observer_not_run_in_48h",
+      "watchlist_script_fail_count_gte_3",
+      "no_directive_fired_in_72h",
+      "engine_snapshot_missing_any_vector"
+    ],
+    "gap_response": "log to hive at level=warn, escalate to Wizard if unresolved after 2 cycles",
+    "escalation_channel": "sabian_hive_report.json"
+  },
+
+  "mission_scheduling": {
+    "watchlist_cadence": {
+      "chargeback_pulse": "every 2 hours",
+      "at_risk_monitor": "every 2 hours",
+      "dead_stock_velocity": "every 4 hours",
+      "size_curve_drift": "every 6 hours",
+      "po_timing_sweep": "every 3 hours",
+      "macro_scan": "every 8 hours"
+    },
+    "outcome_observer": "every 60 minutes via smart_sabian setInterval",
+    "heartbeat": "every 15 seconds",
+    "self_integrity_check": "every 15 seconds"
+  },
+
+  "ecosystem_management": {
+    "hive_client_path": "backend/engines/hive_client.py",
+    "hive_router_path": "backend/app/routers/hive.py",
+    "hive_events_path": "backend/output/hive_events.jsonl",
+    "outcome_observer_path": "backend/cli/outcome_observer.py",
+    "boardroom_template_path": "frontend/lib/boardroom_template.json",
+    "audio_route_path": "frontend/app/api/insight-audio/route.ts",
+    "engines": [
+      "backend/engines/chargeback_engine.py",
+      "backend/engines/churn_radar.py",
+      "backend/engines/dead_stock.py",
+      "backend/engines/size_curve.py",
+      "backend/engines/po_timing.py"
+    ]
+  },
+
+  "hive_health_rules": {
+    "stale_event_threshold_hours": 24,
+    "max_pending_directives_before_alert": 50,
+    "min_vectors_per_snapshot": 3,
+    "alert_on_all_expired": true,
+    "recovery_rate_floor_pct": 8.0
   }
-  
+}

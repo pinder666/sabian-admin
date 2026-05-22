@@ -1,0 +1,14 @@
+node_modules
+.env
+.env.*
+keys/
+*.pem
+*.key
+audio_sessions/
+global_scan_results/
+hive_logs/
+*.log
+.git
+.gitignore
+README.md
+METHODOLOGY.md
