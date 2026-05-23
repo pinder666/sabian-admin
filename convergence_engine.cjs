@@ -1,5 +1,7 @@
 // convergence_engine.cjs
 // Sabian DOD vertical — multi-signal convergence scoring
+// Engine v6: 47 signals across conflict, governance, food, water, infrastructure,
+//   financial stress, displacement, governance, internet, and predictive layers.
 // Accepts: { country, date } — date is optional, defaults to latest available
 // Returns: convergence_score 0-100, risk_level, top_3 signals, threshold_window
 // Score bands: 0-40 STABLE | 41-65 ELEVATED | 66-80 WARNING | 81-100 CRITICAL
@@ -34,6 +36,26 @@ const { fetchGdeltGkgData }            = require('./gdelt_gkg_feed.cjs');
 const { fetchNightLightsData }         = require('./nightlights_feed.cjs');
 const { fetchDarkVesselData }          = require('./darkvessel_feed.cjs');
 const { fetchCableWatchData }          = require('./cablewatch_feed.cjs');
+const { fetchWaterStressData }         = require('./water_stress_feed.cjs');
+const { fetchSovereignCdsData }        = require('./sovereign_cds_feed.cjs');
+const { fetchElectionCalendarData }    = require('./election_calendar_feed.cjs');
+const { fetchTorCensorshipData }       = require('./tor_censorship_feed.cjs');
+const { fetchInternetIodaData }        = require('./internet_ioda_feed.cjs');
+const { fetchFloodRiskData }           = require('./flood_risk_feed.cjs');
+const { fetchPortCongestionData }      = require('./port_congestion_feed.cjs');
+const { fetchPipelineRiskData }        = require('./pipeline_risk_feed.cjs');
+const { fetchPowerGridData }           = require('./power_grid_feed.cjs');
+const { fetchDamRiskData }             = require('./dam_risk_feed.cjs');
+const { fetchRailCorridorData }        = require('./rail_corridor_feed.cjs');
+const { fetchCyberThreatData }         = require('./cyber_threat_feed.cjs');
+const { fetchPredictionMarketData }    = require('./prediction_market_feed.cjs');
+const { fetchSocialVolumeData }        = require('./social_volume_feed.cjs');
+const { fetchUsdaFoodData }            = require('./usda_food_feed.cjs');
+const { fetchFaoFoodData }             = require('./fao_food_feed.cjs');
+const { fetchVdemGovernanceData }      = require('./vdem_governance_feed.cjs');
+const { fetchIomDisplacementData }     = require('./iom_displacement_feed.cjs');
+const { fetchUnhcrOdpData }            = require('./unhcr_odp_feed.cjs');
+const { fetchOccrpData }               = require('./occrp_feed.cjs');
 
 // ISO2 codes — used by FEWS, World Bank, OONI, and IMF queries
 // All 160 monitored countries (159 global watch list + United States)
@@ -250,36 +272,61 @@ const COUNTRY_COORDS = {
 };
 
 // Signal weights — must sum to 1.0
-// 27-signal model (v5): orbit (night lights), below (dark vessel, cable disruption)
+// 47-signal model (v6): full infrastructure + governance + food + displacement + financial layer
 // All weights judgment-set — see METHODOLOGY.md for rationale.
+// Verified sum: 9+8+5+5+4+4 + 3×5 + 2×14 + 1×22 = 35+15+28+22 = 100 / 100 = 1.00
 const WEIGHTS = {
-  conflict:             0.12,
-  food_security:        0.11,
-  governance:           0.08,
-  displacement:         0.08,
-  imf_fiscal:           0.03,
-  ooni_internet:        0.03,
-  fire_hotspot:         0.04,
-  climate_stress:       0.04,
-  trade_collapse:       0.02,
-  economic_stress:      0.02,
-  resource_conflict:    0.03,
-  maritime_trade:       0.03,
-  seismic_risk:         0.01,
-  gps_jamming:          0.02,
-  social_unrest:        0.03,
-  sanctions_pressure:   0.03,
-  currency_collapse:    0.03,
-  flight_movement:      0.02,
-  health_crisis:        0.03,
-  energy_stress:        0.03,
-  capital_flows:        0.02,
-  military_proximity:   0.03,
-  chokepoint:           0.02,
-  gdelt_tone:           0.03,
-  night_lights:         0.03,
-  dark_vessel:          0.02,
-  cable_disruption:     0.02
+  // Core fundamentals — highest weight: structural crisis indicators
+  conflict:               0.09,
+  food_security:          0.08,
+  governance:             0.05,
+  displacement:           0.05,
+  water_stress:           0.04,
+  sovereign_cds:          0.04,
+  // Major structural signals
+  social_unrest:          0.03,
+  military_proximity:     0.03,
+  election_calendar:      0.03,
+  sanctions_pressure:     0.03,
+  currency_collapse:      0.03,
+  // Operational monitoring signals
+  imf_fiscal:             0.02,
+  usda_food:              0.02,
+  fao_food:               0.02,
+  vdem_governance:        0.02,
+  occrp:                  0.02,
+  fire_hotspot:           0.02,
+  climate_stress:         0.02,
+  port_congestion:        0.02,
+  ooni_internet:          0.02,
+  health_crisis:          0.02,
+  cyber_threat:           0.02,
+  gdelt_tone:             0.02,
+  iom_displacement:       0.02,
+  unhcr_odp:              0.02,
+  // Fine-grain signals
+  economic_stress:        0.01,
+  capital_flows:          0.01,
+  maritime_trade:         0.01,
+  chokepoint:             0.01,
+  flood_risk:             0.01,
+  dark_vessel:            0.01,
+  tor_censorship:         0.01,
+  internet_shutdown_ioda: 0.01,
+  cable_disruption:       0.01,
+  social_volume:          0.01,
+  night_lights:           0.01,
+  flight_movement:        0.01,
+  trade_collapse:         0.01,
+  resource_conflict:      0.01,
+  energy_stress:          0.01,
+  pipeline_risk:          0.01,
+  power_grid:             0.01,
+  gps_jamming:            0.01,
+  rail_corridor:          0.01,
+  dam_risk:               0.01,
+  seismic_risk:           0.01,
+  prediction_market:      0.01
 };
 
 // Expected update cadence per signal — judgment-set, matches source publishing frequency
@@ -312,7 +359,27 @@ const FRESHNESS_WINDOWS = {
   'GDELT Tone':         { hours: 24,   cadence: 'Daily — GDELT GKG 30-day tone average' },
   'Night Lights':       { hours: 8760, cadence: 'Annual — World Bank electricity access trend' },
   'Dark Vessel':        { hours: 24,   cadence: 'Daily — GFW AIS gap events, 30-day window' },
-  'Cable Disruption':   { hours: 6,    cadence: '6-hourly — Cloudflare Radar internet traffic anomaly' }
+  'Cable Disruption':   { hours: 6,    cadence: '6-hourly — Cloudflare Radar internet traffic anomaly' },
+  'Water Stress':       { hours: 8760, cadence: 'Annual — WRI Aqueduct 3.0 + Copernicus GDO' },
+  'Sovereign CDS':      { hours: 168,  cadence: 'Weekly — Damodaran CDS spreads + static table' },
+  'Election Calendar':  { hours: 168,  cadence: 'Weekly — curated election dates, 90-day risk window' },
+  'Tor Censorship':     { hours: 24,   cadence: 'Daily — Tor Project metrics bridge usage spike' },
+  'Internet IODA':      { hours: 6,    cadence: '6-hourly — IODA BGP alert feed (Georgia Tech)' },
+  'Flood Risk':         { hours: 24,   cadence: 'Daily — GloFAS river discharge ensemble forecasts' },
+  'Port Congestion':    { hours: 24,   cadence: 'Daily — GoComet live + tier-based baseline' },
+  'Pipeline Risk':      { hours: 2160, cadence: 'Quarterly — Global Energy Monitor pipeline tracker' },
+  'Power Grid':         { hours: 8760, cadence: 'Annual — EIA international electricity reliability' },
+  'Dam Risk':           { hours: 2160, cadence: 'Quarterly — Global Dam Watch + GRanD database' },
+  'Rail Corridor':      { hours: 2160, cadence: 'Quarterly — OpenRailwayMap / OSM strategic corridors' },
+  'Cyber Threat':       { hours: 24,   cadence: 'Daily — AlienVault OTX 7-day pulse window' },
+  'Prediction Market':  { hours: 6,    cadence: '6-hourly — Polymarket geopolitical contracts' },
+  'Social Volume':      { hours: 6,    cadence: '6-hourly — Bluesky public API mention sampling' },
+  'USDA Food Supply':   { hours: 720,  cadence: 'Monthly — USDA FAS PSD grain balance sheets' },
+  'FAO Food Import':    { hours: 8760, cadence: 'Annual — FAO FAOSTAT food import dependency ratio' },
+  'VDem Governance':    { hours: 8760, cadence: 'Annual — V-Dem LDI (University of Gothenburg)' },
+  'IOM Displacement':   { hours: 720,  cadence: 'Monthly — IOM DTM + IDMC internal displacement' },
+  'UNHCR Refugees':     { hours: 720,  cadence: 'Monthly — UNHCR Global Trends refugee outflow/inflow' },
+  'Corruption Risk':    { hours: 8760, cadence: 'Annual — TI CPI 2024 + OCCRP Aleph entity count' }
 };
 
 function getRiskLevel(score) {
@@ -999,6 +1066,326 @@ async function scoreCableDisruption(country) {
   }
 }
 
+async function scoreWaterStress(country) {
+  try {
+    const result = await fetchWaterStressData(country);
+    if (result.score === null) return { name: 'Water Stress', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'WRI_Aqueduct' };
+    return { name: 'Water Stress', score: result.score, label: result.trend || `Water stress ${result.score}/100`, trend: result.trend || 'stable', source: 'WRI_Aqueduct' };
+  } catch (err) {
+    return { name: 'Water Stress', score: null, label: err.message, trend: 'unknown', source: 'WRI_Aqueduct' };
+  }
+}
+
+async function scoreSovereignCds(country) {
+  try {
+    const result = await fetchSovereignCdsData(country);
+    if (result.score === null) return { name: 'Sovereign CDS', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'Damodaran_CDS' };
+    return {
+      name: 'Sovereign CDS',
+      score: result.score,
+      label: result.cds_spread_bps ? `${result.cds_spread_bps}bps CDS spread (${result.risk_tier})` : `CDS score ${result.score}/100`,
+      trend: result.score >= 70 ? 'distressed' : result.score >= 45 ? 'elevated' : 'stable',
+      source: 'Damodaran_CDS'
+    };
+  } catch (err) {
+    return { name: 'Sovereign CDS', score: null, label: err.message, trend: 'unknown', source: 'Damodaran_CDS' };
+  }
+}
+
+async function scoreElectionCalendar(country) {
+  try {
+    const result = await fetchElectionCalendarData(country);
+    if (result.score === null || result.score === undefined) return { name: 'Election Calendar', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'ElectionCalendar' };
+    return {
+      name: 'Election Calendar',
+      score: result.score,
+      label: result.note || result.status || `Election risk ${result.score}/100`,
+      trend: result.score >= 60 ? 'pre_election_tension' : result.score >= 30 ? 'election_window' : 'stable',
+      source: 'ElectionCalendar'
+    };
+  } catch (err) {
+    return { name: 'Election Calendar', score: null, label: err.message, trend: 'unknown', source: 'ElectionCalendar' };
+  }
+}
+
+async function scoreTorCensorship(country) {
+  try {
+    const result = await fetchTorCensorshipData(country);
+    if (result.score === null) return { name: 'Tor Censorship', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'TorProject' };
+    return {
+      name: 'Tor Censorship',
+      score: result.score,
+      label: result.bridge_spike_ratio ? `Bridge-to-relay ratio: ${result.bridge_spike_ratio}x (${result.trend})` : `Censorship signal ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'TorProject'
+    };
+  } catch (err) {
+    return { name: 'Tor Censorship', score: null, label: err.message, trend: 'unknown', source: 'TorProject' };
+  }
+}
+
+async function scoreInternetIoda(country) {
+  try {
+    const result = await fetchInternetIodaData(country);
+    if (result.score === null) return { name: 'Internet IODA', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'IODA_GaTech' };
+    return {
+      name: 'Internet IODA',
+      score: result.score,
+      label: result.alert_count > 0 ? `${result.alert_count} IODA alert(s) — ${result.trend}` : 'No IODA alerts',
+      trend: result.trend || 'stable',
+      source: 'IODA_GaTech'
+    };
+  } catch (err) {
+    return { name: 'Internet IODA', score: null, label: err.message, trend: 'unknown', source: 'IODA_GaTech' };
+  }
+}
+
+async function scoreFloodRisk(country) {
+  try {
+    const result = await fetchFloodRiskData(country);
+    if (result.score === null) return { name: 'Flood Risk', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'GloFAS' };
+    return {
+      name: 'Flood Risk',
+      score: result.score,
+      label: result.warning_count > 0
+        ? `${result.warning_count} flood warning(s), ${result.watch_count || 0} watches`
+        : result.total_alerts > 0 ? `${result.total_alerts} advisory alert(s)` : 'No flood alerts',
+      trend: result.trend || 'stable',
+      source: 'GloFAS'
+    };
+  } catch (err) {
+    return { name: 'Flood Risk', score: null, label: err.message, trend: 'unknown', source: 'GloFAS' };
+  }
+}
+
+async function scorePortCongestion(country) {
+  try {
+    const result = await fetchPortCongestionData(country);
+    if (result.score === null) return { name: 'Port Congestion', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'GoComet' };
+    if (result.reason === 'landlocked') return { name: 'Port Congestion', score: 0, label: 'Landlocked — no port exposure', trend: 'stable', source: 'GoComet' };
+    return {
+      name: 'Port Congestion',
+      score: result.score,
+      label: result.port ? `${result.port}: ${result.trend}` : `Port congestion ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: result.source || 'GoComet'
+    };
+  } catch (err) {
+    return { name: 'Port Congestion', score: null, label: err.message, trend: 'unknown', source: 'GoComet' };
+  }
+}
+
+async function scorePipelineRisk(country) {
+  try {
+    const result = await fetchPipelineRiskData(country);
+    if (result.score === null) return { name: 'Pipeline Risk', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'GEM_Pipeline' };
+    if (result.reason === 'no_pipeline_data') return { name: 'Pipeline Risk', score: 0, label: 'No strategic pipelines', trend: 'stable', source: 'GEM_Pipeline' };
+    return {
+      name: 'Pipeline Risk',
+      score: result.score,
+      label: `${result.pipeline_km?.toLocaleString()}km pipeline — ${result.pipeline_type} (${result.trend})`,
+      trend: result.trend || 'stable',
+      source: 'GEM_Pipeline'
+    };
+  } catch (err) {
+    return { name: 'Pipeline Risk', score: null, label: err.message, trend: 'unknown', source: 'GEM_Pipeline' };
+  }
+}
+
+async function scorePowerGrid(country) {
+  try {
+    const result = await fetchPowerGridData(country);
+    if (result.score === null) return { name: 'Power Grid', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'EIA_Grid' };
+    return {
+      name: 'Power Grid',
+      score: result.score,
+      label: `Grid reliability: ${result.reliability_tier} (baseline ${result.grid_baseline}/100)`,
+      trend: result.trend || 'stable',
+      source: 'EIA_Grid'
+    };
+  } catch (err) {
+    return { name: 'Power Grid', score: null, label: err.message, trend: 'unknown', source: 'EIA_Grid' };
+  }
+}
+
+async function scoreDamRisk(country) {
+  try {
+    const result = await fetchDamRiskData(country);
+    if (result.score === null) return { name: 'Dam Risk', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'GDW_GRanD' };
+    if (result.reason === 'no_dam_data') return { name: 'Dam Risk', score: 5, label: 'No major dam infrastructure', trend: 'stable', source: 'GDW_GRanD' };
+    return {
+      name: 'Dam Risk',
+      score: result.score,
+      label: result.dams?.length > 0 ? `${result.dams[0]}${result.dispute ? ' (dispute)' : ''}${result.attack_risk ? ' (attack risk)' : ''}` : `Dam risk ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'GDW_GRanD'
+    };
+  } catch (err) {
+    return { name: 'Dam Risk', score: null, label: err.message, trend: 'unknown', source: 'GDW_GRanD' };
+  }
+}
+
+async function scoreRailCorridor(country) {
+  try {
+    const result = await fetchRailCorridorData(country);
+    if (result.score === null) return { name: 'Rail Corridor', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'OpenRailwayMap' };
+    if (result.reason === 'no_rail_data') return { name: 'Rail Corridor', score: 0, label: 'No strategic rail infrastructure', trend: 'stable', source: 'OpenRailwayMap' };
+    return {
+      name: 'Rail Corridor',
+      score: result.score,
+      label: result.corridor ? `${result.corridor} — ${result.rail_km?.toLocaleString()}km` : `Rail risk ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'OpenRailwayMap'
+    };
+  } catch (err) {
+    return { name: 'Rail Corridor', score: null, label: err.message, trend: 'unknown', source: 'OpenRailwayMap' };
+  }
+}
+
+async function scoreCyberThreat(country) {
+  try {
+    const result = await fetchCyberThreatData(country);
+    if (result.score === null) return { name: 'Cyber Threat', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'AlienVault_OTX' };
+    return {
+      name: 'Cyber Threat',
+      score: result.score,
+      label: result.pulse_count_7d !== undefined ? `${result.pulse_count_7d} OTX pulses (7d) — ${result.trend}` : `Cyber threat ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'AlienVault_OTX'
+    };
+  } catch (err) {
+    return { name: 'Cyber Threat', score: null, label: err.message, trend: 'unknown', source: 'AlienVault_OTX' };
+  }
+}
+
+async function scorePredictionMarket(country) {
+  try {
+    const result = await fetchPredictionMarketData(country);
+    if (result.score === null) return { name: 'Prediction Market', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'Polymarket' };
+    return {
+      name: 'Prediction Market',
+      score: result.score,
+      label: result.avg_probability !== undefined ? `${(result.avg_probability * 100).toFixed(0)}% avg market-priced risk (${result.market_count} contracts)` : `Market risk ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: result.source || 'Polymarket'
+    };
+  } catch (err) {
+    return { name: 'Prediction Market', score: null, label: err.message, trend: 'unknown', source: 'Polymarket' };
+  }
+}
+
+async function scoreSocialVolume(country) {
+  try {
+    const result = await fetchSocialVolumeData(country);
+    if (result.score === null) return { name: 'Social Volume', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'Bluesky' };
+    return {
+      name: 'Social Volume',
+      score: result.score,
+      label: result.post_count_sample !== undefined ? `${result.post_count_sample} posts sampled — ${result.trend}` : `Social volume ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'Bluesky'
+    };
+  } catch (err) {
+    return { name: 'Social Volume', score: null, label: err.message, trend: 'unknown', source: 'Bluesky' };
+  }
+}
+
+async function scoreUsdaFood(country) {
+  try {
+    const result = await fetchUsdaFoodData(country);
+    if (result.score === null) return { name: 'USDA Food Supply', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'USDA_FAS' };
+    return {
+      name: 'USDA Food Supply',
+      score: result.score,
+      label: `Food supply balance: ${result.trend} (${result.source})`,
+      trend: result.trend || 'stable',
+      source: result.source || 'USDA_FAS'
+    };
+  } catch (err) {
+    return { name: 'USDA Food Supply', score: null, label: err.message, trend: 'unknown', source: 'USDA_FAS' };
+  }
+}
+
+async function scoreFaoFood(country) {
+  try {
+    const result = await fetchFaoFoodData(country);
+    if (result.score === null) return { name: 'FAO Food Import', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'FAO_FAOSTAT' };
+    return {
+      name: 'FAO Food Import',
+      score: result.score,
+      label: result.food_import_dependency_pct !== undefined ? `${result.food_import_dependency_pct}% import dependency (${result.trend})` : `Food import risk ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'FAO_FAOSTAT'
+    };
+  } catch (err) {
+    return { name: 'FAO Food Import', score: null, label: err.message, trend: 'unknown', source: 'FAO_FAOSTAT' };
+  }
+}
+
+async function scoreVdemGovernance(country) {
+  try {
+    const result = await fetchVdemGovernanceData(country);
+    if (result.score === null) return { name: 'VDem Governance', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'VDem' };
+    return {
+      name: 'VDem Governance',
+      score: result.score,
+      label: result.regime ? `${result.regime} — LDI ${result.ldi} (${result.trend})` : `Governance risk ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'VDem'
+    };
+  } catch (err) {
+    return { name: 'VDem Governance', score: null, label: err.message, trend: 'unknown', source: 'VDem' };
+  }
+}
+
+async function scoreIomDisplacement(country) {
+  try {
+    const result = await fetchIomDisplacementData(country);
+    if (result.score === null) return { name: 'IOM Displacement', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'IOM_DTM' };
+    return {
+      name: 'IOM Displacement',
+      score: result.score,
+      label: result.idps_thousands !== undefined ? `${result.idps_thousands}k IDPs — ${result.trend}` : `IDP score ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'IOM_DTM'
+    };
+  } catch (err) {
+    return { name: 'IOM Displacement', score: null, label: err.message, trend: 'unknown', source: 'IOM_DTM' };
+  }
+}
+
+async function scoreUnhcrOdp(country) {
+  try {
+    const result = await fetchUnhcrOdpData(country);
+    if (result.score === null) return { name: 'UNHCR Refugees', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'UNHCR' };
+    return {
+      name: 'UNHCR Refugees',
+      score: result.score,
+      label: result.refugees_out_thousands !== undefined ? `${result.refugees_out_thousands}k origin refugees, ${result.refugees_in_thousands}k hosted` : `Refugee risk ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'UNHCR'
+    };
+  } catch (err) {
+    return { name: 'UNHCR Refugees', score: null, label: err.message, trend: 'unknown', source: 'UNHCR' };
+  }
+}
+
+async function scoreOccrp(country) {
+  try {
+    const result = await fetchOccrpData(country);
+    if (result.score === null) return { name: 'Corruption Risk', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'TI_CPI_OCCRP' };
+    return {
+      name: 'Corruption Risk',
+      score: result.score,
+      label: result.ti_cpi_2024 !== undefined ? `TI CPI ${result.ti_cpi_2024}/100 — ${result.trend}` : `Corruption risk ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'TI_CPI_OCCRP'
+    };
+  } catch (err) {
+    return { name: 'Corruption Risk', score: null, label: err.message, trend: 'unknown', source: 'TI_CPI_OCCRP' };
+  }
+}
+
 // Wraps a scorer call with wall-clock timing and error capture.
 // timedCall never rejects — failed scorers return score:null with the error in label.
 async function timedCall(scorerFn, ...args) {
@@ -1020,7 +1407,12 @@ async function runConvergence(country, date) {
       gpsResult, unrestResult, sanctionsResult,
       currencyResult, flightResult, healthResult, energyResult, capitalResult,
       militaryResult, chokepointResult, gdeltResult,
-      nightLightsResult, darkVesselResult, cableResult
+      nightLightsResult, darkVesselResult, cableResult,
+      waterStressResult, sovereignCdsResult, electionResult,
+      torResult, iodaResult, floodResult, portResult, pipelineResult,
+      powerGridResult, damResult, railResult, cyberResult, predictionResult,
+      socialVolResult, usdaFoodResult, faoFoodResult, vdemResult,
+      iomResult, unhcrOdpResult, occrpResult
     ] = await Promise.all([
       timedCall(scoreConflict,          country, date),
       timedCall(scoreFoodSecurity,      country, date),
@@ -1048,7 +1440,27 @@ async function runConvergence(country, date) {
       timedCall(scoreGdeltTone,         country),
       timedCall(scoreNightLights,       country),
       timedCall(scoreDarkVessel,        country),
-      timedCall(scoreCableDisruption,   country)
+      timedCall(scoreCableDisruption,   country),
+      timedCall(scoreWaterStress,       country),
+      timedCall(scoreSovereignCds,      country),
+      timedCall(scoreElectionCalendar,  country),
+      timedCall(scoreTorCensorship,     country),
+      timedCall(scoreInternetIoda,      country),
+      timedCall(scoreFloodRisk,         country),
+      timedCall(scorePortCongestion,    country),
+      timedCall(scorePipelineRisk,      country),
+      timedCall(scorePowerGrid,         country),
+      timedCall(scoreDamRisk,           country),
+      timedCall(scoreRailCorridor,      country),
+      timedCall(scoreCyberThreat,       country),
+      timedCall(scorePredictionMarket,  country),
+      timedCall(scoreSocialVolume,      country),
+      timedCall(scoreUsdaFood,          country),
+      timedCall(scoreFaoFood,           country),
+      timedCall(scoreVdemGovernance,    country),
+      timedCall(scoreIomDisplacement,   country),
+      timedCall(scoreUnhcrOdp,          country),
+      timedCall(scoreOccrp,             country)
     ]);
 
     // Attach weight + freshness metadata to each signal result
@@ -1077,9 +1489,29 @@ async function runConvergence(country, date) {
       { weight: WEIGHTS.military_proximity,  ...militaryResult    },
       { weight: WEIGHTS.chokepoint,          ...chokepointResult  },
       { weight: WEIGHTS.gdelt_tone,          ...gdeltResult       },
-      { weight: WEIGHTS.night_lights,        ...nightLightsResult },
-      { weight: WEIGHTS.dark_vessel,         ...darkVesselResult  },
-      { weight: WEIGHTS.cable_disruption,    ...cableResult       }
+      { weight: WEIGHTS.night_lights,           ...nightLightsResult  },
+      { weight: WEIGHTS.dark_vessel,            ...darkVesselResult   },
+      { weight: WEIGHTS.cable_disruption,       ...cableResult        },
+      { weight: WEIGHTS.water_stress,           ...waterStressResult  },
+      { weight: WEIGHTS.sovereign_cds,          ...sovereignCdsResult },
+      { weight: WEIGHTS.election_calendar,      ...electionResult     },
+      { weight: WEIGHTS.tor_censorship,         ...torResult          },
+      { weight: WEIGHTS.internet_shutdown_ioda, ...iodaResult         },
+      { weight: WEIGHTS.flood_risk,             ...floodResult        },
+      { weight: WEIGHTS.port_congestion,        ...portResult         },
+      { weight: WEIGHTS.pipeline_risk,          ...pipelineResult     },
+      { weight: WEIGHTS.power_grid,             ...powerGridResult    },
+      { weight: WEIGHTS.dam_risk,               ...damResult          },
+      { weight: WEIGHTS.rail_corridor,          ...railResult         },
+      { weight: WEIGHTS.cyber_threat,           ...cyberResult        },
+      { weight: WEIGHTS.prediction_market,      ...predictionResult   },
+      { weight: WEIGHTS.social_volume,          ...socialVolResult    },
+      { weight: WEIGHTS.usda_food,              ...usdaFoodResult     },
+      { weight: WEIGHTS.fao_food,               ...faoFoodResult      },
+      { weight: WEIGHTS.vdem_governance,        ...vdemResult         },
+      { weight: WEIGHTS.iom_displacement,       ...iomResult          },
+      { weight: WEIGHTS.unhcr_odp,              ...unhcrOdpResult     },
+      { weight: WEIGHTS.occrp,                  ...occrpResult        }
     ].map(s => ({
       ...s,
       freshness_window_hrs: FRESHNESS_WINDOWS[s.name]?.hours  || null,
@@ -1162,7 +1594,7 @@ async function runConvergence(country, date) {
     });
 
     return {
-      source: 'Sabian_Convergence_Engine_v5',
+      source: 'Sabian_Convergence_Engine_v6',
       country,
       date: targetDate,
       convergence_score: convergenceScore,
@@ -1185,7 +1617,7 @@ async function runConvergence(country, date) {
       data: { country, date: targetDate, message: err.message },
       tags: ['convergence', 'error']
     });
-    return { source: 'Sabian_Convergence_Engine_v5', country, date: targetDate, error: err.message };
+    return { source: 'Sabian_Convergence_Engine_v6', country, date: targetDate, error: err.message };
   }
 }
 
