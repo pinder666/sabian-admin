@@ -329,6 +329,45 @@ app.get('/api/db/status', async (req, res) => {
   res.json(result);
 });
 
+// ── Autonomous scan scheduler (runs inside the API process — no PM2 required) ──
+// Railway runs `node sabian_api.cjs` — PM2 cron never fires on Railway.
+// node-cron schedules are in UTC to match Railway's container timezone.
+try {
+  const cron = require('node-cron');
+  const runGlobalScan      = require('./global_scan.cjs');
+  const runGradingPass     = require('./grading_pass.cjs');
+  const { runBackup }      = require('./sabian_backup.cjs');
+
+  // Daily scan — 0600 UTC every day
+  cron.schedule('0 6 * * *', () => {
+    console.log('[CRON] Daily global scan starting — 0600 UTC');
+    logToHive({ source: 'sabian_api', level: 'intel', event: 'cron_scan_start', data: { time: new Date().toISOString() }, tags: ['cron'] });
+    runGlobalScan(null, { save: true }).catch(err =>
+      logToHive({ source: 'sabian_api', level: 'error', event: 'cron_scan_failed', data: { error: err.message }, tags: ['cron', 'error'] })
+    );
+  }, { timezone: 'UTC' });
+
+  // Grading pass — 0630 UTC every day (30 min after scan completes)
+  cron.schedule('30 6 * * *', () => {
+    console.log('[CRON] Grading pass starting — 0630 UTC');
+    runGradingPass().catch(err =>
+      logToHive({ source: 'sabian_api', level: 'error', event: 'cron_grade_failed', data: { error: err.message }, tags: ['cron', 'error'] })
+    );
+  }, { timezone: 'UTC' });
+
+  // Weekly backup — every Sunday 0200 UTC
+  cron.schedule('0 2 * * 0', () => {
+    console.log('[CRON] Weekly Supabase backup — 0200 UTC Sunday');
+    runBackup().catch(err =>
+      logToHive({ source: 'sabian_api', level: 'error', event: 'cron_backup_failed', data: { error: err.message }, tags: ['cron', 'error'] })
+    );
+  }, { timezone: 'UTC' });
+
+  console.log('[CRON] Scheduler active — scan 0600 UTC | grade 0630 UTC | backup Sunday 0200 UTC');
+} catch (cronErr) {
+  console.warn('[CRON] Scheduler not loaded:', cronErr.message);
+}
+
 // ── Start ──────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`\nSabian Intelligence Terminal — Port ${PORT}`);
