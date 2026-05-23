@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sabian — Intelligence Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #050c1a;
+      --panel:    #0a1428;
+      --panel2:   #0d1a33;
+      --border:   #152040;
+      --accent:   #1a6fff;
+      --dim:      #8aa0c0;
+      --text:     #c8d8f0;
+      --bright:   #e8f0ff;
+      --critical: #ff3c3c;
+      --warning:  #ffaa00;
+      --elevated: #00c8ee;
+      --stable:   #00cc88;
+      --mono:     'Courier New', 'Consolas', monospace;
+      --sans:     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 52px;
+      background: rgba(5,12,26,0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--mono); font-size: 1rem; font-weight: 700;
+      color: var(--bright); letter-spacing: 0.14em; text-transform: uppercase;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-right {
+      display: flex; align-items: center; gap: 1.5rem;
+    }
+    .nav-badge {
+      font-family: var(--mono); font-size: 0.7rem; color: var(--dim);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    #live-dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--stable); margin-right: 6px;
+      box-shadow: 0 0 6px var(--stable);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .nav-link {
+      color: var(--dim); text-decoration: none; font-size: 0.78rem;
+      letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--bright); }
+
+    /* ── TABS ────────────────────────────────────────────────────────────── */
+    .tab-bar {
+      position: fixed; top: 52px; left: 0; right: 0; z-index: 190;
+      display: flex; align-items: center; gap: 0;
+      background: var(--panel); border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      overflow-x: auto;
+    }
+    .tab-bar::-webkit-scrollbar { height: 0; }
+    .tab-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 0.75rem 1.25rem;
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--dim); border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-label-num {
+      font-size: 0.62rem; opacity: 0.6; margin-left: 5px;
+    }
+
+    /* ── MAIN CONTENT ────────────────────────────────────────────────────── */
+    main {
+      padding-top: 110px; /* nav + tab bar */
+      padding-bottom: 3rem;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── GLOBAL STATUS BAR ───────────────────────────────────────────────── */
+    .status-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .stat-cell {
+      background: var(--panel); padding: 0.9rem 1.2rem;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .stat-label {
+      font-family: var(--mono); font-size: 0.62rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim);
+    }
+    .stat-value {
+      font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--bright);
+    }
+    .stat-value.critical { color: var(--critical); }
+    .stat-value.warning  { color: var(--warning); }
+    .stat-value.elevated { color: var(--elevated); }
+    .stat-value.stable   { color: var(--stable); }
+    .stat-sub { font-size: 0.72rem; color: var(--dim); }
+
+    /* ── SECTION HEADER ──────────────────────────────────────────────────── */
+    .section-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title {
+      font-family: var(--mono); font-size: 0.75rem;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+    }
+    .section-meta { font-size: 0.72rem; color: var(--dim); }
+
+    /* ── RISK BADGE ──────────────────────────────────────────────────────── */
+    .badge {
+      display: inline-block; padding: 1px 7px; border-radius: 3px;
+      font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .badge-CRITICAL { background: rgba(255,60,60,0.15);  color: var(--critical); border: 1px solid rgba(255,60,60,0.3); }
+    .badge-WARNING  { background: rgba(255,170,0,0.12);  color: var(--warning);  border: 1px solid rgba(255,170,0,0.3); }
+    .badge-ELEVATED { background: rgba(0,200,238,0.1);   color: var(--elevated); border: 1px solid rgba(0,200,238,0.3); }
+    .badge-STABLE   { background: rgba(0,204,136,0.1);   color: var(--stable);   border: 1px solid rgba(0,204,136,0.3); }
+    .badge-HIT      { background: rgba(0,204,136,0.1);   color: var(--stable);   border: 1px solid rgba(0,204,136,0.3); }
+    .badge-MISS     { background: rgba(255,60,60,0.12);  color: var(--critical); border: 1px solid rgba(255,60,60,0.25); }
+    .badge-PARTIAL  { background: rgba(255,170,0,0.1);   color: var(--warning);  border: 1px solid rgba(255,170,0,0.25); }
+    .badge-OPEN     { background: rgba(26,111,255,0.1);  color: var(--accent);   border: 1px solid rgba(26,111,255,0.3); }
+
+    /* ── SCORE BAR ───────────────────────────────────────────────────────── */
+    .score-bar-wrap { flex: 1; min-width: 60px; max-width: 120px; }
+    .score-bar {
+      height: 4px; border-radius: 2px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .score-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+
+    /* ── THREAT TABLE (Step 19 + overview) ───────────────────────────────── */
+    .threat-controls {
+      display: flex; gap: 0.75rem; align-items: center;
+      margin-bottom: 1rem; flex-wrap: wrap;
+    }
+    .ctrl-select, .ctrl-input {
+      background: var(--panel2); border: 1px solid var(--border);
+      color: var(--text); padding: 5px 10px; border-radius: 4px;
+      font-size: 0.8rem; font-family: var(--sans);
+      outline: none; cursor: pointer;
+    }
+    .ctrl-select:hover, .ctrl-input:focus { border-color: var(--accent); }
+    .ctrl-input { width: 200px; }
+    .ctrl-input::placeholder { color: var(--dim); }
+
+    .threat-table { width: 100%; border-collapse: collapse; }
+    .threat-table th {
+      padding: 0.5rem 0.75rem;
+      font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--dim); text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap; cursor: pointer; user-select: none;
+    }
+    .threat-table th:hover { color: var(--text); }
+    .threat-table th.sorted { color: var(--accent); }
+    .threat-table td {
+      padding: 0.55rem 0.75rem; border-bottom: 1px solid rgba(21,32,64,0.5);
+      font-size: 0.82rem; vertical-align: middle;
+    }
+    .threat-table tr:hover td { background: rgba(26,111,255,0.04); }
+    .country-name { font-weight: 600; color: var(--bright); }
+    .theater-tag {
+      font-family: var(--mono); font-size: 0.62rem; color: var(--dim);
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .score-num {
+      font-family: var(--mono); font-size: 0.9rem; font-weight: 700;
+    }
+    .signal-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+    .signal-chip {
+      font-family: var(--mono); font-size: 0.6rem; padding: 1px 5px;
+      border-radius: 2px; background: rgba(26,111,255,0.08);
+      color: var(--dim); border: 1px solid rgba(26,111,255,0.15);
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+
+    /* sparkline SVG */
+    .sparkline { display: block; }
+    .spark-no-data { font-size: 0.65rem; color: var(--dim); font-family: var(--mono); }
+
+    /* ── COUNTRY DETAIL PANEL (Step 19 deep) ─────────────────────────────── */
+    .detail-panel {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 420px; z-index: 300;
+      background: var(--panel2);
+      border-left: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      overflow-y: auto;
+    }
+    .detail-panel.open { transform: translateX(0); }
+    .detail-header {
+      padding: 1.2rem 1.4rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between;
+      background: var(--panel);
+    }
+    .detail-country { font-size: 1.1rem; font-weight: 700; color: var(--bright); }
+    .detail-meta { font-size: 0.75rem; color: var(--dim); margin-top: 2px; }
+    .detail-close {
+      background: none; border: none; cursor: pointer;
+      color: var(--dim); font-size: 1.2rem; line-height: 1;
+      padding: 2px 6px; border-radius: 4px;
+    }
+    .detail-close:hover { color: var(--bright); background: var(--border); }
+    .detail-section { padding: 1rem 1.4rem; border-bottom: 1px solid var(--border); }
+    .detail-section-title {
+      font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem;
+    }
+    .detail-chart-wrap { width: 100%; height: 80px; position: relative; }
+    .detail-sparkline { width: 100%; height: 80px; }
+    .obs-row {
+      display: flex; flex-direction: column; gap: 4px;
+      padding: 0.6rem 0; border-bottom: 1px solid rgba(21,32,64,0.5);
+    }
+    .obs-row:last-child { border-bottom: none; }
+    .obs-row-top { display: flex; align-items: center; gap: 8px; }
+    .obs-dir {
+      font-family: var(--mono); font-size: 0.65rem;
+      color: var(--dim); text-transform: uppercase;
+    }
+    .obs-dir.ASCENDING  { color: var(--critical); }
+    .obs-dir.DESCENDING { color: var(--stable); }
+    .obs-window { font-size: 0.72rem; color: var(--dim); }
+    .obs-note { font-size: 0.72rem; color: var(--dim); font-style: italic; }
+
+    /* ── SPARKLINES VIEW (Step 19 full grid) ─────────────────────────────── */
+    .spark-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .spark-card {
+      background: var(--panel); padding: 0.8rem 1rem;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .spark-card:hover { background: var(--panel2); }
+    .spark-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .spark-country { font-size: 0.82rem; font-weight: 600; color: var(--bright); }
+    .spark-score {
+      font-family: var(--mono); font-size: 0.82rem; font-weight: 700;
+    }
+    .spark-theater { font-size: 0.65rem; color: var(--dim); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .spark-svg { display: block; width: 100%; }
+
+    /* ── LEDGER VIEW (Step 20) ───────────────────────────────────────────── */
+    .ledger-filter-row {
+      display: flex; gap: 0.75rem; align-items: center;
+      margin-bottom: 1rem; flex-wrap: wrap;
+    }
+    .ledger-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: 6px;
+      overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .ledger-stat {
+      background: var(--panel); padding: 0.75rem 1rem;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .ledger-stat-label {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim);
+    }
+    .ledger-stat-val {
+      font-family: var(--mono); font-size: 1.2rem; font-weight: 700;
+      color: var(--bright);
+    }
+    .ledger-table { width: 100%; border-collapse: collapse; }
+    .ledger-table th {
+      padding: 0.5rem 0.75rem;
+      font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--dim); text-align: left;
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    .ledger-table td {
+      padding: 0.55rem 0.75rem; border-bottom: 1px solid rgba(21,32,64,0.5);
+      font-size: 0.8rem; vertical-align: middle;
+    }
+    .ledger-table tr:hover td { background: rgba(26,111,255,0.04); }
+    .grade-hit     { color: var(--stable);   font-weight: 600; font-family: var(--mono); font-size: 0.72rem; }
+    .grade-miss    { color: var(--critical); font-weight: 600; font-family: var(--mono); font-size: 0.72rem; }
+    .grade-partial { color: var(--warning);  font-weight: 600; font-family: var(--mono); font-size: 0.72rem; }
+    .grade-open    { color: var(--accent);   font-weight: 600; font-family: var(--mono); font-size: 0.72rem; }
+    .window-bar {
+      height: 3px; border-radius: 2px; background: var(--border); overflow: hidden; margin-top: 3px;
+    }
+    .window-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+
+    /* ── FRESHNESS VIEW (Step 21) ────────────────────────────────────────── */
+    .freshness-note {
+      font-size: 0.8rem; color: var(--dim); margin-bottom: 1rem;
+      line-height: 1.6; max-width: 700px;
+    }
+    .freshness-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+    }
+    .freshness-card {
+      background: var(--panel); padding: 0.9rem 1rem;
+    }
+    .freshness-card-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .freshness-country { font-size: 0.82rem; font-weight: 600; color: var(--bright); }
+    .freshness-pct {
+      font-family: var(--mono); font-size: 0.78rem; font-weight: 700;
+    }
+    .freshness-bar { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; margin-bottom: 6px; }
+    .freshness-bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+    .freshness-bar-fill.high   { background: var(--stable); }
+    .freshness-bar-fill.medium { background: var(--warning); }
+    .freshness-bar-fill.low    { background: var(--critical); }
+    .freshness-meta { font-size: 0.7rem; color: var(--dim); }
+    .freshness-signals { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+    .sig-dot {
+      font-family: var(--mono); font-size: 0.6rem; padding: 1px 5px;
+      border-radius: 2px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .sig-dot.live { background: rgba(0,204,136,0.12); color: var(--stable); border: 1px solid rgba(0,204,136,0.25); }
+    .sig-dot.miss { background: rgba(255,60,60,0.08); color: rgba(255,60,60,0.6); border: 1px solid rgba(255,60,60,0.15); }
+
+    /* ── HEATMAP VIEW (Step 22) ──────────────────────────────────────────── */
+    .heatmap-note {
+      font-size: 0.8rem; color: var(--dim); margin-bottom: 1rem; line-height: 1.6;
+    }
+    .heatmap-wrap { overflow-x: auto; }
+    .heatmap-table { border-collapse: collapse; white-space: nowrap; }
+    .heatmap-table th.hm-country {
+      position: sticky; left: 0; z-index: 10;
+      background: var(--panel); min-width: 140px; max-width: 140px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.72rem; font-weight: 600; color: var(--bright);
+      text-align: left; border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .heatmap-table th.hm-sig {
+      padding: 0.4rem 0.3rem;
+      font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--dim); text-align: center;
+      border-bottom: 1px solid var(--border);
+      writing-mode: vertical-rl; transform: rotate(180deg);
+      max-height: 90px; min-width: 28px;
+    }
+    .heatmap-table td.hm-country-cell {
+      position: sticky; left: 0; z-index: 5;
+      background: var(--panel); min-width: 140px; max-width: 140px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.75rem; font-weight: 600; color: var(--bright);
+      text-align: left; border-right: 1px solid var(--border);
+      border-bottom: 1px solid rgba(21,32,64,0.4);
+    }
+    .hm-cell {
+      width: 28px; min-width: 28px; height: 28px;
+      text-align: center; vertical-align: middle;
+      border-bottom: 1px solid rgba(21,32,64,0.4);
+      border-right: 1px solid rgba(21,32,64,0.2);
+      font-family: var(--mono); font-size: 0.6rem;
+      cursor: default;
+      transition: opacity 0.15s;
+    }
+    .hm-cell:hover { opacity: 0.75; outline: 1px solid rgba(255,255,255,0.3); }
+    .hm-cell.null-cell { background: rgba(21,32,64,0.3); color: var(--dim); }
+    .heatmap-legend {
+      display: flex; align-items: center; gap: 8px; margin-top: 1rem;
+      font-size: 0.72rem; color: var(--dim); font-family: var(--mono);
+    }
+    .legend-swatch {
+      width: 16px; height: 16px; border-radius: 2px; display: inline-block;
+    }
+
+    /* ── LOADING / ERROR STATES ──────────────────────────────────────────── */
+    .loading-msg {
+      font-family: var(--mono); font-size: 0.8rem; color: var(--dim);
+      padding: 2rem; text-align: center; letter-spacing: 0.08em;
+    }
+    .error-msg {
+      font-family: var(--mono); font-size: 0.78rem; color: var(--critical);
+      padding: 1rem; background: rgba(255,60,60,0.06);
+      border: 1px solid rgba(255,60,60,0.2); border-radius: 4px;
+    }
+
+    /* ── PAGINATION ──────────────────────────────────────────────────────── */
+    .pagination {
+      display: flex; align-items: center; gap: 0.5rem;
+      justify-content: center; margin-top: 1.5rem;
+    }
+    .page-btn {
+      background: var(--panel2); border: 1px solid var(--border);
+      color: var(--text); padding: 4px 12px; border-radius: 4px;
+      font-size: 0.78rem; cursor: pointer; font-family: var(--mono);
+    }
+    .page-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .page-btn:disabled { opacity: 0.35; cursor: default; }
+    .page-info { font-family: var(--mono); font-size: 0.72rem; color: var(--dim); }
+
+    /* ── OVERLAY BACKDROP ─────────────────────────────────────────────────── */
+    #backdrop {
+      display: none; position: fixed; inset: 0; z-index: 250;
+      background: rgba(5,12,26,0.6); backdrop-filter: blur(2px);
+    }
+    #backdrop.visible { display: block; }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .detail-panel { width: 100%; }
+      .status-bar { grid-template-columns: repeat(2, 1fr); }
+      main { padding-left: 0.75rem; padding-right: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/"><span>SABIAN</span> INTEL</a>
+  <div class="nav-right">
+    <span class="nav-badge"><span id="live-dot"></span>LIVE</span>
+    <span class="nav-badge" id="scan-date-nav">—</span>
+    <a class="nav-link" href="/">← Home</a>
+  </div>
+</nav>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-view="threats">Threats <span class="tab-label-num" id="tab-threats-count"></span></button>
+  <button class="tab-btn" data-view="sparklines">90-Day Trends <span class="tab-label-num" id="tab-spark-count"></span></button>
+  <button class="tab-btn" data-view="ledger">Observation Ledger <span class="tab-label-num" id="tab-ledger-count"></span></button>
+  <button class="tab-btn" data-view="freshness">Signal Freshness <span class="tab-label-num" id="tab-fresh-count"></span></button>
+  <button class="tab-btn" data-view="heatmap">Signal Heatmap</button>
+</div>
+
+<main>
+
+  <!-- ── THREATS VIEW ─────────────────────────────────────────────────────── -->
+  <div class="view active" id="view-threats">
+    <!-- Status bar -->
+    <div class="status-bar" id="status-bar">
+      <div class="stat-cell">
+        <div class="stat-label">Countries</div>
+        <div class="stat-value" id="stat-total">—</div>
+        <div class="stat-sub">monitored</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Critical</div>
+        <div class="stat-value critical" id="stat-critical">—</div>
+        <div class="stat-sub">≥ 75</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Warning</div>
+        <div class="stat-value warning" id="stat-warning">—</div>
+        <div class="stat-sub">50 – 74</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Elevated</div>
+        <div class="stat-value elevated" id="stat-elevated">—</div>
+        <div class="stat-sub">25 – 49</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Stable</div>
+        <div class="stat-value stable" id="stat-stable">—</div>
+        <div class="stat-sub">0 – 24</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Avg Score</div>
+        <div class="stat-value" id="stat-avg">—</div>
+        <div class="stat-sub">global</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Last Scan</div>
+        <div class="stat-value" id="stat-date" style="font-size:1rem">—</div>
+        <div class="stat-sub">UTC</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-label">Signals</div>
+        <div class="stat-value" id="stat-signals">47</div>
+        <div class="stat-sub">active</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="threat-controls">
+      <input class="ctrl-input" id="search-input" type="text" placeholder="Search country…" oninput="filterThreats()">
+      <select class="ctrl-select" id="filter-level" onchange="filterThreats()">
+        <option value="">All Levels</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="WARNING">Warning</option>
+        <option value="ELEVATED">Elevated</option>
+        <option value="STABLE">Stable</option>
+      </select>
+      <select class="ctrl-select" id="filter-theater" onchange="filterThreats()">
+        <option value="">All Theaters</option>
+      </select>
+      <select class="ctrl-select" id="sort-col" onchange="sortThreats()">
+        <option value="score_desc">Score ↓</option>
+        <option value="score_asc">Score ↑</option>
+        <option value="country_asc">Country A–Z</option>
+        <option value="country_desc">Country Z–A</option>
+      </select>
+    </div>
+
+    <!-- Table -->
+    <div id="threat-table-wrap">
+      <div class="loading-msg">Loading threat data…</div>
+    </div>
+  </div>
+
+  <!-- ── SPARKLINES VIEW ───────────────────────────────────────────────────── -->
+  <div class="view" id="view-sparklines">
+    <div class="section-hdr">
+      <span class="section-title">90-Day Score Trajectories</span>
+      <span class="section-meta" id="spark-meta">Click any card to view detail</span>
+    </div>
+    <div class="threat-controls">
+      <input class="ctrl-input" id="spark-search" type="text" placeholder="Search country…" oninput="filterSparklines()">
+      <select class="ctrl-select" id="spark-filter-level" onchange="filterSparklines()">
+        <option value="">All Levels</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="WARNING">Warning</option>
+        <option value="ELEVATED">Elevated</option>
+        <option value="STABLE">Stable</option>
+      </select>
+    </div>
+    <div id="spark-grid-wrap">
+      <div class="loading-msg">Loading sparklines…</div>
+    </div>
+  </div>
+
+  <!-- ── LEDGER VIEW ───────────────────────────────────────────────────────── -->
+  <div class="view" id="view-ledger">
+    <div class="section-hdr">
+      <span class="section-title">Observation Ledger</span>
+      <span class="section-meta">Immutable threshold-crossing record</span>
+    </div>
+    <div class="ledger-filter-row">
+      <select class="ctrl-select" id="ledger-country" onchange="loadLedger()">
+        <option value="">All Countries</option>
+      </select>
+      <select class="ctrl-select" id="ledger-status" onchange="renderLedger()">
+        <option value="">All Status</option>
+        <option value="OPEN">Open</option>
+        <option value="HIT">Hit</option>
+        <option value="MISS">Miss</option>
+        <option value="PARTIAL">Partial</option>
+      </select>
+      <select class="ctrl-select" id="ledger-direction" onchange="renderLedger()">
+        <option value="">All Directions</option>
+        <option value="ASCENDING">Ascending (Worsening)</option>
+        <option value="DESCENDING">Descending (Improving)</option>
+      </select>
+    </div>
+    <div class="ledger-stats" id="ledger-stats-bar">
+      <div class="ledger-stat"><div class="ledger-stat-label">Total</div><div class="ledger-stat-val" id="ls-total">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">Open</div><div class="ledger-stat-val" id="ls-open" style="color:var(--accent)">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">Graded</div><div class="ledger-stat-val" id="ls-graded">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">Hits</div><div class="ledger-stat-val" id="ls-hits" style="color:var(--stable)">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">Misses</div><div class="ledger-stat-val" id="ls-misses" style="color:var(--critical)">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">Hit Rate</div><div class="ledger-stat-val" id="ls-rate">—</div></div>
+    </div>
+    <div id="ledger-table-wrap">
+      <div class="loading-msg">Select a country or load all observations…</div>
+    </div>
+  </div>
+
+  <!-- ── FRESHNESS VIEW ───────────────────────────────────────────────────── -->
+  <div class="view" id="view-freshness">
+    <div class="section-hdr">
+      <span class="section-title">Signal Freshness</span>
+      <span class="section-meta">Live signal coverage per country</span>
+    </div>
+    <p class="freshness-note">
+      Each country shows how many of 47 signals returned live data on the last scan.
+      Signals that timeout or have no API key return null and are excluded from the weighted average.
+      Higher coverage = more confident score.
+    </p>
+    <div class="threat-controls">
+      <input class="ctrl-input" id="fresh-search" type="text" placeholder="Search country…" oninput="filterFreshness()">
+      <select class="ctrl-select" id="fresh-sort" onchange="filterFreshness()">
+        <option value="pct_desc">Coverage ↓</option>
+        <option value="pct_asc">Coverage ↑</option>
+        <option value="country_asc">Country A–Z</option>
+        <option value="score_desc">Score ↓</option>
+      </select>
+    </div>
+    <div id="freshness-grid-wrap">
+      <div class="loading-msg">Loading freshness data…</div>
+    </div>
+  </div>
+
+  <!-- ── HEATMAP VIEW ──────────────────────────────────────────────────────── -->
+  <div class="view" id="view-heatmap">
+    <div class="section-hdr">
+      <span class="section-title">Signal × Country Heatmap</span>
+      <span class="section-meta">Top-3 dominant signals per country</span>
+    </div>
+    <p class="heatmap-note">
+      Color intensity = signal contribution. Dark cell = signal absent or not top-3.
+      Sorted by convergence score descending. Click any cell for country detail.
+    </p>
+    <div class="threat-controls">
+      <select class="ctrl-select" id="heatmap-theater" onchange="renderHeatmap()">
+        <option value="">All Theaters</option>
+      </select>
+      <select class="ctrl-select" id="heatmap-level" onchange="renderHeatmap()">
+        <option value="">All Levels</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="WARNING">Warning</option>
+        <option value="ELEVATED">Elevated</option>
+        <option value="STABLE">Stable</option>
+      </select>
+    </div>
+    <div class="heatmap-wrap" id="heatmap-wrap">
+      <div class="loading-msg">Loading heatmap…</div>
+    </div>
+    <div class="heatmap-legend">
+      <span class="legend-swatch" style="background:#1a1a4a"></span> 0
+      <span class="legend-swatch" style="background:#0a2a7a; margin-left:4px"></span> Low
+      <span class="legend-swatch" style="background:#0d5099; margin-left:4px"></span> Mid
+      <span class="legend-swatch" style="background:#0070cc; margin-left:4px"></span> High
+      <span class="legend-swatch" style="background:var(--warning); margin-left:4px"></span> Warning
+      <span class="legend-swatch" style="background:var(--critical); margin-left:4px"></span> Critical
+      <span style="margin-left:8px; opacity:0.6">Score range: 0–100</span>
+    </div>
+  </div>
+
+</main>
+
+<!-- Country Detail Side Panel -->
+<div id="backdrop"></div>
+<div id="detail-panel" class="detail-panel">
+  <div class="detail-header">
+    <div>
+      <div class="detail-country" id="dp-country">—</div>
+      <div class="detail-meta" id="dp-meta">—</div>
+    </div>
+    <button class="detail-close" onclick="closeDetail()">✕</button>
+  </div>
+  <div class="detail-section">
+    <div class="detail-section-title">90-Day Score History</div>
+    <div class="detail-chart-wrap">
+      <svg class="detail-sparkline" id="dp-sparkline" viewBox="0 0 380 80" preserveAspectRatio="none"></svg>
+    </div>
+    <div id="dp-spark-labels" style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.6rem; color:var(--dim); margin-top:4px;"></div>
+  </div>
+  <div class="detail-section">
+    <div class="detail-section-title">Current Signals</div>
+    <div id="dp-signals"></div>
+  </div>
+  <div class="detail-section">
+    <div class="detail-section-title">Open Observations</div>
+    <div id="dp-observations"></div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────────────────────────
+const BASE = '';  // same origin
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let allCountries   = [];
+let ledgerData     = [];
+let ledgerAllObs   = [];
+let historyCache   = {};
+let obsCache       = {};
+let sparkloaded    = false;
+let ledgerLoaded   = false;
+let freshnessLoaded= false;
+let heatmapLoaded  = false;
+
+// ── UTIL ───────────────────────────────────────────────────────────────────
+function riskColor(level) {
+  const m = { CRITICAL:'var(--critical)', WARNING:'var(--warning)', ELEVATED:'var(--elevated)', STABLE:'var(--stable)' };
+  return m[level] || 'var(--dim)';
+}
+
+function scoreColor(score) {
+  if (score >= 75) return 'var(--critical)';
+  if (score >= 50) return 'var(--warning)';
+  if (score >= 25) return 'var(--elevated)';
+  return 'var(--stable)';
+}
+
+function hmColor(score) {
+  if (score == null) return 'rgba(21,32,64,0.3)';
+  if (score >= 75) return `rgba(255,${Math.round(60 - score*0.3)},60,${0.3 + score/200})`;
+  if (score >= 50) return `rgba(255,${Math.round(170 - (score-50)*2)},0,${0.2 + score/250})`;
+  if (score >= 25) return `rgba(0,${Math.round(200 - score)},238,${0.1 + score/300})`;
+  return `rgba(0,204,136,${0.08 + score/400})`;
+}
+
+function badge(level) {
+  return `<span class="badge badge-${level}">${level}</span>`;
+}
+
+async function apiFetch(path) {
+  const res = await fetch(BASE + path);
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+  return res.json();
+}
+
+// ── TAB SWITCHING ──────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    const vid = 'view-' + btn.dataset.view;
+    document.getElementById(vid).classList.add('active');
+    if (btn.dataset.view === 'sparklines' && !sparkloaded) loadSparklines();
+    if (btn.dataset.view === 'ledger' && !ledgerLoaded) loadLedger();
+    if (btn.dataset.view === 'freshness' && !freshnessLoaded) loadFreshness();
+    if (btn.dataset.view === 'heatmap' && !heatmapLoaded) loadHeatmap();
+  });
+});
+
+// ── SPARKLINE SVG RENDERER ─────────────────────────────────────────────────
+function makeSpark(history, w, h, strokeColor, fill) {
+  if (!history || history.length < 2) {
+    return `<text x="${w/2}" y="${h/2}" font-family="monospace" font-size="9" fill="rgba(136,160,192,0.5)" text-anchor="middle">No history</text>`;
+  }
+  const scores = history.map(r => r.convergence_score || 0);
+  const minV = Math.min(...scores, 0);
+  const maxV = Math.max(...scores, 1);
+  const range = maxV - minV || 1;
+  const xs = scores.map((_, i) => (i / (scores.length - 1)) * w);
+  const ys = scores.map(s => h - ((s - minV) / range) * h * 0.85 - h * 0.05);
+  const pts = xs.map((x, i) => `${x},${ys[i]}`).join(' ');
+  const areaBot = h;
+  const areaPath = `M${xs[0]},${ys[0]} ` + xs.slice(1).map((x,i) => `L${x},${ys[i+1]}`).join(' ') + ` L${xs[xs.length-1]},${areaBot} L${xs[0]},${areaBot} Z`;
+  const lastScore = scores[scores.length - 1];
+  const lastX = xs[xs.length - 1];
+  const lastY = ys[ys.length - 1];
+  return `
+    <defs>
+      <linearGradient id="sg${Math.random().toString(36).slice(2,6)}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.01"/>
+      </linearGradient>
+    </defs>
+    ${fill ? `<path d="${areaPath}" fill="url(#sg${Math.random().toString(36).slice(2,6)})" opacity="0.5"/>` : ''}
+    <polyline points="${pts}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${lastX}" cy="${lastY}" r="2.5" fill="${strokeColor}"/>
+    <text x="${lastX - 3}" y="${lastY - 5}" font-family="monospace" font-size="8" fill="${strokeColor}" text-anchor="middle">${lastScore}</text>
+  `;
+}
+
+function makeSparkSVG(history, w, h, level) {
+  const color = riskColor(level || (history?.length ? (history[history.length-1].risk_level || 'STABLE') : 'STABLE'));
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" class="sparkline">${makeSpark(history, w, h, color, true)}</svg>`;
+}
+
+// ── LOAD THREATS (initial data) ────────────────────────────────────────────
+async function loadThreats() {
+  try {
+    const data = await apiFetch('/public-api/threats');
+    allCountries = data.countries || [];
+
+    // Update status bar
+    const scores = allCountries.map(c => c.convergence_score || 0);
+    const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
+    const counts = { CRITICAL:0, WARNING:0, ELEVATED:0, STABLE:0 };
+    allCountries.forEach(c => { counts[c.risk_level] = (counts[c.risk_level]||0)+1; });
+
+    document.getElementById('stat-total').textContent    = allCountries.length;
+    document.getElementById('stat-critical').textContent = counts.CRITICAL || 0;
+    document.getElementById('stat-warning').textContent  = counts.WARNING  || 0;
+    document.getElementById('stat-elevated').textContent = counts.ELEVATED || 0;
+    document.getElementById('stat-stable').textContent   = counts.STABLE   || 0;
+    document.getElementById('stat-avg').textContent      = avg;
+    const scanDate = allCountries[0]?.scan_date || '—';
+    document.getElementById('stat-date').textContent     = scanDate;
+    document.getElementById('scan-date-nav').textContent = scanDate;
+    document.getElementById('tab-threats-count').textContent = `(${allCountries.length})`;
+    document.getElementById('tab-spark-count').textContent   = `(${allCountries.length})`;
+    document.getElementById('tab-fresh-count').textContent   = `(${allCountries.length})`;
+
+    // Populate theater filter
+    const theaters = [...new Set(allCountries.map(c=>c.theater).filter(Boolean))].sort();
+    const tsel = document.getElementById('filter-theater');
+    const tsel2 = document.getElementById('heatmap-theater');
+    theaters.forEach(t => {
+      [tsel, tsel2].forEach(sel => {
+        const opt = document.createElement('option');
+        opt.value = t; opt.textContent = t;
+        sel.appendChild(opt);
+      });
+    });
+
+    // Populate ledger country dropdown
+    const lsel = document.getElementById('ledger-country');
+    allCountries.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.country; opt.textContent = c.country;
+      lsel.appendChild(opt);
+    });
+
+    renderThreatsTable(allCountries);
+  } catch (err) {
+    document.getElementById('threat-table-wrap').innerHTML =
+      `<div class="error-msg">Failed to load threat data: ${err.message}</div>`;
+  }
+}
+
+function filterThreats() {
+  const q    = document.getElementById('search-input').value.toLowerCase();
+  const lev  = document.getElementById('filter-level').value;
+  const thr  = document.getElementById('filter-theater').value;
+  let rows   = allCountries;
+  if (q)   rows = rows.filter(c => c.country.toLowerCase().includes(q));
+  if (lev) rows = rows.filter(c => c.risk_level === lev);
+  if (thr) rows = rows.filter(c => c.theater === thr);
+  renderThreatsTable(rows);
+}
+
+function sortThreats() {
+  const v = document.getElementById('sort-col').value;
+  let rows = [...allCountries];
+  if (v === 'score_asc')    rows.sort((a,b) => (a.convergence_score||0)-(b.convergence_score||0));
+  if (v === 'score_desc')   rows.sort((a,b) => (b.convergence_score||0)-(a.convergence_score||0));
+  if (v === 'country_asc')  rows.sort((a,b) => a.country.localeCompare(b.country));
+  if (v === 'country_desc') rows.sort((a,b) => b.country.localeCompare(a.country));
+  renderThreatsTable(rows);
+}
+
+function renderThreatsTable(rows) {
+  if (!rows.length) {
+    document.getElementById('threat-table-wrap').innerHTML = '<div class="loading-msg">No results.</div>';
+    return;
+  }
+  let html = `<table class="threat-table">
+    <thead><tr>
+      <th>#</th>
+      <th>Country</th>
+      <th>Theater</th>
+      <th>Score</th>
+      <th>Level</th>
+      <th>Trend (spark)</th>
+      <th>Top Signals</th>
+      <th>Scan Date</th>
+    </tr></thead><tbody>`;
+
+  rows.forEach((c, i) => {
+    const color = riskColor(c.risk_level);
+    const sc = c.convergence_score || 0;
+    const top3 = c.top_3_signals || [];
+    const chips = top3.map(s => `<span class="signal-chip">${(s.name||'').replace(/_/g,' ')}</span>`).join('');
+    const cached = historyCache[c.country];
+    const sparkHtml = cached
+      ? makeSparkSVG(cached, 100, 28, c.risk_level)
+      : `<span class="spark-no-data">—</span>`;
+    html += `<tr onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
+      <td style="font-family:var(--mono);font-size:0.7rem;color:var(--dim)">${i+1}</td>
+      <td><span class="country-name">${c.country}</span></td>
+      <td><span class="theater-tag">${c.theater||'—'}</span></td>
+      <td><span class="score-num" style="color:${color}">${sc}</span>
+        <div class="score-bar-wrap" style="margin-top:3px">
+          <div class="score-bar"><div class="score-bar-fill" style="width:${sc}%;background:${color}"></div></div>
+        </div>
+      </td>
+      <td>${badge(c.risk_level)}</td>
+      <td>${sparkHtml}</td>
+      <td><div class="signal-chips">${chips}</div></td>
+      <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">${c.scan_date||'—'}</td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('threat-table-wrap').innerHTML = html;
+}
+
+// ── SPARKLINES VIEW ────────────────────────────────────────────────────────
+async function loadSparklines() {
+  sparkloaded = true;
+  const wrap = document.getElementById('spark-grid-wrap');
+  wrap.innerHTML = '<div class="loading-msg">Fetching 90-day histories…</div>';
+
+  // Fetch histories for all countries in parallel batches
+  const BATCH = 10;
+  const countries = allCountries.slice();
+  for (let i = 0; i < countries.length; i += BATCH) {
+    const batch = countries.slice(i, i + BATCH);
+    await Promise.all(batch.map(async c => {
+      if (historyCache[c.country]) return;
+      try {
+        const d = await apiFetch(`/public-api/country/${encodeURIComponent(c.country)}?days=90`);
+        historyCache[c.country] = d.history || [];
+      } catch (_) {
+        historyCache[c.country] = [];
+      }
+    }));
+    renderSparkGrid(false);
+  }
+  renderSparkGrid(true);
+}
+
+function renderSparkGrid(final) {
+  const q   = document.getElementById('spark-search').value.toLowerCase();
+  const lev = document.getElementById('spark-filter-level').value;
+  let rows  = allCountries;
+  if (q)   rows = rows.filter(c => c.country.toLowerCase().includes(q));
+  if (lev) rows = rows.filter(c => c.risk_level === lev);
+
+  let html = '<div class="spark-grid">';
+  rows.forEach(c => {
+    const history = historyCache[c.country] || [];
+    const color   = riskColor(c.risk_level);
+    const sc      = c.convergence_score || 0;
+    const svgContent = makeSpark(history, 240, 50, color, true);
+    html += `<div class="spark-card" onclick="openDetail('${encodeURIComponent(c.country)}')">
+      <div class="spark-card-header">
+        <span class="spark-country">${c.country}</span>
+        <span class="spark-score" style="color:${color}">${sc}</span>
+      </div>
+      <div class="spark-theater">${c.theater||''}</div>
+      <svg viewBox="0 0 240 50" width="100%" height="50" class="spark-svg">${svgContent}</svg>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px">
+        ${badge(c.risk_level)}
+        <span style="font-family:var(--mono);font-size:0.6rem;color:var(--dim)">${history.length} days</span>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  if (!final) html += '<div class="loading-msg" style="margin-top:1rem">Loading remaining histories…</div>';
+  document.getElementById('spark-grid-wrap').innerHTML = html;
+}
+
+function filterSparklines() { renderSparkGrid(true); }
+
+// ── LEDGER VIEW ────────────────────────────────────────────────────────────
+async function loadLedger() {
+  ledgerLoaded = true;
+  const country = document.getElementById('ledger-country').value;
+  const wrap    = document.getElementById('ledger-table-wrap');
+  wrap.innerHTML = '<div class="loading-msg">Loading ledger…</div>';
+
+  try {
+    let url = country
+      ? `/public-api/observations/${encodeURIComponent(country)}`
+      : `/public-api/observations/stats`;
+
+    if (!country) {
+      // Load stats from all countries
+      const stats = await apiFetch('/public-api/observations/stats');
+      updateLedgerStats(stats);
+      // Then load all observations across first batch of countries
+      const obs = [];
+      const top20 = allCountries.slice(0, 20);
+      await Promise.all(top20.map(async c => {
+        try {
+          const d = await apiFetch(`/public-api/observations/${encodeURIComponent(c.country)}`);
+          obs.push(...(d.observations || []));
+        } catch(_) {}
+      }));
+      ledgerAllObs = obs.sort((a,b) => new Date(b.scan_date) - new Date(a.scan_date));
+      document.getElementById('tab-ledger-count').textContent = `(${ledgerAllObs.length})`;
+      renderLedger();
+      return;
+    }
+
+    const d = await apiFetch(`/public-api/observations/${encodeURIComponent(country)}`);
+    ledgerAllObs = d.observations || [];
+    updateLedgerStats({
+      total: d.total, open: d.open_count,
+      graded: d.total - d.open_count
+    });
+    renderLedger();
+  } catch (err) {
+    wrap.innerHTML = `<div class="error-msg">Failed to load ledger: ${err.message}</div>`;
+  }
+}
+
+function updateLedgerStats(s) {
+  document.getElementById('ls-total').textContent  = s.total ?? '—';
+  document.getElementById('ls-open').textContent   = s.open ?? '—';
+  document.getElementById('ls-graded').textContent = s.graded ?? '—';
+  document.getElementById('ls-hits').textContent   = s.hits ?? '—';
+  document.getElementById('ls-misses').textContent = s.misses ?? '—';
+  const rate = s.hit_rate != null ? Math.round(s.hit_rate * 100) + '%' : '—';
+  document.getElementById('ls-rate').textContent   = rate;
+}
+
+function renderLedger() {
+  const status    = document.getElementById('ledger-status').value;
+  const direction = document.getElementById('ledger-direction').value;
+  let rows = ledgerAllObs;
+  if (status)    rows = rows.filter(r => (r.grade || 'OPEN') === status);
+  if (direction) rows = rows.filter(r => r.direction === direction);
+
+  if (!rows.length) {
+    document.getElementById('ledger-table-wrap').innerHTML = '<div class="loading-msg">No observations match filter.</div>';
+    return;
+  }
+
+  const today = new Date();
+  let html = `<table class="ledger-table">
+    <thead><tr>
+      <th>Country</th>
+      <th>Date</th>
+      <th>Level</th>
+      <th>→ From</th>
+      <th>Direction</th>
+      <th>Score</th>
+      <th>Window</th>
+      <th>Closes</th>
+      <th>Grade</th>
+      <th>Notes</th>
+    </tr></thead><tbody>`;
+
+  rows.forEach(r => {
+    const grade       = r.grade || 'OPEN';
+    const gradeClass  = grade === 'HIT' ? 'grade-hit' : grade === 'MISS' ? 'grade-miss' : grade === 'PARTIAL' ? 'grade-partial' : 'grade-open';
+    const closeDate   = r.window_closes_at ? r.window_closes_at.slice(0,10) : '—';
+    const closeDt     = r.window_closes_at ? new Date(r.window_closes_at) : null;
+    const daysLeft    = closeDt ? Math.max(0, Math.round((closeDt - today) / 86400000)) : null;
+    const totalWindow = r.window_days || 30;
+    const elapsed     = closeDt ? Math.max(0, totalWindow - daysLeft) : 0;
+    const pct         = Math.min(100, Math.round((elapsed / totalWindow) * 100));
+    const dirColor    = r.direction === 'ASCENDING' ? 'var(--critical)' : r.direction === 'DESCENDING' ? 'var(--stable)' : 'var(--dim)';
+    html += `<tr>
+      <td><span class="country-name" style="cursor:pointer" onclick="openDetail('${encodeURIComponent(r.country)}')">${r.country}</span></td>
+      <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">${r.scan_date||'—'}</td>
+      <td>${badge(r.risk_level)}</td>
+      <td>${badge(r.previous_risk_level||'—')}</td>
+      <td style="font-family:var(--mono);font-size:0.72rem;font-weight:600;color:${dirColor}">${r.direction||'—'}</td>
+      <td style="font-family:var(--mono);font-size:0.82rem;font-weight:700;color:${scoreColor(r.convergence_score)}">${r.convergence_score||'—'}</td>
+      <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">${totalWindow}d
+        <div class="window-bar"><div class="window-bar-fill" style="width:${pct}%"></div></div>
+      </td>
+      <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">${closeDate}${daysLeft != null && grade === 'OPEN' ? `<br><span style="color:var(--accent)">${daysLeft}d left</span>` : ''}</td>
+      <td><span class="${gradeClass}">${grade}</span></td>
+      <td style="font-size:0.72rem;color:var(--dim);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.grade_notes||''}">${r.grade_notes||'—'}</td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('ledger-table-wrap').innerHTML = html;
+}
+
+// ── FRESHNESS VIEW ─────────────────────────────────────────────────────────
+async function loadFreshness() {
+  freshnessLoaded = true;
+  const wrap = document.getElementById('freshness-grid-wrap');
+  wrap.innerHTML = '<div class="loading-msg">Fetching signal coverage…</div>';
+
+  // Use allCountries data: signals_available from the threats list (stored in history)
+  // Supplement with country history to get signals_available
+  const BATCH = 8;
+  const countries = allCountries.slice();
+  for (let i = 0; i < countries.length; i += BATCH) {
+    const batch = countries.slice(i, i + BATCH);
+    await Promise.all(batch.map(async c => {
+      if (historyCache[c.country]) return;
+      try {
+        const d = await apiFetch(`/public-api/country/${encodeURIComponent(c.country)}?days=1`);
+        historyCache[c.country] = d.history || [];
+      } catch(_) {
+        historyCache[c.country] = [];
+      }
+    }));
+    renderFreshnessGrid();
+  }
+  renderFreshnessGrid();
+}
+
+function renderFreshnessGrid() {
+  const q    = document.getElementById('fresh-search').value.toLowerCase();
+  const sort = document.getElementById('fresh-sort').value;
+  let rows   = allCountries.map(c => {
+    const history = historyCache[c.country] || [];
+    const latest  = history.length ? history[history.length-1] : null;
+    const avail   = latest?.signals_available || c.signals_available || null;
+    const pct     = avail != null ? Math.round((avail / 47) * 100) : null;
+    return { ...c, signals_available: avail, coverage_pct: pct };
+  });
+  if (q) rows = rows.filter(c => c.country.toLowerCase().includes(q));
+  if (sort === 'pct_desc')    rows.sort((a,b) => (b.coverage_pct||0)-(a.coverage_pct||0));
+  if (sort === 'pct_asc')     rows.sort((a,b) => (a.coverage_pct||0)-(b.coverage_pct||0));
+  if (sort === 'country_asc') rows.sort((a,b) => a.country.localeCompare(b.country));
+  if (sort === 'score_desc')  rows.sort((a,b) => (b.convergence_score||0)-(a.convergence_score||0));
+
+  let html = '<div class="freshness-grid">';
+  rows.forEach(c => {
+    const pct     = c.coverage_pct;
+    const pctStr  = pct != null ? pct + '%' : '—';
+    const pctClass= pct == null ? '' : pct >= 70 ? 'high' : pct >= 40 ? 'medium' : 'low';
+    const pctColor= pct == null ? 'var(--dim)' : pct >= 70 ? 'var(--stable)' : pct >= 40 ? 'var(--warning)' : 'var(--critical)';
+    const top3    = c.top_3_signals || [];
+    const chips   = top3.map(s => `<span class="sig-dot live">${(s.name||'').replace(/_/g,' ').slice(0,12)}</span>`).join('');
+    const avail   = c.signals_available;
+    const missing = avail != null ? (47 - avail) : null;
+    html += `<div class="freshness-card">
+      <div class="freshness-card-hdr">
+        <span class="freshness-country">${c.country}</span>
+        <span class="freshness-pct" style="color:${pctColor}">${pctStr}</span>
+      </div>
+      ${pct != null ? `<div class="freshness-bar"><div class="freshness-bar-fill ${pctClass}" style="width:${pct}%"></div></div>` : ''}
+      <div class="freshness-meta">${avail != null ? `${avail} live / ${missing} null` : 'loading…'} &nbsp;·&nbsp; ${badge(c.risk_level)}</div>
+      <div class="freshness-signals">${chips}</div>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('freshness-grid-wrap').innerHTML = html;
+}
+
+function filterFreshness() { renderFreshnessGrid(); }
+
+// ── HEATMAP VIEW ───────────────────────────────────────────────────────────
+function loadHeatmap() {
+  heatmapLoaded = true;
+  renderHeatmap();
+}
+
+function renderHeatmap() {
+  const theater = document.getElementById('heatmap-theater').value;
+  const level   = document.getElementById('heatmap-level').value;
+  let rows = allCountries;
+  if (theater) rows = rows.filter(c => c.theater === theater);
+  if (level)   rows = rows.filter(c => c.risk_level === level);
+
+  // Collect all signal names that appear in top_3_signals across filtered rows
+  const sigCount = {};
+  rows.forEach(c => {
+    (c.top_3_signals || []).forEach(s => {
+      const n = s.name || '';
+      sigCount[n] = (sigCount[n]||0) + 1;
+    });
+  });
+  // Top N most frequently appearing signals
+  const sigNames = Object.entries(sigCount)
+    .sort((a,b) => b[1]-a[1])
+    .slice(0, 30)
+    .map(e => e[0]);
+
+  if (!rows.length || !sigNames.length) {
+    document.getElementById('heatmap-wrap').innerHTML = '<div class="loading-msg">No data to display.</div>';
+    return;
+  }
+
+  let html = `<table class="heatmap-table"><thead><tr>
+    <th class="hm-country">Country</th>`;
+  sigNames.forEach(s => {
+    html += `<th class="hm-sig" title="${s}">${s.replace(/_/g,' ')}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  rows.forEach(c => {
+    const sigMap = {};
+    (c.top_3_signals || []).forEach(s => { sigMap[s.name] = s.score || 0; });
+    const sc = c.convergence_score || 0;
+    html += `<tr>
+      <td class="hm-country-cell" onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
+        <span style="font-size:0.7rem;color:${riskColor(c.risk_level)};margin-right:4px">●</span>${c.country}
+      </td>`;
+    sigNames.forEach(s => {
+      const score = sigMap[s];
+      const bg    = score != null ? hmColor(score) : 'rgba(21,32,64,0.25)';
+      const txt   = score != null ? score : '';
+      html += `<td class="hm-cell${score==null?' null-cell':''}" style="background:${bg}" title="${s}: ${score??'—'}" onclick="openDetail('${encodeURIComponent(c.country)}')">${txt}</td>`;
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('heatmap-wrap').innerHTML = html;
+}
+
+// ── COUNTRY DETAIL PANEL ───────────────────────────────────────────────────
+async function openDetail(encodedCountry) {
+  const country = decodeURIComponent(encodedCountry);
+  document.getElementById('dp-country').textContent = country;
+  document.getElementById('dp-meta').textContent = 'Loading…';
+  document.getElementById('dp-sparkline').innerHTML = '';
+  document.getElementById('dp-spark-labels').innerHTML = '';
+  document.getElementById('dp-signals').innerHTML = '<span style="font-size:0.75rem;color:var(--dim)">Loading…</span>';
+  document.getElementById('dp-observations').innerHTML = '<span style="font-size:0.75rem;color:var(--dim)">Loading…</span>';
+
+  document.getElementById('detail-panel').classList.add('open');
+  document.getElementById('backdrop').classList.add('visible');
+
+  // Fetch history + observations in parallel
+  const [histRes, obsRes] = await Promise.allSettled([
+    historyCache[country]
+      ? Promise.resolve({ history: historyCache[country] })
+      : apiFetch(`/public-api/country/${encodeURIComponent(country)}?days=90`),
+    apiFetch(`/public-api/observations/${encodeURIComponent(country)}`)
+  ]);
+
+  const current = allCountries.find(c => c.country === country);
+  const history = histRes.status === 'fulfilled' ? (histRes.value.history || []) : [];
+  historyCache[country] = history;
+
+  // Update meta
+  if (current) {
+    const color = riskColor(current.risk_level);
+    document.getElementById('dp-meta').innerHTML =
+      `<span style="color:${color};font-weight:700">${current.convergence_score}</span> &nbsp;` +
+      badge(current.risk_level) + `&nbsp; ${current.theater||''} &nbsp;·&nbsp; ${current.scan_date||''}`;
+  }
+
+  // Draw sparkline
+  const svgEl = document.getElementById('dp-sparkline');
+  if (history.length >= 2) {
+    const color = riskColor(current?.risk_level || 'STABLE');
+    svgEl.innerHTML = makeSpark(history, 380, 80, color, true);
+    // Date labels
+    const first = history[0]?.scan_date || '';
+    const last  = history[history.length-1]?.scan_date || '';
+    document.getElementById('dp-spark-labels').innerHTML =
+      `<span>${first}</span><span style="color:var(--dim)">${history.length} data points</span><span>${last}</span>`;
+  } else {
+    svgEl.innerHTML = `<text x="190" y="44" font-family="monospace" font-size="10" fill="rgba(136,160,192,0.5)" text-anchor="middle">Insufficient history</text>`;
+  }
+
+  // Signals
+  const top3 = current?.top_3_signals || [];
+  if (top3.length) {
+    let sigHtml = '';
+    top3.forEach(s => {
+      const sc = s.score || 0;
+      const c2 = scoreColor(sc);
+      sigHtml += `<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(21,32,64,0.5)">
+        <span style="font-family:var(--mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--dim)">${(s.name||'').replace(/_/g,' ')}</span>
+        <span style="font-family:var(--mono);font-size:0.82rem;font-weight:700;color:${c2}">${sc}</span>
+      </div>`;
+    });
+    document.getElementById('dp-signals').innerHTML = sigHtml || '<span style="font-size:0.75rem;color:var(--dim)">No signal data</span>';
+  } else {
+    document.getElementById('dp-signals').innerHTML = '<span style="font-size:0.75rem;color:var(--dim)">No signal data available</span>';
+  }
+
+  // Observations
+  const obsData = obsRes.status === 'fulfilled' ? obsRes.value : null;
+  const openObs = obsData ? (obsData.observations || []).filter(o => !o.grade) : [];
+  if (openObs.length) {
+    let obsHtml = '';
+    openObs.forEach(o => {
+      const dirColor = o.direction === 'ASCENDING' ? 'var(--critical)' : 'var(--stable)';
+      const closeDate = o.window_closes_at ? o.window_closes_at.slice(0,10) : '—';
+      obsHtml += `<div class="obs-row">
+        <div class="obs-row-top">
+          ${badge(o.risk_level)}
+          <span class="obs-dir ${o.direction}">${o.direction}</span>
+          <span class="badge badge-OPEN">OPEN</span>
+        </div>
+        <div class="obs-window">Window closes: ${closeDate} (${o.window_days}d)</div>
+        ${o.grade_notes ? `<div class="obs-note">${o.grade_notes}</div>` : ''}
+      </div>`;
+    });
+    document.getElementById('dp-observations').innerHTML = obsHtml;
+  } else {
+    const allObs = obsData ? (obsData.observations || []) : [];
+    document.getElementById('dp-observations').innerHTML =
+      allObs.length
+        ? `<span style="font-size:0.75rem;color:var(--dim)">${allObs.length} graded observation(s) — no open windows</span>`
+        : '<span style="font-size:0.75rem;color:var(--dim)">No observations recorded</span>';
+  }
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('visible');
+}
+
+document.getElementById('backdrop').addEventListener('click', closeDetail);
+
+// ── BOOT ───────────────────────────────────────────────────────────────────
+loadThreats();
+</script>
+</body>
+</html>
