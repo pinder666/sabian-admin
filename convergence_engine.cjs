@@ -20,9 +20,17 @@ const fetchSeismicRisk = require('./seismic_risk_feed.cjs');
 const fetchOoni = require('./ooni_feed.cjs');
 const fetchImfFiscal = require('./imf_fiscal_feed.cjs');
 const fetchMaritime = require('./unctad_maritime_feed.cjs');
-const { fetchGpsJammingData }   = require('./gps_jamming_feed.cjs');
-const { fetchSocialUnrestData } = require('./social_unrest_feed.cjs');
-const { fetchSanctionsData }    = require('./sanctions_feed.cjs');
+const { fetchGpsJammingData }       = require('./gps_jamming_feed.cjs');
+const { fetchSocialUnrestData }     = require('./social_unrest_feed.cjs');
+const { fetchSanctionsData }        = require('./sanctions_feed.cjs');
+const { fetchCurrencyCollapseData }    = require('./exchangerate_feed.cjs');
+const { fetchFlightMovementData }      = require('./opensky_feed.cjs');
+const { fetchHealthCrisisData }        = require('./who_health_feed.cjs');
+const { fetchEnergyStressData }        = require('./eia_energy_feed.cjs');
+const { fetchCapitalFlowsData }        = require('./fred_capital_feed.cjs');
+const { fetchMilitaryProximityData }   = require('./military_proximity_feed.cjs');
+const { fetchChokepointData }          = require('./chokepoint_feed.cjs');
+const { fetchGdeltGkgData }            = require('./gdelt_gkg_feed.cjs');
 
 // ISO2 codes — used by FEWS, World Bank, OONI, and IMF queries
 // All 160 monitored countries (159 global watch list + United States)
@@ -239,26 +247,33 @@ const COUNTRY_COORDS = {
 };
 
 // Signal weights — must sum to 1.0
-// 16-signal model (13 original + GPS Jamming, Social Unrest, Sanctions Pressure)
-// Existing signals reduced proportionally to accommodate 10% for three new signals.
+// 24-signal model (v4): 21 previous + military proximity, chokepoint, GDELT GKG tone
 // All weights judgment-set — see METHODOLOGY.md for rationale.
 const WEIGHTS = {
-  conflict:            0.16,
-  food_security:       0.15,
-  governance:          0.12,
-  displacement:        0.11,
-  imf_fiscal:          0.05,
-  ooni_internet:       0.05,
-  fire_hotspot:        0.07,
-  climate_stress:      0.07,
-  trade_collapse:      0.02,
-  economic_stress:     0.02,
-  resource_conflict:   0.04,
-  maritime_trade:      0.03,
-  seismic_risk:        0.01,
-  gps_jamming:         0.03,
-  social_unrest:       0.04,
-  sanctions_pressure:  0.03
+  conflict:             0.13,
+  food_security:        0.12,
+  governance:           0.09,
+  displacement:         0.09,
+  imf_fiscal:           0.04,
+  ooni_internet:        0.03,
+  fire_hotspot:         0.05,
+  climate_stress:       0.05,
+  trade_collapse:       0.02,
+  economic_stress:      0.02,
+  resource_conflict:    0.03,
+  maritime_trade:       0.03,
+  seismic_risk:         0.01,
+  gps_jamming:          0.02,
+  social_unrest:        0.03,
+  sanctions_pressure:   0.03,
+  currency_collapse:    0.04,
+  flight_movement:      0.02,
+  health_crisis:        0.03,
+  energy_stress:        0.03,
+  capital_flows:        0.02,
+  military_proximity:   0.03,
+  chokepoint:           0.02,
+  gdelt_tone:           0.03
 };
 
 // Expected update cadence per signal — judgment-set, matches source publishing frequency
@@ -280,7 +295,15 @@ const FRESHNESS_WINDOWS = {
   'Maritime Trade':    { hours: 720,  cadence: 'Monthly — UNCTAD' },
   'GPS Jamming':       { hours: 24,   cadence: 'Daily — gpsjam.org hexgrid (prev-day ~0800 UTC)' },
   'Social Unrest':     { hours: 168,  cadence: 'ACLED weekly — protest/riot events 90-day window' },
-  'Sanctions Pressure':{ hours: 168,  cadence: 'Weekly — OFAC SDN list + static severity tier' }
+  'Sanctions Pressure':{ hours: 168,  cadence: 'Weekly — OFAC SDN list + static severity tier' },
+  'Currency Collapse': { hours: 168,  cadence: 'Weekly — Alpha Vantage FX monthly series' },
+  'Flight Movement':   { hours: 6,    cadence: '6-hourly — OpenSky Network ADS-B state vectors' },
+  'Health Crisis':     { hours: 24,   cadence: 'Daily — disease.sh + WHO outbreak news' },
+  'Energy Stress':     { hours: 168,  cadence: 'Weekly — EIA international energy data' },
+  'Capital Flows':      { hours: 24,   cadence: 'Daily — FRED FX series + St. Louis FSI' },
+  'Military Proximity': { hours: 8760, cadence: 'Annual — curated global base dataset' },
+  'Chokepoint':         { hours: 8760, cadence: 'Static — geographic reality, annual review' },
+  'GDELT Tone':         { hours: 24,   cadence: 'Daily — GDELT GKG 30-day tone average' }
 };
 
 function getRiskLevel(score) {
@@ -747,6 +770,161 @@ async function scoreSanctionsPressure(country) {
   }
 }
 
+async function scoreCurrencyCollapse(country) {
+  try {
+    const result = await fetchCurrencyCollapseData(country);
+    if (result.score === null) {
+      return { name: 'Currency Collapse', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'AlphaVantage' };
+    }
+    return {
+      name: 'Currency Collapse',
+      score: result.score,
+      label: result.depreciation_pct !== undefined
+        ? `${result.currency} ${result.depreciation_pct > 0 ? '-' : '+'}${Math.abs(result.depreciation_pct)}% vs USD (12m)`
+        : (result.reason || 'USD-pegged'),
+      trend: result.score >= 50 ? 'deteriorating' : result.score >= 20 ? 'watch' : 'stable',
+      source: 'AlphaVantage'
+    };
+  } catch (err) {
+    return { name: 'Currency Collapse', score: null, label: err.message, trend: 'unknown', source: 'AlphaVantage' };
+  }
+}
+
+async function scoreFlightMovement(country) {
+  try {
+    const result = await fetchFlightMovementData(country);
+    if (result.score === null) {
+      return { name: 'Flight Movement', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'OpenSky' };
+    }
+    return {
+      name: 'Flight Movement',
+      score: result.score,
+      label: result.emergency_squawks > 0
+        ? `${result.emergency_squawks} emergency squawks — ${result.aircraft_count} total aircraft`
+        : `${result.aircraft_count} aircraft over country`,
+      trend: result.score >= 40 ? 'elevated' : 'normal',
+      source: 'OpenSky'
+    };
+  } catch (err) {
+    return { name: 'Flight Movement', score: null, label: err.message, trend: 'unknown', source: 'OpenSky' };
+  }
+}
+
+async function scoreHealthCrisis(country) {
+  try {
+    const result = await fetchHealthCrisisData(country);
+    if (result.score === null) {
+      return { name: 'Health Crisis', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'WHO/disease.sh' };
+    }
+    return {
+      name: 'Health Crisis',
+      score: result.score,
+      label: result.who_outbreaks > 0
+        ? `${result.who_outbreaks} WHO active outbreak(s)`
+        : result.active_per_million > 0
+          ? `${result.active_per_million} active cases/M`
+          : 'No active outbreaks',
+      trend: result.score >= 50 ? 'critical' : result.score >= 20 ? 'elevated' : 'stable',
+      source: 'WHO/disease.sh'
+    };
+  } catch (err) {
+    return { name: 'Health Crisis', score: null, label: err.message, trend: 'unknown', source: 'WHO/disease.sh' };
+  }
+}
+
+async function scoreEnergyStress(country) {
+  try {
+    const result = await fetchEnergyStressData(country);
+    if (result.score === null) {
+      return { name: 'Energy Stress', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'EIA' };
+    }
+    return {
+      name: 'Energy Stress',
+      score: result.score,
+      label: result.source === 'baseline'
+        ? `Energy stress baseline (${result.score}/100)`
+        : `Import dependency score ${result.import_score}/50`,
+      trend: result.score >= 60 ? 'critical' : result.score >= 40 ? 'elevated' : 'stable',
+      source: 'EIA'
+    };
+  } catch (err) {
+    return { name: 'Energy Stress', score: null, label: err.message, trend: 'unknown', source: 'EIA' };
+  }
+}
+
+async function scoreMilitaryProximity(country) {
+  try {
+    const result = await fetchMilitaryProximityData(country);
+    if (result.score === 0 && result.base_count === 0) {
+      return { name: 'Military Proximity', score: 0, label: 'No foreign military bases', trend: 'stable', source: 'CuratedBases' };
+    }
+    return {
+      name: 'Military Proximity',
+      score: result.score,
+      label: `${result.base_count} foreign base(s) — powers: ${(result.powers_present || []).join(', ')}`,
+      trend: result.score >= 60 ? 'elevated' : result.score >= 30 ? 'watch' : 'stable',
+      source: 'CuratedBases'
+    };
+  } catch (err) {
+    return { name: 'Military Proximity', score: null, label: err.message, trend: 'unknown', source: 'CuratedBases' };
+  }
+}
+
+async function scoreChokepoint(country) {
+  try {
+    const result = await fetchChokepointData(country);
+    return {
+      name: 'Chokepoint',
+      score: result.score,
+      label: result.score > 0
+        ? `Controls ${result.primary} (score ${result.score}/100)`
+        : 'No chokepoint leverage',
+      trend: result.score >= 70 ? 'strategic' : result.score >= 40 ? 'proximate' : 'none',
+      source: 'GeographicStatic'
+    };
+  } catch (err) {
+    return { name: 'Chokepoint', score: null, label: err.message, trend: 'unknown', source: 'GeographicStatic' };
+  }
+}
+
+async function scoreGdeltTone(country) {
+  try {
+    const result = await fetchGdeltGkgData(country);
+    if (result.score === null) {
+      return { name: 'GDELT Tone', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'GDELT' };
+    }
+    return {
+      name: 'GDELT Tone',
+      score: result.score,
+      label: `30d avg tone ${result.avg_tone_30d}, 7d avg ${result.avg_tone_7d} (${result.trend})`,
+      trend: result.trend || 'stable',
+      source: 'GDELT'
+    };
+  } catch (err) {
+    return { name: 'GDELT Tone', score: null, label: err.message, trend: 'unknown', source: 'GDELT' };
+  }
+}
+
+async function scoreCapitalFlows(country) {
+  try {
+    const result = await fetchCapitalFlowsData(country);
+    if (result.score === null) {
+      return { name: 'Capital Flows', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'FRED' };
+    }
+    return {
+      name: 'Capital Flows',
+      score: result.score,
+      label: result.fx_change_pct !== undefined
+        ? `FX ${result.fx_change_pct > 0 ? '-' : '+'}${Math.abs(result.fx_change_pct)}% (90d) + FSI ${result.global_stress}`
+        : `Capital stress baseline (${result.score}/100)`,
+      trend: result.score >= 50 ? 'deteriorating' : result.score >= 25 ? 'watch' : 'stable',
+      source: 'FRED'
+    };
+  } catch (err) {
+    return { name: 'Capital Flows', score: null, label: err.message, trend: 'unknown', source: 'FRED' };
+  }
+}
+
 // Wraps a scorer call with wall-clock timing and error capture.
 // timedCall never rejects — failed scorers return score:null with the error in label.
 async function timedCall(scorerFn, ...args) {
@@ -765,7 +943,9 @@ async function runConvergence(country, date) {
       conflictResult, foodResult, govResult, dispResult, fireResult, climateResult,
       tradeResult, econResult, resourceResult, seismicResult, ooniResult,
       imfFiscalResult, maritimeResult,
-      gpsResult, unrestResult, sanctionsResult
+      gpsResult, unrestResult, sanctionsResult,
+      currencyResult, flightResult, healthResult, energyResult, capitalResult,
+      militaryResult, chokepointResult, gdeltResult
     ] = await Promise.all([
       timedCall(scoreConflict,          country, date),
       timedCall(scoreFoodSecurity,      country, date),
@@ -782,7 +962,15 @@ async function runConvergence(country, date) {
       timedCall(scoreMaritimeTrade,     country, date),
       timedCall(scoreGpsJamming,        country, date),
       timedCall(scoreSocialUnrest,      country, date),
-      timedCall(scoreSanctionsPressure, country)
+      timedCall(scoreSanctionsPressure, country),
+      timedCall(scoreCurrencyCollapse,  country),
+      timedCall(scoreFlightMovement,    country),
+      timedCall(scoreHealthCrisis,      country),
+      timedCall(scoreEnergyStress,      country),
+      timedCall(scoreCapitalFlows,       country),
+      timedCall(scoreMilitaryProximity,  country),
+      timedCall(scoreChokepoint,         country),
+      timedCall(scoreGdeltTone,          country)
     ]);
 
     // Attach weight + freshness metadata to each signal result
@@ -802,7 +990,15 @@ async function runConvergence(country, date) {
       { weight: WEIGHTS.maritime_trade,      ...maritimeResult   },
       { weight: WEIGHTS.gps_jamming,         ...gpsResult        },
       { weight: WEIGHTS.social_unrest,       ...unrestResult     },
-      { weight: WEIGHTS.sanctions_pressure,  ...sanctionsResult  }
+      { weight: WEIGHTS.sanctions_pressure,  ...sanctionsResult  },
+      { weight: WEIGHTS.currency_collapse,   ...currencyResult   },
+      { weight: WEIGHTS.flight_movement,     ...flightResult     },
+      { weight: WEIGHTS.health_crisis,       ...healthResult     },
+      { weight: WEIGHTS.energy_stress,       ...energyResult     },
+      { weight: WEIGHTS.capital_flows,       ...capitalResult    },
+      { weight: WEIGHTS.military_proximity,  ...militaryResult   },
+      { weight: WEIGHTS.chokepoint,          ...chokepointResult },
+      { weight: WEIGHTS.gdelt_tone,          ...gdeltResult      }
     ].map(s => ({
       ...s,
       freshness_window_hrs: FRESHNESS_WINDOWS[s.name]?.hours  || null,
@@ -885,7 +1081,7 @@ async function runConvergence(country, date) {
     });
 
     return {
-      source: 'Sabian_Convergence_Engine_v2',
+      source: 'Sabian_Convergence_Engine_v4',
       country,
       date: targetDate,
       convergence_score: convergenceScore,

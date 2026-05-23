@@ -37,9 +37,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Auth middleware — skip for /health
+// Auth middleware — skip for /health and all /public-api/* routes
 function auth(req, res, next) {
   if (req.path === '/health') return next();
+  if (req.path.startsWith('/public-api')) return next();
   const header = req.headers.authorization;
   if (!header || header !== `Bearer ${API_KEY}`) {
     return res.status(401).json({ error: 'Unauthorized' });
