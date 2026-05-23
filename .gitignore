@@ -55,3 +55,6 @@ vrtx/
 *.pdf
 *.csv
 NUL
+
+# Supabase backup data files (large — not in git)
+backups/

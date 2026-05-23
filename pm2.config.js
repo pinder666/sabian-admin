@@ -43,6 +43,17 @@ module.exports = {
       env: {
         NODE_ENV: 'production'
       }
+    },
+    {
+      // ── Weekly Supabase backup — fires every Sunday 0200 UTC ─────────────────
+      name:         'sabian-backup',
+      script:       'sabian_backup.cjs',
+      cron_restart: '0 2 * * 0',
+      autorestart:  false,
+      watch:        false,
+      env: {
+        NODE_ENV: 'production'
+      }
     }
   ]
 };
