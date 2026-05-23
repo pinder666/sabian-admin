@@ -523,6 +523,24 @@
 
   <!-- ── THREATS VIEW ─────────────────────────────────────────────────────── -->
   <div class="view active" id="view-threats">
+    <!-- Product explainer -->
+    <div style="padding:1rem 1.25rem;background:var(--panel);border:1px solid var(--border);border-radius:6px;margin-bottom:1.25rem;display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap">
+      <div style="flex:2;min-width:260px">
+        <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px">What you are reading</div>
+        <div style="font-size:0.83rem;line-height:1.65;color:var(--text)">
+          Sabian compiles intelligence across <strong style="color:var(--bright)">47 signals</strong> — conflict, governance, economics, food, displacement, infrastructure, and predictive data — into a single convergence score for each country. A higher score means more signals are simultaneously elevated. The score does not predict. It makes the current condition legible.
+        </div>
+      </div>
+      <div style="flex:1;min-width:200px;border-left:1px solid var(--border);padding-left:1.5rem">
+        <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:6px">How to use this</div>
+        <div style="font-size:0.8rem;line-height:1.7;color:var(--dim)">
+          Click any country for the full intelligence read.<br>
+          Use the <strong style="color:var(--text)">Ledger</strong> tab to see Sabian's timestamped predictions and how they grade out.<br>
+          Use the <strong style="color:var(--text)">Trends</strong> tab to see 90-day trajectories.
+        </div>
+      </div>
+    </div>
+
     <!-- Score legend -->
     <div class="score-legend">
       <div class="legend-band">
@@ -781,6 +799,64 @@
 // ── CONFIG ─────────────────────────────────────────────────────────────────
 const BASE = '';  // same origin
 
+// ── SIGNAL DISPLAY LAYER ───────────────────────────────────────────────────
+// Buyer-facing names and descriptions. Never expose source names.
+// Keys match the 'name' field returned by the API.
+const SIGNAL_META = {
+  'Food Security':        { label: 'Food Security',             desc: 'Population access to sufficient food — IPC phase severity, supply shortfalls, acute hunger conditions.' },
+  'Economic Stress':      { label: 'Economic Stress',           desc: 'GDP contraction, inflation, currency depreciation, and financial system pressure.' },
+  'Satellite Fire':       { label: 'Thermal Activity',          desc: 'Satellite-detected fire hotspots — indicates conflict burn patterns, agricultural collapse, or infrastructure destruction.' },
+  'Climate Stress':       { label: 'Climate Stress',            desc: 'Precipitation deficit, extreme heat, and drought conditions affecting stability.' },
+  'Political Stability':  { label: 'Political Stability',       desc: 'Government legitimacy, rule of law, and absence of violent political transitions.' },
+  'VDem Governance':      { label: 'Governance Index',          desc: 'Democratic backsliding, autocratic consolidation, electoral manipulation, and institutional decay.' },
+  'Governance':           { label: 'Governance & Rule of Law',  desc: 'State capacity, control of corruption, regulatory quality, and judicial independence.' },
+  'Displacement':         { label: 'Population Displacement',   desc: 'Internally displaced persons and refugee outflows — scale, trend, and crisis severity.' },
+  'IOM Displacement':     { label: 'Internal Displacement',     desc: 'Conflict-driven and disaster-driven internal displacement — scale and trajectory.' },
+  'UNHCR ODP':            { label: 'Refugee Flows',             desc: 'Cross-border refugee and asylum-seeker movements — origin outflow and hosting pressure.' },
+  'Armed Conflict':       { label: 'Armed Conflict',            desc: 'Active armed conflict events, fatalities, and geographic spread of violence.' },
+  'Conflict Intelligence':{ label: 'Conflict Intelligence',     desc: 'Multi-source armed conflict signal aggregated across conflict zones and theaters.' },
+  'Military Activity':    { label: 'Military Activity',         desc: 'Proximity of military assets, troop movements, and force posture near monitored territory.' },
+  'Sanctions Pressure':   { label: 'Sanctions Pressure',        desc: 'Active international sanctions programs — financial, trade, and arms embargo pressure.' },
+  'Sovereign Default Risk':{ label: 'Sovereign Default Risk',   desc: 'Market-priced probability of sovereign debt default via credit spreads.' },
+  'Currency Stability':   { label: 'Currency Stability',        desc: 'Exchange rate volatility, devaluation pressure, and dollarization risk.' },
+  'Capital Flows':        { label: 'Capital Flows',             desc: 'Foreign investment inflows, trade finance, and capital flight indicators.' },
+  'Internet Freedom':     { label: 'Internet Freedom',          desc: 'Website blocking, censorship events, and internet access interference.' },
+  'Communications Pressure':{ label: 'Communications Pressure', desc: 'Anonymized network traffic anomalies indicating suppression of communications.' },
+  'Internet Disruption':  { label: 'Internet Disruption',       desc: 'Routing disruptions, BGP anomalies, and connectivity outages.' },
+  'Network Activity':     { label: 'Network Activity',          desc: 'Traffic pattern anomalies and connectivity stress on national networks.' },
+  'GPS/Navigation Disruption':{ label: 'Navigation Disruption', desc: 'GPS jamming and spoofing events affecting civil and military navigation.' },
+  'Social Unrest':        { label: 'Social Unrest',             desc: 'Protest and riot events, strike activity, and civil mobilization intensity.' },
+  'Social Signals':       { label: 'Social Signals',            desc: 'Anomalous mention volume and engagement patterns around country-level events.' },
+  'Market Risk Pricing':  { label: 'Market Risk Pricing',       desc: 'Crowd-priced probability of significant geopolitical events from prediction markets.' },
+  'Political Cycle Risk': { label: 'Political Cycle Risk',      desc: 'Election calendar tension, contested transitions, and regime change risk.' },
+  'Resource Conflict':    { label: 'Resource Conflict',         desc: 'Competition over oil, minerals, water, and land as a driver of armed conflict.' },
+  'Water Stress':         { label: 'Water Stress',              desc: 'Freshwater scarcity, dam competition, and transboundary water conflict risk.' },
+  'Flood Risk':           { label: 'Flood & Disaster Risk',     desc: 'River discharge anomalies, flood alerts, and disaster displacement risk.' },
+  'Maritime Disruption':  { label: 'Maritime Disruption',       desc: 'Port congestion, shipping delays, and supply chain pressure at key terminals.' },
+  'Energy Infrastructure Risk':{ label: 'Energy Infrastructure Risk', desc: 'Pipeline vulnerability, supply disruption risk on strategic energy corridors.' },
+  'Power Grid Stability': { label: 'Power Grid Stability',      desc: 'Grid reliability, blackout frequency, and energy security conditions.' },
+  'Dam & Water Infrastructure Risk':{ label: 'Water Infrastructure Risk', desc: 'Dam integrity risk, transboundary water disputes, and infrastructure attack vectors.' },
+  'Rail Infrastructure Risk':{ label: 'Rail Infrastructure Risk', desc: 'Strategic rail corridor vulnerability and logistics disruption risk.' },
+  'Cyber Threat Activity':{ label: 'Cyber Threat Activity',     desc: 'Active cyber threat campaigns, intrusion attempts, and attack pulse frequency targeting this country.' },
+  'Chokepoint Risk':      { label: 'Strategic Chokepoint Risk', desc: 'Threat to maritime chokepoints — Hormuz, Bab el-Mandeb, Suez, Malacca, and others.' },
+  'Maritime Intelligence':{ label: 'Maritime Intelligence',     desc: 'Vessel behavior anomalies, dark shipping, and suspicious maritime activity.' },
+  'Aviation Activity':    { label: 'Aviation Activity',         desc: 'Commercial flight operations and airspace closure indicators.' },
+  'Economic Activity (Night Lights)':{ label: 'Economic Activity', desc: 'Satellite-measured night light emissions — proxy for economic output and population movement.' },
+  'Undersea Infrastructure Risk':{ label: 'Undersea Infrastructure Risk', desc: 'Risk to submarine cable and undersea energy infrastructure.' },
+  'Trade Dependency':     { label: 'Trade Dependency',          desc: 'Import/export concentration, trade partner risk, and sanctions exposure.' },
+  'Corruption Index':     { label: 'Corruption & Accountability', desc: 'Corruption perceptions, financial crime exposure, and accountability deficit.' },
+  'OCCRP Corruption':     { label: 'Corruption & Accountability', desc: 'Corruption perceptions, financial crime exposure, and accountability deficit.' },
+  'FAO Food':             { label: 'Food Import Risk',          desc: 'Structural food import dependency — vulnerability to supply chain disruption.' },
+  'USDA Food':            { label: 'Food Supply Balance',       desc: 'Grain production vs consumption balance, strategic reserve levels.' },
+};
+
+function sigDisplay(rawName) {
+  return SIGNAL_META[rawName]?.label || rawName;
+}
+function sigDesc(rawName) {
+  return SIGNAL_META[rawName]?.desc || 'Proprietary Sabian intelligence signal.';
+}
+
 // ── STATE ──────────────────────────────────────────────────────────────────
 let allCountries   = [];
 let ledgerData     = [];
@@ -968,7 +1044,7 @@ function renderThreatsTable(rows) {
     const color = riskColor(c.risk_level);
     const sc = c.convergence_score || 0;
     const top3 = c.top_3_signals || [];
-    const chips = top3.map(s => `<span class="signal-chip">${(s.name||'').replace(/_/g,' ')}</span>`).join('');
+    const chips = top3.map(s => `<span class="signal-chip" title="${sigDesc(s.name)}">${sigDisplay(s.name)}</span>`).join('');
     const cached = historyCache[c.country];
     const sparkHtml = cached
       ? makeSparkSVG(cached, 100, 28, c.risk_level)
@@ -1401,11 +1477,18 @@ async function openDetail(encodedCountry) {
   if (top3.length) {
     let sigHtml = '';
     top3.forEach(s => {
-      const sc = s.score || 0;
-      const c2 = scoreColor(sc);
-      sigHtml += `<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(21,32,64,0.5)">
-        <span style="font-family:var(--mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--dim)">${(s.name||'').replace(/_/g,' ')}</span>
-        <span style="font-family:var(--mono);font-size:0.82rem;font-weight:700;color:${c2}">${sc}</span>
+      const sc   = s.score || 0;
+      const c2   = scoreColor(sc);
+      const disp = sigDisplay(s.name);
+      const desc = sigDesc(s.name);
+      const lbl  = s.label || '';
+      sigHtml += `<div style="padding:7px 0;border-bottom:1px solid rgba(21,32,64,0.5)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+          <span style="font-size:0.78rem;font-weight:600;color:var(--bright)">${disp}</span>
+          <span style="font-family:var(--mono);font-size:0.85rem;font-weight:700;color:${c2}">${sc}<span style="font-size:0.65rem;color:var(--dim)">/100</span></span>
+        </div>
+        ${lbl ? `<div style="font-size:0.72rem;color:var(--warning);margin-bottom:2px">${lbl}</div>` : ''}
+        <div style="font-size:0.7rem;color:var(--dim);line-height:1.5">${desc}</div>
       </div>`;
     });
     document.getElementById('dp-signals').innerHTML = sigHtml || '<span style="font-size:0.75rem;color:var(--dim)">No signal data</span>';
