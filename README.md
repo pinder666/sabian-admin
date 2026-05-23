@@ -46,9 +46,21 @@ Sabian delivers what it finds in one format only: a dual-voice podcast between H
 
 The briefing is audio-first. The script path completes independently of audio rendering. Audio is rendered via ElevenLabs TTS with two fixed voice IDs that are the brand across all verticals.
 
-Voice IDs:
+Voice IDs — English (AFRICOM / CENTCOM default):
 - Sabian: `UgBBYS2sOqTuMpoF3BR0`
 - Host A: `cgSgspJ2msm6clMCkdW9`
+
+Voice IDs — French (Francophone Africa, Sahel, West Africa):
+- Sabian FR: `SABIAN_VOICE_ID_FRENCH`
+- Host A FR: `HOSTA_VOICE_ID_FRENCH`
+
+Voice IDs — Portuguese (Lusophone Africa: Angola, Mozambique, Cape Verde):
+- Sabian PT: `SABIAN_VOICE_ID_PORTUGUESE`
+- Host A PT: `HOSTA_VOICE_ID_PORTUGUESE`
+
+Voice IDs — Arabic (CENTCOM: Yemen, Iraq, Syria, Iran, Saudi Arabia, UAE, Qatar, Bahrain, Kuwait, Oman, Jordan, Lebanon, Pakistan, Afghanistan, Central Asia):
+- Sabian AR: `SABIAN_VOICE_ID_ARABIC`
+- Host A AR: `HOSTA_VOICE_ID_ARABIC`
 
 Files: `insight_engine.cjs`, `boardroom_podcast.cjs`, `sabian_voice.py`, `sabian_elevenlabs.py`, `voice_generator.cjs`, `boardroom_template.json`, `conversational_template.json`, `tone_profiles.cjs`
 
@@ -313,11 +325,38 @@ These are not configurable. They are the foundation.
 
 Required in `sabian_core/.env`:
 
-**LLM and Voice:**
-`OPENROUTER_API_KEY`, `OPENROUTER_MODEL`, `ANTHROPIC_API_KEY`, `ELEVENLABS_API_KEY`, `SABIAN_VOICE_ID` (UgBBYS2sOqTuMpoF3BR0), `HOST_A_US_ID` (cgSgspJ2msm6clMCkdW9), `ELEVENLABS_MODEL_ID`
+**LLM:**
+`OPENROUTER_API_KEY`, `OPENROUTER_MODEL`, `ANTHROPIC_API_KEY`
 
-**Data Feeds:**
-`FRED_API_KEY`, `CENSUS_API_KEY`, ~~`COURTLISTENER_API_TOKEN`~~, `NEWS_API_KEY`, `GITHUB_TOKEN`
+**Voice — English (default):**
+`ELEVENLABS_API_KEY`, `ELEVENLABS_MODEL_ID`
+`SABIAN_VOICE_ID` (UgBBYS2sOqTuMpoF3BR0), `HOST_A_VOICE_ID` (cgSgspJ2msm6clMCkdW9)
+
+**Voice — French (Sahel / Francophone Africa):**
+`SABIAN_VOICE_ID_FRENCH`, `HOSTA_VOICE_ID_FRENCH`
+
+**Voice — Portuguese (Lusophone Africa):**
+`SABIAN_VOICE_ID_PORTUGUESE`, `HOSTA_VOICE_ID_PORTUGUESE`
+
+**Voice — Arabic (CENTCOM theater):**
+`SABIAN_VOICE_ID_ARABIC`, `HOSTA_VOICE_ID_ARABIC`
+
+**Signal Feeds — Country Risk:**
+`ACLED_API_KEY` (developer.acleddata.com — get from Account Settings)
+`ALPHA_VANTAGE_KEY` (currency collapse — AlphaVantage free tier)
+`EIA_API_KEY` (energy stress — eia.gov/opendata)
+`FRED_API_KEY` (capital flows — FRED St. Louis Fed)
+`NASA_FIRMS_API_KEY` (satellite fire hotspot)
+`SMART_SABIAN_API_KEY` (internal API auth — falls back to 'sabian_key')
+
+**No key required (open APIs):**
+OpenSky Network (flight movement), WHO Disease Outbreak News (health crisis), GDELT DOC 2.0 (media tone), USGS Earthquake Catalog (seismic), OONI (internet freedom), Open-Meteo (climate), World Monitor base dataset (military proximity)
+
+**Database:**
+`SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
+
+**Commodity and Metals:**
+`METALPRICEAPI_KEY`, `COBALT_API_KEY`
 
 ~~**Trading and Commerce:**
 `SPS_COMMERCE_CLIENT_ID`, `SPS_COMMERCE_CLIENT_SECRET`, `SPS_COMMERCE_TOKEN_URL`, `SPS_COMMERCE_AUDIENCE`~~
@@ -358,7 +397,7 @@ Every new vertical built on Sabian follows the same pattern:
 | PNSIQ | Wholesale apparel intelligence | In build | pnsiq/ |
 | Silkcathouse | [Separate — Sabian in background] | Independent | silkcathouse/ |
 | Government / Institutional | Macro intelligence, 22 ML models | Positioned | sabian_core/sabian_ml_clients/ |
-| **Country-Risk Terminal** | **Physical layer of country risk — 160 countries, 13 signals** | **Active build — Step 5 of 34** | **sabian_core/** |
+| **Country-Risk Terminal** | **Physical layer of country risk — 160 countries, 24 signals** | **Active build — Step 16 of 34** | **sabian_core/** |
 
 ---
 
@@ -372,7 +411,7 @@ That is the system. That is what it does. That is what it will do at scale.
 
 Sabian is the legibility terminal for the physical layer of country risk.
 
-It does not predict. It does not recommend action. It does not direct targeting. It compiles 13 observable signals across 160 countries into a single transparent, auditable 0–100 score — a lens on what is happening in the world right now, with every point traceable back to a source and a weight.
+It does not predict. It does not recommend action. It does not direct targeting. It compiles 24 observable signals across 160 countries into a single transparent, auditable 0–100 score — a lens on what is happening in the world right now, with every point traceable back to a source and a weight.
 
 The score is not a black box. The arithmetic is shown. The weights are labeled judgment-set. Every null handled by proportional redistribution is disclosed. A decision-maker looking at this score can verify every component that produced it.
 
@@ -380,25 +419,38 @@ The score is not a black box. The arithmetic is shown. The weights are labeled j
 
 160 countries. 159 on the global watch list across four tiers — active conflicts, threshold watch, regional watch, and global watch. Plus the United States, the best-lit node on the board (FRED, SEC EDGAR, EIA).
 
-### The 13 Signals
+### The 24 Signals — Engine v4
 
-| # | Signal | Source | Notes |
-|---|---|---|---|
-| 1 | Political Instability | GDELT conflict feed | Tone score from global event coverage |
-| 2 | Conflict Activity | ACLED (GDELT fallback) | Armed conflict events, fatalities |
-| 3 | Economic Stress | World Bank GDP/inflation | GDP per capita, inflation rate |
-| 4 | Food Security | FEWS NET | IPC phase classification |
-| 5 | Climate Stress | Open-Meteo | Temperature anomaly, precipitation deficit |
-| 6 | Humanitarian Crisis | ReliefWeb | Active alerts and emergency classifications |
-| 7 | Internet Freedom | OONI | Network interference and censorship detection |
-| 8 | Governance Index | World Bank WGI | Rule of law, government effectiveness |
-| 9 | Public Health | WHO | Disease outbreak alerts |
-| 10 | Seismic Activity | USGS | Earthquake magnitude and frequency |
-| 11 | Refugee / Displacement | UNHCR | Displacement figures and trend |
-| 12 | Currency Collapse | ExchangeRate API | *(pending key — step 28)* |
-| 13 | Vessel Behavior | Global Fishing Watch | *(pending key — step 28)* |
+| # | Signal | Weight | Source | File |
+|---|---|---|---|---|
+| 1 | Conflict Events | 0.13 | ACLED (GDELT fallback) | `acled_conflict_feed.cjs` |
+| 2 | Food Security | 0.12 | FEWS NET IPC | `fews_food_feed.cjs` |
+| 3 | Governance Index | 0.09 | World Bank WGI | `worldbank_governance_feed.cjs` |
+| 4 | Displacement | 0.09 | UNHCR | `unhcr_displacement_feed.cjs` |
+| 5 | Fiscal Stress | 0.04 | IMF World Economic Outlook | `imf_fiscal_feed.cjs` |
+| 6 | Internet Freedom | 0.03 | OONI | `ooni_internet_feed.cjs` |
+| 7 | Satellite Fire Hotspot | 0.05 | NASA FIRMS (VIIRS/MODIS) | `firms_fire_feed.cjs` |
+| 8 | Climate Stress | 0.05 | Open-Meteo | `climate_stress_feed.cjs` |
+| 9 | Trade Collapse | 0.02 | UN Comtrade | `comtrade_feed.cjs` |
+| 10 | Economic Stress | 0.02 | World Bank GDP/CPI | `worldbank_economic_feed.cjs` |
+| 11 | Resource Conflict | 0.03 | USGS mineral/water stress | `resource_conflict_feed.cjs` |
+| 12 | Maritime Trade | 0.03 | MarineTraffic / AIS | `maritime_feed.cjs` |
+| 13 | Seismic Risk | 0.01 | USGS Earthquake Catalog | `usgs_seismic_feed.cjs` |
+| 14 | GPS Jamming | 0.02 | GPSJam.org spoofing data | `gpsjam_feed.cjs` |
+| 15 | Social Unrest | 0.03 | ACLED protest/riot events | `acled_conflict_feed.cjs` |
+| 16 | Sanctions Pressure | 0.03 | OFAC / UN sanctions lists | `sanctions_feed.cjs` |
+| 17 | Currency Collapse | 0.04 | Alpha Vantage FX monthly | `exchangerate_feed.cjs` |
+| 18 | Flight Movement | 0.02 | OpenSky Network ADS-B | `opensky_feed.cjs` |
+| 19 | Health Crisis | 0.03 | WHO Disease Outbreak News | `who_health_feed.cjs` |
+| 20 | Energy Stress | 0.03 | EIA International Energy | `eia_energy_feed.cjs` |
+| 21 | Capital Flows | 0.02 | FRED FX + St. Louis FSI | `fred_capital_feed.cjs` |
+| 22 | Military Proximity | 0.03 | World Monitor base dataset | `military_proximity_feed.cjs` |
+| 23 | Chokepoint Control | 0.02 | Static geographic data | `chokepoint_feed.cjs` |
+| 24 | GDELT Media Tone | 0.03 | GDELT DOC 2.0 API | `gdelt_gkg_feed.cjs` |
 
-Weights and null-redistribution rule are documented in `convergence_engine.cjs`. Missing signals return `null` — their weight is distributed proportionally across active signals. No fabricated scores enter the average.
+**Total weight: 1.00. Missing signals redistribute proportionally — no fabricated scores enter the average.**
+
+Weights and null-redistribution rule are in `convergence_engine.cjs`.
 
 ### Risk Bands
 
@@ -413,22 +465,25 @@ Weights and null-redistribution rule are documented in `convergence_engine.cjs`.
 
 | File | Role |
 |---|---|
-| `convergence_engine.cjs` | 13-signal weighted average. Decomposes every point to its source. |
+| `convergence_engine.cjs` | 24-signal weighted average (Engine v4). Decomposes every point to its source. |
 | `global_scan.cjs` | Sweeps all 160 countries. Runs on demand or daily cron (0600 UTC). |
 | `sabian_persistence.cjs` | Writes every scan result to Supabase. Append-only. |
 | `sabian_api.cjs` | REST API on :5000. Routes: `/api/scores`, `/api/country/:name`, `/api/observations` |
 | `government_briefing.cjs` | DOD-format audio briefing — Host A + Sabian. |
 | `observation_ledger.cjs` | Immutable record of every threshold crossing. *(step 8)* |
 
-### Build State — May 22, 2026
+### Build State — May 23, 2026
 
 Steps completed:
 - **Step 1** — Credentials secured. `.env` never committed. `.gitignore` confirmed.
 - **Step 2** — `COUNTRY_ISO` and `COUNTRY_COORDS` expanded to all 160 countries.
 - **Step 3** — Phantom-50 killed. `scoreClimateStress()` returns `null` for missing coords.
 - **Step 4** — `gdelt_feed.cjs` deleted. GDELT serves its role via `gdelt_conflict_feed.cjs` as the ACLED fallback.
+- **Steps 5–13** — Supabase tables, freshness layer, observation ledger, transparent math, `/api/observations` route — all built and deployed.
+- **Step 14** — Railway deploy config confirmed. PM2 + Node ecosystem running.
+- **Step 15** — Live deployment confirmed: `https://sabian-admin-production.up.railway.app`. Engine v4 running 24 signals. First live scan (Mali): convergence_score 50, ELEVATED, 17/24 signals active.
 
-Next: **Step 5** — Verify Supabase tables exist, run schema SQL.
+Next: **Step 16** — Verify live scan persists to Supabase (trigger global_scan.cjs on Railway, confirm rows writing in production).
 
 90-day clock: **May 22 → Aug 21, 2026.** Autonomous daily scan accumulates 90 days of scored history. This is the evidence base.
 
@@ -436,9 +491,13 @@ Full 34-step roadmap: see `sabian_roadmap.md` in project memory.
 
 ### Target Buyers
 
-- AFRICOM J2 — informal approach (Step 30)
-- CDAO — 5-page brief (Step 31)
-- DIU / sovereign-risk insurers — first conversations (Step 32)
+| Vertical | Who | Theater | Entry Point |
+|---|---|---|---|
+| **DoD / AFRICOM** | J2 intelligence officers, CDAO, DIU | Sub-Saharan Africa, Sahel, Horn of Africa | Informal approach (Step 30) |
+| **DoD / CENTCOM** | J2 intelligence officers | Yemen, Iraq, Syria, Iran, Lebanon, Saudi Arabia, UAE, Qatar, Bahrain, Kuwait, Oman, Jordan, Pakistan, Afghanistan, Central Asian states | Briefing in Arabic, English |
+| **Sovereign Risk Insurer** | Political risk underwriters | Global — 160 countries | Commercial track (Step 32) |
+| **NGO / Humanitarian** | OCHA, ICRC, WFP planners | Active conflict / threshold zones | Dashboard + audio brief |
+| **Corporate Supply Chain** | Chief Risk Officers, logistics heads | Chokepoint countries, commodity zones | Signal decomposition export |
 
 The 90-day dossier (Step 33) is the pitch artifact: every observation graded, honest hit rate, methodology fully auditable.
 
