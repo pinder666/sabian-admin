@@ -31,6 +31,9 @@ const { fetchCapitalFlowsData }        = require('./fred_capital_feed.cjs');
 const { fetchMilitaryProximityData }   = require('./military_proximity_feed.cjs');
 const { fetchChokepointData }          = require('./chokepoint_feed.cjs');
 const { fetchGdeltGkgData }            = require('./gdelt_gkg_feed.cjs');
+const { fetchNightLightsData }         = require('./nightlights_feed.cjs');
+const { fetchDarkVesselData }          = require('./darkvessel_feed.cjs');
+const { fetchCableWatchData }          = require('./cablewatch_feed.cjs');
 
 // ISO2 codes — used by FEWS, World Bank, OONI, and IMF queries
 // All 160 monitored countries (159 global watch list + United States)
@@ -247,17 +250,17 @@ const COUNTRY_COORDS = {
 };
 
 // Signal weights — must sum to 1.0
-// 24-signal model (v4): 21 previous + military proximity, chokepoint, GDELT GKG tone
+// 27-signal model (v5): orbit (night lights), below (dark vessel, cable disruption)
 // All weights judgment-set — see METHODOLOGY.md for rationale.
 const WEIGHTS = {
-  conflict:             0.13,
-  food_security:        0.12,
-  governance:           0.09,
-  displacement:         0.09,
-  imf_fiscal:           0.04,
+  conflict:             0.12,
+  food_security:        0.11,
+  governance:           0.08,
+  displacement:         0.08,
+  imf_fiscal:           0.03,
   ooni_internet:        0.03,
-  fire_hotspot:         0.05,
-  climate_stress:       0.05,
+  fire_hotspot:         0.04,
+  climate_stress:       0.04,
   trade_collapse:       0.02,
   economic_stress:      0.02,
   resource_conflict:    0.03,
@@ -266,14 +269,17 @@ const WEIGHTS = {
   gps_jamming:          0.02,
   social_unrest:        0.03,
   sanctions_pressure:   0.03,
-  currency_collapse:    0.04,
+  currency_collapse:    0.03,
   flight_movement:      0.02,
   health_crisis:        0.03,
   energy_stress:        0.03,
   capital_flows:        0.02,
   military_proximity:   0.03,
   chokepoint:           0.02,
-  gdelt_tone:           0.03
+  gdelt_tone:           0.03,
+  night_lights:         0.03,
+  dark_vessel:          0.02,
+  cable_disruption:     0.02
 };
 
 // Expected update cadence per signal — judgment-set, matches source publishing frequency
@@ -303,7 +309,10 @@ const FRESHNESS_WINDOWS = {
   'Capital Flows':      { hours: 24,   cadence: 'Daily — FRED FX series + St. Louis FSI' },
   'Military Proximity': { hours: 8760, cadence: 'Annual — curated global base dataset' },
   'Chokepoint':         { hours: 8760, cadence: 'Static — geographic reality, annual review' },
-  'GDELT Tone':         { hours: 24,   cadence: 'Daily — GDELT GKG 30-day tone average' }
+  'GDELT Tone':         { hours: 24,   cadence: 'Daily — GDELT GKG 30-day tone average' },
+  'Night Lights':       { hours: 8760, cadence: 'Annual — World Bank electricity access trend' },
+  'Dark Vessel':        { hours: 24,   cadence: 'Daily — GFW AIS gap events, 30-day window' },
+  'Cable Disruption':   { hours: 6,    cadence: '6-hourly — Cloudflare Radar internet traffic anomaly' }
 };
 
 function getRiskLevel(score) {
@@ -925,6 +934,71 @@ async function scoreCapitalFlows(country) {
   }
 }
 
+async function scoreNightLights(country) {
+  try {
+    const result = await fetchNightLightsData(country);
+    if (result.score === null) {
+      return { name: 'Night Lights', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'WorldBank_Electricity' };
+    }
+    return {
+      name: 'Night Lights',
+      score: result.score,
+      label: result.electricity_access_pct !== undefined
+        ? `${result.electricity_access_pct}% electricity access (${result.latest_year}) — ${result.trend}`
+        : `Night lights baseline (${result.score}/100)`,
+      trend: result.trend || 'stable',
+      source: 'WorldBank_Electricity'
+    };
+  } catch (err) {
+    return { name: 'Night Lights', score: null, label: err.message, trend: 'unknown', source: 'WorldBank_Electricity' };
+  }
+}
+
+async function scoreDarkVessel(country) {
+  try {
+    const result = await fetchDarkVesselData(country);
+    if (result.score === null) {
+      return { name: 'Dark Vessel', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'GFW' };
+    }
+    if (result.score === 0) {
+      return { name: 'Dark Vessel', score: 0, label: result.reason || 'No dark events', trend: 'stable', source: 'GFW' };
+    }
+    return {
+      name: 'Dark Vessel',
+      score: result.score,
+      label: result.gap_events > 0
+        ? `${result.gap_events} AIS gap events (avg ${result.avg_gap_duration_hrs}h dark) — 30d window`
+        : 'No AIS gap events detected',
+      trend: result.score >= 50 ? 'elevated' : result.score >= 20 ? 'watch' : 'stable',
+      source: 'GFW'
+    };
+  } catch (err) {
+    return { name: 'Dark Vessel', score: null, label: err.message, trend: 'unknown', source: 'GFW' };
+  }
+}
+
+async function scoreCableDisruption(country) {
+  try {
+    const result = await fetchCableWatchData(country);
+    if (result.score === null) {
+      return { name: 'Cable Disruption', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'Cloudflare' };
+    }
+    return {
+      name: 'Cable Disruption',
+      score: result.score,
+      label: result.active_outages > 0
+        ? `${result.active_outages} active outage(s) — ${result.traffic_drop_pct}% traffic drop`
+        : result.traffic_drop_pct > 10
+          ? `${result.traffic_drop_pct}% traffic anomaly vs baseline`
+          : 'Internet traffic normal',
+      trend: result.score >= 50 ? 'disrupted' : result.score >= 20 ? 'degraded' : 'normal',
+      source: 'Cloudflare'
+    };
+  } catch (err) {
+    return { name: 'Cable Disruption', score: null, label: err.message, trend: 'unknown', source: 'Cloudflare' };
+  }
+}
+
 // Wraps a scorer call with wall-clock timing and error capture.
 // timedCall never rejects — failed scorers return score:null with the error in label.
 async function timedCall(scorerFn, ...args) {
@@ -945,7 +1019,8 @@ async function runConvergence(country, date) {
       imfFiscalResult, maritimeResult,
       gpsResult, unrestResult, sanctionsResult,
       currencyResult, flightResult, healthResult, energyResult, capitalResult,
-      militaryResult, chokepointResult, gdeltResult
+      militaryResult, chokepointResult, gdeltResult,
+      nightLightsResult, darkVesselResult, cableResult
     ] = await Promise.all([
       timedCall(scoreConflict,          country, date),
       timedCall(scoreFoodSecurity,      country, date),
@@ -967,10 +1042,13 @@ async function runConvergence(country, date) {
       timedCall(scoreFlightMovement,    country),
       timedCall(scoreHealthCrisis,      country),
       timedCall(scoreEnergyStress,      country),
-      timedCall(scoreCapitalFlows,       country),
-      timedCall(scoreMilitaryProximity,  country),
-      timedCall(scoreChokepoint,         country),
-      timedCall(scoreGdeltTone,          country)
+      timedCall(scoreCapitalFlows,      country),
+      timedCall(scoreMilitaryProximity, country),
+      timedCall(scoreChokepoint,        country),
+      timedCall(scoreGdeltTone,         country),
+      timedCall(scoreNightLights,       country),
+      timedCall(scoreDarkVessel,        country),
+      timedCall(scoreCableDisruption,   country)
     ]);
 
     // Attach weight + freshness metadata to each signal result
@@ -996,9 +1074,12 @@ async function runConvergence(country, date) {
       { weight: WEIGHTS.health_crisis,       ...healthResult     },
       { weight: WEIGHTS.energy_stress,       ...energyResult     },
       { weight: WEIGHTS.capital_flows,       ...capitalResult    },
-      { weight: WEIGHTS.military_proximity,  ...militaryResult   },
-      { weight: WEIGHTS.chokepoint,          ...chokepointResult },
-      { weight: WEIGHTS.gdelt_tone,          ...gdeltResult      }
+      { weight: WEIGHTS.military_proximity,  ...militaryResult    },
+      { weight: WEIGHTS.chokepoint,          ...chokepointResult  },
+      { weight: WEIGHTS.gdelt_tone,          ...gdeltResult       },
+      { weight: WEIGHTS.night_lights,        ...nightLightsResult },
+      { weight: WEIGHTS.dark_vessel,         ...darkVesselResult  },
+      { weight: WEIGHTS.cable_disruption,    ...cableResult       }
     ].map(s => ({
       ...s,
       freshness_window_hrs: FRESHNESS_WINDOWS[s.name]?.hours  || null,
@@ -1081,7 +1162,7 @@ async function runConvergence(country, date) {
     });
 
     return {
-      source: 'Sabian_Convergence_Engine_v4',
+      source: 'Sabian_Convergence_Engine_v5',
       country,
       date: targetDate,
       convergence_score: convergenceScore,
@@ -1104,7 +1185,7 @@ async function runConvergence(country, date) {
       data: { country, date: targetDate, message: err.message },
       tags: ['convergence', 'error']
     });
-    return { source: 'Sabian_Convergence_Engine_v2', country, date: targetDate, error: err.message };
+    return { source: 'Sabian_Convergence_Engine_v5', country, date: targetDate, error: err.message };
   }
 }
 
