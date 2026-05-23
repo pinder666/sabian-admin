@@ -198,6 +198,18 @@ app.get('/api/summary', async (req, res) => {
   }
 });
 
+// ── Trigger full global scan manually (responds immediately, runs async) ──────
+app.post('/api/scan/trigger', (req, res) => {
+  const scanDate = req.body?.date || null;
+  res.json({ status: 'started', message: 'Global scan running in background — check /public-api/summary for results', scan_date: scanDate || new Date().toISOString().slice(0, 10) });
+  logToHive({ source: 'sabian_api', level: 'intel', event: 'manual_scan_triggered', data: { scan_date: scanDate, ip: req.ip }, tags: ['scan', 'manual'] });
+  runGlobalScan(scanDate, { save: true }).then(r => {
+    logToHive({ source: 'sabian_api', level: 'intel', event: 'manual_scan_complete', data: { countries: r?.results?.length || 0 }, tags: ['scan'] });
+  }).catch(err => {
+    logToHive({ source: 'sabian_api', level: 'error', event: 'manual_scan_failed', data: { error: err.message }, tags: ['scan', 'error'] });
+  });
+});
+
 // ── Trigger forward briefing for any country (responds immediately, generates async) ──
 app.post('/api/brief/:country', async (req, res) => {
   const country = decodeURIComponent(req.params.country);
