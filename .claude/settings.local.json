@@ -33,7 +33,8 @@
       "Bash(SCENARIO=s04_mild_deficit node vrtx/engine/vrtx_engine.cjs)",
       "Bash(SCENARIO=s16_hrv_spike node vrtx/engine/vrtx_engine.cjs)",
       "Bash(SKIP_AUDIO=1 node vrtx/engine/vrtx_engine.cjs)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(git rm *)"
     ]
   }
 }

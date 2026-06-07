@@ -764,6 +764,19 @@
   <!-- ── EXTRACTION INTELLIGENCE VIEW ─────────────────────────────────────── -->
   <div class="view" id="view-extraction">
 
+    <!-- Locked state (shown when no valid buyer key) -->
+    <div id="extraction-locked" style="display:none">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:1.5rem">
+        <div style="font-family:var(--mono);font-size:0.85rem;color:var(--dim);letter-spacing:0.1em">RESTRICTED INTELLIGENCE LAYER</div>
+        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--dim);max-width:340px;text-align:center;line-height:1.8">This layer requires a buyer access key. Contact Sabian Holdings Ltd to request access.</div>
+        <input id="buyer-key-input" type="password" placeholder="Enter access key" style="background:var(--panel);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.8rem;padding:0.6rem 1rem;border-radius:4px;width:340px;outline:none">
+        <button onclick="checkBuyerKey()" style="background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.75rem;padding:0.5rem 2rem;border-radius:4px;cursor:pointer;letter-spacing:0.1em">AUTHENTICATE</button>
+        <div id="key-error" style="font-family:var(--mono);font-size:0.7rem;color:var(--critical);display:none">Invalid access key</div>
+      </div>
+    </div>
+
+    <!-- Unlocked content (shown when valid buyer key) -->
+    <div id="extraction-content">
     <!-- Header -->
     <div style="padding:1rem 1.25rem;background:var(--panel);border:1px solid rgba(255,60,60,0.25);border-radius:6px;margin-bottom:1.25rem;">
       <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--critical);margin-bottom:6px">EXTRACTION INTELLIGENCE — RESTRICTED</div>
@@ -1253,6 +1266,7 @@
       </ul>
     </div>
 
+    </div><!-- end extraction-content -->
   </div>
 
 </main>
@@ -1400,6 +1414,13 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.add('active');
     const vid = 'view-' + btn.dataset.view;
     document.getElementById(vid).classList.add('active');
+    // Extraction view requires buyer key
+    if (btn.dataset.view === 'extraction') {
+      const hasKey = localStorage.getItem('sabian_buyer_key') === 'cc77ec38601f82587e06dc4158df6e28ae22a84146f82b7279af5932bec9fd3f';
+      document.getElementById('extraction-locked').style.display = hasKey ? 'none' : 'block';
+      document.getElementById('extraction-content').style.display = hasKey ? 'block' : 'none';
+      return;
+    }
     if (btn.dataset.view === 'sparklines' && !sparkloaded) loadSparklines();
     if (btn.dataset.view === 'ledger' && !ledgerLoaded) loadLedger();
     if (btn.dataset.view === 'freshness' && !freshnessLoaded) loadFreshness();
@@ -2058,6 +2079,17 @@ function closeDetail() {
 }
 
 document.getElementById('backdrop').addEventListener('click', closeDetail);
+
+// ── BUYER KEY CHECK ────────────────────────────────────────────────────────
+function checkBuyerKey() {
+  const key = document.getElementById('buyer-key-input').value.trim();
+  if (key === 'cc77ec38601f82587e06dc4158df6e28ae22a84146f82b7279af5932bec9fd3f') {
+    localStorage.setItem('sabian_buyer_key', key);
+    document.querySelector('[data-view="extraction"]').click();
+  } else {
+    document.getElementById('key-error').style.display = 'block';
+  }
+}
 
 // ── BOOT ───────────────────────────────────────────────────────────────────
 loadThreats();
