@@ -45,6 +45,19 @@ module.exports = {
       }
     },
     {
+      // ── Checkpoint runner — fires 0645 UTC, after grading pass ───────────────
+      // Records data-only snapshots at days 30, 42, 56, 70, 84, 183, 365
+      // Real grading at day 84 only (grading_pass.cjs). This captures discovery.
+      name:         'sabian-checkpoints',
+      script:       'checkpoint_runner.cjs',
+      cron_restart: '45 6 * * *',
+      autorestart:  false,
+      watch:        false,
+      env: {
+        NODE_ENV: 'production'
+      }
+    },
+    {
       // ── Weekly Supabase backup — fires every Sunday 0200 UTC ─────────────────
       name:         'sabian-backup',
       script:       'sabian_backup.cjs',

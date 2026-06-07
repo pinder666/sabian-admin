@@ -1,0 +1,4993 @@
+{
+  "generatedAt": "2026-05-25T22:33:22.423Z",
+  "totalTests": 6,
+  "results": {
+    "test1_nightLightsDropLeadsScore": [
+      {
+        "country": "Afghanistan",
+        "dropYear": 2015,
+        "nightLightsDropPct": -20.11173184357542,
+        "scoreAtDrop": 48.83,
+        "lag": 1,
+        "scoreAfter": 48.97,
+        "scoreDelta": 0.14000000000000057
+      },
+      {
+        "country": "Afghanistan",
+        "dropYear": 2015,
+        "nightLightsDropPct": -20.11173184357542,
+        "scoreAtDrop": 48.83,
+        "lag": 2,
+        "scoreAfter": 49.37,
+        "scoreDelta": 0.5399999999999991
+      },
+      {
+        "country": "Afghanistan",
+        "dropYear": 2015,
+        "nightLightsDropPct": -20.11173184357542,
+        "scoreAtDrop": 48.83,
+        "lag": 3,
+        "scoreAfter": 49.09,
+        "scoreDelta": 0.2600000000000051
+      },
+      {
+        "country": "Afghanistan",
+        "dropYear": 2015,
+        "nightLightsDropPct": -20.11173184357542,
+        "scoreAtDrop": 48.83,
+        "lag": 4,
+        "scoreAfter": 49.18,
+        "scoreDelta": 0.3500000000000014
+      },
+      {
+        "country": "Afghanistan",
+        "dropYear": 2015,
+        "nightLightsDropPct": -20.11173184357542,
+        "scoreAtDrop": 48.83,
+        "lag": 5,
+        "scoreAfter": 52.43,
+        "scoreDelta": 3.6000000000000014
+      },
+      {
+        "country": "Albania",
+        "dropYear": 1997,
+        "nightLightsDropPct": -20.87743704380608,
+        "scoreAtDrop": 50.98,
+        "lag": 1,
+        "scoreAfter": 43.04,
+        "scoreDelta": -7.939999999999998
+      },
+      {
+        "country": "Albania",
+        "dropYear": 1997,
+        "nightLightsDropPct": -20.87743704380608,
+        "scoreAtDrop": 50.98,
+        "lag": 2,
+        "scoreAfter": 50.22,
+        "scoreDelta": -0.759999999999998
+      },
+      {
+        "country": "Albania",
+        "dropYear": 1997,
+        "nightLightsDropPct": -20.87743704380608,
+        "scoreAtDrop": 50.98,
+        "lag": 3,
+        "scoreAfter": 50.76,
+        "scoreDelta": -0.21999999999999886
+      },
+      {
+        "country": "Albania",
+        "dropYear": 1997,
+        "nightLightsDropPct": -20.87743704380608,
+        "scoreAtDrop": 50.98,
+        "lag": 4,
+        "scoreAfter": 56.03,
+        "scoreDelta": 5.050000000000004
+      },
+      {
+        "country": "Albania",
+        "dropYear": 1997,
+        "nightLightsDropPct": -20.87743704380608,
+        "scoreAtDrop": 50.98,
+        "lag": 5,
+        "scoreAfter": 55.56,
+        "scoreDelta": 4.580000000000005
+      },
+      {
+        "country": "Albania",
+        "dropYear": 2006,
+        "nightLightsDropPct": -27.65414284077358,
+        "scoreAtDrop": 50.7,
+        "lag": 1,
+        "scoreAfter": 48.77,
+        "scoreDelta": -1.9299999999999997
+      },
+      {
+        "country": "Albania",
+        "dropYear": 2006,
+        "nightLightsDropPct": -27.65414284077358,
+        "scoreAtDrop": 50.7,
+        "lag": 2,
+        "scoreAfter": 54.1,
+        "scoreDelta": 3.3999999999999986
+      },
+      {
+        "country": "Albania",
+        "dropYear": 2006,
+        "nightLightsDropPct": -27.65414284077358,
+        "scoreAtDrop": 50.7,
+        "lag": 3,
+        "scoreAfter": 54.92,
+        "scoreDelta": 4.219999999999999
+      },
+      {
+        "country": "Albania",
+        "dropYear": 2006,
+        "nightLightsDropPct": -27.65414284077358,
+        "scoreAtDrop": 50.7,
+        "lag": 4,
+        "scoreAfter": 54.08,
+        "scoreDelta": 3.3799999999999955
+      },
+      {
+        "country": "Albania",
+        "dropYear": 2006,
+        "nightLightsDropPct": -27.65414284077358,
+        "scoreAtDrop": 50.7,
+        "lag": 5,
+        "scoreAfter": 55.83,
+        "scoreDelta": 5.1299999999999955
+      },
+      {
+        "country": "Algeria",
+        "dropYear": 2000,
+        "nightLightsDropPct": -40.17068770798479,
+        "scoreAtDrop": 52.04,
+        "lag": 1,
+        "scoreAfter": 52.33,
+        "scoreDelta": 0.28999999999999915
+      },
+      {
+        "country": "Algeria",
+        "dropYear": 2000,
+        "nightLightsDropPct": -40.17068770798479,
+        "scoreAtDrop": 52.04,
+        "lag": 2,
+        "scoreAfter": 52.56,
+        "scoreDelta": 0.5200000000000031
+      },
+      {
+        "country": "Algeria",
+        "dropYear": 2000,
+        "nightLightsDropPct": -40.17068770798479,
+        "scoreAtDrop": 52.04,
+        "lag": 3,
+        "scoreAfter": 51.07,
+        "scoreDelta": -0.9699999999999989
+      },
+      {
+        "country": "Algeria",
+        "dropYear": 2000,
+        "nightLightsDropPct": -40.17068770798479,
+        "scoreAtDrop": 52.04,
+        "lag": 4,
+        "scoreAfter": 49.05,
+        "scoreDelta": -2.990000000000002
+      },
+      {
+        "country": "Algeria",
+        "dropYear": 2000,
+        "nightLightsDropPct": -40.17068770798479,
+        "scoreAtDrop": 52.04,
+        "lag": 5,
+        "scoreAfter": 51.21,
+        "scoreDelta": -0.8299999999999983
+      },
+      {
+        "country": "Angola",
+        "dropYear": 2000,
+        "nightLightsDropPct": -31.071736493621096,
+        "scoreAtDrop": 56.42,
+        "lag": 1,
+        "scoreAfter": 58,
+        "scoreDelta": 1.5799999999999983
+      },
+      {
+        "country": "Angola",
+        "dropYear": 2000,
+        "nightLightsDropPct": -31.071736493621096,
+        "scoreAtDrop": 56.42,
+        "lag": 2,
+        "scoreAfter": 54.56,
+        "scoreDelta": -1.8599999999999994
+      },
+      {
+        "country": "Angola",
+        "dropYear": 2000,
+        "nightLightsDropPct": -31.071736493621096,
+        "scoreAtDrop": 56.42,
+        "lag": 3,
+        "scoreAfter": 52.4,
+        "scoreDelta": -4.020000000000003
+      },
+      {
+        "country": "Angola",
+        "dropYear": 2000,
+        "nightLightsDropPct": -31.071736493621096,
+        "scoreAtDrop": 56.42,
+        "lag": 4,
+        "scoreAfter": 50.04,
+        "scoreDelta": -6.380000000000003
+      },
+      {
+        "country": "Angola",
+        "dropYear": 2000,
+        "nightLightsDropPct": -31.071736493621096,
+        "scoreAtDrop": 56.42,
+        "lag": 5,
+        "scoreAfter": 48.52,
+        "scoreDelta": -7.899999999999999
+      },
+      {
+        "country": "Armenia",
+        "dropYear": 2000,
+        "nightLightsDropPct": -47.63924561565578,
+        "scoreAtDrop": 99,
+        "lag": 1,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "dropYear": 2000,
+        "nightLightsDropPct": -47.63924561565578,
+        "scoreAtDrop": 99,
+        "lag": 2,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "dropYear": 2000,
+        "nightLightsDropPct": -47.63924561565578,
+        "scoreAtDrop": 99,
+        "lag": 3,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "dropYear": 2000,
+        "nightLightsDropPct": -47.63924561565578,
+        "scoreAtDrop": 99,
+        "lag": 4,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "dropYear": 2000,
+        "nightLightsDropPct": -47.63924561565578,
+        "scoreAtDrop": 99,
+        "lag": 5,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Azerbaijan",
+        "dropYear": 1999,
+        "nightLightsDropPct": -45.28775167182763,
+        "scoreAtDrop": 55.87,
+        "lag": 1,
+        "scoreAfter": 56.37,
+        "scoreDelta": 0.5
+      },
+      {
+        "country": "Azerbaijan",
+        "dropYear": 1999,
+        "nightLightsDropPct": -45.28775167182763,
+        "scoreAtDrop": 55.87,
+        "lag": 2,
+        "scoreAfter": 48.3,
+        "scoreDelta": -7.57
+      },
+      {
+        "country": "Azerbaijan",
+        "dropYear": 1999,
+        "nightLightsDropPct": -45.28775167182763,
+        "scoreAtDrop": 55.87,
+        "lag": 3,
+        "scoreAfter": 54.05,
+        "scoreDelta": -1.8200000000000003
+      },
+      {
+        "country": "Azerbaijan",
+        "dropYear": 1999,
+        "nightLightsDropPct": -45.28775167182763,
+        "scoreAtDrop": 55.87,
+        "lag": 4,
+        "scoreAfter": 55.77,
+        "scoreDelta": -0.09999999999999432
+      },
+      {
+        "country": "Azerbaijan",
+        "dropYear": 1999,
+        "nightLightsDropPct": -45.28775167182763,
+        "scoreAtDrop": 55.87,
+        "lag": 5,
+        "scoreAfter": 51.49,
+        "scoreDelta": -4.3799999999999955
+      },
+      {
+        "country": "Benin",
+        "dropYear": 1996,
+        "nightLightsDropPct": -28.281581739242828,
+        "scoreAtDrop": 51.28,
+        "lag": 1,
+        "scoreAfter": 50.6,
+        "scoreDelta": -0.6799999999999997
+      },
+      {
+        "country": "Benin",
+        "dropYear": 1996,
+        "nightLightsDropPct": -28.281581739242828,
+        "scoreAtDrop": 51.28,
+        "lag": 2,
+        "scoreAfter": 50.44,
+        "scoreDelta": -0.8400000000000034
+      },
+      {
+        "country": "Benin",
+        "dropYear": 1996,
+        "nightLightsDropPct": -28.281581739242828,
+        "scoreAtDrop": 51.28,
+        "lag": 3,
+        "scoreAfter": 50.92,
+        "scoreDelta": -0.35999999999999943
+      },
+      {
+        "country": "Benin",
+        "dropYear": 1996,
+        "nightLightsDropPct": -28.281581739242828,
+        "scoreAtDrop": 51.28,
+        "lag": 4,
+        "scoreAfter": 50.47,
+        "scoreDelta": -0.8100000000000023
+      },
+      {
+        "country": "Benin",
+        "dropYear": 1996,
+        "nightLightsDropPct": -28.281581739242828,
+        "scoreAtDrop": 51.28,
+        "lag": 5,
+        "scoreAfter": 50.63,
+        "scoreDelta": -0.6499999999999986
+      }
+    ],
+    "test2_remittanceSpikeLeadsScore": [
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2010,
+        "remittanceSpikePct": 110.48690848248964,
+        "scoreAtSpike": 50.57,
+        "lag": 1,
+        "scoreAfter": 47.97,
+        "scoreDelta": -2.6000000000000014
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2010,
+        "remittanceSpikePct": 110.48690848248964,
+        "scoreAtSpike": 50.57,
+        "lag": 2,
+        "scoreAfter": 49.67,
+        "scoreDelta": -0.8999999999999986
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2010,
+        "remittanceSpikePct": 110.48690848248964,
+        "scoreAtSpike": 50.57,
+        "lag": 3,
+        "scoreAfter": 47.83,
+        "scoreDelta": -2.740000000000002
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2010,
+        "remittanceSpikePct": 110.48690848248964,
+        "scoreAtSpike": 50.57,
+        "lag": 4,
+        "scoreAfter": 50.11,
+        "scoreDelta": -0.46000000000000085
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2010,
+        "remittanceSpikePct": 110.48690848248964,
+        "scoreAtSpike": 50.57,
+        "lag": 5,
+        "scoreAfter": 48.83,
+        "scoreDelta": -1.740000000000002
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2013,
+        "remittanceSpikePct": 56.34465200335001,
+        "scoreAtSpike": 47.83,
+        "lag": 1,
+        "scoreAfter": 50.11,
+        "scoreDelta": 2.280000000000001
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2013,
+        "remittanceSpikePct": 56.34465200335001,
+        "scoreAtSpike": 47.83,
+        "lag": 2,
+        "scoreAfter": 48.83,
+        "scoreDelta": 1
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2013,
+        "remittanceSpikePct": 56.34465200335001,
+        "scoreAtSpike": 47.83,
+        "lag": 3,
+        "scoreAfter": 48.97,
+        "scoreDelta": 1.1400000000000006
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2013,
+        "remittanceSpikePct": 56.34465200335001,
+        "scoreAtSpike": 47.83,
+        "lag": 4,
+        "scoreAfter": 49.37,
+        "scoreDelta": 1.5399999999999991
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2013,
+        "remittanceSpikePct": 56.34465200335001,
+        "scoreAtSpike": 47.83,
+        "lag": 5,
+        "scoreAfter": 49.09,
+        "scoreDelta": 1.2600000000000051
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2015,
+        "remittanceSpikePct": 47.3971010992321,
+        "scoreAtSpike": 48.83,
+        "lag": 1,
+        "scoreAfter": 48.97,
+        "scoreDelta": 0.14000000000000057
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2015,
+        "remittanceSpikePct": 47.3971010992321,
+        "scoreAtSpike": 48.83,
+        "lag": 2,
+        "scoreAfter": 49.37,
+        "scoreDelta": 0.5399999999999991
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2015,
+        "remittanceSpikePct": 47.3971010992321,
+        "scoreAtSpike": 48.83,
+        "lag": 3,
+        "scoreAfter": 49.09,
+        "scoreDelta": 0.2600000000000051
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2015,
+        "remittanceSpikePct": 47.3971010992321,
+        "scoreAtSpike": 48.83,
+        "lag": 4,
+        "scoreAfter": 49.18,
+        "scoreDelta": 0.3500000000000014
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2015,
+        "remittanceSpikePct": 47.3971010992321,
+        "scoreAtSpike": 48.83,
+        "lag": 5,
+        "scoreAfter": 52.43,
+        "scoreDelta": 3.6000000000000014
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2016,
+        "remittanceSpikePct": 90.16745483995726,
+        "scoreAtSpike": 48.97,
+        "lag": 1,
+        "scoreAfter": 49.37,
+        "scoreDelta": 0.3999999999999986
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2016,
+        "remittanceSpikePct": 90.16745483995726,
+        "scoreAtSpike": 48.97,
+        "lag": 2,
+        "scoreAfter": 49.09,
+        "scoreDelta": 0.12000000000000455
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2016,
+        "remittanceSpikePct": 90.16745483995726,
+        "scoreAtSpike": 48.97,
+        "lag": 3,
+        "scoreAfter": 49.18,
+        "scoreDelta": 0.21000000000000085
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2016,
+        "remittanceSpikePct": 90.16745483995726,
+        "scoreAtSpike": 48.97,
+        "lag": 4,
+        "scoreAfter": 52.43,
+        "scoreDelta": 3.460000000000001
+      },
+      {
+        "country": "Afghanistan",
+        "spikeYear": 2016,
+        "remittanceSpikePct": 90.16745483995726,
+        "scoreAtSpike": 48.97,
+        "lag": 5,
+        "scoreAfter": 49.11,
+        "scoreDelta": 0.14000000000000057
+      },
+      {
+        "country": "Albania",
+        "spikeYear": 1998,
+        "remittanceSpikePct": 48.07884957010143,
+        "scoreAtSpike": 43.04,
+        "lag": 1,
+        "scoreAfter": 50.22,
+        "scoreDelta": 7.18
+      },
+      {
+        "country": "Albania",
+        "spikeYear": 1998,
+        "remittanceSpikePct": 48.07884957010143,
+        "scoreAtSpike": 43.04,
+        "lag": 2,
+        "scoreAfter": 50.76,
+        "scoreDelta": 7.719999999999999
+      },
+      {
+        "country": "Albania",
+        "spikeYear": 1998,
+        "remittanceSpikePct": 48.07884957010143,
+        "scoreAtSpike": 43.04,
+        "lag": 3,
+        "scoreAfter": 56.03,
+        "scoreDelta": 12.990000000000002
+      },
+      {
+        "country": "Albania",
+        "spikeYear": 1998,
+        "remittanceSpikePct": 48.07884957010143,
+        "scoreAtSpike": 43.04,
+        "lag": 4,
+        "scoreAfter": 55.56,
+        "scoreDelta": 12.520000000000003
+      },
+      {
+        "country": "Albania",
+        "spikeYear": 1998,
+        "remittanceSpikePct": 48.07884957010143,
+        "scoreAtSpike": 43.04,
+        "lag": 5,
+        "scoreAfter": 55.85,
+        "scoreDelta": 12.810000000000002
+      },
+      {
+        "country": "Albania",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 34.49510212528869,
+        "scoreAtSpike": 50.76,
+        "lag": 1,
+        "scoreAfter": 56.03,
+        "scoreDelta": 5.270000000000003
+      },
+      {
+        "country": "Albania",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 34.49510212528869,
+        "scoreAtSpike": 50.76,
+        "lag": 2,
+        "scoreAfter": 55.56,
+        "scoreDelta": 4.800000000000004
+      },
+      {
+        "country": "Albania",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 34.49510212528869,
+        "scoreAtSpike": 50.76,
+        "lag": 3,
+        "scoreAfter": 55.85,
+        "scoreDelta": 5.090000000000003
+      },
+      {
+        "country": "Albania",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 34.49510212528869,
+        "scoreAtSpike": 50.76,
+        "lag": 4,
+        "scoreAfter": 54.39,
+        "scoreDelta": 3.6300000000000026
+      },
+      {
+        "country": "Albania",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 34.49510212528869,
+        "scoreAtSpike": 50.76,
+        "lag": 5,
+        "scoreAfter": 55.16,
+        "scoreDelta": 4.399999999999999
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 1991,
+        "remittanceSpikePct": 397.4085388970973,
+        "scoreAtSpike": 52.81,
+        "lag": 1,
+        "scoreAfter": 57.89,
+        "scoreDelta": 5.079999999999998
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 1991,
+        "remittanceSpikePct": 397.4085388970973,
+        "scoreAtSpike": 52.81,
+        "lag": 2,
+        "scoreAfter": 56.81,
+        "scoreDelta": 4
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 1991,
+        "remittanceSpikePct": 397.4085388970973,
+        "scoreAtSpike": 52.81,
+        "lag": 3,
+        "scoreAfter": 53.58,
+        "scoreDelta": 0.769999999999996
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 1991,
+        "remittanceSpikePct": 397.4085388970973,
+        "scoreAtSpike": 52.81,
+        "lag": 4,
+        "scoreAfter": 59.34,
+        "scoreDelta": 6.530000000000001
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 1991,
+        "remittanceSpikePct": 397.4085388970973,
+        "scoreAtSpike": 52.81,
+        "lag": 5,
+        "scoreAfter": 54.33,
+        "scoreDelta": 1.519999999999996
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 1994,
+        "remittanceSpikePct": 43.66022388498554,
+        "scoreAtSpike": 53.58,
+        "lag": 1,
+        "scoreAfter": 59.34,
+        "scoreDelta": 5.760000000000005
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 1994,
+        "remittanceSpikePct": 43.66022388498554,
+        "scoreAtSpike": 53.58,
+        "lag": 2,
+        "scoreAfter": 54.33,
+        "scoreDelta": 0.75
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 1994,
+        "remittanceSpikePct": 43.66022388498554,
+        "scoreAtSpike": 53.58,
+        "lag": 3,
+        "scoreAfter": 56.4,
+        "scoreDelta": 2.8200000000000003
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 1994,
+        "remittanceSpikePct": 43.66022388498554,
+        "scoreAtSpike": 53.58,
+        "lag": 4,
+        "scoreAfter": 52.35,
+        "scoreDelta": -1.2299999999999969
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 1994,
+        "remittanceSpikePct": 43.66022388498554,
+        "scoreAtSpike": 53.58,
+        "lag": 5,
+        "scoreAfter": 53.56,
+        "scoreDelta": -0.01999999999999602
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 54.24268246598678,
+        "scoreAtSpike": 52.56,
+        "lag": 1,
+        "scoreAfter": 51.07,
+        "scoreDelta": -1.490000000000002
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 54.24268246598678,
+        "scoreAtSpike": 52.56,
+        "lag": 2,
+        "scoreAfter": 49.05,
+        "scoreDelta": -3.510000000000005
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 54.24268246598678,
+        "scoreAtSpike": 52.56,
+        "lag": 3,
+        "scoreAfter": 51.21,
+        "scoreDelta": -1.3500000000000014
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 54.24268246598678,
+        "scoreAtSpike": 52.56,
+        "lag": 4,
+        "scoreAfter": 49.65,
+        "scoreDelta": -2.9100000000000037
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 54.24268246598678,
+        "scoreAtSpike": 52.56,
+        "lag": 5,
+        "scoreAfter": 47.3,
+        "scoreDelta": -5.260000000000005
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 36.91800409777886,
+        "scoreAtSpike": 51.07,
+        "lag": 1,
+        "scoreAfter": 49.05,
+        "scoreDelta": -2.020000000000003
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 36.91800409777886,
+        "scoreAtSpike": 51.07,
+        "lag": 2,
+        "scoreAfter": 51.21,
+        "scoreDelta": 0.14000000000000057
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 36.91800409777886,
+        "scoreAtSpike": 51.07,
+        "lag": 3,
+        "scoreAfter": 49.65,
+        "scoreDelta": -1.4200000000000017
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 36.91800409777886,
+        "scoreAtSpike": 51.07,
+        "lag": 4,
+        "scoreAfter": 47.3,
+        "scoreDelta": -3.770000000000003
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 36.91800409777886,
+        "scoreAtSpike": 51.07,
+        "lag": 5,
+        "scoreAfter": 50.46,
+        "scoreDelta": -0.6099999999999994
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2009,
+        "remittanceSpikePct": 74.0848853454192,
+        "scoreAtSpike": 49.9,
+        "lag": 1,
+        "scoreAfter": 51.71,
+        "scoreDelta": 1.8100000000000023
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2009,
+        "remittanceSpikePct": 74.0848853454192,
+        "scoreAtSpike": 49.9,
+        "lag": 2,
+        "scoreAfter": 50.18,
+        "scoreDelta": 0.28000000000000114
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2009,
+        "remittanceSpikePct": 74.0848853454192,
+        "scoreAtSpike": 49.9,
+        "lag": 3,
+        "scoreAfter": 49.43,
+        "scoreDelta": -0.46999999999999886
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2009,
+        "remittanceSpikePct": 74.0848853454192,
+        "scoreAtSpike": 49.9,
+        "lag": 4,
+        "scoreAfter": 48.03,
+        "scoreDelta": -1.8699999999999974
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2009,
+        "remittanceSpikePct": 74.0848853454192,
+        "scoreAtSpike": 49.9,
+        "lag": 5,
+        "scoreAfter": 47.69,
+        "scoreDelta": -2.210000000000001
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2014,
+        "remittanceSpikePct": 1024.7981231229926,
+        "scoreAtSpike": 47.69,
+        "lag": 1,
+        "scoreAfter": 49.03,
+        "scoreDelta": 1.3400000000000034
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2014,
+        "remittanceSpikePct": 1024.7981231229926,
+        "scoreAtSpike": 47.69,
+        "lag": 2,
+        "scoreAfter": 49.41,
+        "scoreDelta": 1.7199999999999989
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2014,
+        "remittanceSpikePct": 1024.7981231229926,
+        "scoreAtSpike": 47.69,
+        "lag": 3,
+        "scoreAfter": 47.97,
+        "scoreDelta": 0.28000000000000114
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2014,
+        "remittanceSpikePct": 1024.7981231229926,
+        "scoreAtSpike": 47.69,
+        "lag": 4,
+        "scoreAfter": 50.78,
+        "scoreDelta": 3.0900000000000034
+      },
+      {
+        "country": "Algeria",
+        "spikeYear": 2014,
+        "remittanceSpikePct": 1024.7981231229926,
+        "scoreAtSpike": 47.69,
+        "lag": 5,
+        "scoreAfter": 52.66,
+        "scoreDelta": 4.969999999999999
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2010,
+        "remittanceSpikePct": 9365.75260413885,
+        "scoreAtSpike": 48.59,
+        "lag": 1,
+        "scoreAfter": 47.74,
+        "scoreDelta": -0.8500000000000014
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2010,
+        "remittanceSpikePct": 9365.75260413885,
+        "scoreAtSpike": 48.59,
+        "lag": 2,
+        "scoreAfter": 49.02,
+        "scoreDelta": 0.4299999999999997
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2010,
+        "remittanceSpikePct": 9365.75260413885,
+        "scoreAtSpike": 48.59,
+        "lag": 3,
+        "scoreAfter": 50.24,
+        "scoreDelta": 1.6499999999999986
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2010,
+        "remittanceSpikePct": 9365.75260413885,
+        "scoreAtSpike": 48.59,
+        "lag": 4,
+        "scoreAfter": 51.68,
+        "scoreDelta": 3.0899999999999963
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2010,
+        "remittanceSpikePct": 9365.75260413885,
+        "scoreAtSpike": 48.59,
+        "lag": 5,
+        "scoreAfter": 52.21,
+        "scoreDelta": 3.6199999999999974
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2012,
+        "remittanceSpikePct": 17132.759884286013,
+        "scoreAtSpike": 49.02,
+        "lag": 1,
+        "scoreAfter": 50.24,
+        "scoreDelta": 1.2199999999999989
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2012,
+        "remittanceSpikePct": 17132.759884286013,
+        "scoreAtSpike": 49.02,
+        "lag": 2,
+        "scoreAfter": 51.68,
+        "scoreDelta": 2.6599999999999966
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2012,
+        "remittanceSpikePct": 17132.759884286013,
+        "scoreAtSpike": 49.02,
+        "lag": 3,
+        "scoreAfter": 52.21,
+        "scoreDelta": 3.1899999999999977
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2012,
+        "remittanceSpikePct": 17132.759884286013,
+        "scoreAtSpike": 49.02,
+        "lag": 4,
+        "scoreAfter": 49.8,
+        "scoreDelta": 0.779999999999994
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2012,
+        "remittanceSpikePct": 17132.759884286013,
+        "scoreAtSpike": 49.02,
+        "lag": 5,
+        "scoreAfter": 51.12,
+        "scoreDelta": 2.0999999999999943
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2019,
+        "remittanceSpikePct": 141.8940280479348,
+        "scoreAtSpike": 53.5,
+        "lag": 1,
+        "scoreAfter": 50.18,
+        "scoreDelta": -3.3200000000000003
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2019,
+        "remittanceSpikePct": 141.8940280479348,
+        "scoreAtSpike": 53.5,
+        "lag": 2,
+        "scoreAfter": 47.56,
+        "scoreDelta": -5.939999999999998
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2019,
+        "remittanceSpikePct": 141.8940280479348,
+        "scoreAtSpike": 53.5,
+        "lag": 3,
+        "scoreAfter": 49.85,
+        "scoreDelta": -3.6499999999999986
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2019,
+        "remittanceSpikePct": 141.8940280479348,
+        "scoreAtSpike": 53.5,
+        "lag": 4,
+        "scoreAfter": 50.45,
+        "scoreDelta": -3.049999999999997
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2019,
+        "remittanceSpikePct": 141.8940280479348,
+        "scoreAtSpike": 53.5,
+        "lag": 5,
+        "scoreAfter": 49.83,
+        "scoreDelta": -3.6700000000000017
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2020,
+        "remittanceSpikePct": 220.63115175419355,
+        "scoreAtSpike": 50.18,
+        "lag": 1,
+        "scoreAfter": 47.56,
+        "scoreDelta": -2.6199999999999974
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2020,
+        "remittanceSpikePct": 220.63115175419355,
+        "scoreAtSpike": 50.18,
+        "lag": 2,
+        "scoreAfter": 49.85,
+        "scoreDelta": -0.3299999999999983
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2020,
+        "remittanceSpikePct": 220.63115175419355,
+        "scoreAtSpike": 50.18,
+        "lag": 3,
+        "scoreAfter": 50.45,
+        "scoreDelta": 0.2700000000000031
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2020,
+        "remittanceSpikePct": 220.63115175419355,
+        "scoreAtSpike": 50.18,
+        "lag": 4,
+        "scoreAfter": 49.83,
+        "scoreDelta": -0.3500000000000014
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2020,
+        "remittanceSpikePct": 220.63115175419355,
+        "scoreAtSpike": 50.18,
+        "lag": 5,
+        "scoreAfter": 49.87,
+        "scoreDelta": -0.3100000000000023
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2024,
+        "remittanceSpikePct": 348.8165255607484,
+        "scoreAtSpike": 49.83,
+        "lag": 1,
+        "scoreAfter": 49.87,
+        "scoreDelta": 0.03999999999999915
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2024,
+        "remittanceSpikePct": 348.8165255607484,
+        "scoreAtSpike": 49.83,
+        "lag": 2,
+        "scoreAfter": 50.28,
+        "scoreDelta": 0.45000000000000284
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2024,
+        "remittanceSpikePct": 348.8165255607484,
+        "scoreAtSpike": 49.83,
+        "lag": 3,
+        "scoreAfter": 50.79,
+        "scoreDelta": 0.9600000000000009
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2024,
+        "remittanceSpikePct": 348.8165255607484,
+        "scoreAtSpike": 49.83,
+        "lag": 4,
+        "scoreAfter": 51.21,
+        "scoreDelta": 1.3800000000000026
+      },
+      {
+        "country": "Angola",
+        "spikeYear": 2024,
+        "remittanceSpikePct": 348.8165255607484,
+        "scoreAtSpike": 49.83,
+        "lag": 5,
+        "scoreAfter": 51.36,
+        "scoreDelta": 1.5300000000000011
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1979,
+        "remittanceSpikePct": 107.7173702385414,
+        "scoreAtSpike": 43.44,
+        "lag": 1,
+        "scoreAfter": 56.3,
+        "scoreDelta": 12.86
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1979,
+        "remittanceSpikePct": 107.7173702385414,
+        "scoreAtSpike": 43.44,
+        "lag": 2,
+        "scoreAfter": 59.77,
+        "scoreDelta": 16.330000000000005
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1979,
+        "remittanceSpikePct": 107.7173702385414,
+        "scoreAtSpike": 43.44,
+        "lag": 3,
+        "scoreAfter": 51,
+        "scoreDelta": 7.560000000000002
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1979,
+        "remittanceSpikePct": 107.7173702385414,
+        "scoreAtSpike": 43.44,
+        "lag": 4,
+        "scoreAfter": 50.5,
+        "scoreDelta": 7.060000000000002
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1979,
+        "remittanceSpikePct": 107.7173702385414,
+        "scoreAtSpike": 43.44,
+        "lag": 5,
+        "scoreAfter": 57.12,
+        "scoreDelta": 13.68
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 45.24563675160779,
+        "scoreAtSpike": 56.56,
+        "lag": 1,
+        "scoreAfter": 43.89,
+        "scoreDelta": -12.670000000000002
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 45.24563675160779,
+        "scoreAtSpike": 56.56,
+        "lag": 2,
+        "scoreAfter": 44.66,
+        "scoreDelta": -11.900000000000006
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 45.24563675160779,
+        "scoreAtSpike": 56.56,
+        "lag": 3,
+        "scoreAfter": 48.57,
+        "scoreDelta": -7.990000000000002
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 45.24563675160779,
+        "scoreAtSpike": 56.56,
+        "lag": 4,
+        "scoreAfter": 48.53,
+        "scoreDelta": -8.030000000000001
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 45.24563675160779,
+        "scoreAtSpike": 56.56,
+        "lag": 5,
+        "scoreAfter": 53.11,
+        "scoreDelta": -3.450000000000003
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1993,
+        "remittanceSpikePct": 262.07314946597035,
+        "scoreAtSpike": 48.53,
+        "lag": 1,
+        "scoreAfter": 53.11,
+        "scoreDelta": 4.579999999999998
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1993,
+        "remittanceSpikePct": 262.07314946597035,
+        "scoreAtSpike": 48.53,
+        "lag": 2,
+        "scoreAfter": 49.05,
+        "scoreDelta": 0.519999999999996
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1993,
+        "remittanceSpikePct": 262.07314946597035,
+        "scoreAtSpike": 48.53,
+        "lag": 3,
+        "scoreAfter": 47.07,
+        "scoreDelta": -1.4600000000000009
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1993,
+        "remittanceSpikePct": 262.07314946597035,
+        "scoreAtSpike": 48.53,
+        "lag": 4,
+        "scoreAfter": 51.28,
+        "scoreDelta": 2.75
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 1993,
+        "remittanceSpikePct": 262.07314946597035,
+        "scoreAtSpike": 48.53,
+        "lag": 5,
+        "scoreAfter": 53.04,
+        "scoreDelta": 4.509999999999998
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 33.96087186551233,
+        "scoreAtSpike": 52.98,
+        "lag": 1,
+        "scoreAfter": 64.62,
+        "scoreDelta": 11.640000000000008
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 33.96087186551233,
+        "scoreAtSpike": 52.98,
+        "lag": 2,
+        "scoreAfter": 52.81,
+        "scoreDelta": -0.1699999999999946
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 33.96087186551233,
+        "scoreAtSpike": 52.98,
+        "lag": 3,
+        "scoreAfter": 52.91,
+        "scoreDelta": -0.07000000000000028
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 33.96087186551233,
+        "scoreAtSpike": 52.98,
+        "lag": 4,
+        "scoreAfter": 49.23,
+        "scoreDelta": -3.75
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 33.96087186551233,
+        "scoreAtSpike": 52.98,
+        "lag": 5,
+        "scoreAfter": 49.11,
+        "scoreDelta": -3.8699999999999974
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2001,
+        "remittanceSpikePct": 132.26045726913637,
+        "scoreAtSpike": 64.62,
+        "lag": 1,
+        "scoreAfter": 52.81,
+        "scoreDelta": -11.810000000000002
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2001,
+        "remittanceSpikePct": 132.26045726913637,
+        "scoreAtSpike": 64.62,
+        "lag": 2,
+        "scoreAfter": 52.91,
+        "scoreDelta": -11.710000000000008
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2001,
+        "remittanceSpikePct": 132.26045726913637,
+        "scoreAtSpike": 64.62,
+        "lag": 3,
+        "scoreAfter": 49.23,
+        "scoreDelta": -15.390000000000008
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2001,
+        "remittanceSpikePct": 132.26045726913637,
+        "scoreAtSpike": 64.62,
+        "lag": 4,
+        "scoreAfter": 49.11,
+        "scoreDelta": -15.510000000000005
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2001,
+        "remittanceSpikePct": 132.26045726913637,
+        "scoreAtSpike": 64.62,
+        "lag": 5,
+        "scoreAfter": 47.09,
+        "scoreDelta": -17.53
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 199.65132489756297,
+        "scoreAtSpike": 52.81,
+        "lag": 1,
+        "scoreAfter": 52.91,
+        "scoreDelta": 0.09999999999999432
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 199.65132489756297,
+        "scoreAtSpike": 52.81,
+        "lag": 2,
+        "scoreAfter": 49.23,
+        "scoreDelta": -3.5800000000000054
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 199.65132489756297,
+        "scoreAtSpike": 52.81,
+        "lag": 3,
+        "scoreAfter": 49.11,
+        "scoreDelta": -3.700000000000003
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 199.65132489756297,
+        "scoreAtSpike": 52.81,
+        "lag": 4,
+        "scoreAfter": 47.09,
+        "scoreDelta": -5.719999999999999
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 199.65132489756297,
+        "scoreAtSpike": 52.81,
+        "lag": 5,
+        "scoreAfter": 49.28,
+        "scoreDelta": -3.530000000000001
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2018,
+        "remittanceSpikePct": 33.498974101684254,
+        "scoreAtSpike": 51.91,
+        "lag": 1,
+        "scoreAfter": 53.66,
+        "scoreDelta": 1.75
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2018,
+        "remittanceSpikePct": 33.498974101684254,
+        "scoreAtSpike": 51.91,
+        "lag": 2,
+        "scoreAfter": 47.43,
+        "scoreDelta": -4.479999999999997
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2018,
+        "remittanceSpikePct": 33.498974101684254,
+        "scoreAtSpike": 51.91,
+        "lag": 3,
+        "scoreAfter": 48.59,
+        "scoreDelta": -3.319999999999993
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2018,
+        "remittanceSpikePct": 33.498974101684254,
+        "scoreAtSpike": 51.91,
+        "lag": 4,
+        "scoreAfter": 54.09,
+        "scoreDelta": 2.180000000000007
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2018,
+        "remittanceSpikePct": 33.498974101684254,
+        "scoreAtSpike": 51.91,
+        "lag": 5,
+        "scoreAfter": 54.58,
+        "scoreDelta": 2.6700000000000017
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2020,
+        "remittanceSpikePct": 34.00130798208747,
+        "scoreAtSpike": 47.43,
+        "lag": 1,
+        "scoreAfter": 48.59,
+        "scoreDelta": 1.1600000000000037
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2020,
+        "remittanceSpikePct": 34.00130798208747,
+        "scoreAtSpike": 47.43,
+        "lag": 2,
+        "scoreAfter": 54.09,
+        "scoreDelta": 6.660000000000004
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2020,
+        "remittanceSpikePct": 34.00130798208747,
+        "scoreAtSpike": 47.43,
+        "lag": 3,
+        "scoreAfter": 54.58,
+        "scoreDelta": 7.149999999999999
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2020,
+        "remittanceSpikePct": 34.00130798208747,
+        "scoreAtSpike": 47.43,
+        "lag": 4,
+        "scoreAfter": 53.1,
+        "scoreDelta": 5.670000000000002
+      },
+      {
+        "country": "Argentina",
+        "spikeYear": 2020,
+        "remittanceSpikePct": 34.00130798208747,
+        "scoreAtSpike": 47.43,
+        "lag": 5,
+        "scoreAfter": 51.91,
+        "scoreDelta": 4.479999999999997
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 98.10166892674799,
+        "scoreAtSpike": 99,
+        "lag": 1,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 98.10166892674799,
+        "scoreAtSpike": 99,
+        "lag": 2,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 98.10166892674799,
+        "scoreAtSpike": 99,
+        "lag": 3,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 98.10166892674799,
+        "scoreAtSpike": 99,
+        "lag": 4,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 98.10166892674799,
+        "scoreAtSpike": 99,
+        "lag": 5,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 1997,
+        "remittanceSpikePct": 45.09021148748948,
+        "scoreAtSpike": 99,
+        "lag": 1,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 1997,
+        "remittanceSpikePct": 45.09021148748948,
+        "scoreAtSpike": 99,
+        "lag": 2,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 1997,
+        "remittanceSpikePct": 45.09021148748948,
+        "scoreAtSpike": 99,
+        "lag": 3,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 1997,
+        "remittanceSpikePct": 45.09021148748948,
+        "scoreAtSpike": 99,
+        "lag": 4,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 1997,
+        "remittanceSpikePct": 45.09021148748948,
+        "scoreAtSpike": 99,
+        "lag": 5,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 2004,
+        "remittanceSpikePct": 84.02747489511343,
+        "scoreAtSpike": 99,
+        "lag": 1,
+        "scoreAfter": 99,
+        "scoreDelta": 0
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 2004,
+        "remittanceSpikePct": 84.02747489511343,
+        "scoreAtSpike": 99,
+        "lag": 2,
+        "scoreAfter": 47.68,
+        "scoreDelta": -51.32
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 2004,
+        "remittanceSpikePct": 84.02747489511343,
+        "scoreAtSpike": 99,
+        "lag": 3,
+        "scoreAfter": 50.78,
+        "scoreDelta": -48.22
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 2004,
+        "remittanceSpikePct": 84.02747489511343,
+        "scoreAtSpike": 99,
+        "lag": 4,
+        "scoreAfter": 52.66,
+        "scoreDelta": -46.34
+      },
+      {
+        "country": "Armenia",
+        "spikeYear": 2004,
+        "remittanceSpikePct": 84.02747489511343,
+        "scoreAtSpike": 99,
+        "lag": 5,
+        "scoreAfter": 48.87,
+        "scoreDelta": -50.13
+      },
+      {
+        "country": "Australia",
+        "spikeYear": 2022,
+        "remittanceSpikePct": 32.35258776147422,
+        "scoreAtSpike": 49.51,
+        "lag": 1,
+        "scoreAfter": 54.02,
+        "scoreDelta": 4.510000000000005
+      },
+      {
+        "country": "Australia",
+        "spikeYear": 2022,
+        "remittanceSpikePct": 32.35258776147422,
+        "scoreAtSpike": 49.51,
+        "lag": 2,
+        "scoreAfter": 50,
+        "scoreDelta": 0.490000000000002
+      },
+      {
+        "country": "Australia",
+        "spikeYear": 2022,
+        "remittanceSpikePct": 32.35258776147422,
+        "scoreAtSpike": 49.51,
+        "lag": 3,
+        "scoreAfter": 50,
+        "scoreDelta": 0.490000000000002
+      },
+      {
+        "country": "Australia",
+        "spikeYear": 2022,
+        "remittanceSpikePct": 32.35258776147422,
+        "scoreAtSpike": 49.51,
+        "lag": 4,
+        "scoreAfter": 14,
+        "scoreDelta": -35.51
+      },
+      {
+        "country": "Australia",
+        "spikeYear": 2023,
+        "remittanceSpikePct": 30.193867821093384,
+        "scoreAtSpike": 54.02,
+        "lag": 1,
+        "scoreAfter": 50,
+        "scoreDelta": -4.020000000000003
+      },
+      {
+        "country": "Australia",
+        "spikeYear": 2023,
+        "remittanceSpikePct": 30.193867821093384,
+        "scoreAtSpike": 54.02,
+        "lag": 2,
+        "scoreAfter": 50,
+        "scoreDelta": -4.020000000000003
+      },
+      {
+        "country": "Australia",
+        "spikeYear": 2023,
+        "remittanceSpikePct": 30.193867821093384,
+        "scoreAtSpike": 54.02,
+        "lag": 3,
+        "scoreAfter": 14,
+        "scoreDelta": -40.02
+      },
+      {
+        "country": "Austria",
+        "spikeYear": 1998,
+        "remittanceSpikePct": 50.99725363544244,
+        "scoreAtSpike": 49.42,
+        "lag": 1,
+        "scoreAfter": 48.33,
+        "scoreDelta": -1.0900000000000034
+      },
+      {
+        "country": "Austria",
+        "spikeYear": 1998,
+        "remittanceSpikePct": 50.99725363544244,
+        "scoreAtSpike": 49.42,
+        "lag": 2,
+        "scoreAfter": 51.16,
+        "scoreDelta": 1.7399999999999949
+      },
+      {
+        "country": "Austria",
+        "spikeYear": 1998,
+        "remittanceSpikePct": 50.99725363544244,
+        "scoreAtSpike": 49.42,
+        "lag": 3,
+        "scoreAfter": 50.74,
+        "scoreDelta": 1.3200000000000003
+      },
+      {
+        "country": "Austria",
+        "spikeYear": 1998,
+        "remittanceSpikePct": 50.99725363544244,
+        "scoreAtSpike": 49.42,
+        "lag": 4,
+        "scoreAfter": 51.78,
+        "scoreDelta": 2.3599999999999994
+      },
+      {
+        "country": "Austria",
+        "spikeYear": 1998,
+        "remittanceSpikePct": 50.99725363544244,
+        "scoreAtSpike": 49.42,
+        "lag": 5,
+        "scoreAfter": 50.12,
+        "scoreDelta": 0.6999999999999957
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 1999,
+        "remittanceSpikePct": 740.2869385327593,
+        "scoreAtSpike": 55.87,
+        "lag": 1,
+        "scoreAfter": 56.37,
+        "scoreDelta": 0.5
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 1999,
+        "remittanceSpikePct": 740.2869385327593,
+        "scoreAtSpike": 55.87,
+        "lag": 2,
+        "scoreAfter": 48.3,
+        "scoreDelta": -7.57
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 1999,
+        "remittanceSpikePct": 740.2869385327593,
+        "scoreAtSpike": 55.87,
+        "lag": 3,
+        "scoreAfter": 54.05,
+        "scoreDelta": -1.8200000000000003
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 1999,
+        "remittanceSpikePct": 740.2869385327593,
+        "scoreAtSpike": 55.87,
+        "lag": 4,
+        "scoreAfter": 55.77,
+        "scoreDelta": -0.09999999999999432
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 1999,
+        "remittanceSpikePct": 740.2869385327593,
+        "scoreAtSpike": 55.87,
+        "lag": 5,
+        "scoreAfter": 51.49,
+        "scoreDelta": -4.3799999999999955
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2001,
+        "remittanceSpikePct": 68.36311217432163,
+        "scoreAtSpike": 48.3,
+        "lag": 1,
+        "scoreAfter": 54.05,
+        "scoreDelta": 5.75
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2001,
+        "remittanceSpikePct": 68.36311217432163,
+        "scoreAtSpike": 48.3,
+        "lag": 2,
+        "scoreAfter": 55.77,
+        "scoreDelta": 7.470000000000006
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2001,
+        "remittanceSpikePct": 68.36311217432163,
+        "scoreAtSpike": 48.3,
+        "lag": 3,
+        "scoreAfter": 51.49,
+        "scoreDelta": 3.190000000000005
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2001,
+        "remittanceSpikePct": 68.36311217432163,
+        "scoreAtSpike": 48.3,
+        "lag": 4,
+        "scoreAfter": 46.59,
+        "scoreDelta": -1.7099999999999937
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2001,
+        "remittanceSpikePct": 68.36311217432163,
+        "scoreAtSpike": 48.3,
+        "lag": 5,
+        "scoreAfter": 46.95,
+        "scoreDelta": -1.3499999999999943
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 43.55519871077433,
+        "scoreAtSpike": 54.05,
+        "lag": 1,
+        "scoreAfter": 55.77,
+        "scoreDelta": 1.720000000000006
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 43.55519871077433,
+        "scoreAtSpike": 54.05,
+        "lag": 2,
+        "scoreAfter": 51.49,
+        "scoreDelta": -2.559999999999995
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 43.55519871077433,
+        "scoreAtSpike": 54.05,
+        "lag": 3,
+        "scoreAfter": 46.59,
+        "scoreDelta": -7.459999999999994
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 43.55519871077433,
+        "scoreAtSpike": 54.05,
+        "lag": 4,
+        "scoreAfter": 46.95,
+        "scoreDelta": -7.099999999999994
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 43.55519871077433,
+        "scoreAtSpike": 54.05,
+        "lag": 5,
+        "scoreAfter": 48.04,
+        "scoreDelta": -6.009999999999998
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 100.62969881881033,
+        "scoreAtSpike": 46.59,
+        "lag": 1,
+        "scoreAfter": 46.95,
+        "scoreDelta": 0.35999999999999943
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 100.62969881881033,
+        "scoreAtSpike": 46.59,
+        "lag": 2,
+        "scoreAfter": 48.04,
+        "scoreDelta": 1.4499999999999957
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 100.62969881881033,
+        "scoreAtSpike": 46.59,
+        "lag": 3,
+        "scoreAfter": 49.49,
+        "scoreDelta": 2.8999999999999986
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 100.62969881881033,
+        "scoreAtSpike": 46.59,
+        "lag": 4,
+        "scoreAfter": 50.01,
+        "scoreDelta": 3.4199999999999946
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 100.62969881881033,
+        "scoreAtSpike": 46.59,
+        "lag": 5,
+        "scoreAfter": 51.19,
+        "scoreDelta": 4.599999999999994
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2017,
+        "remittanceSpikePct": 63.287612390527336,
+        "scoreAtSpike": 49.85,
+        "lag": 1,
+        "scoreAfter": 49.35,
+        "scoreDelta": -0.5
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2017,
+        "remittanceSpikePct": 63.287612390527336,
+        "scoreAtSpike": 49.85,
+        "lag": 2,
+        "scoreAfter": 53.06,
+        "scoreDelta": 3.210000000000001
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2017,
+        "remittanceSpikePct": 63.287612390527336,
+        "scoreAtSpike": 49.85,
+        "lag": 3,
+        "scoreAfter": 49.43,
+        "scoreDelta": -0.4200000000000017
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2017,
+        "remittanceSpikePct": 63.287612390527336,
+        "scoreAtSpike": 49.85,
+        "lag": 4,
+        "scoreAfter": 50.16,
+        "scoreDelta": 0.30999999999999517
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2017,
+        "remittanceSpikePct": 63.287612390527336,
+        "scoreAtSpike": 49.85,
+        "lag": 5,
+        "scoreAfter": 50.24,
+        "scoreDelta": 0.39000000000000057
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2022,
+        "remittanceSpikePct": 80.002815555131,
+        "scoreAtSpike": 50.24,
+        "lag": 1,
+        "scoreAfter": 45.71,
+        "scoreDelta": -4.530000000000001
+      },
+      {
+        "country": "Azerbaijan",
+        "spikeYear": 2022,
+        "remittanceSpikePct": 80.002815555131,
+        "scoreAtSpike": 50.24,
+        "lag": 4,
+        "scoreAfter": 22,
+        "scoreDelta": -28.240000000000002
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1977,
+        "remittanceSpikePct": 340.7119525473747,
+        "scoreAtSpike": 36.31,
+        "lag": 1,
+        "scoreAfter": 49.51,
+        "scoreDelta": 13.199999999999996
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1977,
+        "remittanceSpikePct": 340.7119525473747,
+        "scoreAtSpike": 36.31,
+        "lag": 2,
+        "scoreAfter": 51.58,
+        "scoreDelta": 15.269999999999996
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1977,
+        "remittanceSpikePct": 340.7119525473747,
+        "scoreAtSpike": 36.31,
+        "lag": 3,
+        "scoreAfter": 58.14,
+        "scoreDelta": 21.83
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1977,
+        "remittanceSpikePct": 340.7119525473747,
+        "scoreAtSpike": 36.31,
+        "lag": 4,
+        "scoreAfter": 54.2,
+        "scoreDelta": 17.89
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1977,
+        "remittanceSpikePct": 340.7119525473747,
+        "scoreAtSpike": 36.31,
+        "lag": 5,
+        "scoreAfter": 54.03,
+        "scoreDelta": 17.72
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1980,
+        "remittanceSpikePct": 69.82290919391787,
+        "scoreAtSpike": 58.14,
+        "lag": 1,
+        "scoreAfter": 54.2,
+        "scoreDelta": -3.9399999999999977
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1980,
+        "remittanceSpikePct": 69.82290919391787,
+        "scoreAtSpike": 58.14,
+        "lag": 2,
+        "scoreAfter": 54.03,
+        "scoreDelta": -4.109999999999999
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1980,
+        "remittanceSpikePct": 69.82290919391787,
+        "scoreAtSpike": 58.14,
+        "lag": 3,
+        "scoreAfter": 52.98,
+        "scoreDelta": -5.160000000000004
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1980,
+        "remittanceSpikePct": 69.82290919391787,
+        "scoreAtSpike": 58.14,
+        "lag": 4,
+        "scoreAfter": 52.65,
+        "scoreDelta": -5.490000000000002
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1980,
+        "remittanceSpikePct": 69.82290919391787,
+        "scoreAtSpike": 58.14,
+        "lag": 5,
+        "scoreAfter": 53.55,
+        "scoreDelta": -4.590000000000003
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1982,
+        "remittanceSpikePct": 51.0201462907229,
+        "scoreAtSpike": 54.03,
+        "lag": 1,
+        "scoreAfter": 52.98,
+        "scoreDelta": -1.0500000000000043
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1982,
+        "remittanceSpikePct": 51.0201462907229,
+        "scoreAtSpike": 54.03,
+        "lag": 2,
+        "scoreAfter": 52.65,
+        "scoreDelta": -1.3800000000000026
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1982,
+        "remittanceSpikePct": 51.0201462907229,
+        "scoreAtSpike": 54.03,
+        "lag": 3,
+        "scoreAfter": 53.55,
+        "scoreDelta": -0.480000000000004
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1982,
+        "remittanceSpikePct": 51.0201462907229,
+        "scoreAtSpike": 54.03,
+        "lag": 4,
+        "scoreAfter": 52.25,
+        "scoreDelta": -1.7800000000000011
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 1982,
+        "remittanceSpikePct": 51.0201462907229,
+        "scoreAtSpike": 54.03,
+        "lag": 5,
+        "scoreAfter": 54.12,
+        "scoreDelta": 0.0899999999999963
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 33.98515208012876,
+        "scoreAtSpike": 50.22,
+        "lag": 1,
+        "scoreAfter": 45.82,
+        "scoreDelta": -4.399999999999999
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 33.98515208012876,
+        "scoreAtSpike": 50.22,
+        "lag": 2,
+        "scoreAfter": 49.49,
+        "scoreDelta": -0.7299999999999969
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 33.98515208012876,
+        "scoreAtSpike": 50.22,
+        "lag": 3,
+        "scoreAfter": 49.83,
+        "scoreDelta": -0.39000000000000057
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 33.98515208012876,
+        "scoreAtSpike": 50.22,
+        "lag": 4,
+        "scoreAfter": 49.5,
+        "scoreDelta": -0.7199999999999989
+      },
+      {
+        "country": "Bangladesh",
+        "spikeYear": 2002,
+        "remittanceSpikePct": 33.98515208012876,
+        "scoreAtSpike": 50.22,
+        "lag": 5,
+        "scoreAfter": 50.28,
+        "scoreDelta": 0.060000000000002274
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1995,
+        "remittanceSpikePct": 7513.890070348893,
+        "scoreAtSpike": 49.54,
+        "lag": 1,
+        "scoreAfter": 43.23,
+        "scoreDelta": -6.310000000000002
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1995,
+        "remittanceSpikePct": 7513.890070348893,
+        "scoreAtSpike": 49.54,
+        "lag": 2,
+        "scoreAfter": 48.66,
+        "scoreDelta": -0.8800000000000026
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1995,
+        "remittanceSpikePct": 7513.890070348893,
+        "scoreAtSpike": 49.54,
+        "lag": 3,
+        "scoreAfter": 49.94,
+        "scoreDelta": 0.3999999999999986
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1995,
+        "remittanceSpikePct": 7513.890070348893,
+        "scoreAtSpike": 49.54,
+        "lag": 4,
+        "scoreAfter": 52.07,
+        "scoreDelta": 2.530000000000001
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1995,
+        "remittanceSpikePct": 7513.890070348893,
+        "scoreAtSpike": 49.54,
+        "lag": 5,
+        "scoreAfter": 53.98,
+        "scoreDelta": 4.439999999999998
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 215.4536030297523,
+        "scoreAtSpike": 43.23,
+        "lag": 1,
+        "scoreAfter": 48.66,
+        "scoreDelta": 5.43
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 215.4536030297523,
+        "scoreAtSpike": 43.23,
+        "lag": 2,
+        "scoreAfter": 49.94,
+        "scoreDelta": 6.710000000000001
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 215.4536030297523,
+        "scoreAtSpike": 43.23,
+        "lag": 3,
+        "scoreAfter": 52.07,
+        "scoreDelta": 8.840000000000003
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 215.4536030297523,
+        "scoreAtSpike": 43.23,
+        "lag": 4,
+        "scoreAfter": 53.98,
+        "scoreDelta": 10.75
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 215.4536030297523,
+        "scoreAtSpike": 43.23,
+        "lag": 5,
+        "scoreAfter": 51.52,
+        "scoreDelta": 8.290000000000006
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1999,
+        "remittanceSpikePct": 44.24821986603395,
+        "scoreAtSpike": 52.07,
+        "lag": 1,
+        "scoreAfter": 53.98,
+        "scoreDelta": 1.9099999999999966
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1999,
+        "remittanceSpikePct": 44.24821986603395,
+        "scoreAtSpike": 52.07,
+        "lag": 2,
+        "scoreAfter": 51.52,
+        "scoreDelta": -0.5499999999999972
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1999,
+        "remittanceSpikePct": 44.24821986603395,
+        "scoreAtSpike": 52.07,
+        "lag": 3,
+        "scoreAfter": 47.25,
+        "scoreDelta": -4.82
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1999,
+        "remittanceSpikePct": 44.24821986603395,
+        "scoreAtSpike": 52.07,
+        "lag": 4,
+        "scoreAfter": 51.28,
+        "scoreDelta": -0.7899999999999991
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 1999,
+        "remittanceSpikePct": 44.24821986603395,
+        "scoreAtSpike": 52.07,
+        "lag": 5,
+        "scoreAfter": 51.12,
+        "scoreDelta": -0.9500000000000028
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 75.54024015323513,
+        "scoreAtSpike": 53.98,
+        "lag": 1,
+        "scoreAfter": 51.52,
+        "scoreDelta": -2.4599999999999937
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 75.54024015323513,
+        "scoreAtSpike": 53.98,
+        "lag": 2,
+        "scoreAfter": 47.25,
+        "scoreDelta": -6.729999999999997
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 75.54024015323513,
+        "scoreAtSpike": 53.98,
+        "lag": 3,
+        "scoreAfter": 51.28,
+        "scoreDelta": -2.6999999999999957
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 75.54024015323513,
+        "scoreAtSpike": 53.98,
+        "lag": 4,
+        "scoreAfter": 51.12,
+        "scoreDelta": -2.8599999999999994
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 75.54024015323513,
+        "scoreAtSpike": 53.98,
+        "lag": 5,
+        "scoreAfter": 49.51,
+        "scoreDelta": -4.469999999999999
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 66.69950768544618,
+        "scoreAtSpike": 51.28,
+        "lag": 1,
+        "scoreAfter": 51.12,
+        "scoreDelta": -0.1600000000000037
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 66.69950768544618,
+        "scoreAtSpike": 51.28,
+        "lag": 2,
+        "scoreAfter": 49.51,
+        "scoreDelta": -1.7700000000000031
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 66.69950768544618,
+        "scoreAtSpike": 51.28,
+        "lag": 3,
+        "scoreAfter": 49.99,
+        "scoreDelta": -1.2899999999999991
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 66.69950768544618,
+        "scoreAtSpike": 51.28,
+        "lag": 4,
+        "scoreAfter": 47.32,
+        "scoreDelta": -3.960000000000001
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 66.69950768544618,
+        "scoreAtSpike": 51.28,
+        "lag": 5,
+        "scoreAfter": 53,
+        "scoreDelta": 1.7199999999999989
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2008,
+        "remittanceSpikePct": 50.78261907003279,
+        "scoreAtSpike": 53,
+        "lag": 1,
+        "scoreAfter": 52.27,
+        "scoreDelta": -0.7299999999999969
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2008,
+        "remittanceSpikePct": 50.78261907003279,
+        "scoreAtSpike": 53,
+        "lag": 2,
+        "scoreAfter": 51.79,
+        "scoreDelta": -1.2100000000000009
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2008,
+        "remittanceSpikePct": 50.78261907003279,
+        "scoreAtSpike": 53,
+        "lag": 3,
+        "scoreAfter": 52.54,
+        "scoreDelta": -0.46000000000000085
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2008,
+        "remittanceSpikePct": 50.78261907003279,
+        "scoreAtSpike": 53,
+        "lag": 4,
+        "scoreAfter": 54.01,
+        "scoreDelta": 1.009999999999998
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2008,
+        "remittanceSpikePct": 50.78261907003279,
+        "scoreAtSpike": 53,
+        "lag": 5,
+        "scoreAfter": 51.91,
+        "scoreDelta": -1.0900000000000034
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2011,
+        "remittanceSpikePct": 43.45063523550356,
+        "scoreAtSpike": 52.54,
+        "lag": 1,
+        "scoreAfter": 54.01,
+        "scoreDelta": 1.4699999999999989
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2011,
+        "remittanceSpikePct": 43.45063523550356,
+        "scoreAtSpike": 52.54,
+        "lag": 2,
+        "scoreAfter": 51.91,
+        "scoreDelta": -0.6300000000000026
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2011,
+        "remittanceSpikePct": 43.45063523550356,
+        "scoreAtSpike": 52.54,
+        "lag": 3,
+        "scoreAfter": 54.49,
+        "scoreDelta": 1.9500000000000028
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2011,
+        "remittanceSpikePct": 43.45063523550356,
+        "scoreAtSpike": 52.54,
+        "lag": 4,
+        "scoreAfter": 52.16,
+        "scoreDelta": -0.38000000000000256
+      },
+      {
+        "country": "Belarus",
+        "spikeYear": 2011,
+        "remittanceSpikePct": 43.45063523550356,
+        "scoreAtSpike": 52.54,
+        "lag": 5,
+        "scoreAfter": 50.75,
+        "scoreDelta": -1.7899999999999991
+      },
+      {
+        "country": "Belgium",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 89.1157216676991,
+        "scoreAtSpike": 49.24,
+        "lag": 1,
+        "scoreAfter": 51.35,
+        "scoreDelta": 2.1099999999999994
+      },
+      {
+        "country": "Belgium",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 89.1157216676991,
+        "scoreAtSpike": 49.24,
+        "lag": 2,
+        "scoreAfter": 51.07,
+        "scoreDelta": 1.8299999999999983
+      },
+      {
+        "country": "Belgium",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 89.1157216676991,
+        "scoreAtSpike": 49.24,
+        "lag": 3,
+        "scoreAfter": 55.38,
+        "scoreDelta": 6.140000000000001
+      },
+      {
+        "country": "Belgium",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 89.1157216676991,
+        "scoreAtSpike": 49.24,
+        "lag": 4,
+        "scoreAfter": 48.09,
+        "scoreDelta": -1.1499999999999986
+      },
+      {
+        "country": "Belgium",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 89.1157216676991,
+        "scoreAtSpike": 49.24,
+        "lag": 5,
+        "scoreAfter": 50.04,
+        "scoreDelta": 0.7999999999999972
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1975,
+        "remittanceSpikePct": 95.25743374648664,
+        "scoreAtSpike": 57.4,
+        "lag": 1,
+        "scoreAfter": 48.51,
+        "scoreDelta": -8.89
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1975,
+        "remittanceSpikePct": 95.25743374648664,
+        "scoreAtSpike": 57.4,
+        "lag": 2,
+        "scoreAfter": 54.41,
+        "scoreDelta": -2.990000000000002
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1975,
+        "remittanceSpikePct": 95.25743374648664,
+        "scoreAtSpike": 57.4,
+        "lag": 3,
+        "scoreAfter": 42.76,
+        "scoreDelta": -14.64
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1975,
+        "remittanceSpikePct": 95.25743374648664,
+        "scoreAtSpike": 57.4,
+        "lag": 4,
+        "scoreAfter": 44.33,
+        "scoreDelta": -13.07
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1975,
+        "remittanceSpikePct": 95.25743374648664,
+        "scoreAtSpike": 57.4,
+        "lag": 5,
+        "scoreAfter": 41.67,
+        "scoreDelta": -15.729999999999997
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1976,
+        "remittanceSpikePct": 54.4791352772623,
+        "scoreAtSpike": 48.51,
+        "lag": 1,
+        "scoreAfter": 54.41,
+        "scoreDelta": 5.899999999999999
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1976,
+        "remittanceSpikePct": 54.4791352772623,
+        "scoreAtSpike": 48.51,
+        "lag": 2,
+        "scoreAfter": 42.76,
+        "scoreDelta": -5.75
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1976,
+        "remittanceSpikePct": 54.4791352772623,
+        "scoreAtSpike": 48.51,
+        "lag": 3,
+        "scoreAfter": 44.33,
+        "scoreDelta": -4.18
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1976,
+        "remittanceSpikePct": 54.4791352772623,
+        "scoreAtSpike": 48.51,
+        "lag": 4,
+        "scoreAfter": 41.67,
+        "scoreDelta": -6.839999999999996
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1976,
+        "remittanceSpikePct": 54.4791352772623,
+        "scoreAtSpike": 48.51,
+        "lag": 5,
+        "scoreAfter": 58.89,
+        "scoreDelta": 10.380000000000003
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1977,
+        "remittanceSpikePct": 30.115500662505422,
+        "scoreAtSpike": 54.41,
+        "lag": 1,
+        "scoreAfter": 42.76,
+        "scoreDelta": -11.649999999999999
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1977,
+        "remittanceSpikePct": 30.115500662505422,
+        "scoreAtSpike": 54.41,
+        "lag": 2,
+        "scoreAfter": 44.33,
+        "scoreDelta": -10.079999999999998
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1977,
+        "remittanceSpikePct": 30.115500662505422,
+        "scoreAtSpike": 54.41,
+        "lag": 3,
+        "scoreAfter": 41.67,
+        "scoreDelta": -12.739999999999995
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1977,
+        "remittanceSpikePct": 30.115500662505422,
+        "scoreAtSpike": 54.41,
+        "lag": 4,
+        "scoreAfter": 58.89,
+        "scoreDelta": 4.480000000000004
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1977,
+        "remittanceSpikePct": 30.115500662505422,
+        "scoreAtSpike": 54.41,
+        "lag": 5,
+        "scoreAfter": 68.52,
+        "scoreDelta": 14.11
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1983,
+        "remittanceSpikePct": 37.341276032165254,
+        "scoreAtSpike": 46.34,
+        "lag": 1,
+        "scoreAfter": 43.3,
+        "scoreDelta": -3.0400000000000063
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1983,
+        "remittanceSpikePct": 37.341276032165254,
+        "scoreAtSpike": 46.34,
+        "lag": 2,
+        "scoreAfter": 57.01,
+        "scoreDelta": 10.669999999999995
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1983,
+        "remittanceSpikePct": 37.341276032165254,
+        "scoreAtSpike": 46.34,
+        "lag": 3,
+        "scoreAfter": 61.03,
+        "scoreDelta": 14.689999999999998
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1983,
+        "remittanceSpikePct": 37.341276032165254,
+        "scoreAtSpike": 46.34,
+        "lag": 4,
+        "scoreAfter": 51.94,
+        "scoreDelta": 5.599999999999994
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1983,
+        "remittanceSpikePct": 37.341276032165254,
+        "scoreAtSpike": 46.34,
+        "lag": 5,
+        "scoreAfter": 65.85,
+        "scoreDelta": 19.50999999999999
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 38.51547719118468,
+        "scoreAtSpike": 37.81,
+        "lag": 1,
+        "scoreAfter": 46.19,
+        "scoreDelta": 8.379999999999995
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 38.51547719118468,
+        "scoreAtSpike": 37.81,
+        "lag": 2,
+        "scoreAfter": 49.34,
+        "scoreDelta": 11.530000000000001
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 38.51547719118468,
+        "scoreAtSpike": 37.81,
+        "lag": 3,
+        "scoreAfter": 47.57,
+        "scoreDelta": 9.759999999999998
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 38.51547719118468,
+        "scoreAtSpike": 37.81,
+        "lag": 4,
+        "scoreAfter": 56.9,
+        "scoreDelta": 19.089999999999996
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 38.51547719118468,
+        "scoreAtSpike": 37.81,
+        "lag": 5,
+        "scoreAfter": 47.85,
+        "scoreDelta": 10.04
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1992,
+        "remittanceSpikePct": 35.384380846816875,
+        "scoreAtSpike": 47.57,
+        "lag": 1,
+        "scoreAfter": 56.9,
+        "scoreDelta": 9.329999999999998
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1992,
+        "remittanceSpikePct": 35.384380846816875,
+        "scoreAtSpike": 47.57,
+        "lag": 2,
+        "scoreAfter": 47.85,
+        "scoreDelta": 0.28000000000000114
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1992,
+        "remittanceSpikePct": 35.384380846816875,
+        "scoreAtSpike": 47.57,
+        "lag": 3,
+        "scoreAfter": 52.4,
+        "scoreDelta": 4.829999999999998
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1992,
+        "remittanceSpikePct": 35.384380846816875,
+        "scoreAtSpike": 47.57,
+        "lag": 4,
+        "scoreAfter": 51.28,
+        "scoreDelta": 3.710000000000001
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 1992,
+        "remittanceSpikePct": 35.384380846816875,
+        "scoreAtSpike": 47.57,
+        "lag": 5,
+        "scoreAfter": 50.6,
+        "scoreDelta": 3.030000000000001
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 119.42746195711203,
+        "scoreAtSpike": 49.26,
+        "lag": 1,
+        "scoreAfter": 46.66,
+        "scoreDelta": -2.6000000000000014
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 119.42746195711203,
+        "scoreAtSpike": 49.26,
+        "lag": 2,
+        "scoreAfter": 49.36,
+        "scoreDelta": 0.10000000000000142
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 119.42746195711203,
+        "scoreAtSpike": 49.26,
+        "lag": 3,
+        "scoreAfter": 50.97,
+        "scoreDelta": 1.7100000000000009
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 119.42746195711203,
+        "scoreAtSpike": 49.26,
+        "lag": 4,
+        "scoreAfter": 50.54,
+        "scoreDelta": 1.2800000000000011
+      },
+      {
+        "country": "Benin",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 119.42746195711203,
+        "scoreAtSpike": 49.26,
+        "lag": 5,
+        "scoreAfter": 50.4,
+        "scoreDelta": 1.1400000000000006
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1980,
+        "remittanceSpikePct": 36.41649911632569,
+        "scoreAtSpike": 54.18,
+        "lag": 1,
+        "scoreAfter": 70.71,
+        "scoreDelta": 16.529999999999994
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1980,
+        "remittanceSpikePct": 36.41649911632569,
+        "scoreAtSpike": 54.18,
+        "lag": 2,
+        "scoreAfter": 66.78,
+        "scoreDelta": 12.600000000000001
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1980,
+        "remittanceSpikePct": 36.41649911632569,
+        "scoreAtSpike": 54.18,
+        "lag": 3,
+        "scoreAfter": 49.37,
+        "scoreDelta": -4.810000000000002
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1980,
+        "remittanceSpikePct": 36.41649911632569,
+        "scoreAtSpike": 54.18,
+        "lag": 4,
+        "scoreAfter": 52.38,
+        "scoreDelta": -1.7999999999999972
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1980,
+        "remittanceSpikePct": 36.41649911632569,
+        "scoreAtSpike": 54.18,
+        "lag": 5,
+        "scoreAfter": 57.49,
+        "scoreDelta": 3.3100000000000023
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1981,
+        "remittanceSpikePct": 158.55404768521785,
+        "scoreAtSpike": 70.71,
+        "lag": 1,
+        "scoreAfter": 66.78,
+        "scoreDelta": -3.9299999999999926
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1981,
+        "remittanceSpikePct": 158.55404768521785,
+        "scoreAtSpike": 70.71,
+        "lag": 2,
+        "scoreAfter": 49.37,
+        "scoreDelta": -21.339999999999996
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1981,
+        "remittanceSpikePct": 158.55404768521785,
+        "scoreAtSpike": 70.71,
+        "lag": 3,
+        "scoreAfter": 52.38,
+        "scoreDelta": -18.32999999999999
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1981,
+        "remittanceSpikePct": 158.55404768521785,
+        "scoreAtSpike": 70.71,
+        "lag": 4,
+        "scoreAfter": 57.49,
+        "scoreDelta": -13.219999999999992
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1981,
+        "remittanceSpikePct": 158.55404768521785,
+        "scoreAtSpike": 70.71,
+        "lag": 5,
+        "scoreAfter": 51.62,
+        "scoreDelta": -19.089999999999996
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1983,
+        "remittanceSpikePct": 91.04091276661168,
+        "scoreAtSpike": 49.37,
+        "lag": 1,
+        "scoreAfter": 52.38,
+        "scoreDelta": 3.010000000000005
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1983,
+        "remittanceSpikePct": 91.04091276661168,
+        "scoreAtSpike": 49.37,
+        "lag": 2,
+        "scoreAfter": 57.49,
+        "scoreDelta": 8.120000000000005
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1983,
+        "remittanceSpikePct": 91.04091276661168,
+        "scoreAtSpike": 49.37,
+        "lag": 3,
+        "scoreAfter": 51.62,
+        "scoreDelta": 2.25
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1983,
+        "remittanceSpikePct": 91.04091276661168,
+        "scoreAtSpike": 49.37,
+        "lag": 4,
+        "scoreAfter": 53.73,
+        "scoreDelta": 4.359999999999999
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1983,
+        "remittanceSpikePct": 91.04091276661168,
+        "scoreAtSpike": 49.37,
+        "lag": 5,
+        "scoreAfter": 52.47,
+        "scoreDelta": 3.1000000000000014
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1986,
+        "remittanceSpikePct": 81.08130421841605,
+        "scoreAtSpike": 51.62,
+        "lag": 1,
+        "scoreAfter": 53.73,
+        "scoreDelta": 2.1099999999999994
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1986,
+        "remittanceSpikePct": 81.08130421841605,
+        "scoreAtSpike": 51.62,
+        "lag": 2,
+        "scoreAfter": 52.47,
+        "scoreDelta": 0.8500000000000014
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1986,
+        "remittanceSpikePct": 81.08130421841605,
+        "scoreAtSpike": 51.62,
+        "lag": 3,
+        "scoreAfter": 48.07,
+        "scoreDelta": -3.549999999999997
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1986,
+        "remittanceSpikePct": 81.08130421841605,
+        "scoreAtSpike": 51.62,
+        "lag": 4,
+        "scoreAfter": 46.49,
+        "scoreDelta": -5.1299999999999955
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1986,
+        "remittanceSpikePct": 81.08130421841605,
+        "scoreAtSpike": 51.62,
+        "lag": 5,
+        "scoreAfter": 55.1,
+        "scoreDelta": 3.480000000000004
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 84.14817262497711,
+        "scoreAtSpike": 48.07,
+        "lag": 1,
+        "scoreAfter": 46.49,
+        "scoreDelta": -1.5799999999999983
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 84.14817262497711,
+        "scoreAtSpike": 48.07,
+        "lag": 2,
+        "scoreAfter": 55.1,
+        "scoreDelta": 7.030000000000001
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 84.14817262497711,
+        "scoreAtSpike": 48.07,
+        "lag": 3,
+        "scoreAfter": 55.06,
+        "scoreDelta": 6.990000000000002
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 84.14817262497711,
+        "scoreAtSpike": 48.07,
+        "lag": 4,
+        "scoreAfter": 54.26,
+        "scoreDelta": 6.189999999999998
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1989,
+        "remittanceSpikePct": 84.14817262497711,
+        "scoreAtSpike": 48.07,
+        "lag": 5,
+        "scoreAfter": 52.27,
+        "scoreDelta": 4.200000000000003
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 79.88454956582223,
+        "scoreAtSpike": 50.53,
+        "lag": 1,
+        "scoreAfter": 47.57,
+        "scoreDelta": -2.960000000000001
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 79.88454956582223,
+        "scoreAtSpike": 50.53,
+        "lag": 2,
+        "scoreAfter": 59.74,
+        "scoreDelta": 9.21
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 79.88454956582223,
+        "scoreAtSpike": 50.53,
+        "lag": 3,
+        "scoreAfter": 53.22,
+        "scoreDelta": 2.6899999999999977
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 79.88454956582223,
+        "scoreAtSpike": 50.53,
+        "lag": 4,
+        "scoreAfter": 54.73,
+        "scoreDelta": 4.199999999999996
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1996,
+        "remittanceSpikePct": 79.88454956582223,
+        "scoreAtSpike": 50.53,
+        "lag": 5,
+        "scoreAfter": 52.07,
+        "scoreDelta": 1.5399999999999991
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1997,
+        "remittanceSpikePct": 640.5201784185227,
+        "scoreAtSpike": 47.57,
+        "lag": 1,
+        "scoreAfter": 59.74,
+        "scoreDelta": 12.170000000000002
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1997,
+        "remittanceSpikePct": 640.5201784185227,
+        "scoreAtSpike": 47.57,
+        "lag": 2,
+        "scoreAfter": 53.22,
+        "scoreDelta": 5.649999999999999
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1997,
+        "remittanceSpikePct": 640.5201784185227,
+        "scoreAtSpike": 47.57,
+        "lag": 3,
+        "scoreAfter": 54.73,
+        "scoreDelta": 7.159999999999997
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1997,
+        "remittanceSpikePct": 640.5201784185227,
+        "scoreAtSpike": 47.57,
+        "lag": 4,
+        "scoreAfter": 52.07,
+        "scoreDelta": 4.5
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 1997,
+        "remittanceSpikePct": 640.5201784185227,
+        "scoreAtSpike": 47.57,
+        "lag": 5,
+        "scoreAfter": 56.04,
+        "scoreDelta": 8.469999999999999
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 30.381268011426954,
+        "scoreAtSpike": 54.73,
+        "lag": 1,
+        "scoreAfter": 52.07,
+        "scoreDelta": -2.6599999999999966
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 30.381268011426954,
+        "scoreAtSpike": 54.73,
+        "lag": 2,
+        "scoreAfter": 56.04,
+        "scoreDelta": 1.3100000000000023
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 30.381268011426954,
+        "scoreAtSpike": 54.73,
+        "lag": 3,
+        "scoreAfter": 52.69,
+        "scoreDelta": -2.039999999999999
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 30.381268011426954,
+        "scoreAtSpike": 54.73,
+        "lag": 4,
+        "scoreAfter": 54.03,
+        "scoreDelta": -0.6999999999999957
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2000,
+        "remittanceSpikePct": 30.381268011426954,
+        "scoreAtSpike": 54.73,
+        "lag": 5,
+        "scoreAfter": 52.56,
+        "scoreDelta": -2.1699999999999946
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 37.027751312532004,
+        "scoreAtSpike": 52.69,
+        "lag": 1,
+        "scoreAfter": 54.03,
+        "scoreDelta": 1.3400000000000034
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 37.027751312532004,
+        "scoreAtSpike": 52.69,
+        "lag": 2,
+        "scoreAfter": 52.56,
+        "scoreDelta": -0.12999999999999545
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 37.027751312532004,
+        "scoreAtSpike": 52.69,
+        "lag": 3,
+        "scoreAfter": 52.42,
+        "scoreDelta": -0.269999999999996
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 37.027751312532004,
+        "scoreAtSpike": 52.69,
+        "lag": 4,
+        "scoreAfter": 50.07,
+        "scoreDelta": -2.6199999999999974
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2003,
+        "remittanceSpikePct": 37.027751312532004,
+        "scoreAtSpike": 52.69,
+        "lag": 5,
+        "scoreAfter": 51.54,
+        "scoreDelta": -1.1499999999999986
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 47.06705726185832,
+        "scoreAtSpike": 52.56,
+        "lag": 1,
+        "scoreAfter": 52.42,
+        "scoreDelta": -0.14000000000000057
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 47.06705726185832,
+        "scoreAtSpike": 52.56,
+        "lag": 2,
+        "scoreAfter": 50.07,
+        "scoreDelta": -2.490000000000002
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 47.06705726185832,
+        "scoreAtSpike": 52.56,
+        "lag": 3,
+        "scoreAfter": 51.54,
+        "scoreDelta": -1.0200000000000031
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 47.06705726185832,
+        "scoreAtSpike": 52.56,
+        "lag": 4,
+        "scoreAfter": 48.39,
+        "scoreDelta": -4.170000000000002
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2005,
+        "remittanceSpikePct": 47.06705726185832,
+        "scoreAtSpike": 52.56,
+        "lag": 5,
+        "scoreAfter": 47.7,
+        "scoreDelta": -4.859999999999999
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2006,
+        "remittanceSpikePct": 49.17812466164527,
+        "scoreAtSpike": 52.42,
+        "lag": 1,
+        "scoreAfter": 50.07,
+        "scoreDelta": -2.3500000000000014
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2006,
+        "remittanceSpikePct": 49.17812466164527,
+        "scoreAtSpike": 52.42,
+        "lag": 2,
+        "scoreAfter": 51.54,
+        "scoreDelta": -0.8800000000000026
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2006,
+        "remittanceSpikePct": 49.17812466164527,
+        "scoreAtSpike": 52.42,
+        "lag": 3,
+        "scoreAfter": 48.39,
+        "scoreDelta": -4.030000000000001
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2006,
+        "remittanceSpikePct": 49.17812466164527,
+        "scoreAtSpike": 52.42,
+        "lag": 4,
+        "scoreAfter": 47.7,
+        "scoreDelta": -4.719999999999999
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2006,
+        "remittanceSpikePct": 49.17812466164527,
+        "scoreAtSpike": 52.42,
+        "lag": 5,
+        "scoreAfter": 49.57,
+        "scoreDelta": -2.8500000000000014
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2007,
+        "remittanceSpikePct": 52.771642694219565,
+        "scoreAtSpike": 50.07,
+        "lag": 1,
+        "scoreAfter": 51.54,
+        "scoreDelta": 1.4699999999999989
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2007,
+        "remittanceSpikePct": 52.771642694219565,
+        "scoreAtSpike": 50.07,
+        "lag": 2,
+        "scoreAfter": 48.39,
+        "scoreDelta": -1.6799999999999997
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2007,
+        "remittanceSpikePct": 52.771642694219565,
+        "scoreAtSpike": 50.07,
+        "lag": 3,
+        "scoreAfter": 47.7,
+        "scoreDelta": -2.3699999999999974
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2007,
+        "remittanceSpikePct": 52.771642694219565,
+        "scoreAtSpike": 50.07,
+        "lag": 4,
+        "scoreAfter": 49.57,
+        "scoreDelta": -0.5
+      },
+      {
+        "country": "Bolivia",
+        "spikeYear": 2007,
+        "remittanceSpikePct": 52.771642694219565,
+        "scoreAtSpike": 50.07,
+        "lag": 5,
+        "scoreAfter": 47.68,
+        "scoreDelta": -2.3900000000000006
+      }
+    ],
+    "test3_divergenceNightLightsVsScore": [
+      {
+        "country": "Afghanistan",
+        "year": 2015,
+        "nightLightsDropPct": -20.11173184357542,
+        "scoreChange": -1.2800000000000011,
+        "scoreNextYear": 48.97,
+        "score2YearsOut": 49.37,
+        "scoreDelta1Yr": 0.14000000000000057,
+        "scoreDelta2Yr": 0.5399999999999991
+      },
+      {
+        "country": "Albania",
+        "year": 2006,
+        "nightLightsDropPct": -27.65414284077358,
+        "scoreChange": -4.459999999999994,
+        "scoreNextYear": 48.77,
+        "score2YearsOut": 54.1,
+        "scoreDelta1Yr": -1.9299999999999997,
+        "scoreDelta2Yr": 3.3999999999999986
+      },
+      {
+        "country": "Algeria",
+        "year": 2000,
+        "nightLightsDropPct": -40.17068770798479,
+        "scoreChange": -1.5200000000000031,
+        "scoreNextYear": 52.33,
+        "score2YearsOut": 52.56,
+        "scoreDelta1Yr": 0.28999999999999915,
+        "scoreDelta2Yr": 0.5200000000000031
+      },
+      {
+        "country": "Armenia",
+        "year": 2000,
+        "nightLightsDropPct": -47.63924561565578,
+        "scoreChange": 0,
+        "scoreNextYear": 99,
+        "score2YearsOut": 99,
+        "scoreDelta1Yr": 0,
+        "scoreDelta2Yr": 0
+      },
+      {
+        "country": "Azerbaijan",
+        "year": 2007,
+        "nightLightsDropPct": -16.369181062266385,
+        "scoreChange": 1.0899999999999963,
+        "scoreNextYear": 49.49,
+        "score2YearsOut": 50.01,
+        "scoreDelta1Yr": 1.4500000000000028,
+        "scoreDelta2Yr": 1.9699999999999989
+      },
+      {
+        "country": "Azerbaijan",
+        "year": 2009,
+        "nightLightsDropPct": -19.630029529524997,
+        "scoreChange": 0.519999999999996,
+        "scoreNextYear": 51.19,
+        "score2YearsOut": 52.49,
+        "scoreDelta1Yr": 1.1799999999999997,
+        "scoreDelta2Yr": 2.480000000000004
+      },
+      {
+        "country": "Benin",
+        "year": 1996,
+        "nightLightsDropPct": -28.281581739242828,
+        "scoreChange": -1.1199999999999974,
+        "scoreNextYear": 50.6,
+        "score2YearsOut": 50.44,
+        "scoreDelta1Yr": -0.6799999999999997,
+        "scoreDelta2Yr": -0.8400000000000034
+      }
+    ],
+    "test4_convergenceNightLightsAndScore": [],
+    "test5_remittanceLeadsInstitutional": [
+      {
+        "country": "Afghanistan",
+        "remittanceSpikeYear": 2017,
+        "remittanceSpikePct": 26.61737340619966,
+        "lag": 3,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 52.43
+      },
+      {
+        "country": "Albania",
+        "remittanceSpikeYear": 1998,
+        "remittanceSpikePct": 48.07884957010143,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 50.22
+      },
+      {
+        "country": "Albania",
+        "remittanceSpikeYear": 1998,
+        "remittanceSpikePct": 48.07884957010143,
+        "lag": 2,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 50.76
+      },
+      {
+        "country": "Albania",
+        "remittanceSpikeYear": 1998,
+        "remittanceSpikePct": 48.07884957010143,
+        "lag": 3,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 56.03
+      },
+      {
+        "country": "Albania",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 34.49510212528869,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 56.03
+      },
+      {
+        "country": "Albania",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 34.49510212528869,
+        "lag": 2,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 55.56
+      },
+      {
+        "country": "Albania",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 34.49510212528869,
+        "lag": 3,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 55.85
+      },
+      {
+        "country": "Algeria",
+        "remittanceSpikeYear": 1987,
+        "remittanceSpikePct": 29.809600250019514,
+        "lag": 3,
+        "elevatedSignals": [
+          "trade_collapse",
+          "economic_stress"
+        ],
+        "scoreAtLag": 59.75
+      },
+      {
+        "country": "Algeria",
+        "remittanceSpikeYear": 1991,
+        "remittanceSpikePct": 397.4085388970973,
+        "lag": 1,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 57.89
+      },
+      {
+        "country": "Algeria",
+        "remittanceSpikeYear": 1991,
+        "remittanceSpikePct": 397.4085388970973,
+        "lag": 2,
+        "elevatedSignals": [
+          "imf_fiscal",
+          "economic_stress"
+        ],
+        "scoreAtLag": 56.81
+      },
+      {
+        "country": "Algeria",
+        "remittanceSpikeYear": 1991,
+        "remittanceSpikePct": 397.4085388970973,
+        "lag": 3,
+        "elevatedSignals": [
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 53.58
+      },
+      {
+        "country": "Algeria",
+        "remittanceSpikeYear": 1994,
+        "remittanceSpikePct": 43.66022388498554,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance",
+          "imf_fiscal",
+          "trade_collapse"
+        ],
+        "scoreAtLag": 59.34
+      },
+      {
+        "country": "Algeria",
+        "remittanceSpikeYear": 1994,
+        "remittanceSpikePct": 43.66022388498554,
+        "lag": 3,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 56.4
+      },
+      {
+        "country": "Angola",
+        "remittanceSpikeYear": 2012,
+        "remittanceSpikePct": 17132.759884286013,
+        "lag": 2,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 51.68
+      },
+      {
+        "country": "Angola",
+        "remittanceSpikeYear": 2012,
+        "remittanceSpikePct": 17132.759884286013,
+        "lag": 3,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 52.21
+      },
+      {
+        "country": "Angola",
+        "remittanceSpikeYear": 2019,
+        "remittanceSpikePct": 141.8940280479348,
+        "lag": 3,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 49.85
+      },
+      {
+        "country": "Angola",
+        "remittanceSpikeYear": 2020,
+        "remittanceSpikePct": 220.63115175419355,
+        "lag": 2,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 49.85
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 1979,
+        "remittanceSpikePct": 107.7173702385414,
+        "lag": 1,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 56.3
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 1979,
+        "remittanceSpikePct": 107.7173702385414,
+        "lag": 2,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 59.77
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 1989,
+        "remittanceSpikePct": 45.24563675160779,
+        "lag": 1,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 43.89
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 1989,
+        "remittanceSpikePct": 45.24563675160779,
+        "lag": 2,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 44.66
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 1989,
+        "remittanceSpikePct": 45.24563675160779,
+        "lag": 3,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 48.57
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 33.96087186551233,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance",
+          "imf_fiscal",
+          "trade_collapse",
+          "economic_stress"
+        ],
+        "scoreAtLag": 64.62
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 33.96087186551233,
+        "lag": 2,
+        "elevatedSignals": [
+          "governance",
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 52.81
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 33.96087186551233,
+        "lag": 3,
+        "elevatedSignals": [
+          "governance",
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 52.91
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2001,
+        "remittanceSpikePct": 132.26045726913637,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance",
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 52.81
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2001,
+        "remittanceSpikePct": 132.26045726913637,
+        "lag": 2,
+        "elevatedSignals": [
+          "governance",
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 52.91
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2002,
+        "remittanceSpikePct": 199.65132489756297,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance",
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 52.91
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2018,
+        "remittanceSpikePct": 33.498974101684254,
+        "lag": 1,
+        "elevatedSignals": [
+          "imf_fiscal",
+          "economic_stress"
+        ],
+        "scoreAtLag": 53.66
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2018,
+        "remittanceSpikePct": 33.498974101684254,
+        "lag": 3,
+        "elevatedSignals": [
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 48.59
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2019,
+        "remittanceSpikePct": 25.951599006590037,
+        "lag": 2,
+        "elevatedSignals": [
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 48.59
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2019,
+        "remittanceSpikePct": 25.951599006590037,
+        "lag": 3,
+        "elevatedSignals": [
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 54.09
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2020,
+        "remittanceSpikePct": 34.00130798208747,
+        "lag": 1,
+        "elevatedSignals": [
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 48.59
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2020,
+        "remittanceSpikePct": 34.00130798208747,
+        "lag": 2,
+        "elevatedSignals": [
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 54.09
+      },
+      {
+        "country": "Argentina",
+        "remittanceSpikeYear": 2020,
+        "remittanceSpikePct": 34.00130798208747,
+        "lag": 3,
+        "elevatedSignals": [
+          "governance",
+          "imf_fiscal"
+        ],
+        "scoreAtLag": 54.58
+      },
+      {
+        "country": "Armenia",
+        "remittanceSpikeYear": 1996,
+        "remittanceSpikePct": 98.10166892674799,
+        "lag": 1,
+        "elevatedSignals": [
+          "capital_flows"
+        ],
+        "scoreAtLag": 99
+      },
+      {
+        "country": "Armenia",
+        "remittanceSpikeYear": 1996,
+        "remittanceSpikePct": 98.10166892674799,
+        "lag": 2,
+        "elevatedSignals": [
+          "capital_flows"
+        ],
+        "scoreAtLag": 99
+      },
+      {
+        "country": "Armenia",
+        "remittanceSpikeYear": 1996,
+        "remittanceSpikePct": 98.10166892674799,
+        "lag": 3,
+        "elevatedSignals": [
+          "capital_flows"
+        ],
+        "scoreAtLag": 99
+      },
+      {
+        "country": "Armenia",
+        "remittanceSpikeYear": 1997,
+        "remittanceSpikePct": 45.09021148748948,
+        "lag": 1,
+        "elevatedSignals": [
+          "capital_flows"
+        ],
+        "scoreAtLag": 99
+      },
+      {
+        "country": "Armenia",
+        "remittanceSpikeYear": 1997,
+        "remittanceSpikePct": 45.09021148748948,
+        "lag": 2,
+        "elevatedSignals": [
+          "capital_flows"
+        ],
+        "scoreAtLag": 99
+      },
+      {
+        "country": "Armenia",
+        "remittanceSpikeYear": 1997,
+        "remittanceSpikePct": 45.09021148748948,
+        "lag": 3,
+        "elevatedSignals": [
+          "capital_flows"
+        ],
+        "scoreAtLag": 99
+      },
+      {
+        "country": "Armenia",
+        "remittanceSpikeYear": 2004,
+        "remittanceSpikePct": 84.02747489511343,
+        "lag": 1,
+        "elevatedSignals": [
+          "capital_flows"
+        ],
+        "scoreAtLag": 99
+      },
+      {
+        "country": "Australia",
+        "remittanceSpikeYear": 1983,
+        "remittanceSpikePct": 27.793515301923065,
+        "lag": 3,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 57.06
+      },
+      {
+        "country": "Australia",
+        "remittanceSpikeYear": 1987,
+        "remittanceSpikePct": 27.65063432556672,
+        "lag": 3,
+        "elevatedSignals": [
+          "trade_collapse",
+          "economic_stress"
+        ],
+        "scoreAtLag": 59.04
+      },
+      {
+        "country": "Australia",
+        "remittanceSpikeYear": 2022,
+        "remittanceSpikePct": 32.35258776147422,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance",
+          "economic_stress"
+        ],
+        "scoreAtLag": 54.02
+      },
+      {
+        "country": "Australia",
+        "remittanceSpikeYear": 2023,
+        "remittanceSpikePct": 30.193867821093384,
+        "lag": 3,
+        "elevatedSignals": [
+          "seismic_risk"
+        ],
+        "scoreAtLag": 14
+      },
+      {
+        "country": "Austria",
+        "remittanceSpikeYear": 1971,
+        "remittanceSpikePct": 28.5773920264229,
+        "lag": 3,
+        "elevatedSignals": [
+          "trade_collapse",
+          "economic_stress"
+        ],
+        "scoreAtLag": 60.06
+      },
+      {
+        "country": "Austria",
+        "remittanceSpikeYear": 1974,
+        "remittanceSpikePct": 29.09309495693908,
+        "lag": 3,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 57.7
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 1999,
+        "remittanceSpikePct": 740.2869385327593,
+        "lag": 1,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 56.37
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 1999,
+        "remittanceSpikePct": 740.2869385327593,
+        "lag": 2,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 48.3
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 1999,
+        "remittanceSpikePct": 740.2869385327593,
+        "lag": 3,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 54.05
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 2001,
+        "remittanceSpikePct": 68.36311217432163,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 54.05
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 2001,
+        "remittanceSpikePct": 68.36311217432163,
+        "lag": 2,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 55.77
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 2001,
+        "remittanceSpikePct": 68.36311217432163,
+        "lag": 3,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 51.49
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 2002,
+        "remittanceSpikePct": 43.55519871077433,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 55.77
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 2002,
+        "remittanceSpikePct": 43.55519871077433,
+        "lag": 2,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 51.49
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 2002,
+        "remittanceSpikePct": 43.55519871077433,
+        "lag": 3,
+        "elevatedSignals": [
+          "governance",
+          "power_grid"
+        ],
+        "scoreAtLag": 46.59
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 2005,
+        "remittanceSpikePct": 100.62969881881033,
+        "lag": 1,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 46.95
+      },
+      {
+        "country": "Azerbaijan",
+        "remittanceSpikeYear": 2017,
+        "remittanceSpikePct": 63.287612390527336,
+        "lag": 2,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 53.06
+      },
+      {
+        "country": "Bangladesh",
+        "remittanceSpikeYear": 1977,
+        "remittanceSpikePct": 340.7119525473747,
+        "lag": 2,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 51.58
+      },
+      {
+        "country": "Bangladesh",
+        "remittanceSpikeYear": 1977,
+        "remittanceSpikePct": 340.7119525473747,
+        "lag": 3,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 58.14
+      },
+      {
+        "country": "Bangladesh",
+        "remittanceSpikeYear": 1979,
+        "remittanceSpikePct": 26.50353610036314,
+        "lag": 1,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 58.14
+      },
+      {
+        "country": "Bangladesh",
+        "remittanceSpikeYear": 1979,
+        "remittanceSpikePct": 26.50353610036314,
+        "lag": 2,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 54.2
+      },
+      {
+        "country": "Bangladesh",
+        "remittanceSpikeYear": 1980,
+        "remittanceSpikePct": 69.82290919391787,
+        "lag": 1,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 54.2
+      },
+      {
+        "country": "Bangladesh",
+        "remittanceSpikeYear": 2002,
+        "remittanceSpikePct": 33.98515208012876,
+        "lag": 2,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 49.49
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 1996,
+        "remittanceSpikePct": 215.4536030297523,
+        "lag": 3,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 52.07
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 1999,
+        "remittanceSpikePct": 44.24821986603395,
+        "lag": 1,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 53.98
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 1999,
+        "remittanceSpikePct": 44.24821986603395,
+        "lag": 2,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 51.52
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 1999,
+        "remittanceSpikePct": 44.24821986603395,
+        "lag": 3,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 47.25
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 75.54024015323513,
+        "lag": 1,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 51.52
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 75.54024015323513,
+        "lag": 2,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 47.25
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 75.54024015323513,
+        "lag": 3,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 51.28
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 2003,
+        "remittanceSpikePct": 66.69950768544618,
+        "lag": 1,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 51.12
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 2003,
+        "remittanceSpikePct": 66.69950768544618,
+        "lag": 2,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 49.51
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 2003,
+        "remittanceSpikePct": 66.69950768544618,
+        "lag": 3,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 49.99
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 2008,
+        "remittanceSpikePct": 50.78261907003279,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 52.27
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 2008,
+        "remittanceSpikePct": 50.78261907003279,
+        "lag": 2,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 51.79
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 2011,
+        "remittanceSpikePct": 43.45063523550356,
+        "lag": 3,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 54.49
+      },
+      {
+        "country": "Belarus",
+        "remittanceSpikeYear": 2022,
+        "remittanceSpikePct": 28.63461928757993,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 55.85
+      },
+      {
+        "country": "Belgium",
+        "remittanceSpikeYear": 1989,
+        "remittanceSpikePct": 89.1157216676991,
+        "lag": 3,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 55.38
+      },
+      {
+        "country": "Benin",
+        "remittanceSpikeYear": 1975,
+        "remittanceSpikePct": 95.25743374648664,
+        "lag": 2,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 54.41
+      },
+      {
+        "country": "Benin",
+        "remittanceSpikeYear": 1976,
+        "remittanceSpikePct": 54.4791352772623,
+        "lag": 1,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 54.41
+      },
+      {
+        "country": "Benin",
+        "remittanceSpikeYear": 1983,
+        "remittanceSpikePct": 37.341276032165254,
+        "lag": 2,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 57.01
+      },
+      {
+        "country": "Benin",
+        "remittanceSpikeYear": 1983,
+        "remittanceSpikePct": 37.341276032165254,
+        "lag": 3,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 61.03
+      },
+      {
+        "country": "Benin",
+        "remittanceSpikeYear": 1992,
+        "remittanceSpikePct": 35.384380846816875,
+        "lag": 3,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 52.4
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1980,
+        "remittanceSpikePct": 36.41649911632569,
+        "lag": 1,
+        "elevatedSignals": [
+          "trade_collapse",
+          "economic_stress"
+        ],
+        "scoreAtLag": 70.71
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1980,
+        "remittanceSpikePct": 36.41649911632569,
+        "lag": 2,
+        "elevatedSignals": [
+          "trade_collapse",
+          "economic_stress"
+        ],
+        "scoreAtLag": 66.78
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1980,
+        "remittanceSpikePct": 36.41649911632569,
+        "lag": 3,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 49.37
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1981,
+        "remittanceSpikePct": 158.55404768521785,
+        "lag": 1,
+        "elevatedSignals": [
+          "trade_collapse",
+          "economic_stress"
+        ],
+        "scoreAtLag": 66.78
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1981,
+        "remittanceSpikePct": 158.55404768521785,
+        "lag": 2,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 49.37
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1981,
+        "remittanceSpikePct": 158.55404768521785,
+        "lag": 3,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 52.38
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1983,
+        "remittanceSpikePct": 91.04091276661168,
+        "lag": 1,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 52.38
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1983,
+        "remittanceSpikePct": 91.04091276661168,
+        "lag": 2,
+        "elevatedSignals": [
+          "economic_stress"
+        ],
+        "scoreAtLag": 57.49
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1989,
+        "remittanceSpikePct": 84.14817262497711,
+        "lag": 2,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 55.1
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1989,
+        "remittanceSpikePct": 84.14817262497711,
+        "lag": 3,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 55.06
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1996,
+        "remittanceSpikePct": 79.88454956582223,
+        "lag": 2,
+        "elevatedSignals": [
+          "trade_collapse",
+          "economic_stress"
+        ],
+        "scoreAtLag": 59.74
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 1997,
+        "remittanceSpikePct": 640.5201784185227,
+        "lag": 1,
+        "elevatedSignals": [
+          "trade_collapse",
+          "economic_stress"
+        ],
+        "scoreAtLag": 59.74
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 30.381268011426954,
+        "lag": 1,
+        "elevatedSignals": [
+          "power_grid"
+        ],
+        "scoreAtLag": 52.07
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 30.381268011426954,
+        "lag": 2,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 56.04
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 2000,
+        "remittanceSpikePct": 30.381268011426954,
+        "lag": 3,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 52.69
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 2003,
+        "remittanceSpikePct": 37.027751312532004,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 54.03
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 2003,
+        "remittanceSpikePct": 37.027751312532004,
+        "lag": 2,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 52.56
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 2003,
+        "remittanceSpikePct": 37.027751312532004,
+        "lag": 3,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 52.42
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 2005,
+        "remittanceSpikePct": 47.06705726185832,
+        "lag": 1,
+        "elevatedSignals": [
+          "governance"
+        ],
+        "scoreAtLag": 52.42
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 2005,
+        "remittanceSpikePct": 47.06705726185832,
+        "lag": 3,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 51.54
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 2006,
+        "remittanceSpikePct": 49.17812466164527,
+        "lag": 2,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 51.54
+      },
+      {
+        "country": "Bolivia",
+        "remittanceSpikeYear": 2007,
+        "remittanceSpikePct": 52.771642694219565,
+        "lag": 1,
+        "elevatedSignals": [
+          "trade_collapse"
+        ],
+        "scoreAtLag": 51.54
+      }
+    ],
+    "test6_highRemittanceBaseline": [
+      {
+        "country": "Albania",
+        "medianRemittance": 13.1267801276088,
+        "yearsOfData": 33,
+        "avgScore": 51.68733333333333,
+        "maxScore": 76.22,
+        "pattern": "chronic_high_remittance"
+      },
+      {
+        "country": "Armenia",
+        "medianRemittance": 13.1074628255062,
+        "yearsOfData": 30,
+        "avgScore": 78.87424242424242,
+        "maxScore": 99,
+        "pattern": "chronic_high_remittance"
+      }
+    ]
+  },
+  "summary": {
+    "nightLightsDropLeadsScore": {
+      "pattern": "Night Lights Drop → Score Movement",
+      "sampleSize": 40,
+      "summary": null,
+      "distribution": {},
+      "examples": [
+        {
+          "country": "Afghanistan",
+          "dropYear": 2015,
+          "nightLightsDropPct": -20.11173184357542,
+          "scoreAtDrop": 48.83,
+          "lag": 1,
+          "scoreAfter": 48.97,
+          "scoreDelta": 0.14000000000000057
+        },
+        {
+          "country": "Afghanistan",
+          "dropYear": 2015,
+          "nightLightsDropPct": -20.11173184357542,
+          "scoreAtDrop": 48.83,
+          "lag": 2,
+          "scoreAfter": 49.37,
+          "scoreDelta": 0.5399999999999991
+        },
+        {
+          "country": "Afghanistan",
+          "dropYear": 2015,
+          "nightLightsDropPct": -20.11173184357542,
+          "scoreAtDrop": 48.83,
+          "lag": 3,
+          "scoreAfter": 49.09,
+          "scoreDelta": 0.2600000000000051
+        },
+        {
+          "country": "Afghanistan",
+          "dropYear": 2015,
+          "nightLightsDropPct": -20.11173184357542,
+          "scoreAtDrop": 48.83,
+          "lag": 4,
+          "scoreAfter": 49.18,
+          "scoreDelta": 0.3500000000000014
+        },
+        {
+          "country": "Afghanistan",
+          "dropYear": 2015,
+          "nightLightsDropPct": -20.11173184357542,
+          "scoreAtDrop": 48.83,
+          "lag": 5,
+          "scoreAfter": 52.43,
+          "scoreDelta": 3.6000000000000014
+        },
+        {
+          "country": "Albania",
+          "dropYear": 1997,
+          "nightLightsDropPct": -20.87743704380608,
+          "scoreAtDrop": 50.98,
+          "lag": 1,
+          "scoreAfter": 43.04,
+          "scoreDelta": -7.939999999999998
+        },
+        {
+          "country": "Albania",
+          "dropYear": 1997,
+          "nightLightsDropPct": -20.87743704380608,
+          "scoreAtDrop": 50.98,
+          "lag": 2,
+          "scoreAfter": 50.22,
+          "scoreDelta": -0.759999999999998
+        },
+        {
+          "country": "Albania",
+          "dropYear": 1997,
+          "nightLightsDropPct": -20.87743704380608,
+          "scoreAtDrop": 50.98,
+          "lag": 3,
+          "scoreAfter": 50.76,
+          "scoreDelta": -0.21999999999999886
+        },
+        {
+          "country": "Albania",
+          "dropYear": 1997,
+          "nightLightsDropPct": -20.87743704380608,
+          "scoreAtDrop": 50.98,
+          "lag": 4,
+          "scoreAfter": 56.03,
+          "scoreDelta": 5.050000000000004
+        },
+        {
+          "country": "Albania",
+          "dropYear": 1997,
+          "nightLightsDropPct": -20.87743704380608,
+          "scoreAtDrop": 50.98,
+          "lag": 5,
+          "scoreAfter": 55.56,
+          "scoreDelta": 4.580000000000005
+        }
+      ]
+    },
+    "remittanceSpikeLeadsScore": {
+      "pattern": "Remittance Spike → Score Movement",
+      "sampleSize": 334,
+      "summary": null,
+      "distribution": {},
+      "examples": [
+        {
+          "country": "Afghanistan",
+          "spikeYear": 2010,
+          "remittanceSpikePct": 110.48690848248964,
+          "scoreAtSpike": 50.57,
+          "lag": 1,
+          "scoreAfter": 47.97,
+          "scoreDelta": -2.6000000000000014
+        },
+        {
+          "country": "Afghanistan",
+          "spikeYear": 2010,
+          "remittanceSpikePct": 110.48690848248964,
+          "scoreAtSpike": 50.57,
+          "lag": 2,
+          "scoreAfter": 49.67,
+          "scoreDelta": -0.8999999999999986
+        },
+        {
+          "country": "Afghanistan",
+          "spikeYear": 2010,
+          "remittanceSpikePct": 110.48690848248964,
+          "scoreAtSpike": 50.57,
+          "lag": 3,
+          "scoreAfter": 47.83,
+          "scoreDelta": -2.740000000000002
+        },
+        {
+          "country": "Afghanistan",
+          "spikeYear": 2010,
+          "remittanceSpikePct": 110.48690848248964,
+          "scoreAtSpike": 50.57,
+          "lag": 4,
+          "scoreAfter": 50.11,
+          "scoreDelta": -0.46000000000000085
+        },
+        {
+          "country": "Afghanistan",
+          "spikeYear": 2010,
+          "remittanceSpikePct": 110.48690848248964,
+          "scoreAtSpike": 50.57,
+          "lag": 5,
+          "scoreAfter": 48.83,
+          "scoreDelta": -1.740000000000002
+        },
+        {
+          "country": "Afghanistan",
+          "spikeYear": 2013,
+          "remittanceSpikePct": 56.34465200335001,
+          "scoreAtSpike": 47.83,
+          "lag": 1,
+          "scoreAfter": 50.11,
+          "scoreDelta": 2.280000000000001
+        },
+        {
+          "country": "Afghanistan",
+          "spikeYear": 2013,
+          "remittanceSpikePct": 56.34465200335001,
+          "scoreAtSpike": 47.83,
+          "lag": 2,
+          "scoreAfter": 48.83,
+          "scoreDelta": 1
+        },
+        {
+          "country": "Afghanistan",
+          "spikeYear": 2013,
+          "remittanceSpikePct": 56.34465200335001,
+          "scoreAtSpike": 47.83,
+          "lag": 3,
+          "scoreAfter": 48.97,
+          "scoreDelta": 1.1400000000000006
+        },
+        {
+          "country": "Afghanistan",
+          "spikeYear": 2013,
+          "remittanceSpikePct": 56.34465200335001,
+          "scoreAtSpike": 47.83,
+          "lag": 4,
+          "scoreAfter": 49.37,
+          "scoreDelta": 1.5399999999999991
+        },
+        {
+          "country": "Afghanistan",
+          "spikeYear": 2013,
+          "remittanceSpikePct": 56.34465200335001,
+          "scoreAtSpike": 47.83,
+          "lag": 5,
+          "scoreAfter": 49.09,
+          "scoreDelta": 1.2600000000000051
+        }
+      ]
+    },
+    "divergenceNightLightsVsScore": {
+      "pattern": "Night Lights Drop + Score Stable → What Follows",
+      "sampleSize": 7,
+      "summary": null,
+      "distribution": {},
+      "examples": [
+        {
+          "country": "Afghanistan",
+          "year": 2015,
+          "nightLightsDropPct": -20.11173184357542,
+          "scoreChange": -1.2800000000000011,
+          "scoreNextYear": 48.97,
+          "score2YearsOut": 49.37,
+          "scoreDelta1Yr": 0.14000000000000057,
+          "scoreDelta2Yr": 0.5399999999999991
+        },
+        {
+          "country": "Albania",
+          "year": 2006,
+          "nightLightsDropPct": -27.65414284077358,
+          "scoreChange": -4.459999999999994,
+          "scoreNextYear": 48.77,
+          "score2YearsOut": 54.1,
+          "scoreDelta1Yr": -1.9299999999999997,
+          "scoreDelta2Yr": 3.3999999999999986
+        },
+        {
+          "country": "Algeria",
+          "year": 2000,
+          "nightLightsDropPct": -40.17068770798479,
+          "scoreChange": -1.5200000000000031,
+          "scoreNextYear": 52.33,
+          "score2YearsOut": 52.56,
+          "scoreDelta1Yr": 0.28999999999999915,
+          "scoreDelta2Yr": 0.5200000000000031
+        },
+        {
+          "country": "Armenia",
+          "year": 2000,
+          "nightLightsDropPct": -47.63924561565578,
+          "scoreChange": 0,
+          "scoreNextYear": 99,
+          "score2YearsOut": 99,
+          "scoreDelta1Yr": 0,
+          "scoreDelta2Yr": 0
+        },
+        {
+          "country": "Azerbaijan",
+          "year": 2007,
+          "nightLightsDropPct": -16.369181062266385,
+          "scoreChange": 1.0899999999999963,
+          "scoreNextYear": 49.49,
+          "score2YearsOut": 50.01,
+          "scoreDelta1Yr": 1.4500000000000028,
+          "scoreDelta2Yr": 1.9699999999999989
+        },
+        {
+          "country": "Azerbaijan",
+          "year": 2009,
+          "nightLightsDropPct": -19.630029529524997,
+          "scoreChange": 0.519999999999996,
+          "scoreNextYear": 51.19,
+          "score2YearsOut": 52.49,
+          "scoreDelta1Yr": 1.1799999999999997,
+          "scoreDelta2Yr": 2.480000000000004
+        },
+        {
+          "country": "Benin",
+          "year": 1996,
+          "nightLightsDropPct": -28.281581739242828,
+          "scoreChange": -1.1199999999999974,
+          "scoreNextYear": 50.6,
+          "score2YearsOut": 50.44,
+          "scoreDelta1Yr": -0.6799999999999997,
+          "scoreDelta2Yr": -0.8400000000000034
+        }
+      ]
+    },
+    "convergenceNightLightsAndScore": {
+      "pattern": "Night Lights Drop + Score Rise (Simultaneous)",
+      "sampleSize": 0,
+      "summary": "No instances found in historical record",
+      "distribution": {},
+      "examples": []
+    },
+    "remittanceLeadsInstitutional": {
+      "pattern": "Remittance Spike → Institutional Signal Elevation",
+      "sampleSize": 107,
+      "summary": null,
+      "distribution": {},
+      "examples": [
+        {
+          "country": "Afghanistan",
+          "remittanceSpikeYear": 2017,
+          "remittanceSpikePct": 26.61737340619966,
+          "lag": 3,
+          "elevatedSignals": [
+            "economic_stress"
+          ],
+          "scoreAtLag": 52.43
+        },
+        {
+          "country": "Albania",
+          "remittanceSpikeYear": 1998,
+          "remittanceSpikePct": 48.07884957010143,
+          "lag": 1,
+          "elevatedSignals": [
+            "governance",
+            "power_grid"
+          ],
+          "scoreAtLag": 50.22
+        },
+        {
+          "country": "Albania",
+          "remittanceSpikeYear": 1998,
+          "remittanceSpikePct": 48.07884957010143,
+          "lag": 2,
+          "elevatedSignals": [
+            "power_grid"
+          ],
+          "scoreAtLag": 50.76
+        },
+        {
+          "country": "Albania",
+          "remittanceSpikeYear": 1998,
+          "remittanceSpikePct": 48.07884957010143,
+          "lag": 3,
+          "elevatedSignals": [
+            "governance",
+            "power_grid"
+          ],
+          "scoreAtLag": 56.03
+        },
+        {
+          "country": "Albania",
+          "remittanceSpikeYear": 2000,
+          "remittanceSpikePct": 34.49510212528869,
+          "lag": 1,
+          "elevatedSignals": [
+            "governance",
+            "power_grid"
+          ],
+          "scoreAtLag": 56.03
+        },
+        {
+          "country": "Albania",
+          "remittanceSpikeYear": 2000,
+          "remittanceSpikePct": 34.49510212528869,
+          "lag": 2,
+          "elevatedSignals": [
+            "power_grid"
+          ],
+          "scoreAtLag": 55.56
+        },
+        {
+          "country": "Albania",
+          "remittanceSpikeYear": 2000,
+          "remittanceSpikePct": 34.49510212528869,
+          "lag": 3,
+          "elevatedSignals": [
+            "governance",
+            "power_grid"
+          ],
+          "scoreAtLag": 55.85
+        },
+        {
+          "country": "Algeria",
+          "remittanceSpikeYear": 1987,
+          "remittanceSpikePct": 29.809600250019514,
+          "lag": 3,
+          "elevatedSignals": [
+            "trade_collapse",
+            "economic_stress"
+          ],
+          "scoreAtLag": 59.75
+        },
+        {
+          "country": "Algeria",
+          "remittanceSpikeYear": 1991,
+          "remittanceSpikePct": 397.4085388970973,
+          "lag": 1,
+          "elevatedSignals": [
+            "economic_stress"
+          ],
+          "scoreAtLag": 57.89
+        },
+        {
+          "country": "Algeria",
+          "remittanceSpikeYear": 1991,
+          "remittanceSpikePct": 397.4085388970973,
+          "lag": 2,
+          "elevatedSignals": [
+            "imf_fiscal",
+            "economic_stress"
+          ],
+          "scoreAtLag": 56.81
+        }
+      ]
+    },
+    "highRemittanceBaseline": {
+      "pattern": "Chronic High Remittance Countries",
+      "sampleSize": 2,
+      "summary": null,
+      "distribution": {},
+      "examples": [
+        {
+          "country": "Albania",
+          "medianRemittance": 13.1267801276088,
+          "yearsOfData": 33,
+          "avgScore": 51.68733333333333,
+          "maxScore": 76.22,
+          "pattern": "chronic_high_remittance"
+        },
+        {
+          "country": "Armenia",
+          "medianRemittance": 13.1074628255062,
+          "yearsOfData": 30,
+          "avgScore": 78.87424242424242,
+          "maxScore": 99,
+          "pattern": "chronic_high_remittance"
+        }
+      ]
+    }
+  }
+}

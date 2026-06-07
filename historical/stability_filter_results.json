@@ -1,0 +1,3177 @@
+{
+  "noise": [
+    {
+      "country": "Afghanistan",
+      "crossingYear": 1971,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 18.93,
+        "scoreBefore": 45.37,
+        "scoreAfter": 64.3
+      }
+    },
+    {
+      "country": "Albania",
+      "crossingYear": 1983,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 3.4399999999999977,
+        "scoreBefore": 56.74,
+        "scoreAfter": 60.18
+      }
+    },
+    {
+      "country": "Albania",
+      "crossingYear": 1987,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 0.9299999999999997,
+        "scoreBefore": 59.48,
+        "scoreAfter": 60.41
+      }
+    },
+    {
+      "country": "Albania",
+      "crossingYear": 1989,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 17.130000000000003,
+        "scoreBefore": 43.98,
+        "scoreAfter": 61.11
+      }
+    },
+    {
+      "country": "Albania",
+      "crossingYear": 1996,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 17.53,
+        "scoreBefore": 44.42,
+        "scoreAfter": 61.95
+      }
+    },
+    {
+      "country": "Algeria",
+      "crossingYear": 1986,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 2.520000000000003,
+        "scoreBefore": 59.25,
+        "scoreAfter": 61.77
+      }
+    },
+    {
+      "country": "Argentina",
+      "crossingYear": 1981,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 3.0800000000000054,
+        "scoreBefore": 57.12,
+        "scoreAfter": 60.2
+      }
+    },
+    {
+      "country": "Armenia",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 52.99,
+        "scoreBefore": 46.01,
+        "scoreAfter": 99
+      }
+    },
+    {
+      "country": "Australia",
+      "crossingYear": 1961,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 12.330000000000005,
+        "scoreBefore": 51.55,
+        "scoreAfter": 63.88
+      }
+    },
+    {
+      "country": "Australia",
+      "crossingYear": 1977,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 11.04,
+        "scoreBefore": 49.25,
+        "scoreAfter": 60.29
+      }
+    },
+    {
+      "country": "Australia",
+      "crossingYear": 1982,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 19.479999999999997,
+        "scoreBefore": 48.51,
+        "scoreAfter": 67.99
+      }
+    },
+    {
+      "country": "Austria",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.670000000000002,
+        "scoreBefore": 52.96,
+        "scoreAfter": 60.63
+      }
+    },
+    {
+      "country": "Austria",
+      "crossingYear": 2023,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 3.8100000000000023,
+        "scoreBefore": 56.89,
+        "scoreAfter": 60.7
+      }
+    },
+    {
+      "country": "Bahrain",
+      "crossingYear": 1974,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 44.77,
+        "scoreBefore": 39.23,
+        "scoreAfter": 84
+      }
+    },
+    {
+      "country": "Bahrain",
+      "crossingYear": 1980,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 20.430000000000007,
+        "scoreBefore": 54.47,
+        "scoreAfter": 74.9
+      }
+    },
+    {
+      "country": "Bahrain",
+      "crossingYear": 1988,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 17.160000000000004,
+        "scoreBefore": 43.04,
+        "scoreAfter": 60.2
+      }
+    },
+    {
+      "country": "Bangladesh",
+      "crossingYear": 1970,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 22.85,
+        "scoreBefore": 47.99,
+        "scoreAfter": 70.84
+      }
+    },
+    {
+      "country": "Belarus",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 14.39,
+        "scoreBefore": 47.41,
+        "scoreAfter": 61.8
+      }
+    },
+    {
+      "country": "Belgium",
+      "crossingYear": 1974,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 17.459999999999994,
+        "scoreBefore": 47.89,
+        "scoreAfter": 65.35
+      }
+    },
+    {
+      "country": "Benin",
+      "crossingYear": 1961,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 3.8299999999999983,
+        "scoreBefore": 56.27,
+        "scoreAfter": 60.1
+      }
+    },
+    {
+      "country": "Benin",
+      "crossingYear": 1974,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 9.229999999999997,
+        "scoreBefore": 52.95,
+        "scoreAfter": 62.18
+      }
+    },
+    {
+      "country": "Benin",
+      "crossingYear": 1982,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 8.550000000000004,
+        "scoreBefore": 58.68,
+        "scoreAfter": 67.23
+      }
+    },
+    {
+      "country": "Benin",
+      "crossingYear": 1986,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 3.5700000000000003,
+        "scoreBefore": 57.01,
+        "scoreAfter": 60.58
+      }
+    },
+    {
+      "country": "Bolivia",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 6.789999999999999,
+        "scoreBefore": 53.65,
+        "scoreAfter": 60.44
+      }
+    },
+    {
+      "country": "Bosnia",
+      "crossingYear": 1990,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 10.909999999999997,
+        "scoreBefore": 50,
+        "scoreAfter": 60.91
+      }
+    },
+    {
+      "country": "Bosnia",
+      "crossingYear": 2008,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 14.71,
+        "scoreBefore": 50.38,
+        "scoreAfter": 65.09
+      }
+    },
+    {
+      "country": "Bulgaria",
+      "crossingYear": 1988,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_to_baseline_3yr",
+        "delta": 12.950000000000003,
+        "scoreBefore": 50.01,
+        "scoreAfter": 62.96
+      }
+    },
+    {
+      "country": "Burundi",
+      "crossingYear": 1960,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 22.930000000000007,
+        "scoreBefore": 55.33,
+        "scoreAfter": 78.26
+      }
+    },
+    {
+      "country": "Burundi",
+      "crossingYear": 1992,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 9.649999999999999,
+        "scoreBefore": 53.96,
+        "scoreAfter": 63.61
+      }
+    },
+    {
+      "country": "Cambodia",
+      "crossingYear": 1974,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 9.259999999999998,
+        "scoreBefore": 52.03,
+        "scoreAfter": 61.29
+      }
+    },
+    {
+      "country": "Cambodia",
+      "crossingYear": 1993,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 21.65,
+        "scoreBefore": 53.96,
+        "scoreAfter": 75.61
+      }
+    },
+    {
+      "country": "Cameroon",
+      "crossingYear": 1966,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 26.620000000000005,
+        "scoreBefore": 50.67,
+        "scoreAfter": 77.29
+      }
+    },
+    {
+      "country": "Cameroon",
+      "crossingYear": 1975,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 24.57,
+        "scoreBefore": 39.33,
+        "scoreAfter": 63.9
+      }
+    },
+    {
+      "country": "Canada",
+      "crossingYear": 1967,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 2.740000000000002,
+        "scoreBefore": 57.39,
+        "scoreAfter": 60.13
+      }
+    },
+    {
+      "country": "CAR",
+      "crossingYear": 2021,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 53.42,
+        "scoreBefore": 45.58,
+        "scoreAfter": 99
+      }
+    },
+    {
+      "country": "Central African Republic",
+      "crossingYear": 1990,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.980000000000004,
+        "scoreBefore": 53.94,
+        "scoreAfter": 61.92
+      }
+    },
+    {
+      "country": "Chad",
+      "crossingYear": 1978,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 13.130000000000003,
+        "scoreBefore": 53.62,
+        "scoreAfter": 66.75
+      }
+    },
+    {
+      "country": "Chile",
+      "crossingYear": 1972,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 6.25,
+        "scoreBefore": 56.05,
+        "scoreAfter": 62.3
+      }
+    },
+    {
+      "country": "Chile",
+      "crossingYear": 1981,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 27.029999999999994,
+        "scoreBefore": 47.96,
+        "scoreAfter": 74.99
+      }
+    },
+    {
+      "country": "China",
+      "crossingYear": 1960,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 40.36,
+        "scoreBefore": 58.64,
+        "scoreAfter": 99
+      }
+    },
+    {
+      "country": "China",
+      "crossingYear": 1966,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 23.459999999999994,
+        "scoreBefore": 49.06,
+        "scoreAfter": 72.52
+      }
+    },
+    {
+      "country": "China",
+      "crossingYear": 1973,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.789999999999999,
+        "scoreBefore": 53.19,
+        "scoreAfter": 60.98
+      }
+    },
+    {
+      "country": "China",
+      "crossingYear": 1975,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 14.699999999999996,
+        "scoreBefore": 51.82,
+        "scoreAfter": 66.52
+      }
+    },
+    {
+      "country": "Congo",
+      "crossingYear": 1985,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 9.350000000000001,
+        "scoreBefore": 53.51,
+        "scoreAfter": 62.86
+      }
+    },
+    {
+      "country": "Congo",
+      "crossingYear": 1991,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 29.130000000000003,
+        "scoreBefore": 32.14,
+        "scoreAfter": 61.27
+      }
+    },
+    {
+      "country": "Costa Rica",
+      "crossingYear": 1980,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 11.63000000000001,
+        "scoreBefore": 58.55,
+        "scoreAfter": 70.18
+      }
+    },
+    {
+      "country": "Croatia",
+      "crossingYear": 1990,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 18.950000000000003,
+        "scoreBefore": 50,
+        "scoreAfter": 68.95
+      }
+    },
+    {
+      "country": "Cuba",
+      "crossingYear": 1990,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 16.549999999999997,
+        "scoreBefore": 56.69,
+        "scoreAfter": 73.24
+      }
+    },
+    {
+      "country": "Dominican Republic",
+      "crossingYear": 1964,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 26.509999999999998,
+        "scoreBefore": 47.37,
+        "scoreAfter": 73.88
+      }
+    },
+    {
+      "country": "Dominican Republic",
+      "crossingYear": 1989,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 14.350000000000001,
+        "scoreBefore": 48.01,
+        "scoreAfter": 62.36
+      }
+    },
+    {
+      "country": "Ecuador",
+      "crossingYear": 1982,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 8.11,
+        "scoreBefore": 53.58,
+        "scoreAfter": 61.69
+      }
+    },
+    {
+      "country": "Ecuador",
+      "crossingYear": 1998,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 13.06000000000001,
+        "scoreBefore": 51.98,
+        "scoreAfter": 65.04
+      }
+    },
+    {
+      "country": "Egypt",
+      "crossingYear": 1967,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 4.6100000000000065,
+        "scoreBefore": 57.23,
+        "scoreAfter": 61.84
+      }
+    },
+    {
+      "country": "El Salvador",
+      "crossingYear": 1978,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 17.380000000000003,
+        "scoreBefore": 46.55,
+        "scoreAfter": 63.93
+      }
+    },
+    {
+      "country": "Ethiopia",
+      "crossingYear": 1972,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 17.86,
+        "scoreBefore": 46.42,
+        "scoreAfter": 64.28
+      }
+    },
+    {
+      "country": "Ethiopia",
+      "crossingYear": 1978,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 28.580000000000005,
+        "scoreBefore": 53.57,
+        "scoreAfter": 82.15
+      }
+    },
+    {
+      "country": "Fiji",
+      "crossingYear": 1981,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 16.79,
+        "scoreBefore": 45.25,
+        "scoreAfter": 62.04
+      }
+    },
+    {
+      "country": "Fiji",
+      "crossingYear": 1984,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 17.75,
+        "scoreBefore": 42.43,
+        "scoreAfter": 60.18
+      }
+    },
+    {
+      "country": "Fiji",
+      "crossingYear": 1986,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 19.599999999999994,
+        "scoreBefore": 43.31,
+        "scoreAfter": 62.91
+      }
+    },
+    {
+      "country": "Finland",
+      "crossingYear": 1990,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 8.89,
+        "scoreBefore": 53.21,
+        "scoreAfter": 62.1
+      }
+    },
+    {
+      "country": "France",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 10.350000000000001,
+        "scoreBefore": 52.6,
+        "scoreAfter": 62.95
+      }
+    },
+    {
+      "country": "Gabon",
+      "crossingYear": 1976,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 33.86,
+        "scoreBefore": 29.51,
+        "scoreAfter": 63.37
+      }
+    },
+    {
+      "country": "Gabon",
+      "crossingYear": 1986,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 18.409999999999997,
+        "scoreBefore": 56.53,
+        "scoreAfter": 74.94
+      }
+    },
+    {
+      "country": "Gabon",
+      "crossingYear": 1998,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 20.03000000000001,
+        "scoreBefore": 44.48,
+        "scoreAfter": 64.51
+      }
+    },
+    {
+      "country": "Gambia",
+      "crossingYear": 1994,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 3.259999999999998,
+        "scoreBefore": 58.45,
+        "scoreAfter": 61.71
+      }
+    },
+    {
+      "country": "Gambia",
+      "crossingYear": 2012,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 0.3999999999999986,
+        "scoreBefore": 59.76,
+        "scoreAfter": 60.16
+      }
+    },
+    {
+      "country": "Georgia",
+      "crossingYear": 1985,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 24.39,
+        "scoreBefore": 50.95,
+        "scoreAfter": 75.34
+      }
+    },
+    {
+      "country": "Germany",
+      "crossingYear": 2023,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 6.469999999999999,
+        "scoreBefore": 57.09,
+        "scoreAfter": 63.56
+      }
+    },
+    {
+      "country": "Ghana",
+      "crossingYear": 1965,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 12.809999999999995,
+        "scoreBefore": 58.07,
+        "scoreAfter": 70.88
+      }
+    },
+    {
+      "country": "Ghana",
+      "crossingYear": 1971,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 18.130000000000003,
+        "scoreBefore": 48.87,
+        "scoreAfter": 67
+      }
+    },
+    {
+      "country": "Ghana",
+      "crossingYear": 1995,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.280000000000001,
+        "scoreBefore": 52.96,
+        "scoreAfter": 60.24
+      }
+    },
+    {
+      "country": "Guinea",
+      "crossingYear": 1976,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 29.319999999999993,
+        "scoreBefore": 41.09,
+        "scoreAfter": 70.41
+      }
+    },
+    {
+      "country": "Guinea-Bissau",
+      "crossingYear": 1970,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 15.739999999999995,
+        "scoreBefore": 53.11,
+        "scoreAfter": 68.85
+      }
+    },
+    {
+      "country": "Guinea-Bissau",
+      "crossingYear": 1976,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 26.870000000000005,
+        "scoreBefore": 48.72,
+        "scoreAfter": 75.59
+      }
+    },
+    {
+      "country": "Guinea-Bissau",
+      "crossingYear": 1995,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 22.32,
+        "scoreBefore": 48.24,
+        "scoreAfter": 70.56
+      }
+    },
+    {
+      "country": "Guinea-Bissau",
+      "crossingYear": 2011,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 11.86,
+        "scoreBefore": 49.28,
+        "scoreAfter": 61.14
+      }
+    },
+    {
+      "country": "Guyana",
+      "crossingYear": 1962,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 18.86,
+        "scoreBefore": 52.61,
+        "scoreAfter": 71.47
+      }
+    },
+    {
+      "country": "Guyana",
+      "crossingYear": 1981,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 20.689999999999998,
+        "scoreBefore": 52.06,
+        "scoreAfter": 72.75
+      }
+    },
+    {
+      "country": "Guyana",
+      "crossingYear": 1988,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 1.730000000000004,
+        "scoreBefore": 59.37,
+        "scoreAfter": 61.1
+      }
+    },
+    {
+      "country": "Haiti",
+      "crossingYear": 1993,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 18.139999999999993,
+        "scoreBefore": 47.32,
+        "scoreAfter": 65.46
+      }
+    },
+    {
+      "country": "Haiti",
+      "crossingYear": 2009,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 25.61,
+        "scoreBefore": 47.06,
+        "scoreAfter": 72.67
+      }
+    },
+    {
+      "country": "Honduras",
+      "crossingYear": 1967,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 0.04999999999999716,
+        "scoreBefore": 59.95,
+        "scoreAfter": 60
+      }
+    },
+    {
+      "country": "Honduras",
+      "crossingYear": 1989,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 46.86,
+        "scoreBefore": 52.14,
+        "scoreAfter": 99
+      }
+    },
+    {
+      "country": "India",
+      "crossingYear": 1964,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 15.769999999999996,
+        "scoreBefore": 49.19,
+        "scoreAfter": 64.96
+      }
+    },
+    {
+      "country": "Indonesia",
+      "crossingYear": 1962,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 11.799999999999997,
+        "scoreBefore": 58.53,
+        "scoreAfter": 70.33
+      }
+    },
+    {
+      "country": "Iran",
+      "crossingYear": 1977,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 10.36,
+        "scoreBefore": 51.72,
+        "scoreAfter": 62.08
+      }
+    },
+    {
+      "country": "Israel",
+      "crossingYear": 1994,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 57.50999999999999,
+        "scoreBefore": 39.59,
+        "scoreAfter": 97.1
+      }
+    },
+    {
+      "country": "Israel",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 52.36,
+        "scoreBefore": 44.94,
+        "scoreAfter": 97.3
+      }
+    },
+    {
+      "country": "Italy",
+      "crossingYear": 1974,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 16.130000000000003,
+        "scoreBefore": 47.4,
+        "scoreAfter": 63.53
+      }
+    },
+    {
+      "country": "Italy",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.210000000000001,
+        "scoreBefore": 53.53,
+        "scoreAfter": 60.74
+      }
+    },
+    {
+      "country": "Jamaica",
+      "crossingYear": 1972,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 39.28,
+        "scoreBefore": 22.92,
+        "scoreAfter": 62.2
+      }
+    },
+    {
+      "country": "Jamaica",
+      "crossingYear": 1975,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 10.760000000000005,
+        "scoreBefore": 53.47,
+        "scoreAfter": 64.23
+      }
+    },
+    {
+      "country": "Jamaica",
+      "crossingYear": 1979,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.649999999999999,
+        "scoreBefore": 55.02,
+        "scoreAfter": 62.67
+      }
+    },
+    {
+      "country": "Kenya",
+      "crossingYear": 1960,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 6.640000000000001,
+        "scoreBefore": 55.9,
+        "scoreAfter": 62.54
+      }
+    },
+    {
+      "country": "Kuwait",
+      "crossingYear": 1975,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 2.8800000000000026,
+        "scoreBefore": 59.23,
+        "scoreAfter": 62.11
+      }
+    },
+    {
+      "country": "Kuwait",
+      "crossingYear": 1985,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 6.140000000000001,
+        "scoreBefore": 54.95,
+        "scoreAfter": 61.09
+      }
+    },
+    {
+      "country": "Liberia",
+      "crossingYear": 2002,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 20.419999999999995,
+        "scoreBefore": 56.04,
+        "scoreAfter": 76.46
+      }
+    },
+    {
+      "country": "Libya",
+      "crossingYear": 1986,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 1.8500000000000014,
+        "scoreBefore": 58.16,
+        "scoreAfter": 60.01
+      }
+    },
+    {
+      "country": "Lithuania",
+      "crossingYear": 2022,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 3.6600000000000037,
+        "scoreBefore": 58.44,
+        "scoreAfter": 62.1
+      }
+    },
+    {
+      "country": "Lithuania",
+      "crossingYear": 2024,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.329999999999998,
+        "scoreBefore": 59.17,
+        "scoreAfter": 66.5
+      }
+    },
+    {
+      "country": "Malawi",
+      "crossingYear": 1962,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 3.4299999999999997,
+        "scoreBefore": 56.68,
+        "scoreAfter": 60.11
+      }
+    },
+    {
+      "country": "Malawi",
+      "crossingYear": 1967,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 15.979999999999997,
+        "scoreBefore": 45.24,
+        "scoreAfter": 61.22
+      }
+    },
+    {
+      "country": "Malawi",
+      "crossingYear": 1980,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 9.89,
+        "scoreBefore": 57.25,
+        "scoreAfter": 67.14
+      }
+    },
+    {
+      "country": "Malawi",
+      "crossingYear": 1991,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 20.42,
+        "scoreBefore": 42.78,
+        "scoreAfter": 63.2
+      }
+    },
+    {
+      "country": "Malaysia",
+      "crossingYear": 1974,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 21.650000000000006,
+        "scoreBefore": 40.91,
+        "scoreAfter": 62.56
+      }
+    },
+    {
+      "country": "Malaysia",
+      "crossingYear": 1984,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 14.649999999999999,
+        "scoreBefore": 49.11,
+        "scoreAfter": 63.76
+      }
+    },
+    {
+      "country": "Mali",
+      "crossingYear": 1991,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 14.710000000000008,
+        "scoreBefore": 51.83,
+        "scoreAfter": 66.54
+      }
+    },
+    {
+      "country": "Mali",
+      "crossingYear": 2006,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 8.25,
+        "scoreBefore": 52.84,
+        "scoreAfter": 61.09
+      }
+    },
+    {
+      "country": "Mexico",
+      "crossingYear": 2003,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 53.14,
+        "scoreBefore": 45.86,
+        "scoreAfter": 99
+      }
+    },
+    {
+      "country": "Mongolia",
+      "crossingYear": 1989,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 9.29,
+        "scoreBefore": 53.69,
+        "scoreAfter": 62.98
+      }
+    },
+    {
+      "country": "Montenegro",
+      "crossingYear": 2008,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 15.71,
+        "scoreBefore": 45.99,
+        "scoreAfter": 61.7
+      }
+    },
+    {
+      "country": "Montenegro",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 18.450000000000003,
+        "scoreBefore": 49.56,
+        "scoreAfter": 68.01
+      }
+    },
+    {
+      "country": "Morocco",
+      "crossingYear": 1963,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 9.71,
+        "scoreBefore": 53.17,
+        "scoreAfter": 62.88
+      }
+    },
+    {
+      "country": "Morocco",
+      "crossingYear": 1977,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 18.54,
+        "scoreBefore": 43.37,
+        "scoreAfter": 61.91
+      }
+    },
+    {
+      "country": "Mozambique",
+      "crossingYear": 1991,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 9.449999999999996,
+        "scoreBefore": 51.53,
+        "scoreAfter": 60.98
+      }
+    },
+    {
+      "country": "Myanmar",
+      "crossingYear": 1983,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 15,
+        "scoreBefore": 59.64,
+        "scoreAfter": 74.64
+      }
+    },
+    {
+      "country": "Myanmar",
+      "crossingYear": 2003,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 17.759999999999998,
+        "scoreBefore": 58.27,
+        "scoreAfter": 76.03
+      }
+    },
+    {
+      "country": "Namibia",
+      "crossingYear": 1982,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 2,
+        "scoreBefore": 58.81,
+        "scoreAfter": 60.81
+      }
+    },
+    {
+      "country": "Nepal",
+      "crossingYear": 1982,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 11.18,
+        "scoreBefore": 51.02,
+        "scoreAfter": 62.2
+      }
+    },
+    {
+      "country": "Netherlands",
+      "crossingYear": 2023,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 4,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 2.710000000000001,
+        "scoreBefore": 57.76,
+        "scoreAfter": 60.47
+      }
+    },
+    {
+      "country": "New Zealand",
+      "crossingYear": 1966,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 20.889999999999993,
+        "scoreBefore": 45.85,
+        "scoreAfter": 66.74
+      }
+    },
+    {
+      "country": "New Zealand",
+      "crossingYear": 1974,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 23.959999999999994,
+        "scoreBefore": 43.67,
+        "scoreAfter": 67.63
+      }
+    },
+    {
+      "country": "Nicaragua",
+      "crossingYear": 1977,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 25.700000000000003,
+        "scoreBefore": 40.09,
+        "scoreAfter": 65.79
+      }
+    },
+    {
+      "country": "Niger",
+      "crossingYear": 1991,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 20.080000000000005,
+        "scoreBefore": 56.1,
+        "scoreAfter": 76.18
+      }
+    },
+    {
+      "country": "Nigeria",
+      "crossingYear": 1966,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 13.170000000000002,
+        "scoreBefore": 59.31,
+        "scoreAfter": 72.48
+      }
+    },
+    {
+      "country": "North Korea",
+      "crossingYear": 2013,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 4.689999999999998,
+        "scoreBefore": 56.2,
+        "scoreAfter": 60.89
+      }
+    },
+    {
+      "country": "Norway",
+      "crossingYear": 1977,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 12.96,
+        "scoreBefore": 50.29,
+        "scoreAfter": 63.25
+      }
+    },
+    {
+      "country": "Oman",
+      "crossingYear": 1972,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 22.699999999999996,
+        "scoreBefore": 45.96,
+        "scoreAfter": 68.66
+      }
+    },
+    {
+      "country": "Panama",
+      "crossingYear": 1982,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 13.909999999999997,
+        "scoreBefore": 52.83,
+        "scoreAfter": 66.74
+      }
+    },
+    {
+      "country": "Panama",
+      "crossingYear": 1986,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.600000000000001,
+        "scoreBefore": 55.35,
+        "scoreAfter": 62.95
+      }
+    },
+    {
+      "country": "Papua New Guinea",
+      "crossingYear": 1996,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 13.530000000000001,
+        "scoreBefore": 49.71,
+        "scoreAfter": 63.24
+      }
+    },
+    {
+      "country": "Paraguay",
+      "crossingYear": 1982,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 6.410000000000004,
+        "scoreBefore": 56.62,
+        "scoreAfter": 63.03
+      }
+    },
+    {
+      "country": "Paraguay",
+      "crossingYear": 1998,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 3.1400000000000006,
+        "scoreBefore": 57.14,
+        "scoreAfter": 60.28
+      }
+    },
+    {
+      "country": "Peru",
+      "crossingYear": 1977,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 6.969999999999999,
+        "scoreBefore": 54.77,
+        "scoreAfter": 61.74
+      }
+    },
+    {
+      "country": "Peru",
+      "crossingYear": 1987,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 19.39,
+        "scoreBefore": 44.14,
+        "scoreAfter": 63.53
+      }
+    },
+    {
+      "country": "Philippines",
+      "crossingYear": 1983,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 22.979999999999997,
+        "scoreBefore": 58.01,
+        "scoreAfter": 80.99
+      }
+    },
+    {
+      "country": "Poland",
+      "crossingYear": 1990,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 14.449999999999996,
+        "scoreBefore": 49.24,
+        "scoreAfter": 63.69
+      }
+    },
+    {
+      "country": "Portugal",
+      "crossingYear": 1974,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 19.25,
+        "scoreBefore": 53.44,
+        "scoreAfter": 72.69
+      }
+    },
+    {
+      "country": "Qatar",
+      "crossingYear": 1976,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 13.879999999999995,
+        "scoreBefore": 47.27,
+        "scoreAfter": 61.15
+      }
+    },
+    {
+      "country": "Qatar",
+      "crossingYear": 1981,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 6.890000000000001,
+        "scoreBefore": 53.73,
+        "scoreAfter": 60.62
+      }
+    },
+    {
+      "country": "Qatar",
+      "crossingYear": 1995,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 11.25,
+        "scoreBefore": 50.91,
+        "scoreAfter": 62.16
+      }
+    },
+    {
+      "country": "Romania",
+      "crossingYear": 1990,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 13.980000000000004,
+        "scoreBefore": 48.97,
+        "scoreAfter": 62.95
+      }
+    },
+    {
+      "country": "Senegal",
+      "crossingYear": 1968,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 14.090000000000003,
+        "scoreBefore": 52.59,
+        "scoreAfter": 66.68
+      }
+    },
+    {
+      "country": "Sierra Leone",
+      "crossingYear": 1987,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 11.07,
+        "scoreBefore": 49.01,
+        "scoreAfter": 60.08
+      }
+    },
+    {
+      "country": "Sierra Leone",
+      "crossingYear": 1991,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 21.46999999999999,
+        "scoreBefore": 47.85,
+        "scoreAfter": 69.32
+      }
+    },
+    {
+      "country": "Singapore",
+      "crossingYear": 1963,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 21.43999999999999,
+        "scoreBefore": 45.77,
+        "scoreAfter": 67.21
+      }
+    },
+    {
+      "country": "Singapore",
+      "crossingYear": 1984,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 10.099999999999994,
+        "scoreBefore": 50.02,
+        "scoreAfter": 60.12
+      }
+    },
+    {
+      "country": "Slovakia",
+      "crossingYear": 1990,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 21.22,
+        "scoreBefore": 50,
+        "scoreAfter": 71.22
+      }
+    },
+    {
+      "country": "Slovenia",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 19.43,
+        "scoreBefore": 54.24,
+        "scoreAfter": 73.67
+      }
+    },
+    {
+      "country": "Somalia",
+      "crossingYear": 1972,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 22.830000000000005,
+        "scoreBefore": 46.62,
+        "scoreAfter": 69.45
+      }
+    },
+    {
+      "country": "Somalia",
+      "crossingYear": 1978,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 13.79,
+        "scoreBefore": 55.98,
+        "scoreAfter": 69.77
+      }
+    },
+    {
+      "country": "Somalia",
+      "crossingYear": 1982,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 15.009999999999998,
+        "scoreBefore": 51.18,
+        "scoreAfter": 66.19
+      }
+    },
+    {
+      "country": "South Korea",
+      "crossingYear": 1979,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 10.79,
+        "scoreBefore": 49.57,
+        "scoreAfter": 60.36
+      }
+    },
+    {
+      "country": "South Sudan",
+      "crossingYear": 1981,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 15,
+        "scoreBefore": 50,
+        "scoreAfter": 65
+      }
+    },
+    {
+      "country": "South Sudan",
+      "crossingYear": 1986,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 15,
+        "scoreBefore": 50,
+        "scoreAfter": 65
+      }
+    },
+    {
+      "country": "South Sudan",
+      "crossingYear": 2015,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 4,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 5.949999999999996,
+        "scoreBefore": 54.84,
+        "scoreAfter": 60.79
+      }
+    },
+    {
+      "country": "Spain",
+      "crossingYear": 2008,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 4.910000000000004,
+        "scoreBefore": 55.23,
+        "scoreAfter": 60.14
+      }
+    },
+    {
+      "country": "Spain",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 9.169999999999995,
+        "scoreBefore": 50.84,
+        "scoreAfter": 60.01
+      }
+    },
+    {
+      "country": "Sri Lanka",
+      "crossingYear": 1971,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 2.0700000000000003,
+        "scoreBefore": 58.87,
+        "scoreAfter": 60.94
+      }
+    },
+    {
+      "country": "Suriname",
+      "crossingYear": 1979,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 11.950000000000003,
+        "scoreBefore": 53.7,
+        "scoreAfter": 65.65
+      }
+    },
+    {
+      "country": "Suriname",
+      "crossingYear": 1992,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.68,
+        "scoreBefore": 52.59,
+        "scoreAfter": 60.27
+      }
+    },
+    {
+      "country": "Switzerland",
+      "crossingYear": 1974,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 20.819999999999993,
+        "scoreBefore": 56.31,
+        "scoreAfter": 77.13
+      }
+    },
+    {
+      "country": "Syria",
+      "crossingYear": 1962,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 26.82,
+        "scoreBefore": 33.58,
+        "scoreAfter": 60.4
+      }
+    },
+    {
+      "country": "Syria",
+      "crossingYear": 1970,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 17.729999999999997,
+        "scoreBefore": 58.76,
+        "scoreAfter": 76.49
+      }
+    },
+    {
+      "country": "Taiwan",
+      "crossingYear": 2003,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.340000000000003,
+        "scoreBefore": 58.19,
+        "scoreAfter": 65.53
+      }
+    },
+    {
+      "country": "Tajikistan",
+      "crossingYear": 1986,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 10.510000000000005,
+        "scoreBefore": 58.72,
+        "scoreAfter": 69.23
+      }
+    },
+    {
+      "country": "Tanzania",
+      "crossingYear": 1980,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 7.590000000000003,
+        "scoreBefore": 55.61,
+        "scoreAfter": 63.2
+      }
+    },
+    {
+      "country": "Togo",
+      "crossingYear": 1978,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 17.47,
+        "scoreBefore": 43.07,
+        "scoreAfter": 60.54
+      }
+    },
+    {
+      "country": "Togo",
+      "crossingYear": 1982,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 6.380000000000003,
+        "scoreBefore": 55.55,
+        "scoreAfter": 61.93
+      }
+    },
+    {
+      "country": "Togo",
+      "crossingYear": 1992,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 10.370000000000005,
+        "scoreBefore": 58.31,
+        "scoreAfter": 68.68
+      }
+    },
+    {
+      "country": "Togo",
+      "crossingYear": 2004,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 9.960000000000008,
+        "scoreBefore": 54.22,
+        "scoreAfter": 64.18
+      }
+    },
+    {
+      "country": "Trinidad and Tobago",
+      "crossingYear": 1982,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 13.020000000000003,
+        "scoreBefore": 49,
+        "scoreAfter": 62.02
+      }
+    },
+    {
+      "country": "Tunisia",
+      "crossingYear": 1993,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "long_stable_history",
+        "stableStreak": 10,
+        "delta": 20.059999999999995,
+        "scoreBefore": 52.27,
+        "scoreAfter": 72.33
+      }
+    },
+    {
+      "country": "Turkmenistan",
+      "crossingYear": 1988,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 23.46999999999999,
+        "scoreBefore": 42.74,
+        "scoreAfter": 66.21
+      }
+    },
+    {
+      "country": "UAE",
+      "crossingYear": 1985,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 10.29,
+        "scoreBefore": 57.15,
+        "scoreAfter": 67.44
+      }
+    },
+    {
+      "country": "Uganda",
+      "crossingYear": 1973,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 5.810000000000002,
+        "scoreBefore": 55.78,
+        "scoreAfter": 61.59
+      }
+    },
+    {
+      "country": "UK",
+      "crossingYear": 1979,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 16.57,
+        "scoreBefore": 47.25,
+        "scoreAfter": 63.82
+      }
+    },
+    {
+      "country": "UK",
+      "crossingYear": 2019,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 1,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 14.89,
+        "scoreBefore": 49.75,
+        "scoreAfter": 64.64
+      }
+    },
+    {
+      "country": "United States",
+      "crossingYear": 1974,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 3,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 3.8000000000000043,
+        "scoreBefore": 59.79,
+        "scoreAfter": 63.59
+      }
+    },
+    {
+      "country": "United States",
+      "crossingYear": 1979,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 8.949999999999996,
+        "scoreBefore": 51.92,
+        "scoreAfter": 60.87
+      }
+    },
+    {
+      "country": "United States",
+      "crossingYear": 1981,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 8.119999999999997,
+        "scoreBefore": 52.13,
+        "scoreAfter": 60.25
+      }
+    },
+    {
+      "country": "Venezuela",
+      "crossingYear": 1988,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 18.310000000000002,
+        "scoreBefore": 46.39,
+        "scoreAfter": 64.7
+      }
+    },
+    {
+      "country": "Vietnam",
+      "crossingYear": 1985,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 2,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "small_delta",
+        "delta": 2.719999999999999,
+        "scoreBefore": 59.71,
+        "scoreAfter": 62.43
+      }
+    },
+    {
+      "country": "Yemen",
+      "crossingYear": 1978,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": true,
+        "reason": "returned_within_2yr",
+        "delta": 18.370000000000005,
+        "scoreBefore": 53.06,
+        "scoreAfter": 71.43
+      }
+    }
+  ],
+  "genuine": [
+    {
+      "country": "Tunisia",
+      "crossingYear": 1961,
+      "resolvedBy": [],
+      "resolved": false,
+      "firstDark": null,
+      "compoundCount": 0,
+      "contagionSources": [],
+      "fireGdelt": [],
+      "filter": {
+        "isNoise": false,
+        "reason": "genuine",
+        "delta": 12.3,
+        "scoreBefore": 50.5,
+        "scoreAfter": 62.7,
+        "maxSubsequentScore": 72,
+        "hasOutcomeData": true
+      }
+    }
+  ],
+  "noiseByReason": {
+    "returned_within_2yr": 108,
+    "small_delta": 63,
+    "long_stable_history": 12,
+    "returned_to_baseline_3yr": 1
+  },
+  "meta": {
+    "total": 185,
+    "noiseCount": 184,
+    "genuineCount": 1,
+    "ts": "2026-05-27T01:23:47.510Z"
+  }
+}

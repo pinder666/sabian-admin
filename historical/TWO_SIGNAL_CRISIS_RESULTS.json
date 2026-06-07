@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-05-26T03:47:14.205Z",
+  "thresholds": {
+    "weather_fire": 80,
+    "weather_seismic": 75,
+    "communication": -5,
+    "power": 70
+  },
+  "totalRecords": 1846,
+  "combinations": {
+    "weather_plus_power": {
+      "sampleSize": 0,
+      "outcomes": null,
+      "findings": []
+    },
+    "communication_plus_power": {
+      "sampleSize": 0,
+      "outcomes": null,
+      "findings": []
+    },
+    "weather_plus_communication": {
+      "sampleSize": 0,
+      "outcomes": null,
+      "findings": []
+    }
+  }
+}

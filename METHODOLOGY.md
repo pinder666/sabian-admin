@@ -51,13 +51,13 @@ Weights are **judgment-set** — set by the system architect based on the predic
 
 | # | Signal | Source | Allocated Weight | Update Cadence |
 |---|---|---|---|---|
-| 1 | Conflict Events | ACLED (GDELT fallback) | 16% | ACLED weekly / GDELT near-realtime |
+| 1 | Conflict Events | GDELT | 16% | GDELT near-realtime |
 | 2 | Food Security | FEWS NET — IPC phase | 15% | Monthly |
 | 3 | Governance | World Bank WGI | 12% | Annual |
 | 4 | Displacement | UNHCR | 11% | Monthly |
 | 5 | Satellite Fire | NASA FIRMS VIIRS | 7% | Near-realtime (3–12hr) |
 | 6 | Climate Stress | Open-Meteo | 7% | Daily |
-| 7 | Social Unrest | ACLED — Protests/Riots layer | 4% | ACLED weekly |
+| 7 | Social Unrest | Dormant (ACLED removed 2026-06-01) | 4% | — |
 | 8 | Resource Conflict | Commodity price feeds | 4% | Daily |
 | 9 | Fiscal Stress | IMF World Economic Outlook | 5% | Quarterly |
 | 10 | Internet Freedom | OONI | 5% | Daily |
@@ -73,7 +73,7 @@ Weights are **judgment-set** — set by the system architect based on the predic
 ### Weight rationale
 
 - **Conflict (16%) + Food Security (15%) + Governance (12%) + Displacement (11%) = 54%** — the physical and institutional core of state fragility. These four signals are the ones that appear in every major fragility index. Combined weight reflects that; reduced from 59% in v1.0 to accommodate three new signals.
-- **Social Unrest (4%)** — ACLED protest and riot events, distinct from the armed conflict layer. Tracks civil unrest before it crosses into violence. An accelerating protest cycle with state-force response is a 30–60-day precursor to instability. Treated separately from Conflict Events to avoid double-counting.
+- **Social Unrest (4%)** — Signal dormant as of 2026-06-01. Source was ACLED protest/riot data; ACLED removed due to EULA restriction prohibiting ML training use and no available replacement source. Weight reserved for reactivation when a compliant source is identified.
 - **Satellite Fire (7%) + Climate Stress (7%)** — near-realtime physical observation layer. Each reduced 1pt from v1.0 to accommodate new signals.
 - **Fiscal Stress (5%) + Internet Freedom (5%)** — institutional collapse and repression signals. Unchanged.
 - **GPS Jamming (3%)** — gpsjam.org daily hexgrid of GPS/GNSS interference probability. GPS jamming is a direct indicator of military activity and conflict escalation; it precedes and accompanies kinetic operations by 24–72hr. Small weight, high signal-to-noise for active conflict zones. Score is null for countries where h3-js is not installed — weight redistributes cleanly.
@@ -146,7 +146,6 @@ All signal sources are public or publicly accessible with free registration:
 
 | Source | URL |
 |---|---|
-| ACLED | acleddata.com — requires registration, free for non-commercial |
 | FEWS NET | fews.net — public API |
 | World Bank WGI | databank.worldbank.org — public |
 | UNHCR | data.unhcr.org — public API |
@@ -164,7 +163,7 @@ All signal sources are public or publicly accessible with free registration:
 
 ## ACLED Data Use Restriction
 
-ACLED data (Conflict Events and Social Unrest signals) is used under the ACLED End User Licence Agreement. **ACLED data may NOT be used to train or develop machine learning models.** It is used here for convergence scoring only. It is never passed into any hive learning, AI fine-tuning, or model training pipeline.
+ACLED was removed from Sabian on 2026-06-01. No ACLED data is stored in any Sabian table. The ACLED EULA prohibits use of ACLED data to train or develop machine learning models — this restriction, combined with the absence of an active API key, led to the decision to remove ACLED entirely rather than risk future compliance issues. Conflict Events now runs via GDELT only.
 
 ---
 

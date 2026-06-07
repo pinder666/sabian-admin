@@ -23,7 +23,7 @@ module.exports = {
     },
     {
       // Daily global scan — 06:00 every day
-      // Scores all 47 countries, persists to Supabase, fires threshold crossing alerts
+      // Scores all 164 countries, persists to Supabase, fires threshold crossing alerts
       name: 'sabian-scanner',
       script: './global_scan.cjs',
       instances: 1,

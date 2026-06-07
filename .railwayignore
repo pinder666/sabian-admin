@@ -1,0 +1,16 @@
+node_modules/
+logs/
+*.log
+sabian-ui/node_modules/
+vrtx/
+.env
+*.mp3
+*.mp4
+*.pdf
+*.zip
+V-Dem-CY-Core-v16.csv
+TIESv4-1 (1).xls
+NELDA 6.0/
+CPI-Archive/
+gee-service-account.json
+sabian-access.json

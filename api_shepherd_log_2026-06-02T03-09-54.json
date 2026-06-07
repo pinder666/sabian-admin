@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "started": "2026-06-02T03:09:54.264Z",
+    "finished": "2026-06-02T03:10:25.832Z",
+    "mode": "quick",
+    "test_matrix": {
+      "countries": [
+        "Egypt[data-rich]"
+      ],
+      "years": [
+        "2022"
+      ],
+      "total_tests_per_fetcher": 1
+    },
+    "fetchers_scanned": 1,
+    "resolved": 1,
+    "unresolved": 0,
+    "total_api_calls": 2,
+    "data_success": 1,
+    "data_failure": 0,
+    "http_failure": 0
+  },
+  "fetchers": [
+    {
+      "file": "worldbank_historical.cjs",
+      "signal_key": "worldbank",
+      "scanned_at": "2026-06-02T03:09:54.511Z",
+      "load": {
+        "resolved": true,
+        "function_name": "fetchWorldBankHistorical",
+        "error": null
+      },
+      "tests": [
+        {
+          "country": "Egypt",
+          "country_type": "data-rich",
+          "year": "2022",
+          "invoked_at": "2026-06-02T03:09:54.512Z",
+          "intercepted_calls": [
+            {
+              "url": "https://api.worldbank.org/v2/country/EG/indicator/GOV_WGI_PV.SC?date=1996:2026&format=json&per_page=200",
+              "headers_sent": {
+                "Accept": "application/json, text/plain, */*",
+                "User-Agent": "Sabian-Intelligence/1.0",
+                "Accept-Encoding": "gzip, compress, deflate, br"
+              },
+              "timestamp": "2026-06-02T03:09:54.545Z",
+              "http_status": 200,
+              "body_length": 506,
+              "data_validation": {
+                "valid": true,
+                "reason": "non_json_data",
+                "preview": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000��ܘM��0\u0010@���S\u000b����ȷR��S�.l)�\u0012\u001c�,\u00067\u000e��\u0010����\u0004\u001a��k�&\u000bk��X�Ǽ|��y�&u\u001d̷Q7mn�\u0006QA\u001es3@m��y<Nm��\u0006\u000b\n�f��î��eƠ\t+�+b8��\u000f����m�8A�\u0001�5��ϛ��o��g��\u0015\u0014�7ñ�\u001a\u001eǡ�}�\f�Sn����S����{7�}�Us;N]�\tW��\u0019�\n�����o�u\u0011���tȪ�25��Gw�ł~\u001em;�o�����o{w�\b.i���%\u0005�}��\u0006P0n�͜�|�oϻ��_�\f��Gk�\u0011<jo�'Cbi�\"�>Y\u0017�\u0017KK\u0005m�!\u001a�L�\u0005mЌɱXXJ\u0005���%\f"
+              },
+              "body_raw": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000��ܘM��0\u0010@���S\u000b����ȷR��S�.l)�\u0012\u001c�,\u00067\u000e��\u0010����\u0004\u001a��k�&\u000bk��X�Ǽ|��y�&u\u001d̷Q7mn�\u0006QA\u001es3@m��y<Nm��\u0006\u000b\n�f��î��eƠ\t+�+b8��\u000f����m�8A�\u0001�5��ϛ��o��g��\u0015\u0014�7ñ�\u001a\u001eǡ�}�\f�Sn����S����{7�}�Us;N]�\tW��\u0019�\n�����o�u\u0011���tȪ�25��Gw�ł~\u001em;�o�����o{w�\b.i���%\u0005�}��\u0006P0n�͜�|�oϻ��_�\f��Gk�\u0011<jo�'Cbi�\"�>Y\u0017�\u0017KK\u0005m�!\u001a�L�\u0005mЌɱXXJ\u0005���%\f�bi��u��h\\\nbicA�:\u0006�6\u0018���\u001e�&�9\u0011�-R�\u0017�)���ºŏL\u0014БX��¤��h��rkT!R�ut6Y�{�\u0014\"e�F\u0017\f\n�m)R�\u0019�X'�HaaR>hr�\u0018��\u0016\u000b��!�$�$c\\�RrFpj\u000b��WI���j#�\u0005-\u001a�,פ�-�4�\u0012F/�ؖ=)�1X��X��B����c�����EI61\u0005�LZJ��n�&d�$4��RX�[g��[p��\u0000\u0000\u0000��\u0003\u0000\u0007Kﰄ\u0018\u0000\u0000"
+            },
+            {
+              "url": "https://api.worldbank.org/v2/country/EG/indicator/GOV_WGI_GE.SC?date=1996:2026&format=json&per_page=200",
+              "headers_sent": {
+                "Accept": "application/json, text/plain, */*",
+                "User-Agent": "Sabian-Intelligence/1.0",
+                "Accept-Encoding": "gzip, compress, deflate, br"
+              },
+              "timestamp": "2026-06-02T03:10:15.024Z",
+              "http_status": null,
+              "body_length": 0,
+              "data_validation": null,
+              "body_raw": null
+            }
+          ],
+          "fetch_result": null,
+          "error": "TIMEOUT"
+        }
+      ]
+    }
+  ]
+}

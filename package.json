@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/pinder666/sabian_updates#readme",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.98.0",
     "@mozilla/readability": "^0.6.0",
     "@supabase/supabase-js": "^2.50.0",
     "axios": "^1.6.7",
@@ -38,12 +39,14 @@
     "nodemailer": "^7.0.5",
     "openai": "^4.98.0",
     "openmct": "^3.0.0",
+    "pdfkit": "^0.18.0",
     "play-sound": "^1.1.6",
     "pm2": "^5.3.0",
     "rss-parser": "^3.13.0",
     "types-registry": "^0.1.723",
     "uuid": "^11.1.0",
-    "ws": "^8.18.2"
+    "ws": "^8.18.2",
+    "xlsx": "^0.18.5"
   },
   "rnpm": {
     "assets": [

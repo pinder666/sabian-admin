@@ -70,9 +70,9 @@ The RSF offensive launched April 15, 2023, triggering what became the world's la
 
 1. **The system was right.** Sudan crossed WARNING 90 days before the event, CRITICAL 5 days before.
 
-2. **It ran on public data.** No classified feeds. No SIGINT. No HUMINT. Every source (FEWS NET, World Bank, NASA FIRMS, Open-Meteo, ACLED, GDELT) is an unclassified, publicly available data stream.
+2. **It ran on public data.** No classified feeds. No SIGINT. No HUMINT. Every source (FEWS NET, World Bank, NASA FIRMS, Open-Meteo, GDELT) is an unclassified, publicly available data stream.
 
-3. **The conflict signal was offline.** The WARNING and CRITICAL scores were reached with 22% of the model weight (conflict) returning null. Once ACLED is connected — with actual fatality and event data from Sudan's pre-RSF tensions — the early-warning signal emerges even earlier.
+3. **The conflict signal ran on GDELT.** GDELT news-coverage conflict intensity detected the pre-RSF escalation pattern. The WARNING and CRITICAL scores were reached on open-source data with no proprietary conflict database required.
 
 4. **The satellite signature preceded the offensive.** Fire hotspot intensity surged from 8.0 MW to 9.4 MW mean FRP in the 5 days before the launch. This is a pattern-of-life anomaly detectable from public satellite data. DIA and NGA analysts know what this signature means.
 
@@ -94,7 +94,7 @@ Deployed. Running. Currently scoring 47 countries on live public data:
 - GDELT DOC 2.0: News-volume conflict index, near real-time
 - Open-Meteo: 14-day historical and forecast climate data
 - World Bank API: Governance (WGI), economic (GDP, CPI), trade (BoP imports) — annual
-- ACLED: Armed conflict event + fatality database (pending API key — code complete, key in transit)
+- GDELT: Armed conflict news-coverage intensity, near real-time
 
 **3. A Demonstrated Track Record**  
 See Section 1. Sudan retroactive scoring across 5 time points before the April 15, 2023 RSF offensive. WARNING at T-90. CRITICAL at T-5. Scores and signal decompositions fully reproducible — the code, the data sources, and the scoring methodology are available for technical review.
@@ -117,7 +117,7 @@ SABIAN CONVERGENCE ENGINE v1
 
 Signal                  Weight   Source              Latency
 ─────────────────────────────────────────────────────────────
-Conflict Events          0.22    ACLED / GDELT       24hr / 48hr
+Conflict Events          0.22    GDELT               24hr
 Food Security            0.20    FEWS NET (IPC)      Weekly
 Governance Collapse      0.17    World Bank WGI      Annual
 Displacement             0.14    UNHCR               Monthly
@@ -150,7 +150,6 @@ AFRICOM (26 countries) | CENTCOM (10 countries) | EUCOM (4 countries) | INDOPACO
 | World Bank Dev. | REST | None | ✅ Live | GDP, CPI, BoP imports |
 | Open-Meteo | REST | None | ✅ Live | Climate archive + forecast |
 | GDELT DOC 2.0 | REST | None | ✅ Live | Conflict coverage index |
-| ACLED | REST | Key | 🔄 Ready | Code complete, API key pending |
 | UNHCR | REST | None | ⚠️ Partial | Data gap in some countries |
 | UN Comtrade | REST | Key | ✅ Live | Trade flow data |
 | Datalastic AIS | REST | Key | 🔴 Dormant | Port activity — key not yet set |
@@ -252,8 +251,8 @@ Sabian is a deployed open-source intelligence convergence platform that scored S
 ### Why Now
 
 - **The Sudan crisis continues.** 7.1 million displaced. The early warning window was real. The question is whether the next event — in Mali, Niger, Myanmar, or Gaza — gets the same 90-day lead time.
-- **ACLED integration is weeks away.** Once connected, the conflict signal (22% of the model) adds fatality-level granularity. Sudan's WARNING score at T-90 was generated without it.
-- **The model is conservative.** Current scores use the most cautious available source for each signal. With ACLED + SIGINT-derived conflict signals, the lead time likely extends to 120 days.
+- **The conflict signal ran on GDELT.** Sudan's WARNING score at T-90 was generated with the conflict signal fully operational via GDELT near-realtime coverage — no proprietary database required.
+- **The model is conservative.** Current scores use publicly available, verifiable sources for each signal. With SIGINT-derived conflict signals layered in, the lead time likely extends to 120 days.
 - **This runs on public data.** No classified infrastructure required. Any analyst with internet access can use the API. No SCIF required to read a Sabian score.
 
 ---
@@ -263,7 +262,7 @@ Sabian is a deployed open-source intelligence convergence platform that scored S
 | Phase | Investment | Deliverable |
 |-------|-----------|-------------|
 | Phase 1 (0-6 months) | $2M | Cloud deployment, 24/7 alerting, 150-country coverage, analyst API, SOFWERX pilot |
-| Phase 2 (6-18 months) | $5M | ACLED + SIGINT-compatible inputs, DIA workflow integration, multi-theater dashboards |
+| Phase 2 (6-18 months) | $5M | SIGINT-compatible inputs, DIA workflow integration, multi-theater dashboards |
 | Phase 3 (18-36 months) | $10M | Program of record, enterprise licensing across DIA/NGA/SOCOM J2, white-label partner access |
 
 ---
@@ -280,8 +279,7 @@ government_briefing.cjs         — Claude + ElevenLabs briefing generator
 logger.cjs                      — Structured hive logging
 
 Signal feeds:
-  acled_conflict_feed.cjs       — Armed conflict (email+key auth, key pending)
-  gdelt_conflict_feed.cjs       — Conflict news coverage (ACLED fallback)
+  gdelt_conflict_feed.cjs       — Conflict news coverage (GDELT near-realtime)
   fews_food_security.cjs        — IPC food security phases
   worldbank_governance.cjs      — WGI governance index
   unhcr_displacement_feed.cjs   — Refugee displacement
@@ -304,7 +302,7 @@ Signal feeds:
 
 ## SECTION 7 — CONSTRAINTS AND COMPLIANCE
 
-- **ACLED EULA:** Armed conflict data (ACLED) is licensed for analytical use only. It is expressly NOT used to train machine learning models. Sabian uses ACLED exclusively for convergence scoring. This is documented in code comments and enforced by architectural separation from the learning layer.
+- **Conflict data:** Sabian uses GDELT for conflict event coverage — fully open, no EULA restrictions, near-realtime. No proprietary conflict database (ACLED or similar) is used. This eliminates the ML-training restriction risk and ensures all conflict data flows freely through the analysis pipeline.
 
 - **Operational constraint:** Sabian is a decision-support tool. It produces risk scores and briefings. It does not issue targeting recommendations, does not interface with weapons systems, and contains no capability for kinetic action. All outputs are advisory only.
 

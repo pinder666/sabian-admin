@@ -1,0 +1,166 @@
+{
+  "meta": {
+    "started": "2026-06-02T03:11:58.585Z",
+    "finished": "2026-06-02T03:12:08.589Z",
+    "mode": "quick",
+    "test_matrix": {
+      "countries": [
+        "Egypt[data-rich]"
+      ],
+      "years": [
+        "2022"
+      ],
+      "total_tests_per_fetcher": 1
+    },
+    "fetchers_scanned": 1,
+    "resolved": 1,
+    "unresolved": 0,
+    "total_api_calls": 5,
+    "data_success": 5,
+    "data_failure": 0,
+    "http_failure": 0
+  },
+  "fetchers": [
+    {
+      "file": "worldbank_historical.cjs",
+      "signal_key": "worldbank",
+      "scanned_at": "2026-06-02T03:11:58.852Z",
+      "load": {
+        "resolved": true,
+        "function_name": "fetchWorldBankHistorical",
+        "error": null
+      },
+      "tests": [
+        {
+          "country": "Egypt",
+          "country_type": "data-rich",
+          "year": "2022",
+          "invoked_at": "2026-06-02T03:11:58.853Z",
+          "intercepted_calls": [
+            {
+              "url": "https://api.worldbank.org/v2/country/EG/indicator/GOV_WGI_PV.SC?date=1996:2026&format=json&per_page=200",
+              "headers_sent": {
+                "Accept": "application/json, text/plain, */*",
+                "User-Agent": "Sabian-Intelligence/1.0",
+                "Accept-Encoding": "gzip, compress, deflate, br"
+              },
+              "timestamp": "2026-06-02T03:11:58.876Z",
+              "http_status": 200,
+              "body_length": 506,
+              "data_validation": {
+                "valid": true,
+                "reason": "non_json_data",
+                "preview": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000��ܘM��0\u0010@���S\u000b����ȷR��S�.l)�\u0012\u001c�,\u00067\u000e��\u0010����\u0004\u001a��k�&\u000bk��X�Ǽ|��y�&u\u001d̷Q7mn�\u0006QA\u001es3@m��y<Nm��\u0006\u000b\n�f��î��eƠ\t+�+b8��\u000f����m�8A�\u0001�5��ϛ��o��g��\u0015\u0014�7ñ�\u001a\u001eǡ�}�\f�Sn����S����{7�}�Us;N]�\tW��\u0019�\n�����o�u\u0011���tȪ�25��Gw�ł~\u001em;�o�����o{w�\b.i���%\u0005�}��\u0006P0n�͜�|�oϻ��_�\f��Gk�\u0011<jo�'Cbi�\"�>Y\u0017�\u0017KK\u0005m�!\u001a�L�\u0005mЌɱXXJ\u0005���%\f"
+              },
+              "body_raw": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000��ܘM��0\u0010@���S\u000b����ȷR��S�.l)�\u0012\u001c�,\u00067\u000e��\u0010����\u0004\u001a��k�&\u000bk��X�Ǽ|��y�&u\u001d̷Q7mn�\u0006QA\u001es3@m��y<Nm��\u0006\u000b\n�f��î��eƠ\t+�+b8��\u000f����m�8A�\u0001�5��ϛ��o��g��\u0015\u0014�7ñ�\u001a\u001eǡ�}�\f�Sn����S����{7�}�Us;N]�\tW��\u0019�\n�����o�u\u0011���tȪ�25��Gw�ł~\u001em;�o�����o{w�\b.i���%\u0005�}��\u0006P0n�͜�|�oϻ��_�\f��Gk�\u0011<jo�'Cbi�\"�>Y\u0017�\u0017KK\u0005m�!\u001a�L�\u0005mЌɱXXJ\u0005���%\f�bi��u��h\\\nbicA�:\u0006�6\u0018���\u001e�&�9\u0011�-R�\u0017�)���ºŏL\u0014БX��¤��h��rkT!R�ut6Y�{�\u0014\"e�F\u0017\f\n�m)R�\u0019�X'�HaaR>hr�\u0018��\u0016\u000b��!�$�$c\\�RrFpj\u000b��WI���j#�\u0005-\u001a�,פ�-�4�\u0012F/�ؖ=)�1X��X��B����c�����EI61\u0005�LZJ��n�&d�$4��RX�[g��[p��\u0000\u0000\u0000��\u0003\u0000\u0007Kﰄ\u0018\u0000\u0000"
+            },
+            {
+              "url": "https://api.worldbank.org/v2/country/EG/indicator/GOV_WGI_GE.SC?date=1996:2026&format=json&per_page=200",
+              "headers_sent": {
+                "Accept": "application/json, text/plain, */*",
+                "User-Agent": "Sabian-Intelligence/1.0",
+                "Accept-Encoding": "gzip, compress, deflate, br"
+              },
+              "timestamp": "2026-06-02T03:11:59.204Z",
+              "http_status": 200,
+              "body_length": 508,
+              "data_validation": {
+                "valid": true,
+                "reason": "non_json_data",
+                "preview": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000��ܘM��0\u0010���ѩ\u0005E�h��(����S����,��h\u0017C�\u000e�\b,!��$��|뵺Ick��;\u001a����kRkԷ�x\u001f�aw\u000f[\u0000��~�\u000fjmY����&�{�V��:��4\u001f����\u0011\u000b�W@+\u0014uяg�v����~P볺��~�������n̏/J�S}��5ޟ�н�n�6//���S��8V�����T�M?��\u0013�\u0010೺h��s7\r��o�Y����q���P?W���d\u000bڱ�������VZ]\t�\u0000�#���y�bE��k'�VJ��y܍S=��}�OM�v�\u001e���\u0013�>2x0�\u0003{\be#�Le1�#��e#c��&2yq�ldX \u0007!����"
+              },
+              "body_raw": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000��ܘM��0\u0010���ѩ\u0005E�h��(����S����,��h\u0017C�\u000e�\b,!��$��|뵺Ick��;\u001a����kRkԷ�x\u001f�aw\u000f[\u0000��~�\u000fjmY����&�{�V��:��4\u001f����\u0011\u000b�W@+\u0014uяg�v����~P볺��~�������n̏/J�S}��5ޟ�н�n�6//���S��8V�����T�M?��\u0013�\u0010೺h��s7\r��o�Y����q���P?W���d\u000bڱ�������VZ]\t�\u0000�#���y�bE��k'�VJ��y܍S=��}�OM�v�\u001e���\u0013�>2x0�\u0003{\be#�Le1�#��e#c��&2yq�ldX \u0007!����Ƹh_@��e���!�qN\u001c��U\u000eKd+\u0002�e#s�lM`f*\u001d�g�h0\u0006\bT�\u0015��}�\u0018A�R�\u0015��}\u0011\u001b�\u0012�˶\"��/01\u0002B(��qq��\u000b!�^ذ@�׎]61���\u0019��\\��\u0006Y�l9\u0006�l��^ ���U��\u0017EC\u0012ٗ��\u0017�\u0010�����ݢ�-\nz*��\u0016v3�p,]��{Q0��9re#/��(\ny)�{a���\u001c\f�\u0017.Yd�1���5�I\u0004������?\u0000\u0000\u0000��\u0003\u0000��J\u001a\u0007\u0019\u0000\u0000"
+            },
+            {
+              "url": "https://api.worldbank.org/v2/country/EG/indicator/NY.GDP.MKTP.KD.ZG?date=1960:2026&format=json&per_page=200",
+              "headers_sent": {
+                "Accept": "application/json, text/plain, */*",
+                "User-Agent": "Sabian-Intelligence/1.0",
+                "Accept-Encoding": "gzip, compress, deflate, br"
+              },
+              "timestamp": "2026-06-02T03:11:59.263Z",
+              "http_status": 200,
+              "body_length": 1057,
+              "data_validation": {
+                "valid": true,
+                "reason": "non_json_data",
+                "preview": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000��ܛOk\u001cG\u0010ſ�\u0018\b$�\u001e����-`��I0!��\u0018��\u0016G�h�v7�\u0018�0\u0012D=ל�uYv��f~tw�{�5�N\u000f�ϻ�\u0012��/��o�Ǐϗ�h3\u001d����t龙\u000e������f��x�Lw����p�=\u0010�+�W�ӷ������������.�NO����|������_��o_Ͽ_M����i7]NW��]|~��}�������i{w��\u000fӷ�t�?�\u001f\u001f��;ț�7��<\u001c7\u0017?>n?]��{��\u001bn\u000f{���<���i3-�����2����n3��o���4m������q{<\u001d���o�\\��m�Fҗ\u0011x�*x�G��\u0003��� s8q"
+              },
+              "body_raw": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000��ܛOk\u001cG\u0010ſ�\u0018\b$�\u001e����-`��I0!��\u0018��\u0016G�h�v7�\u0018�0\u0012D=ל�uYv��f~tw�{�5�N\u000f�ϻ�\u0012��/��o�Ǐϗ�h3\u001d����t龙\u000e������f��x�Lw����p�=\u0010�+�W�ӷ������������.�NO����|������_��o_Ͽ_M����i7]NW��]|~��}�������i{w��\u000fӷ�t�?�\u001f\u001f��;ț�7��<\u001c7\u0017?>n?]��{��\u001bn\u000f{���<���i3-�����2����n3��o���4m������q{<\u001d���o�\\��m�Fҗ\u0011x�*x�G��\u0003��� s8q�1G�F\u0007<~\u0019�g�H5�L/o��q����\t\u000b6Z,N\u001a��\b�)���\r�P/#�l�TB\u0001�2#�\b@��Rm1y�2��H0SU�F���\u0011O�]E�̴E^���bٌ\u0014Q\u0004�\u00108��,\u0005+ �Ң�ޓ\u0011\u000fi�N&�P��#\u001e��**]��\u0003� Z0��\u0005J�*�\u0003\u001d�Y\u000f\u001a,�\u0016f�!�P�q�ClY�e,�\u0002o�,1ÜSl�-��\u0017#\u001ee$��'���&\u001f�^��$J��\u000e��V�E\u0003���)�\u0001OG<*��\u0003l=�Vu\u0016��iHH�v����\"\u00191)��\u0004w������\"�P!\u0005�\u0016����)AD�\\���=TՈG&*K!�����\u001e�Vu\u0016\u000b�\nu�l1w1�i���\nq���\u0005T��,�\u0019B�\u0014��_��j%Y\\Y-#X����4�tL\u000b\u0015�`$-����\u0010�Ve�\"������{��ӜVH�D���Dժ�\u00026%�2�hP�Eժ��\u001e�\u0005\u000bX�C��U�����i\u0011��\u0002o�Y�!LZf�\u0016�3cL\f)\u001c�\u000eAA:D�\\��P5���&���qq���,\n�b\u001d\"g\u000e���P\u000b�\u0000\u0002l\u001dDY�8{T�䩤I��\u0010%��W\u0014\b@����\u000ex\u0018K��щI�\u000b�p�9�\u0016�L�p�DU�:\u0012*V��4<k9B�h��b\u0010-9;gx�j\t�\u0005^���HH��è�h�A�@f��\u0017I(ZHΰqq�\u0014t1CE��͆�n�,K�\u0002A֢P\u0016��!#O!8k����\u0011��<�٠=�z`uti!��n\u0002����R�U\u001a�$\r\u001e\u001d�|Ն�Q�0�\u0005e\u0007?�jy��ɣX�̥A�1�\u0007�B����+8H������Ϫ+I�5Yο�\u0011�#���2\u0017���\b.�n�l\u0014\u0016��$-����\u001a��\u001d!ޢs�W�%�|�y��\r��P�U��\u0003P�(wxE\u0003���^F���\u001f\u0000\u0000\u0000��\u0003\u0000A%!��9\u0000\u0000"
+            },
+            {
+              "url": "https://api.worldbank.org/v2/country/EG/indicator/EG.ELC.ACCS.ZS?date=1990:2026&format=json&per_page=200",
+              "headers_sent": {
+                "Accept": "application/json, text/plain, */*",
+                "User-Agent": "Sabian-Intelligence/1.0",
+                "Accept-Encoding": "gzip, compress, deflate, br"
+              },
+              "timestamp": "2026-06-02T03:11:59.320Z",
+              "http_status": 200,
+              "body_length": 471,
+              "data_validation": {
+                "valid": true,
+                "reason": "non_json_data",
+                "preview": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000����Mk�0\u0010\u0006�b\u0006\n-(F�/k|[�%���S\u001bBpl%\u0018ܕ��²�/�{�t��s��%�x$�\u0005?�a�>\u0002�(n���\n��[I) ��M�j'`��҇q�\u0016\u0014\b��5m�Хp��=H� =\\��\u0019��0�]�\u000b�g��9<և��z��?տ�@��n�\u0002������U�U�B���\u001fө������\u001c�m��\u0018���\"���1-�l�l���iN��-�[�#�u6`\\���p���'\b�>�����\f�m�\u0004l�1A\u000b  ���k�Ҷޯ�Џ��o\u0003/�?\u0012\u001a�B�9\u0003^\u0017-;��\u000eD�@�\u001c��\u001d�\u0003\u001b�@�\u001d�e\u0019�Z3\u0014�B�\u0019\nu!$�BU\b\u001b"
+              },
+              "body_raw": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003\u0000\u0000\u0000����Mk�0\u0010\u0006�b\u0006\n-(F�/k|[�%���S\u001bBpl%\u0018ܕ��²�/�{�t��s��%�x$�\u0005?�a�>\u0002�(n���\n��[I) ��M�j'`��҇q�\u0016\u0014\b��5m�Хp��=H� =\\��\u0019��0�]�\u000b�g��9<և��z��?տ�@��n�\u0002������U�U�B���\u001fө������\u001c�m��\u0018���\"���1-�l�l���iN��-�[�#�u6`\\���p���'\b�>�����\f�m�\u0004l�1A\u000b  ���k�Ҷޯ�Џ��o\u0003/�?\u0012\u001a�B�9\u0003^\u0017-;��\u000eD�@�\u001c��\u001d�\u0003\u001b�@�\u001d�e\u0019�Z3\u0014�B�\u0019\nu!$�BU\b\u001b�B,���Pr\u0017�,ϐ�\u000f��~�ʦ�!�U��\u001a2�Y��L�h\u001a��P\u0017���P\u00155�\f�X\b9�CY\b٥R$�\u0013�����6�z��݊E\"_h�qV)��\u001aű�M�5R\u0019g��\u001a\u0015�ںB��h�hR���P�g ���D�\u0010:�v�+T�]�E\"]h5)e���t\f�y6���\u0003\u0012!���H$�I���\u0017\u0000\u0000��\u0003\u0000\u0017�gHb \u0000\u0000"
+            },
+            {
+              "url": "https://api.worldbank.org/v2/country/EG/indicator/NE.IMP.GNFS.KD.ZG?date=1947:2026&format=json&per_page=200",
+              "headers_sent": {
+                "Accept": "application/json, text/plain, */*",
+                "User-Agent": "Sabian-Intelligence/1.0",
+                "Accept-Encoding": "gzip, compress, deflate, br"
+              },
+              "timestamp": "2026-06-02T03:11:59.410Z",
+              "http_status": 200,
+              "body_length": 1091,
+              "data_validation": {
+                "valid": true,
+                "reason": "non_json_data",
+                "preview": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003ܛKk#G\u0010ǿ�\u0018\b$ 7�~�\u0016�c��%$�Ͳ,ZKq\u0004^��a1��m�zr�-u\u0019F�T�WOW������f�������ns����\u0000��iZ=L�f��?\u001f�6��t=Ѵ�\u001eV���q�:m^�\u0000�\u0015�\u0015���|�4mw����?L�O��o�޴7?��n���[���������\u001eΛ�zz��q8\u001d\u0017�?\u0016�����X�֋���e{�9.�]�v������a�������t�?�N�����\u0019���}<-\u0017�\u001fV�\u0016�n\u001e����q�w��˷n�M˩+x\u0015�\u0017\u000b����r:ﶧ�z��������:����כ���������)V.\u0016��&;1���"
+              },
+              "body_raw": "\u001f�\b\u0000\u0000\u0000\u0000\u0000\u0000\u0003ܛKk#G\u0010ǿ�\u0018\b$ 7�~�\u0016�c��%$�Ͳ,ZKq\u0004^��a1��m�zr�-u\u0019F�T�WOW������f�������ns����\u0000��iZ=L�f��?\u001f�6��t=Ѵ�\u001eV���q�:m^�\u0000�\u0015�\u0015���|�4mw����?L�O��o�޴7?��n���[���������\u001eΛ�zz��q8\u001d\u0017�?\u0016�����X�֋���e{�9.�]�v������a�������t�?�N�����\u0019���}<-\u0017�\u001fV�\u0016�n\u001e����q�w��˷n�M˩+x\u0015�\u0017\u000b����r:ﶧ�z��������:����כ���������)V.\u0016��&;1����\u0016�\u0017\u000bؐ8��$��j\u000b��\u0005�F�\u001e�\bΒ����\u00024�H\u0010\u0012\tt����b�\n�9\t\u0003�#�Si嘃�h\u001ah}ŕԠ�øX�Fb\u0001�d� �u�łRS\b`0�\f���mxթ\u0011�k\"�\u001a@�V��cOE�׋�֎�(�rH75R\u0000\u0000#���y�����F�H^��\r\u0000��\u0002��)\f1���\u0001�\tXBzDX@m~Ñ߸�f(2 b�M\u000e#���\b7�k�W\u001d\u0006z#k�(�]�pm�\u0006\u0003�Q�\u00006AHb�ڼ\u000e\u0003�\u00116wVU w���@o�-��R\u0010ݤ6��\u0000o�S4dOF`�ںg�7\nP\r���(\u001e���[37�$4@-��p��\rI�Չ�=�o�\u0001ܸe8+��Af�%��\u0001ܐ�kZd\u0012�W\u000ef�\u0019�o�ˍ�&(\\����c٭1\u0010K�(\u0012p�\n3f�̹y\u001a���\tYeT�L\u001d[��\f�\u0014\u001a�V\u0019`0Sf\u0000C�����j�79ϼ���\u0003E�jq�>��Uo�#\u001a��Z���0\u0013gmr7qP����|�n���/�@��ǈn͔\"IM��k{��q��L8���D*祘�&9vl%\u0005A\u0015�\ro1�HM\u0013�L (��g=Sc�`\u0000�L�کi��\u0016�М\\\u0004����\u0001ެ\t�;0[\u0006x�W}�7�޳\u00142W��\u0019Zଧ��F�f����0\u0003�N1�sr����\u000eh����p�#�ш�+�1��A`���\u0004��m\u0005L�Y@�\u0004Q\"�@,.��]�\u000f�\n&y֎�>�L�9E\u0002�8Tw�.3�\u00015V�$K��I�t\u001e#Z\u0012u��L�,��iV��pJ\u0007@d/.|Vy#�\u00074\u0014\u00158��#|�7���}$B\f���\u001f��X�r�D��\u0011�Q\\�\u0000oW��,ٱ����u���>\u0003[BX���ډ��\u0018��H\b�\b\u0018Bqh5�\u0015[#�\u001f�\u00105w��n&��u\u0012U��@Ňall�f�u\u0004�>�V��)�ј�{��zX�f�&��G�BT\u0002���\b\u0014���N���7\u0000\u0000\u0000��\u0003\u0000\u00116�@�@\u0000\u0000"
+            }
+          ],
+          "fetch_result": {
+            "row_count": 194,
+            "sample": [
+              {
+                "signal_key": "governance",
+                "signal_name": "Governance",
+                "date": "2024-01-01",
+                "raw_value": 49.1898949,
+                "raw_metadata": {
+                  "indicator": "GOV_WGI_PV.SC",
+                  "country_iso": "EGY",
+                  "date_raw": "2024",
+                  "gov_effectiveness": 49.4532828
+                },
+                "source": "world_bank_wdi",
+                "gap": false,
+                "gap_reason": null
+              },
+              {
+                "signal_key": "governance",
+                "signal_name": "Governance",
+                "date": "2023-01-01",
+                "raw_value": 50.5325121,
+                "raw_metadata": {
+                  "indicator": "GOV_WGI_PV.SC",
+                  "country_iso": "EGY",
+                  "date_raw": "2023",
+                  "gov_effectiveness": 50.5676507
+                },
+                "source": "world_bank_wdi",
+                "gap": false,
+                "gap_reason": null
+              }
+            ]
+          },
+          "error": null
+        }
+      ]
+    }
+  ]
+}

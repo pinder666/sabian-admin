@@ -15,6 +15,7 @@ const fs = require('fs');
 const path = require('path');
 const runConvergence = require('./convergence_engine.cjs');
 const { logToHive } = require('./logger.cjs');
+const { logAuditEvent } = require('./historical/audit_chain.cjs');
 const { saveConvergenceScore, saveSignalReadings, saveGlobalScan, getLatestScores } = require('./sabian_persistence.cjs');
 const { createObservation } = require('./observation_ledger.cjs');
 const { checkAndAlert } = require('./sabian_alert.cjs');
@@ -125,10 +126,24 @@ async function runGlobalScan(date, options = {}) {
       const theater = getTheater(country);
 
       if (result.status === 'fulfilled' && !result.value.error) {
+        // Compute trajectory: compare current score to previous scan score
+        const currentScore = result.value.convergence_score;
+        const prevScore    = previousScoreMap[country];
+        let trajectory     = 'STABLE';
+        if (prevScore !== undefined && prevScore !== null) {
+          const delta = currentScore - prevScore;
+          if      (delta >= 10) trajectory = 'SHARP_RISE';
+          else if (delta >=  5) trajectory = 'RISING';
+          else if (delta <= -10) trajectory = 'SHARP_FALL';
+          else if (delta <=  -5) trajectory = 'FALLING';
+        }
+        result.value.trajectory = trajectory;
+
         const enriched = {
           country,
           ...result.value,
           theater,
+          trajectory,
           category: ACTIVE_CONFLICTS.includes(country) ? 'ACTIVE_CONFLICT' : 'THRESHOLD_WATCH'
         };
         results.push(enriched);
@@ -301,6 +316,18 @@ async function runGlobalScan(date, options = {}) {
     },
     tags: ['global_scan', 'dod', scanDate]
   });
+
+  logAuditEvent('scan_complete', null, {
+    scan_date:        scanDate,
+    countries_scored: results.length,
+    critical:         critical.length,
+    warning:          warning.length,
+    elevated:         elevated.length,
+    stable:           stable.length,
+    failed:           errors.length,
+    elapsed_seconds:  parseFloat(elapsed),
+    top_5:            results.slice(0, 5).map(r => ({ country: r.country, score: r.convergence_score, level: r.risk_level })),
+  }).catch(() => {});
 
   // ── Save results if requested ──────────────────────────────────────────────
   if (options.save) {

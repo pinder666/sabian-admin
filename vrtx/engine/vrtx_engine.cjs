@@ -7,7 +7,10 @@ const VRTX_SYSTEM_PROMPT = require("../prompts/vrtx_system_prompt.cjs");
 const { validateVrtx, validateSemantics } = require("../guardrails/validator.cjs");
 const { scriptToAudio } = require("../audio/audio_orchestrator.cjs");
 const { buildVrtxScene } = require("./scene_builder.cjs");
-const { retrieveRelevantChunks } = require("../knowledge/vrtx_retrieval.cjs");
+const { loadRecentHistory, buildHistorySummary } = require("./vrtx_run_history.cjs");
+const { loadAllRunSummaries, detectPatterns, buildPatternBlock } = require("./vrtx_pattern_detector.cjs");
+const { buildAngleBlock } = require("./vrtx_teaching_angle.cjs");
+const { retrieveRelevantChunks, retrieveForState } = require("../knowledge/vrtx_retrieval.cjs");
 
 const {
   normalizeHealthConnectPayload,
@@ -545,14 +548,34 @@ function buildInterpretedBoardSummary(signals, combined) {
     .filter(([key]) => !presentMetrics.has(key))
     .map(([, label]) => label);
 
+  function pct(delta, baseline) {
+    if (delta === null || delta === undefined || !baseline) return null;
+    return Math.round(Math.abs(delta) / Math.abs(baseline) * 100);
+  }
+  function magnitudeLabel(p) {
+    if (p === null) return "";
+    if (p >= 60) return "exceptional";
+    if (p >= 35) return "sharp";
+    if (p >= 15) return "clear";
+    if (p >= 7)  return "moderate";
+    return "marginal";
+  }
+
   const signalLines = (signals || []).map((s) => {
+    const p = pct(s.delta, s.baseline);
+    const mag = p !== null ? ` [${magnitudeLabel(p)}, ${p}%]` : "";
+    const baseRef = (s.value != null && s.baseline != null)
+      ? ` — ${s.value} today vs ${s.baseline} baseline`
+      : "";
     let status;
     if (s.direction === "favorable") {
-      status = `favorable (delta: ${s.delta > 0 ? "+" : ""}${s.delta})`;
+      const sign = s.delta >= 0 ? "+" : "";
+      status = `favorable${baseRef} (delta: ${sign}${s.delta}${mag})`;
     } else if (s.direction === "unfavorable") {
-      status = `${s.severity} unfavorable${s.offset ? " — offset by favorable signal" : ""} (delta: ${s.delta})`;
+      status = `${s.severity} unfavorable${s.offset ? " — offset by favorable signal" : ""}${baseRef} (delta: ${s.delta}${mag})`;
     } else {
-      status = `neutral (delta: ${s.delta !== null ? (s.delta > 0 ? "+" : "") + s.delta : "n/a"})`;
+      const dStr = s.delta !== null ? `${s.delta > 0 ? "+" : ""}${s.delta}` : "n/a";
+      status = `neutral${baseRef} (delta: ${dStr}${mag})`;
     }
     return `  ${s.label}: ${status}`;
   }).join("\n");
@@ -567,14 +590,18 @@ ${unavailableLine}
 Coherence: ${combined.coherence} | Net severity: ${combined.net_severity}
 Unfavorable signals: ${combined.unfavorable_count} | Favorable signals: ${combined.favorable_count}
 
-Sabian must reason from the signal breakdown above.
+MAGNITUDE LABELS in brackets above (e.g. [clear, 24%]) define how strong each signal is relative to baseline.
+Use these labels to calibrate Sabian's language. A [marginal] elevation sounds different from a [sharp] or [exceptional] one.
+Do not treat all favorable signals the same — the magnitude is the differentiator.
+
+Sabian must reason from the signal breakdown above, including the magnitude labels.
 Sabian must not anchor reasoning to the single metric with the largest raw deviation.
 
 [computation reference — do not speak or paraphrase]
 body_state: ${combined.body_state}`;
 }
 
-function buildUserPrompt(scene, evidence, preInsight) {
+function buildUserPrompt(scene, evidence, preInsight, historySummary = null, patternBlock = null, angleBlock = null) {
   // Strip baseline_* fields from evidence_snapshot before serializing scene.
   // Baselines are already in INTERPRETED_BOARD as delta + direction + severity.
   // Keeping raw baseline numbers gives the model material to reconstruct
@@ -642,6 +669,23 @@ function buildUserPrompt(scene, evidence, preInsight) {
   const _isPeakWindow    = (_govCond === 'peak_window');
   const _isAutonomicStress = (_govCond === 'autonomic_stress');
 
+  // Build magnitude read from actual signal deltas for this specific run
+  function _magnitudeRead(signals = []) {
+    const metricPriority = ['hrv_ms', 'resting_hr', 'sleep_minutes', 'spo2'];
+    const ordered = metricPriority
+      .map(m => (signals || []).find(s => s.metric === m))
+      .filter(Boolean);
+    return ordered.map(s => {
+      if (s.value == null || s.baseline == null) return null;
+      const p = s.baseline !== 0 ? Math.round(Math.abs(s.delta) / Math.abs(s.baseline) * 100) : null;
+      const sign = s.delta >= 0 ? '+' : '';
+      const pctStr = p !== null ? ` (${sign}${p}% from baseline)` : '';
+      const dir = s.direction === 'favorable' ? '▲ favorable' : s.direction === 'unfavorable' ? (s.offset ? '▼ unfavorable — offset' : '▼ unfavorable') : '→ neutral';
+      return `  ${s.label}: ${s.value} today vs ${s.baseline} baseline — delta ${sign}${s.delta}${pctStr} — ${dir}`;
+    }).filter(Boolean).join('\n');
+  }
+  const _runMagnitude = _magnitudeRead(scene?.interpreted_signals);
+
   const line10Mandate = _isLeverageDay
     ? `MANDATORY LINE 10 RULE — enforced, no exceptions:
 Sabian's Line 10 must open with one of these affirmative imperatives: "Front-load", "Commit", or "Schedule".
@@ -662,9 +706,13 @@ One sentence. One imperative verb (eat). Two food objects. No stimulants named. 
 PATHWAY: ${_isPeakWindow ? 'PEAK WINDOW' : 'RECOVERY WINDOW'} — FULL DIALOGUE LOCK
 =====================================================================
 GOVERNING_CONDITION: ${_govCond}
+
+THIS RUN — EXACT SIGNAL MAGNITUDES (use these specific numbers, not generic "favorable"):
+${_runMagnitude}
+
 ${_isPeakWindow
-  ? `This is an exceptional physiological state — HRV significantly elevated, RHR very low, blood oxygen clean. NOT a standard good day. The body is operating above its normal ceiling. The biological cost of hard work is lower than normal. The arc must reflect the exceptional magnitude.`
-  : `All signals favorable. Body is organized and primed. Standard leverage day arc.`}
+  ? `INTERPRETATION: HRV is sharply above baseline. This is not a standard recovery — it is a physiological surplus. The arc must reflect the exceptional magnitude. Sabian must name how far above normal these numbers are, not just say "HRV is elevated."`
+  : `INTERPRETATION: Signals are favorable. The arc must reflect the ACTUAL degree of recovery — a +10% HRV day and a +70% HRV day are completely different states. Read the magnitudes above and let them drive the dialogue.`}
 
 ABSOLUTE PROHIBITIONS:
 1. NO hydration, residual load, carryover risk, or missing unknowns — the board is clean.
@@ -672,12 +720,19 @@ ABSOLUTE PROHIBITIONS:
 3. NO maintenance framing ("keep the rhythm", "protect the schedule") in Line 10.
 4. NO known/unknown exchange in any line.
 
+DATA REQUIREMENT — MANDATORY:
+Each signal in THIS RUN has a magnitude label: marginal / moderate / clear / sharp / exceptional.
+Sabian must use those labels to calibrate what he says — not just say "HRV is favorable."
+A marginal elevation sounds like: "your HRV came in a bit above where it normally sits."
+An exceptional elevation sounds like: "your HRV came in far above where you usually start — your nervous system built a surplus overnight."
+The dialogue must be traceable to the specific magnitude of today's signals, not recyclable across any recovery day.
+
 ARC:
 Lines 1–4: Board read → combined state → compression → mechanism.
 Lines 5–6: What this state enables → blood oxygen picture.
 Lines 7–8: What uses this → what wastes it.
 Line 9: The one move.
-Line 10: Front-load/Commit/Schedule [work] [timing] — [biological reason].
+Line 10: Front-load/Commit/Schedule [work] [timing] — [biological reason citing today's specific numbers].
 
 ` : _isAutonomicStress ? `
 PATHWAY: AUTONOMIC STRESS — FULL DIALOGUE LOCK
@@ -692,6 +747,9 @@ ABSOLUTE PROHIBITIONS:
 3. NO "Eat eggs" or choline in any line.
 4. NO Front-load/Commit/Schedule — this day does NOT deploy into hard work first thing.
 
+THIS RUN — EXACT SIGNAL MAGNITUDES:
+${_runMagnitude}
+
 ARC:
 Lines 1–4: Board read → HRV+RHR together signal overnight activation, not sleep debt → confirms.
 Lines 5–6: Activated state doesn't reset at wake — what carries forward into the morning.
@@ -699,7 +757,15 @@ Lines 7–8: The risk of misreading activation as readiness → borrowed output,
 Line 9: The one move.
 Line 10: Delay highest-demand work until midday — 90 minutes for the nervous system to come down first.
 
-` : '';
+` : `
+THIS RUN — EXACT SIGNAL MAGNITUDES:
+${_runMagnitude}
+
+DATA REQUIREMENT — Beats 2 and 3 only:
+Use the magnitude labels above to calibrate Beats 2 and 3 — describe how strong or weak the offending signal is ("about an hour short" vs "significantly short"). A marginal sleep deficit sounds different from a sharp one.
+BEATS 4 THROUGH 10: Follow the arc exactly as specified. Do not reorder beats. Do not insert magnitude commentary after Beat 3. The adenosine cascade (Beats 4-8) is a fixed sequence and cannot be shuffled to accommodate magnitude discussion.
+
+`;
 
   return `
 ${leverageDayLock}${preInsightBlock}SCENE:
@@ -714,6 +780,7 @@ ${JSON.stringify(compactEvidence, null, 2)}
 RETRIEVED_KNOWLEDGE:
 ${JSON.stringify(compactKnowledge, null, 2)}
 
+${angleBlock ? angleBlock + '\n\n' : ''}${patternBlock ? patternBlock + '\n' : ''}${historySummary ? historySummary + '\n' : ''}
 OUTPUT CONTRACT:
 
 Return a JavaScript array of exactly 10 strings.
@@ -1232,7 +1299,7 @@ async function callAnthropic({ systemPrompt, userPrompt, maxTokens = 2000 }) {
     model: modelName,
     system: systemText.slice(0, 12000),
     messages: [
-      { role: "user", content: userText.slice(0, 16000) }
+      { role: "user", content: userText.slice(0, 28000) }
     ],
     temperature: 0.4,
     max_tokens: maxTokens,
@@ -1384,80 +1451,13 @@ function contractParsedLines(lines) {
     sliced[i] = sliced[i].replace(/^(Host A:\s*)Sabian,?\s*/i, '$1');
   }
 
-  // Line 10 (Sabian's final move) must be one sentence with one action.
-  // Pass 1: Extract only the first sentence if the model appended explanation after the action.
-  // Structural only — does not rewrite meaning. Correctness is enforced by the validator retry loop.
-  if (sliced.length === target) {
-    const last = sliced[target - 1];
-    const colonIdx = last.indexOf(":");
-    if (colonIdx !== -1) {
-      const prefix = last.slice(0, colonIdx + 1);
-      const body = last.slice(colonIdx + 1).trim();
-
-      // Pass 1 — multi-sentence: keep only first sentence
-      const firstMatch = body.match(/^.+?[.!?](?:\s|$)/);
-      if (firstMatch && firstMatch[0].trim().length > 10 && firstMatch[0].trim().length < body.length) {
-        sliced[target - 1] = `${prefix} ${firstMatch[0].trim()}`;
-      }
-    }
-  }
-
   return sliced;
 }
 
-// Grounding gate: final safety net after the validator retry loop.
-// Timing claim enforcement is handled by the validator (Check E) during generation.
-// This gate handles only the replace path — if the corpus provides a grounded boundary
-// and a timing claim survived two validator attempts, it is substituted here.
-// The strip path is removed: grammar-safe enforcement requires regeneration, not post-hoc surgery.
-// Operates only on Line 10. Does not modify Lines 1–9.
-function groundLine10Claims(contractedLines, retrievedKnowledge) {
-  if (!contractedLines || contractedLines.length < 10) return contractedLines;
-  if (!retrievedKnowledge || retrievedKnowledge.length === 0) return contractedLines;
-
-  const lineIdx = contractedLines.length - 1;
-  const last = contractedLines[lineIdx];
-  const colonIdx = last.indexOf(':');
-  if (colonIdx === -1) return contractedLines;
-
-  const prefix = last.slice(0, colonIdx + 1);
-  const body = last.slice(colonIdx + 1).trim();
-
-  // Detect timing claims (digits and written-out)
-  const timingRx = /\b(?:\d+|thirty|forty[-\s]?five|sixty|ninety|one\s+hundred(?:\s+and\s+\w+)?|one|two|three|four|five|six)\s*(?:minute|hour)s?\b/gi;
-  const claims = [...body.matchAll(timingRx)].map(m => m[0]);
-  if (claims.length === 0) return contractedLines;
-
-  // Find a grounded corpus boundary
-  const corpusFull = retrievedKnowledge.map(c => (c.text || c.content || '')).join('\n');
-  const boundaryRx = /\b(?:before|until|by)\s+(?:noon|midday|mid-morning)\b|\b(?:noon|midday|mid-morning)\b/gi;
-  const boundaryMatches = [...corpusFull.matchAll(boundaryRx)].map(m => m[0].toLowerCase());
-  if (boundaryMatches.length === 0) {
-    console.log(`[VRTX] Grounding gate: timing claim "${claims.join(', ')}" survived — no corpus boundary to replace with. Passing through.`);
-    return contractedLines;
-  }
-
-  // Use the most frequently occurring boundary as the replacement
-  const freq = {};
-  for (const m of boundaryMatches) freq[m] = (freq[m] || 0) + 1;
-  const groundedBoundary = Object.entries(freq).sort((a, b) => b[1] - a[1])[0][0];
-
-  let modifiedBody = body;
-  for (const claim of claims) {
-    const escaped = claim.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const contextRx = new RegExp(
-      `(?:by\\s+|for\\s+)?${escaped}(?:\\s+after\\s+waking)?`,
-      'gi'
-    );
-    modifiedBody = modifiedBody.replace(contextRx, groundedBoundary);
-  }
-
-  if (modifiedBody === body) return contractedLines;
-
-  console.log(`[VRTX] Grounding gate (replace): "${claims.join(', ')}" → "${groundedBoundary}"`);
-  const result = [...contractedLines];
-  result[lineIdx] = `${prefix} ${modifiedBody}`;
-  return result;
+// Grounding gate: disabled. Line 10 is now a 3-sentence coaching arc covering food/sleep timings.
+// Timing claims like "finish dinner 2-3 hours before sleep" are physiologically valid and must pass through.
+function groundLine10Claims(contractedLines) {
+  return contractedLines;
 }
 
 async function regenerateLine10Isolated(scene, evidence, parsedLines) {
@@ -1468,10 +1468,18 @@ async function regenerateLine10Isolated(scene, evidence, parsedLines) {
   const rhr  = today.resting_heart_rate ?? today.resting_hr ?? null;
   const flags = evidence?.flags || {};
 
+  // Activity level — drives afternoon sentence calibration
+  const activityLoad = evidence?.yesterday_layer?.activityLoad || 'light';
+  const isHighActivity = activityLoad === 'high';
+  const afternoonContext = isHighActivity
+    ? `Yesterday's activity was HIGH (physical job or athlete load). This person's body ran sustained physical output all day. Coach a brief rest or hydration pause around 2-3pm. The "because" must name what sustained physical output costs the body by mid-afternoon — specific depletion, not generic tiredness.`
+    : `Yesterday's activity was ${activityLoad.toUpperCase()} (mostly stationary or light). This person's body was sedentary for most of the day. Coach brief movement around 3pm. The "because" must name what extended sitting does to blood glucose and circulation by that point — and why movement outperforms caffeine at this stage.`;
+
   const boardParts = [
     sleepDisplay ? `Sleep: ${sleepDisplay}` : null,
     hrv  != null ? `HRV: ${hrv}`            : null,
     rhr  != null ? `Resting heart rate: ${rhr}` : null,
+    `Activity level (yesterday): ${activityLoad}`,
   ].filter(Boolean);
 
   const govCond = scene?.governing_condition || '';
@@ -1490,43 +1498,40 @@ async function regenerateLine10Isolated(scene, evidence, parsedLines) {
   let sysPrompt, userText, validateFn;
 
   if (isLeverageDay) {
-    // PATHWAY B — FAVORABLE/PRIMED: behavioral deployment prescription
+    // PATHWAY B — FAVORABLE/PRIMED: daily coaching arc
     sysPrompt =
-      'You are Sabian — a behavioral interpretation engine.\n' +
-      'Your only task here: produce exactly one sentence — the Line 10 behavioral deployment directive.\n' +
-      'Output: plain sentence text only. No speaker label. No JSON. No quotes. Nothing else.';
+      'You are Sabian — a human performance coaching engine.\n' +
+      'Your only task here: produce Line 10 — the daily coaching arc for a recovery/peak day.\n' +
+      'Output: plain text only. No speaker label. No JSON. No quotes. Nothing else.';
 
     userText = [
       boardParts.length ? `BOARD STATE: ${boardParts.join(' | ')}` : '',
-      `DAY FRAME: ${dayFrame || 'momentum day'} — all signals favorable, no deficits to manage.`,
-      'CONTEXT: HRV is above baseline. Resting heart rate is below baseline. Sleep was full.',
-      'The nervous system has capacity available to deploy. Lines 1–9 have established this.',
-      'Line 10 delivers the one move that captures the window.',
+      `DAY FRAME: ${scene?.day_frame || 'momentum day'} — signals favorable, nervous system carrying a surplus.`,
       '',
-      'Write Line 10 — the behavioral deployment action.',
-      'Format: [Affirmative action verb] [specific task type] [timing or window] — [biological reason tied to the board].',
-      'The action must be AFFIRMATIVE — name what TO DO, not what to avoid.',
+      'Write Line 10 — the DAILY COACHING ARC. FOUR sentences. Each sentence must name a specific input and a specific biological reason grounded in this board state.',
       '',
-      'ABSOLUTE PROHIBITION:',
-      '- Do NOT say: protein, hydration, water, electrolytes, exercise, movement, fuel',
-      '- Do NOT give food advice of any kind',
-      '- Do NOT frame negatively ("don\'t underload", "treating it like a normal day")',
-      '- Do NOT open with "Treating..." or "Don\'t..."',
+      '  Sentence 1 (morning): What to drink or supplement right now. The "because" must name what that input does at the biological level for the surplus this board is showing.',
+      '  Sentence 2 (lunch): What to eat at lunch. The "because" must name the specific mechanism that food protects through the afternoon on a favorable-signal day.',
+      `  Sentence 3 (~3pm): Activity-calibrated reset. ${afternoonContext}`,
+      '  Sentence 4 (evening/sleep): What to eat for dinner and when to sleep. The "because" must name what keeps the favorable signals intact overnight.',
       '',
-      'Compliant: "Front-load the heaviest cognitive work in the first two hours — HRV this high means the parasympathetic system is clear, decision-making speed is at peak, and the window closes by early afternoon."',
-      'Compliant: "Schedule the highest-stakes decision or the most demanding task for this morning — the autonomic system is organized and it won\'t be this clear again for 24 hours."',
+      'RULES:',
+      '- Coach inputs only: food, drink, supplements, sleep timing. Never the work schedule.',
+      '- No generic advice ("stay hydrated", "eat well", "prioritize recovery").',
+      '- No work commands ("front-load", "commit your cognitive work", "schedule your hardest task").',
+      '- Every "because" must name a specific biological mechanism in plain language — not a general outcome.',
+      '- TONE: Write the way a smart coach talks to an athlete — not a researcher writing a paper. Say "the brain\'s waste clearance system", not "glymphatic flushing". Say "muscle uptake", not "GLUT4 translocation". Say "the body\'s overnight repair", not "slow-wave deep-sleep architecture". Common terms OK: blood glucose, cortisol, HRV, insulin, sleep pressure, circulation.',
+      '- LENGTH: Each sentence 20-35 words. Four sentences total. No multi-clause compound sentences.',
       '',
-      'Output only the sentence. Nothing else.',
+      'Output only the four sentences. Nothing else.',
     ].filter(Boolean).join('\n');
 
-    const prohibitedRx = /\b(protein|hydration|water|electrolyte|movement|exercise|fuel|carbohydrates?)\b/i;
-    const negativeOpenRx = /^(treating|don'?t|avoid|do not)/i;
-    const approvedOpenerRx = /^(front-load|commit|schedule|use|deploy)/i;
+    const workCommandRx = /\b(commit\s+your|schedule\s+your\s+(most|hardest)|(put|start|do|tackle)\s+your\s+(most|hardest)|put\s+the\s+hardest|block\s+the\s+first|push\s+through\s+your\s+(most|hardest)|front[- ]?load)\b/i;
+    const genericRx = /\b(stay\s+hydrated|eat\s+(well|healthy|clean)|prioritize\s+recovery|take\s+it\s+easy)\b/i;
     validateFn = (text) => {
       const issues = [];
-      if (prohibitedRx.test(text)) issues.push('prohibited-category-word');
-      if (negativeOpenRx.test(text)) issues.push('negative-framing');
-      if (!approvedOpenerRx.test(text.trim())) issues.push('missing-deployment-opener');
+      if (workCommandRx.test(text)) issues.push('work-command-prohibited');
+      if (genericRx.test(text)) issues.push('generic-wellness');
       return issues;
     };
   } else if (isAutonomicStress) {
@@ -1564,59 +1569,48 @@ async function regenerateLine10Isolated(scene, evidence, parsedLines) {
       return issues;
     };
   } else {
-    // PATHWAY A — ADENOSINE/SHORT SLEEP: food prescription
+    // PATHWAY A — ADENOSINE/SHORT SLEEP: daily coaching arc
     sysPrompt =
-      'You are Sabian — a behavioral interpretation engine.\n' +
-      'Your only task here: produce exactly one sentence — the Line 10 food prescription.\n' +
-      'Output: plain sentence text only. No speaker label. No JSON. No quotes. Nothing else.';
+      'You are Sabian — a human performance coaching engine.\n' +
+      'Your only task here: produce Line 10 — the daily coaching arc for a sleep-deficit day.\n' +
+      'Output: plain text only. No speaker label. No JSON. No quotes. Nothing else.';
 
     userText = [
       boardParts.length ? `BOARD STATE: ${boardParts.join(' | ')}` : '',
       'GOVERNING MECHANISM: Incomplete clearance of the sleep-pressure chemical (short sleep).',
-      'CONTEXT: Lines 6–8 have already explained the cascade and the mechanism. The word "adenosine" has already been used once — do NOT repeat it in Line 10. It prescribes.',
+      'CONTEXT: Lines 6–8 explained the cascade. Line 10 coaches what this person gives their body today to support it.',
       '',
-      'Write Line 10 — the food prescription. Follow this EXACT pattern:',
-      '"Eat eggs for choline — [translate choline in one short plain phrase] — and [lentils or oats or sweet potato] to [blood glucose reason]."',
+      'Write Line 10 — the DAILY COACHING ARC. FOUR sentences. Each sentence must name a specific input and a specific biological reason derived from this board state.',
       '',
-      'REQUIRED words — all three must appear:',
-      '  • "eggs" — the choline source',
-      '  • "choline" — the science term',
-      '  • one of: "lentils", "oats", "sweet potato" — the slow blood glucose source',
+      '  Sentence 1 (morning): What to drink or supplement right now. The "because" must name what that input does at the cellular level for the clearance process — not "you need energy" or vague alertness claims.',
+      '  Sentence 2 (lunch): What to eat at lunch. The "because" must name the specific mechanism that food drives under short-sleep clearance pressure.',
+      `  Sentence 3 (~3pm): Activity-calibrated reset. ${afternoonContext}`,
+      '  Sentence 4 (evening/sleep): When to eat dinner and when to sleep. The "because" must name what the overnight clearing process requires and what a late or heavy meal takes away from it.',
       '',
-      'PROHIBITED words — none of these may appear:',
-      '  protein, carbohydrates, hydration, water, electrolytes, movement, exercise, fuel,',
-      '  caffeine, coffee, tea, or any other stimulant.',
+      'RULES:',
+      '- Coach inputs only: food, drink, supplements, sleep timing. Never the work schedule.',
+      '- No generic advice ("stay hydrated", "eat well", "prioritize recovery").',
+      '- No work commands ("front-load", "commit your cognitive work", "schedule your hardest task").',
+      '- Every "because" must name a specific biological mechanism in plain language — not a general outcome.',
+      '- TONE: Write the way a smart coach talks to an athlete — not a researcher writing a paper. Say "the brain\'s waste clearance system", not "glymphatic flushing". Say "muscle uptake", not "GLUT4 translocation". Say "the body\'s overnight repair", not "slow-wave deep-sleep architecture". Common terms OK: blood glucose, cortisol, HRV, insulin, sleep pressure, circulation.',
+      '- LENGTH: Each sentence 20-35 words. Four sentences total. No multi-clause compound sentences.',
       '',
-      'STRUCTURE: One sentence. One imperative verb (eat). Two food objects connected by "and".',
-      'No timing duration. No re-explanation of the cascade.',
-      '',
-      'Compliant: "Eat eggs for choline — the raw material your brain uses to build the attention signal — and lentils or oats to keep blood glucose stable so the rebound does not compound with a crash."',
-      'Compliant: "Eat eggs for choline — the precursor your brain converts into the attention neurotransmitter — and oats or sweet potato so blood glucose stays stable and the rebound lands clean."',
-      '',
-      'Output only the sentence. Nothing else.',
+      'Output only the four sentences. Nothing else.',
     ].filter(Boolean).join('\n');
 
-    const substanceRx    = /\b(?:caffeine|coffee|tea)\b/i;
-    const timingRx       = /\b(?:\d+|thirty|forty[-\s]?five|sixty|ninety|one\s+hundred(?:\s+and\s+\w+)?|one|two|three|four|five|six)\s*(?:minute|hour)s?\b/i;
-    const hasEggsRx      = /\beggs?\b/i;
-    const hasCholineRx   = /\bcholine\b/i;
-    const slowGlucoseRx  = /\b(lentils?|oats?|sweet\s+potato)\b/i;
-    const genericRx      = /\b(protein|carbohydrates?|hydration|water|electrolyte|movement|exercise|fuel)\b/i;
+    const workCommandRx = /\b(commit\s+your|schedule\s+your\s+(most|hardest)|(put|start|do|tackle)\s+your\s+(most|hardest)|put\s+the\s+hardest|block\s+the\s+first|push\s+through\s+your\s+(most|hardest)|front[- ]?load)\b/i;
+    const genericRx = /\b(stay\s+hydrated|eat\s+(well|healthy|clean)|prioritize\s+recovery|take\s+it\s+easy)\b/i;
     validateFn = (text) => {
       const issues = [];
-      if (substanceRx.test(text))       issues.push('substance');
-      if (timingRx.test(text))          issues.push('timing');
-      if (!hasEggsRx.test(text))        issues.push('missing:eggs');
-      if (!hasCholineRx.test(text))     issues.push('missing:choline');
-      if (!slowGlucoseRx.test(text))    issues.push('missing:slow-glucose-source');
-      if (genericRx.test(text))         issues.push('generic-category-word');
+      if (workCommandRx.test(text)) issues.push('work-command-prohibited');
+      if (genericRx.test(text)) issues.push('generic-wellness');
       return issues;
     };
   }
 
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const raw  = await callAnthropic({ systemPrompt: sysPrompt, userPrompt: userText, maxTokens: 120 });
+      const raw  = await callAnthropic({ systemPrompt: sysPrompt, userPrompt: userText, maxTokens: 280 });
       const text = String(raw || '').replace(/^["'\s]+|["'\s]+$/g, '').trim();
 
       if (!text || text.length < 20) {
@@ -1640,11 +1634,18 @@ async function regenerateLine10Isolated(scene, evidence, parsedLines) {
 }
 
 async function generateDialogue({ scene, evidence, preInsight, ts }) {
-  const userPrompt = buildUserPrompt(scene, evidence, preInsight);
+  const recentHistory = loadRecentHistory(OUT_DIR, { days: 7 });
+  const historySummary = buildHistorySummary(recentHistory);
+  // Pattern block disabled — VRTX does not audit past behavior.
+  // The body's state today already encodes history. HRV and RHR are the evidence.
+  const patternBlock = null;
+  const angleBlock = buildAngleBlock(scene.governing_condition);
+  const userPrompt = buildUserPrompt(scene, evidence, preInsight, historySummary, patternBlock, angleBlock);
   const targetLines = REQUIRED_DIALOGUE_LINES > 0 ? REQUIRED_DIALOGUE_LINES : 10;
   const attempts = [];
   let lastError = null;
   let lastResult = null;
+  let bestResult = null; // tracks the attempt with the most complete parsed lines
   let lastSemanticViolations = null;
   let lastStructuralErrors = [];
 
@@ -1726,6 +1727,10 @@ async function generateDialogue({ scene, evidence, preInsight, ts }) {
       });
 
       lastResult = { raw, parsedLines, attempts, userPrompt: effectivePrompt };
+      // Keep the result with the most complete parsed lines for fallback
+      if (!bestResult || parsedLines.length > (bestResult.parsedLines?.length || 0)) {
+        bestResult = lastResult;
+      }
       lastSemanticViolations = semanticResult.violations;
       lastStructuralErrors = structuralErrors;
 
@@ -1746,7 +1751,8 @@ async function generateDialogue({ scene, evidence, preInsight, ts }) {
         console.warn(`[VRTX] Attempt 1 failed (${failReasons.join("; ")}). Retrying with correction.`);
       } else {
         console.warn(`[VRTX] Attempt ${i + 1} failed (${failReasons.join("; ")}). Proceeding with available result.`);
-        return lastResult;
+        // Return the best attempt (most lines) rather than the latest (which may have regressed)
+        return bestResult || lastResult;
       }
     } catch (error) {
       // Fatal errors only — network failure, API error, JSON parse failure
@@ -1759,8 +1765,8 @@ async function generateDialogue({ scene, evidence, preInsight, ts }) {
     }
   }
 
-  if (lastResult) {
-    return lastResult;
+  if (bestResult || lastResult) {
+    return bestResult || lastResult;
   }
 
   writeFile(
@@ -1863,9 +1869,11 @@ async function main() {
   let retrievedKnowledge = [];
   try {
     retrievedKnowledge = normalizeRetrievedChunks(
-      retrieveRelevantChunks({
+      retrieveForState({
+        governingCondition: scene.governing_condition,
         query: knowledgeQuery,
-        topK: 4
+        topK: 4,
+        maxPerSource: 2
       })
     );
   } catch (_) {
@@ -1918,16 +1926,18 @@ async function main() {
   // 1. Adenosine-pathway violations: substance assumption, ungrounded timing, prescription not specific
   // 2. ANY scenario where prohibited generic category words (protein, hydration, etc.) survived 2 attempts
   //    (line10_single_action with behaviorHits — detected by checking Line 10 body directly)
-  const PROHIBITED_BEHAVIORS_RX = /\b(hydration|caffeine|coffee|tea|protein|electrolyte|water|carbohydrates?|movement|exercise|fuel)\b/i;
+  const WORK_COMMAND_RX = /\b(commit\s+your\s+(most\s+)?(demanding|complex|cognitive|analytical|creative|hardest)\s+(work|task|output|decision)|schedule\s+your\s+(most\s+)?(demanding|complex|cognitive|hardest)|put\s+your\s+(most\s+)?(demanding|complex|cognitive|hardest)|(start|do|tackle)\s+your\s+(most\s+)?(demanding|complex|cognitive|hardest)|put\s+the\s+(hardest|most\s+demanding)\s+thing|block\s+the\s+first|push\s+through\s+your\s+(most\s+)?(demanding|hardest)|front[- ]?load)\b/i;
   const line10Body = generation.parsedLines?.[9]
     ? generation.parsedLines[9].replace(/^Sabian:\s*/i, '')
     : '';
   const hasLine10Violations = line10Check.violations.some(v =>
+    v.check === 'line10_work_command' ||
+    v.check === 'line10_generic_wellness' ||
+    v.check === 'line10_frontload_banned' ||
+    v.check === 'line10_not_coaching_arc' ||
     v.check === 'line10_substance_assumption' ||
-    v.check === 'line10_ungrounded_timing' ||
-    v.check === 'line10_prescription_noncompliant' ||
-    v.check === 'line10_leverage_day_opener'
-  ) || PROHIBITED_BEHAVIORS_RX.test(line10Body);
+    v.check === 'line10_prescription_noncompliant'
+  ) || WORK_COMMAND_RX.test(line10Body);
   if (hasLine10Violations && generation.parsedLines?.length >= 10) {
     console.warn('[VRTX] Line 10 violation persists — running isolated regeneration pass.');
     const isolatedLine10 = await regenerateLine10Isolated(scene, evidence, generation.parsedLines);
@@ -1945,7 +1955,7 @@ async function main() {
 
   writeFile(
     path.join(OUT_DIR, `vrtx_script_${ts}.txt`),
-    generation.raw
+    JSON.stringify(groundedLines, null, 2)
   );
 
   writeFile(

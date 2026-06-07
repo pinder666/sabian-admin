@@ -267,161 +267,115 @@ function validateSemantics(parsedLines, retrievedKnowledge) {
     }
   }
 
-  // Check C: Line 10 single prescription (index 9)
-  // A compound food prescription is allowed: "[food] for [reason] — and [food] for [reason]"
-  // constitutes one prescription, not two separate actions. "and" connecting food objects
-  // under one imperative verb is valid. Block multiple imperative verbs and multiple sentences.
+  // Check C: Line 10 coaching arc structure
+  // Line 10 is the daily coaching arc — 3 sentences covering morning, lunch, and evening/sleep.
+  // It must NOT be a single work-command sentence ("commit your cognitive work", "schedule your task").
+  // It must NOT use generic wellness language without mechanism.
   if (parsedLines[9]) {
     const line10Body = getBody(parsedLines[9]);
     const line10Lower = line10Body.toLowerCase();
-    const sentenceCount = line10Body.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
-    // Block "also" and "additionally" — these signal a second separate instruction, not a compound object.
-    // "and" is allowed when connecting food items in a prescription.
-    const hasExpandingConnective = /\balso\b|\badditionally\b/.test(line10Lower);
-    // Detect multiple imperative verbs — two separate actions (e.g., "Eat X. Avoid Y.")
-    const imperativeVerbs = (line10Lower.match(/\b(eat|avoid|delay|wait|hold|skip|take|drink|add|use|start|stop)\b/g) || []);
-    const hasMultipleActions = imperativeVerbs.length > 1;
-    const behaviorHits = PROHIBITED_BEHAVIORS.filter(b => new RegExp("\\b" + b + "\\b", "i").test(line10Lower));
-    if (sentenceCount > 1 || hasExpandingConnective || hasMultipleActions || behaviorHits.length >= 1) {
-      const details = [];
-      if (sentenceCount > 1) details.push(`${sentenceCount} sentences`);
-      if (hasExpandingConnective) details.push("expanding connective found");
-      if (hasMultipleActions) details.push(`multiple action verbs: [${imperativeVerbs.join(", ")}]`);
-      if (behaviorHits.length >= 1) details.push(`prohibited generic category word(s): [${behaviorHits.join(", ")}]`);
+
+    // Ban work-scheduling commands — VRTX does not tell people how to structure their work
+    const workCommandRx = /\b(commit\s+your\s+(most\s+)?(demanding|complex|cognitive|analytical|creative|hardest)\s+(work|task|output|decision)|schedule\s+your\s+(most\s+)?(demanding|complex|cognitive|hardest)|put\s+your\s+(most\s+)?(demanding|complex|cognitive|hardest)|(start|do|tackle)\s+your\s+(most\s+)?(demanding|complex|cognitive|hardest)|put\s+the\s+(hardest|most\s+demanding)\s+thing|block\s+the\s+first|push\s+through\s+your\s+(most\s+)?(demanding|hardest))\b/i;
+    if (workCommandRx.test(line10Body)) {
       violations.push({
-        check: "line10_single_action",
+        check: 'line10_work_command',
         line: 10,
-        found: details.join("; "),
+        found: line10Body.trim().slice(0, 80),
         correction:
-          `SEMANTIC VIOLATION — Line 10 (single prescription):\n` +
-          `Line 10 produced: ${details.join("; ")}.\n` +
-          `Line 10 must not use generic nutrient category words like "protein", "carbohydrates", "hydration", "electrolytes", "water", "movement", "exercise", or "fuel".\n` +
-          `Name the specific food — not the nutrient category. "Eggs" not "protein". "Lentils" not "slow carbohydrates". "Oats" not "complex carbs".\n` +
-          `Line 10 is one sentence. One imperative verb. A compound food object is allowed ("eggs and lentils") but two separate action verbs are not.\n` +
-          `Target structure: [eat] [specific food] for [science term — plain translation] — and [specific food] to [biological reason].\n` +
-          `Example: "Eat eggs for choline — the raw material your brain uses to build the attention signal — and lentils or oats to keep blood glucose stable so the adenosine rebound does not compound with a crash."\n` +
-          `Rewrite Line 10 as one prescription sentence with one action verb and specific named foods. Nothing else.`
+          `SEMANTIC VIOLATION — Line 10 (work command prohibited):\n` +
+          `Line 10 told the user when or how to structure their work. VRTX does not do this.\n` +
+          `The user's work schedule is fixed. VRTX coaches the inputs around it: what to drink, what to eat, and when to sleep.\n` +
+          `Line 10 must be the DAILY COACHING ARC — 3 sentences:\n` +
+          `  Sentence 1: what to drink or take this morning — with "because" naming the biological reason\n` +
+          `  Sentence 2: what to eat at lunch — with "because" naming what it supports in the body\n` +
+          `  Sentence 3: what to eat at dinner and what time to sleep — with "because" naming what it enables overnight\n` +
+          `COMPLIANT example:\n` +
+          `  "Start with electrolytes before anything else — your cells need sodium, magnesium, and potassium to run the clearance process efficiently, and water alone won't provide them. At lunch, eat something with complete protein — meat, eggs, fish, or legumes — because your brain converts amino acids into the neurotransmitters that hold attention as the pressure builds. Finish dinner before 8pm and keep it light and alkaline — leafy greens, fish, root vegetables — then get to bed earlier than usual so the clearing process has the full window it needs."`
       });
     }
-  }
 
-  // Check E: Line 10 ungrounded timing claim (index 9)
-  // Only applies on Pathway A (adenosine active). On Pathway B, timing windows like
-  // "the next two hours" are valid behavioral deployment references, not corpus-dependent claims.
-  if (parsedLines[9] && _checkA_adenosineActive) {
-    const line10Body = getBody(parsedLines[9]);
-    const timingRx = /\b(?:\d+|thirty|forty[-\s]?five|sixty|ninety|one\s+hundred(?:\s+and\s+\w+)?|one|two|three|four|five|six)\s*(?:minute|hour)s?\b/gi;
-    const timingMatches = [...line10Body.matchAll(timingRx)].map(m => m[0]);
-
-    if (timingMatches.length > 0) {
-      // Extract grounded boundaries from the retrieved corpus
-      let groundedBoundaries = [];
-      if (Array.isArray(retrievedKnowledge) && retrievedKnowledge.length > 0) {
-        const corpusFull = retrievedKnowledge.map(c => (c.text || c.content || '')).join('\n');
-        const boundaryRx = /\b(?:before|until|by)\s+(?:noon|midday|mid-morning)\b|\b(?:noon|midday|mid-morning)\b/gi;
-        groundedBoundaries = [...new Set(
-          [...corpusFull.matchAll(boundaryRx)].map(m => m[0].toLowerCase())
-        )];
-      }
-
-      let correctionBody;
-      if (groundedBoundaries.length === 0) {
-        correctionBody =
-          `Line 10 contains a timing claim [${timingMatches.join(", ")}] not supported by the retrieved knowledge.\n` +
-          `The retrieved knowledge does not provide a grounded timing boundary for this mechanism.\n` +
-          `Rewrite Line 10 with NO timing reference of any kind — no duration, no "after waking", no "morning", no "tonight", no "afternoon".\n` +
-          `State only: what the action is and the single biological reason it works. Nothing else.\n` +
-          `Example structure: "[Action verb] [behavioral class] — [one mechanism reason]."`;
-      } else if (groundedBoundaries.length === 1) {
-        correctionBody =
-          `Line 10 contains a timing claim [${timingMatches.join(", ")}] not supported by the retrieved knowledge.\n` +
-          `The grounded boundary from the retrieved knowledge is: "${groundedBoundaries[0]}".\n` +
-          `Rewrite Line 10 using this grounded boundary instead of the specific duration [${timingMatches.join(", ")}].`;
-      } else {
-        correctionBody =
-          `Line 10 contains a timing claim [${timingMatches.join(", ")}] not supported by the retrieved knowledge.\n` +
-          `The retrieved knowledge supports multiple boundaries: ${groundedBoundaries.map(b => `"${b}"`).join(", ")}.\n` +
-          `Rewrite Line 10 using these grounded anchors. A range expression is acceptable — for example: "Wait until [earliest boundary]. [Latest boundary] is safer."\n` +
-          `Do not use the specific duration [${timingMatches.join(", ")}].`;
-      }
-
+    // Ban generic wellness phrases without mechanism
+    const genericWellnessRx = /\b(stay hydrated|eat (well|healthy|clean|right)|get better sleep|prioritize recovery|take it easy|listen to your body|balance activity|monitor how you feel)\b/i;
+    if (genericWellnessRx.test(line10Lower)) {
       violations.push({
-        check: "line10_ungrounded_timing",
+        check: 'line10_generic_wellness',
         line: 10,
-        found: timingMatches.join(", "),
-        correction: `SEMANTIC VIOLATION — Line 10 (ungrounded timing claim):\n` + correctionBody
+        found: line10Body.trim().slice(0, 80),
+        correction:
+          `SEMANTIC VIOLATION — Line 10 (generic wellness language):\n` +
+          `Line 10 used a generic wellness phrase. Every recommendation must name the specific input and the biological reason it matters today.\n` +
+          `Not: "stay hydrated" — Instead: "start with electrolytes — your cells need sodium and magnesium to run the clearance process, and water alone won't provide them"\n` +
+          `Not: "eat well" — Instead: "at lunch, eat something with complete protein — meat, fish, or legumes — because your brain converts amino acids into the neurotransmitters that hold focus as clearance pressure builds"\n` +
+          `Rewrite Line 10 with specific inputs and specific biological reasons.`
       });
     }
   }
 
-  // Check F: Line 10 substance assumption (index 9)
-  // Line 8 uses caffeine as an example of the stimulation-seeking response.
-  // Line 10 must resolve the governing mechanism (stimulation timing), not the example substance.
-  // An insight that says "delay caffeine" fails for any user who does not drink caffeine.
-  // Line 10 must use behavioral class language: "stimulation", "artificial alertness", etc.
+  // Check G2a: Line 10 must be a 4-sentence coaching arc covering morning, lunch, afternoon, and evening/sleep.
+  // A single or 2-sentence output is missing required day-points.
   if (parsedLines[9]) {
-    const line10Body = getBody(parsedLines[9]).toLowerCase();
-    const substanceHits = ["caffeine", "coffee", "tea"].filter(s =>
-      new RegExp("\\b" + s + "\\b", "i").test(line10Body)
-    );
-    if (substanceHits.length > 0) {
+    const line10Body = getBody(parsedLines[9]);
+    const sentences = line10Body.split(/(?<=[.!?])\s+(?=[A-Z])/).filter(s => s.trim().length > 10);
+    const hasInputMorning = /\b(morning|first\s+thing|before\s+(coffee|anything|your\s+first)|start\s+with|wake|electrolyte|magnesium|mineral|sodium|potassium|water\s+with|hydrat|supplement)/i.test(line10Body);
+    const hasInputLunch = /\b(lunch|protein|amino|fish|chicken|meat|eggs?|legume|lentil|salmon|muscle|carbohydrate|rice|sweet\s+potato)\b/i.test(line10Body);
+    const hasInputAfternoon = /\b(3pm|afternoon|stairs|walk|outside|sunlight|movement\s+break|break\s+around|step\s+outside|5[-\s]?minute|five[-\s]?minute|rest\s+break|sit\s+down|water\s+break|hydration\s+break|natural\s+break|brief\s+rest)\b/i.test(line10Body);
+    const hasInputEvening = /\b(dinner|evening|alkaline|leafy|vegetable|sleep|bed|tonight|bedtime)\b/i.test(line10Body);
+    const pointsCovered = [hasInputMorning, hasInputLunch, hasInputAfternoon, hasInputEvening].filter(Boolean).length;
+
+    if (sentences.length < 3 || pointsCovered < 3) {
       violations.push({
-        check: "line10_substance_assumption",
+        check: 'line10_not_coaching_arc',
         line: 10,
-        found: substanceHits.join(", "),
+        found: `${sentences.length} sentence(s), ${pointsCovered}/4 day-points covered`,
         correction:
-          `SEMANTIC VIOLATION — Line 10 (substance assumption):\n` +
-          `Line 10 names [${substanceHits.join(", ")}]. This is prohibited.\n` +
-          `Line 8 identified a cascade: early stimulation → adenosine masked → wears off → rebound → energy grab → alertness degrades.\n` +
-          `Line 10 must break the cascade. Not complete the caffeine narrative.\n` +
-          `The cascade is the mechanism. The prescription is: do not trigger it early.\n` +
-          `This is independent of [${substanceHits.join(", ")}]. Whether the user drinks caffeine or not, the cascade is the same. The prescription is the same.\n` +
-          `The word "${substanceHits[0]}" must not appear in Line 10.\n` +
-          `Compliant form — rephrase directly from cascade logic:\n` +
-          `"Don't start the cascade — let the pressure clear on its own before reaching for anything to wake you up."\n` +
-          `One sentence. Behavioral class only. No substance named.`
+          `SEMANTIC VIOLATION — Line 10 (not a coaching arc):\n` +
+          `Line 10 produced ${sentences.length} sentence(s) covering ${pointsCovered} of 4 required day-points.\n` +
+          `Line 10 must be the DAILY COACHING ARC — 4 sentences covering morning, lunch, afternoon (~3pm), and evening/sleep.\n` +
+          `Each sentence must name a specific input (food, drink, supplement, or sleep timing) grounded in the day's biology — not generic advice.\n` +
+          `Required structure:\n` +
+          `  Sentence 1 (morning): a specific morning drink or supplement — "because" names what it does for the body's current state at the biological level.\n` +
+          `  Sentence 2 (lunch): a specific lunch food — "because" names the mechanism it drives under today's conditions.\n` +
+          `  Sentence 3 (~3pm): an activity-calibrated afternoon habit — "because" names what the body needs at that point based on how active it was yesterday.\n` +
+          `  Sentence 4 (evening): specific dinner guidance and sleep timing — "because" names what the overnight process requires.\n` +
+          `Rewrite Line 10 as four sentences. Each sentence must contain a specific biological reason. No single-sentence summaries. No generic advice.`
       });
     }
   }
 
-  // Check G: Line 10 prescription compliance (index 9)
-  // When the adenosine cascade pathway was triggered (adenosine appears in Lines 4–8),
-  // Line 10 must name the specific food prescription: eggs for choline + slow glucose source.
-  // A generic "protein/carbohydrates" instruction without specific foods is non-compliant.
-  if (parsedLines[9] && parsedLines.length >= 9) {
-    const adenosinePrecedingLines = parsedLines.slice(3, 9).join(' ').toLowerCase();
-    const adenosinePathwayActive = adenosinePrecedingLines.includes('adenosine');
-
-    if (adenosinePathwayActive) {
-      const line10Lower = getBody(parsedLines[9]).toLowerCase();
-      const hasEggs = /\beggs?\b/.test(line10Lower);
-      const hasCholine = /\bcholine\b/.test(line10Lower);
-
-      if (!hasEggs || !hasCholine) {
-        violations.push({
-          check: 'line10_prescription_noncompliant',
-          line: 10,
-          found: 'missing eggs and choline — generic prescription delivered instead of specific food prescription',
-          correction:
-            `SEMANTIC VIOLATION — Line 10 (prescription noncompliant):\n` +
-            `The adenosine clearance pathway was established in Lines 4–8. ` +
-            `Line 10 must deliver the specific food prescription — not generic food categories.\n` +
-            `Required: (1) eggs for choline — choline is the raw material the brain converts into ` +
-            `acetylcholine, the attention neurotransmitter. (2) a slow blood glucose source — ` +
-            `lentils, oats, or sweet potato — to prevent the glucose spike-crash that compounds the adenosine rebound.\n` +
-            `Do NOT use: "protein", "carbohydrates", "nutrients", "dopamine", or any generic category.\n` +
-            `Name the food. Name the science term. Translate it immediately.\n` +
-            `Compliant: "Eat eggs for choline — the raw material your brain converts into acetylcholine, ` +
-            `the attention neurotransmitter — and lentils or sweet potato to hold blood glucose steady ` +
-            `so the adenosine rebound does not compound with a crash."`
-        });
-      }
+  // Check G2: Line 10 front-load prohibition — applies to ALL scenarios, all pathways
+  // "Front-load" is a generic filler verb. Line 10 must name specific work, specific timing, specific biology.
+  if (parsedLines[9]) {
+    const line10Body = getBody(parsedLines[9]);
+    if (/\bfront[- ]?load/i.test(line10Body)) {
+      violations.push({
+        check: 'line10_frontload_banned',
+        line: 10,
+        found: line10Body.trim().slice(0, 80),
+        correction:
+          `SEMANTIC VIOLATION — Line 10 (front-load banned — all scenarios):\n` +
+          `"Front-load" is ABSOLUTELY PROHIBITED. It says nothing specific.\n` +
+          `Line 10 must begin with: Put / Commit / Schedule / Use / Get / Delay / Avoid / Protect / Block / Move.\n` +
+          `It must name: (1) a specific work type or sleep action, (2) an exact timing window or tonight directive, (3) the biological reason from today's actual HRV and resting heart rate.\n` +
+          `For depletion/deficit scenarios — compliant examples:\n` +
+          `  "Get to bed 45 minutes earlier tonight — that's the only input that starts paying back the clearance debt."\n` +
+          `  "Move your hardest decision to before noon — the clearance deficit narrows judgment faster than it feels."\n` +
+          `  "Avoid decisions requiring deep judgment after 2pm — the clearance debt compounds hardest in the final hours of waking."\n` +
+          `For peak/recovery scenarios — compliant examples:\n` +
+          `  "Commit your most demanding analytical work to the next 90 minutes — HRV at [X] signals genuine surplus capacity right now."\n` +
+          `  "Schedule your highest-stakes decision before noon — resting heart rate at [X] means the body is running efficiently right now."\n` +
+          `Rewrite Line 10 with a specific verb, specific task or action, specific timing, and biological reason from today's numbers.`
+      });
     }
   }
 
   // Shared pathway detection for Checks H, I, J
   const _adenosinePrecedingLines = parsedLines.slice(3, 9).join(' ').toLowerCase();
-  const _leverageDayActive = !_adenosinePrecedingLines.includes('adenosine');
+  // autonomic_stress arc also has no adenosine — detect it by Line 10 opener to avoid misfire
+  const _line10Body = getBody(parsedLines[9] || '').trim().toLowerCase();
+  const _autonomicStressArc = /^(delay|hold|give|wait)\b/.test(_line10Body);
+  // leverage day = no adenosine AND not autonomic_stress
+  const _leverageDayActive = !_adenosinePrecedingLines.includes('adenosine') && !_autonomicStressArc;
 
   // Check H: Line 9 food/meal question on leverage day
   // On a leverage/favorable day, Host A must NOT ask about food or the first meal in Line 9.
@@ -472,28 +426,8 @@ function validateSemantics(parsedLines, retrievedKnowledge) {
     }
   }
 
-  // Check J: Line 10 opener on leverage day
-  // On a leverage/favorable day, Line 10 must open with an affirmative deployment imperative.
-  // "Keep the rhythm", "Protect the schedule", or any maintenance/protection framing is non-compliant.
-  if (_leverageDayActive && parsedLines[9]) {
-    const line10Body = getBody(parsedLines[9]);
-    const approvedOpenings = /^(front-load|commit|schedule|use|deploy)/i;
-    if (!approvedOpenings.test(line10Body.trim())) {
-      violations.push({
-        check: 'line10_leverage_day_opener',
-        line: 10,
-        found: line10Body.trim().slice(0, 60),
-        correction:
-          `SEMANTIC VIOLATION — Line 10 (leverage day opener):\n` +
-          `Line 10 on a leverage day must open with one of: "Front-load", "Commit", "Schedule", "Use", or "Deploy".\n` +
-          `The current opening ["${line10Body.trim().slice(0, 60)}..."] is non-compliant — it does not deploy the window, it protects or maintains it.\n` +
-          `Line 10 must name: (1) a specific task type (cognitive work, high-stakes decision, most demanding problem), (2) a timing window (this morning, the next two hours), (3) the biological reason (HRV + RHR + what they signal).\n` +
-          `Compliant: "Front-load the heaviest cognitive work in the first two hours — HRV this high means the parasympathetic system is clear and decision-making speed is at peak."\n` +
-          `Compliant: "Commit your most demanding creative or analytical work to the next two hours — HRV and resting heart rate together signal full autonomic organization."\n` +
-          `Rewrite Line 10 with a deployment imperative that names the task, the window, and the biological reason.`
-      });
-    }
-  }
+  // Check J: removed — the old leverage-day opener requirement (Put/Commit/Schedule/Use)
+  // enforced work-command language that is now prohibited. Line 10 is the coaching arc for all states.
 
   // Check D: Prohibited internal labels — all lines
   const LABEL_PARAPHRASE_TERMS = ["constrained", "offset", "near-steady", "near steady", "partially compensated", "one mild limiter", "partially constrained"];
@@ -539,12 +473,43 @@ function validateSemantics(parsedLines, retrievedKnowledge) {
     const totalHits = adenosineCountByLine.reduce((s, x) => s + x.count, 0);
     const offenders = adenosineCountByLine.filter((x, i) => i !== 5 && x.count > 0);
     if (totalHits > 1 || offenders.length > 0) {
+      const offenderLines = adenosineCountByLine.filter(x => x.count > 0).map(x => `Line ${x.line}`).join(', ');
+      const offenderIndexes = offenders.map(x => `Line ${x.line}`).join(', ');
       violations.push({
         check: 'adenosine_overuse',
         severity: 'error',
-        message: `"adenosine" must appear exactly once (Line 6 only). Found in: ${
-          adenosineCountByLine.filter(x => x.count > 0).map(x => `Line ${x.line}`).join(', ')
-        } (${totalHits} total).`,
+        line: offenders[0]?.line,
+        found: `"adenosine" found in ${offenderLines} (${totalHits} total — only Line 6 is allowed)`,
+        correction:
+          `SEMANTIC VIOLATION — adenosine_overuse:\n` +
+          `"adenosine" appears in ${offenderLines} but must appear EXACTLY ONCE — in Line 6 ONLY.\n` +
+          `Lines using "adenosine" outside Line 6: ${offenderIndexes}.\n` +
+          `Fix: In every line EXCEPT Line 6, replace "adenosine" with a substitute:\n` +
+          `  - In Line 4: say "the chemical that drives the pressure to sleep" — do NOT name it yet.\n` +
+          `  - Beat 5 (Line 5): Host A asks "What's the chemical?" — this is what pulls the definition forward.\n` +
+          `  - Line 6: Sabian defines it — "Adenosine is the chemical..." — ONE use, here only.\n` +
+          `  - Line 8: Use "it", "the pressure", "the signal", "the chemical" — never say "adenosine" again.\n` +
+          `Rewrite any line that uses "adenosine" outside Line 6 without the word.`
+      });
+    }
+  }
+
+  // Check L: Night/day count prohibition — VRTX does not audit past behavior
+  if (parsedLines.length > 0) {
+    const fullDialogue = parsedLines.map(l => getBody(l)).join(' ');
+    const countPattern = /\b\d+\s+of\s+the\s+last\s+\d+\s+(nights?|days?)\b|\b\d+\s+consecutive\s+(nights?|days?)\b|\bmost\s+(nights?|days?)\s+for\s+the\s+past\b/gi;
+    const countMatches = [...fullDialogue.matchAll(countPattern)].map(m => m[0]);
+    if (countMatches.length > 0) {
+      violations.push({
+        check: 'night_count_audit',
+        severity: 'error',
+        found: countMatches.join(', '),
+        correction:
+          `SEMANTIC VIOLATION — night_count_audit:\n` +
+          `VRTX does not count past nights or audit behavior. Found: "${countMatches.join('", "')}"\n` +
+          `Remove all references to past night/day counts. The body's state today already encodes the history.\n` +
+          `A low HRV IS the evidence. Say what the body shows today. Say what that means today. Say what wins today.\n` +
+          `Replace any count-based framing with today's physiological signal: HRV, RHR, sleep duration, or sleep score.`
       });
     }
   }

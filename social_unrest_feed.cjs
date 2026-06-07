@@ -1,15 +1,9 @@
+// DECOMMISSIONED 2026-06-01. ACLED removed from Sabian — no API key, no data, EULA risk.
+// File kept for audit trail. scoreSocialUnrest in convergence_engine returns null stub directly.
+//
 // social_unrest_feed.cjs
-// Social Unrest Signal — ACLED civil protest/riot event layer
-// Source: ACLED (acleddata.com) — requires free registration, non-commercial licence
-// Auth: ACLED_EMAIL + ACLED_API_KEY in .env
-//
-// EULA constraint: data may NOT be used to train ML models — convergence scoring only, never into hive
-//
-// Queries PROTEST and RIOT event types — distinct from the armed conflict feed
-// which tracks Battles, Violence against civilians, and Explosions/Remote violence.
-// These two signals do not double-count ACLED data.
-//
-// Window: 90 days (protest cycles are shorter than armed conflict cycles)
+// Social Unrest Signal — ACLED civil protest/riot event layer (dormant)
+// Source: ACLED — requires free registration, EULA prohibits ML training use
 
 require('dotenv').config({ path: './.env' });
 const https = require('https');

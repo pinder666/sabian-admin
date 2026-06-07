@@ -1,0 +1,22 @@
+{
+  "generatedAt": "2026-05-26T01:34:36.409Z",
+  "thresholds": {
+    "weather_fire": 80,
+    "weather_seismic": 75,
+    "communication": -5,
+    "power": 70
+  },
+  "preCrisisRange": {
+    "weather_fire": 64,
+    "weather_seismic": 60,
+    "communication": -4,
+    "power": 56
+  },
+  "totalRecords": 1916,
+  "preCrisisEvents": {
+    "total": 0,
+    "reachedCrisis": 0,
+    "didNotReach": 0,
+    "events": []
+  }
+}

@@ -4,5 +4,11 @@
   "status": "calibrated",
   "baseline_established": true,
   "patterns_detected": [],
-  "confidence_score": 0
+  "confidence_score": 0,
+  "teaching_angles": {
+    "partial_clearance_deficit": 4,
+    "peak_window": 0,
+    "recovery_window": 1,
+    "full_depletion": 2
+  }
 }

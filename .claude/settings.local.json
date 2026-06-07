@@ -32,7 +32,8 @@
       "Bash(cat \"C:\\\\\\\\Users\\\\\\\\user\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-user-Desktop-sabian-ai-sabian-core\\\\\\\\09f80e5d-3258-45f9-9a04-d8ea9708257d\\\\\\\\tasks\\\\\\\\bq4r8y054.output\")",
       "Bash(SCENARIO=s04_mild_deficit node vrtx/engine/vrtx_engine.cjs)",
       "Bash(SCENARIO=s16_hrv_spike node vrtx/engine/vrtx_engine.cjs)",
-      "Bash(SKIP_AUDIO=1 node vrtx/engine/vrtx_engine.cjs)"
+      "Bash(SKIP_AUDIO=1 node vrtx/engine/vrtx_engine.cjs)",
+      "Bash(git commit *)"
     ]
   }
 }

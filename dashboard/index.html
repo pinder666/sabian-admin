@@ -3,171 +3,1269 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sabian Intelligence Terminal</title>
-
-  <!-- Open MCT core styles — served from Express /openmct/ route -->
+  <title>Sabian — Country Risk Intelligence Terminal</title>
   <link rel="stylesheet" href="/openmct/openmct.css">
-
   <style>
-    /* Sabian brand overrides */
     :root {
-      --sabian-critical: #ff4444;
-      --sabian-warning:  #ffaa00;
-      --sabian-elevated: #00ccee;
-      --sabian-stable:   #22dd88;
-      --sabian-bg:       #0a0e1a;
-      --sabian-panel:    #0f1628;
-      --sabian-border:   #1e2d4a;
-      --sabian-text:     #c8d8f0;
+      --s-bg:       #060a14;
+      --s-panel:    #0a0f1e;
+      --s-border:   #162035;
+      --s-border2:  #1d2d47;
+      --s-text:     #b8cce0;
+      --s-dim:      #3d5570;
+      --s-critical: #ff3333;
+      --s-warning:  #ff9900;
+      --s-elevated: #00b8d4;
+      --s-stable:   #00e676;
+      --s-accent:   #00b8d4;
+      --s-gold:     #d4af37;
+      --s-font:     'Share Tech Mono', 'Courier New', monospace;
     }
 
-    /* Loading screen — shown until Open MCT is ready */
-    #sabian-loading {
-      position: fixed;
-      inset: 0;
-      background: var(--sabian-bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      font-family: 'Share Tech Mono', monospace, sans-serif;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    #sabian-loading h1 {
-      color: var(--sabian-elevated);
-      font-size: 2rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      margin: 0 0 0.5rem;
-    }
-
-    #sabian-loading .sub {
-      color: var(--sabian-text);
-      font-size: 0.9rem;
-      opacity: 0.7;
-      letter-spacing: 0.15em;
-    }
-
-    #sabian-loading .bar {
-      margin-top: 2rem;
-      width: 240px;
-      height: 3px;
-      background: var(--sabian-border);
-      border-radius: 2px;
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--s-bg);
+      color: var(--s-text);
+      font-family: var(--s-font);
       overflow: hidden;
     }
 
-    #sabian-loading .bar-fill {
-      height: 100%;
-      background: var(--sabian-elevated);
-      animation: load-bar 2s ease-in-out infinite;
+    /* ══ LOADING SCREEN ══════════════════════════════════════════════════ */
+    #s-loading {
+      position: fixed; inset: 0; z-index: 99999;
+      background: var(--s-bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0;
+    }
+    #s-loading .s-logo {
+      font-size: 3.5rem; font-weight: 100;
+      letter-spacing: 0.5em;
+      color: var(--s-elevated);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      text-shadow: 0 0 40px rgba(0,184,212,0.4);
+    }
+    #s-loading .s-tagline {
+      font-size: 0.68rem; letter-spacing: 0.35em;
+      color: var(--s-dim); text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+    #s-loading .s-bar {
+      width: 320px; height: 1px;
+      background: var(--s-border2);
+      position: relative; overflow: hidden;
+      margin-bottom: 28px;
+    }
+    #s-loading .s-bar-fill {
+      position: absolute; left: -100%; top: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, var(--s-elevated), transparent);
+      animation: sweep 1.8s ease-in-out infinite;
+    }
+    @keyframes sweep {
+      0%   { left: -100%; }
+      100% { left: 100%; }
+    }
+    #s-loading .s-stats {
+      display: flex; gap: 40px;
+    }
+    #s-loading .s-stat {
+      text-align: center;
+    }
+    #s-loading .s-stat-num {
+      font-size: 1.4rem; color: var(--s-elevated);
+      letter-spacing: 0.1em;
+    }
+    #s-loading .s-stat-label {
+      font-size: 0.58rem; color: var(--s-dim);
+      letter-spacing: 0.2em; text-transform: uppercase;
+      margin-top: 2px;
+    }
+    #s-loading .s-version {
+      position: absolute; bottom: 24px; right: 32px;
+      font-size: 0.6rem; color: var(--s-dim);
+      letter-spacing: 0.15em;
+    }
+    body.s-ready #s-loading {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
     }
 
-    @keyframes load-bar {
-      0%   { width: 0%; }
-      60%  { width: 90%; }
-      100% { width: 100%; }
+    /* ══ BRANDING OVERLAY — injected into OpenMCT shell ════════════════ */
+    #s-brand {
+      position: fixed;
+      top: 0; left: 0;
+      height: 40px;
+      display: flex; align-items: center;
+      padding: 0 16px;
+      z-index: 10000;
+      pointer-events: none;
+      gap: 12px;
+    }
+    #s-brand .s-brand-name {
+      font-size: 0.75rem; letter-spacing: 0.3em;
+      color: var(--s-elevated);
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    #s-brand .s-brand-sep {
+      width: 1px; height: 16px;
+      background: var(--s-border2);
+    }
+    #s-brand .s-brand-sub {
+      font-size: 0.58rem; letter-spacing: 0.2em;
+      color: var(--s-dim); text-transform: uppercase;
+    }
+    #s-brand .s-live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--s-stable);
+      box-shadow: 0 0 6px var(--s-stable);
+      animation: pulse-dot 2s ease-in-out infinite;
+      pointer-events: auto;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
-    body.mct-ready #sabian-loading {
-      display: none;
+    /* ══ INTEL BUTTON — top right, opens intelligence panel ═════════════ */
+    #s-intel-btn {
+      position: fixed;
+      top: 6px; right: 12px;
+      z-index: 10001;
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 14px;
+      background: rgba(0,184,212,0.08);
+      border: 1px solid rgba(0,184,212,0.3);
+      border-radius: 2px;
+      color: var(--s-elevated);
+      font-family: var(--s-font);
+      font-size: 0.65rem; letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
     }
+    #s-intel-btn:hover {
+      background: rgba(0,184,212,0.18);
+      border-color: rgba(0,184,212,0.6);
+    }
+    #s-intel-btn .s-intel-icon {
+      font-size: 0.8rem;
+    }
+    #s-intel-btn.s-intel-active {
+      background: rgba(0,184,212,0.2);
+      border-color: var(--s-elevated);
+      color: #fff;
+    }
+
+    /* ══ INTEL PANEL — slides in over OpenMCT ══════════════════════════ */
+    #s-intel-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 480px;
+      background: var(--s-panel);
+      border-left: 1px solid var(--s-border2);
+      z-index: 9999;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -4px 0 40px rgba(0,0,0,0.6);
+    }
+    #s-intel-panel.s-open {
+      transform: translateX(0);
+    }
+
+    .s-panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--s-border2);
+      background: var(--s-bg);
+      flex-shrink: 0;
+    }
+    .s-panel-header .s-ph-left {
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .s-panel-header .s-ph-country {
+      font-size: 1rem; letter-spacing: 0.1em;
+      color: var(--s-elevated);
+    }
+    .s-panel-header .s-ph-score {
+      font-size: 0.68rem; letter-spacing: 0.1em;
+      color: var(--s-dim);
+    }
+    .s-panel-close {
+      background: none; border: none;
+      color: var(--s-dim); cursor: pointer;
+      font-size: 1.2rem; line-height: 1;
+      padding: 4px 8px;
+      font-family: var(--s-font);
+    }
+    .s-panel-close:hover { color: var(--s-text); }
+
+    .s-panel-body {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--s-border2) transparent;
+    }
+
+    /* Key gate */
+    .s-key-gate {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--s-border);
+    }
+    .s-key-gate .s-kg-label {
+      font-size: 0.6rem; letter-spacing: 0.2em;
+      color: var(--s-dim); margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .s-key-row {
+      display: flex; gap: 8px;
+    }
+    .s-key-input {
+      flex: 1; padding: 8px 12px;
+      background: var(--s-bg);
+      border: 1px solid var(--s-border2);
+      border-radius: 2px;
+      color: var(--s-text);
+      font-family: var(--s-font); font-size: 0.78rem;
+    }
+    .s-key-input:focus { outline: none; border-color: var(--s-elevated); }
+    .s-key-submit {
+      padding: 8px 16px;
+      background: var(--s-elevated);
+      color: #000; border: none; border-radius: 2px;
+      font-family: var(--s-font); font-size: 0.7rem;
+      letter-spacing: 0.1em; cursor: pointer;
+    }
+    .s-key-submit:hover { background: #00d0ee; }
+    .s-key-note {
+      margin-top: 8px; font-size: 0.62rem;
+      color: var(--s-dim); line-height: 1.5;
+    }
+
+    /* Sections */
+    .s-section {
+      border-bottom: 1px solid var(--s-border);
+    }
+    .s-section-head {
+      padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; user-select: none;
+    }
+    .s-section-head:hover { background: rgba(255,255,255,0.02); }
+    .s-section-title {
+      font-size: 0.6rem; letter-spacing: 0.25em;
+      color: var(--s-dim); text-transform: uppercase;
+    }
+    .s-section-toggle {
+      font-size: 0.65rem; color: var(--s-dim);
+    }
+    .s-section-body {
+      padding: 0 20px 14px;
+    }
+
+    /* Signal grid */
+    .s-signal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+    .s-sig-card {
+      background: var(--s-bg);
+      border: 1px solid var(--s-border);
+      border-radius: 2px;
+      padding: 8px 10px;
+    }
+    .s-sig-name {
+      font-size: 0.55rem; letter-spacing: 0.08em;
+      color: var(--s-dim); text-transform: uppercase;
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; margin-bottom: 3px;
+    }
+    .s-sig-val {
+      font-size: 0.9rem; font-weight: bold;
+      margin-bottom: 4px; line-height: 1;
+    }
+    svg.s-spark { display: block; }
+
+    /* Dark list */
+    .s-dark-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(22,32,53,0.8);
+      font-size: 0.72rem;
+    }
+    .s-dark-row:last-child { border-bottom: none; }
+    .s-dark-signal { color: var(--s-text); }
+    .s-dark-yr { font-size: 0.65rem; }
+
+    /* Contagion */
+    .s-cont-row {
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(22,32,53,0.8);
+      font-size: 0.72rem;
+    }
+    .s-cont-row:last-child { border-bottom: none; }
+    .s-cont-country { color: var(--s-warning); }
+    .s-cont-detail { font-size: 0.65rem; color: var(--s-dim); }
+
+    /* Audio */
+    .s-audio-btn {
+      width: 100%; padding: 11px;
+      background: transparent;
+      border: 1px solid var(--s-elevated);
+      color: var(--s-elevated);
+      border-radius: 2px; cursor: pointer;
+      font-family: var(--s-font); font-size: 0.7rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      transition: background 0.15s;
+    }
+    .s-audio-btn:hover:not(:disabled) { background: rgba(0,184,212,0.1); }
+    .s-audio-btn:disabled { opacity: 0.45; cursor: default; }
+    .s-audio-status {
+      margin-top: 8px; font-size: 0.68rem;
+      line-height: 1.6;
+    }
+    .s-audio-status a { color: var(--s-stable); text-decoration: none; }
+    .s-audio-status a:hover { text-decoration: underline; }
+
+    /* Q&A */
+    .s-qa-textarea {
+      width: 100%; padding: 10px 12px;
+      background: var(--s-bg);
+      border: 1px solid var(--s-border2);
+      border-radius: 2px;
+      color: var(--s-text);
+      font-family: var(--s-font); font-size: 0.78rem;
+      resize: vertical; min-height: 72px;
+      margin-bottom: 8px;
+    }
+    .s-qa-textarea:focus { outline: none; border-color: var(--s-elevated); }
+    .s-qa-btn {
+      width: 100%; padding: 9px;
+      background: rgba(0,184,212,0.12);
+      border: 1px solid var(--s-elevated);
+      color: var(--s-elevated);
+      border-radius: 2px; cursor: pointer;
+      font-family: var(--s-font); font-size: 0.7rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .s-qa-btn:hover:not(:disabled) { background: rgba(0,184,212,0.22); }
+    .s-qa-btn:disabled { opacity: 0.4; cursor: default; }
+    .s-qa-response {
+      margin-top: 14px;
+      font-size: 0.74rem; line-height: 1.7;
+      color: var(--s-text); white-space: pre-wrap;
+      border-left: 2px solid var(--s-border2);
+      padding-left: 12px;
+    }
+
+    /* Utility */
+    .s-loading-msg { color: var(--s-dim); font-size: 0.7rem; }
+    .s-error-msg   { color: var(--s-critical); font-size: 0.7rem; }
+    .s-ok-msg      { color: var(--s-stable); font-size: 0.7rem; }
+    .s-warn-msg    { color: var(--s-warning); font-size: 0.7rem; }
+
+    .s-no-country {
+      padding: 40px 20px; text-align: center;
+    }
+    .s-no-country p {
+      font-size: 0.72rem; color: var(--s-dim);
+      line-height: 1.8; letter-spacing: 0.05em;
+    }
+
+    /* ══ OPENMCT BRANDING OVERRIDES ═════════════════════════════════════ */
+    /* Hide any Open MCT text/logo that renders in the shell */
+    .l-shell__head-section--title,
+    .c-app-logo,
+    [class*="open-mct"],
+    .t-title,
+    .c-app__name {
+      display: none !important;
+    }
+    /* Override OpenMCT background to match Sabian */
+    body.s-ready .c-app,
+    body.s-ready .l-shell,
+    body.s-ready .l-browse-bar {
+      background: var(--s-bg) !important;
+    }
+    body.s-ready .c-tree__item__label {
+      font-family: var(--s-font) !important;
+    }
+    /* OpenMCT scrollbars */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--s-border2); border-radius: 2px; }
+
+    /* ══ GLOBAL LANDING OVERLAY ════════════════════════════════════════════ */
+    #s-global-panel {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 9000;
+      background: rgba(6,10,20,0.97);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(0);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease;
+      opacity: 1;
+    }
+    #s-global-panel.s-global-hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    #s-global-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--s-border2);
+      flex-shrink: 0;
+    }
+    #s-global-header .s-gh-left {
+      display: flex; align-items: center; gap: 16px;
+    }
+    #s-global-header .s-gh-title {
+      font-size: 0.65rem; letter-spacing: 0.35em;
+      color: var(--s-elevated); text-transform: uppercase;
+    }
+    #s-global-header .s-gh-meta {
+      font-size: 0.58rem; color: var(--s-dim); letter-spacing: 0.1em;
+    }
+    #s-global-header .s-gh-dismiss {
+      font-size: 0.6rem; letter-spacing: 0.2em; color: var(--s-dim);
+      background: transparent; border: 1px solid var(--s-border2);
+      padding: 4px 12px; cursor: pointer; text-transform: uppercase;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    #s-global-header .s-gh-dismiss:hover {
+      color: var(--s-text); border-color: var(--s-border2);
+    }
+    #s-global-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 1px;
+      background: var(--s-border);
+      flex: 1;
+      overflow: hidden;
+    }
+    .s-global-cell {
+      background: var(--s-bg);
+      padding: 20px 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .s-cell-title {
+      font-size: 0.58rem; letter-spacing: 0.3em;
+      color: var(--s-elevated); text-transform: uppercase;
+      margin-bottom: 14px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .s-cell-title span { color: var(--s-dim); }
+    .s-cell-body { flex: 1; overflow-y: auto; }
+
+    /* Top 10 risk table */
+    .s-top10-row {
+      display: grid;
+      grid-template-columns: 20px 1fr 52px 80px 70px;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--s-border);
+      font-size: 0.68rem;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .s-top10-row:hover { background: rgba(255,255,255,0.03); }
+    .s-top10-rank { color: var(--s-dim); font-size: 0.58rem; }
+    .s-top10-name { color: var(--s-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .s-top10-score { text-align: right; font-weight: bold; }
+    .s-top10-band  { text-align: right; font-size: 0.58rem; letter-spacing: 0.1em; }
+    .s-top10-theater { color: var(--s-dim); font-size: 0.58rem; text-align: right; }
+    .band-CRITICAL { color: var(--s-critical); }
+    .band-WARNING  { color: var(--s-warning); }
+    .band-ELEVATED { color: var(--s-elevated); }
+    .band-STABLE   { color: var(--s-stable); }
+
+    /* Threshold crossings */
+    .s-crossing-row {
+      display: grid;
+      grid-template-columns: 1fr 50px 50px 70px;
+      gap: 6px;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--s-border);
+      font-size: 0.65rem;
+    }
+    .s-crossing-name { color: var(--s-text); }
+    .s-crossing-from { color: var(--s-dim); font-size: 0.58rem; }
+    .s-crossing-to   { font-size: 0.58rem; font-weight: bold; }
+    .s-crossing-dir  { font-size: 0.6rem; letter-spacing: 0.1em; }
+    .dir-ASCENDING   { color: var(--s-critical); }
+    .dir-DESCENDING  { color: var(--s-stable); }
+
+    /* Theater rollup cells */
+    .s-theater-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .s-theater-card {
+      background: var(--s-panel);
+      border: 1px solid var(--s-border2);
+      padding: 12px;
+    }
+    .s-tc-name {
+      font-size: 0.58rem; letter-spacing: 0.2em;
+      color: var(--s-elevated); margin-bottom: 8px; text-transform: uppercase;
+    }
+    .s-tc-score { font-size: 1.4rem; font-weight: bold; line-height: 1; }
+    .s-tc-meta  { font-size: 0.58rem; color: var(--s-dim); margin-top: 4px; }
+    .s-tc-bands { display: flex; gap: 6px; margin-top: 8px; font-size: 0.6rem; }
+    .s-tc-band  { display: flex; align-items: center; gap: 3px; }
+    .s-tc-dot   { width: 5px; height: 5px; border-radius: 50%; }
+
+    /* Band counts bar */
+    .s-band-bar {
+      display: flex; gap: 12px;
+      font-size: 0.65rem; padding: 14px 0 0;
+    }
+    .s-band-item { display: flex; align-items: center; gap: 6px; }
+    .s-band-num  { font-size: 1.1rem; font-weight: bold; line-height: 1; }
+    .s-band-lbl  { font-size: 0.55rem; color: var(--s-dim); letter-spacing: 0.1em; }
+
+    /* Global btn — next to INTEL btn */
+    #s-global-btn {
+      position: fixed;
+      top: 6px; right: 136px;
+      z-index: 10001;
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 14px;
+      background: rgba(0,184,212,0.04);
+      border: 1px solid rgba(0,184,212,0.2);
+      border-radius: 2px;
+      color: var(--s-dim);
+      font-family: var(--s-font);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    #s-global-btn:hover,
+    #s-global-btn.s-global-active {
+      background: rgba(0,184,212,0.12);
+      border-color: rgba(0,184,212,0.5);
+      color: var(--s-elevated);
+    }
+
+    .s-global-loading { color: var(--s-dim); font-size: 0.65rem; padding: 12px 0; }
+    .s-global-error   { color: var(--s-critical); font-size: 0.65rem; padding: 12px 0; }
   </style>
 </head>
 <body>
 
   <!-- Loading screen -->
-  <div id="sabian-loading">
-    <h1>Sabian</h1>
-    <div class="sub">COUNTRY RISK INTELLIGENCE TERMINAL</div>
-    <div class="bar"><div class="bar-fill"></div></div>
-    <div class="sub" style="margin-top:1rem;font-size:0.75rem;">
-      16 SIGNALS &nbsp;·&nbsp; 160 COUNTRIES &nbsp;·&nbsp; 0–100 TRANSPARENT SCORE
+  <div id="s-loading">
+    <div class="s-logo">Sabian</div>
+    <div class="s-tagline">Country Risk Intelligence Terminal</div>
+    <div class="s-bar"><div class="s-bar-fill"></div></div>
+    <div class="s-stats">
+      <div class="s-stat">
+        <div class="s-stat-num">43</div>
+        <div class="s-stat-label">Signals</div>
+      </div>
+      <div class="s-stat">
+        <div class="s-stat-num">153</div>
+        <div class="s-stat-label">Countries</div>
+      </div>
+      <div class="s-stat">
+        <div class="s-stat-num">65yr</div>
+        <div class="s-stat-label">Historical Depth</div>
+      </div>
+      <div class="s-stat">
+        <div class="s-stat-num">99.7%</div>
+        <div class="s-stat-label">Classification</div>
+      </div>
+    </div>
+    <div class="s-version">SIG-INTEL v4.5 &nbsp;·&nbsp; CLASSIFICATION: BUYER</div>
+  </div>
+
+  <!-- Sabian brand strip (overlays OpenMCT toolbar) -->
+  <div id="s-brand">
+    <div class="s-live-dot"></div>
+    <div class="s-brand-name">Sabian</div>
+    <div class="s-brand-sep"></div>
+    <div class="s-brand-sub">Country Risk Intelligence</div>
+  </div>
+
+  <!-- Global threat board trigger -->
+  <button id="s-global-btn" title="Global Threat Board (G)">
+    ◈ Global
+  </button>
+
+  <!-- Intelligence panel trigger -->
+  <button id="s-intel-btn" title="Open Intelligence Panel (I)">
+    <span class="s-intel-icon">⬡</span> Intelligence
+  </button>
+
+  <!-- Global Threat Board overlay -->
+  <div id="s-global-panel" class="s-global-hidden">
+    <div id="s-global-header">
+      <div class="s-gh-left">
+        <div class="s-live-dot" style="pointer-events:none"></div>
+        <div class="s-gh-title">Sabian Global Threat Board</div>
+        <div class="s-gh-meta" id="s-global-meta">Loading...</div>
+      </div>
+      <button class="s-gh-dismiss" id="s-global-dismiss">Select Country [G]</button>
+    </div>
+    <div id="s-global-body">
+
+      <!-- Cell 1: Top 10 risk countries -->
+      <div class="s-global-cell">
+        <div class="s-cell-title">Top Risk Countries <span id="s-global-updated"></span></div>
+        <div class="s-cell-body" id="s-top10-body">
+          <div class="s-global-loading">Loading threat data...</div>
+        </div>
+      </div>
+
+      <!-- Cell 2: Recent threshold crossings -->
+      <div class="s-global-cell">
+        <div class="s-cell-title">Threshold Crossings — 7 Days <span id="s-crossings-count"></span></div>
+        <div class="s-cell-body" id="s-crossings-body">
+          <div class="s-global-loading">Loading crossings...</div>
+        </div>
+      </div>
+
+      <!-- Cell 3: Global band summary -->
+      <div class="s-global-cell">
+        <div class="s-cell-title">Global Status <span id="s-avg-score"></span></div>
+        <div class="s-cell-body">
+          <div class="s-band-bar" id="s-band-bar">
+            <div class="s-global-loading">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cell 4-5-6: Theater rollup (spans bottom row) -->
+      <div class="s-global-cell" style="grid-column: 1 / -1;">
+        <div class="s-cell-title">Theater Rollup — Regional Threat Distribution</div>
+        <div class="s-cell-body">
+          <div class="s-theater-grid" id="s-theater-grid">
+            <div class="s-global-loading">Loading theaters...</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- Open MCT core bundle — served from node_modules/openmct/dist/ -->
-  <script src="/openmct/openmct.js"></script>
+  <!-- Intelligence slide-in panel -->
+  <div id="s-intel-panel" role="complementary" aria-label="Sabian Intelligence Panel">
 
-  <!-- Sabian telemetry adapter plugin -->
+    <div class="s-panel-header">
+      <div class="s-ph-left">
+        <div class="s-ph-country" id="s-ph-country">— SELECT A COUNTRY —</div>
+        <div class="s-ph-score" id="s-ph-score"></div>
+      </div>
+      <button class="s-panel-close" id="s-panel-close" title="Close (Esc)">✕</button>
+    </div>
+
+    <div class="s-panel-body">
+
+      <!-- Key gate -->
+      <div class="s-key-gate" id="s-key-gate">
+        <div class="s-kg-label">Intelligence Access</div>
+        <div class="s-key-row">
+          <input class="s-key-input" type="password" id="s-key-input" placeholder="Buyer API key...">
+          <button class="s-key-submit" id="s-key-submit">Unlock</button>
+        </div>
+        <p class="s-key-note">Scores are public. Buyer key unlocks going-dark analysis, contagion vectors, audio, and Q&amp;A.</p>
+      </div>
+
+      <!-- No country prompt -->
+      <div class="s-no-country" id="s-no-country">
+        <p>Select a country from the navigation tree.<br>The intelligence panel will load its full signal profile, going-dark status, contagion vectors, audio insight, and Q&amp;A interface.</p>
+      </div>
+
+      <!-- Signal profile -->
+      <div class="s-section" id="s-sec-signals" style="display:none">
+        <div class="s-section-head" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display==='none'?'block':'none'">
+          <div class="s-section-title" id="s-signals-title">Signal Profile</div>
+          <div class="s-section-toggle">▾</div>
+        </div>
+        <div class="s-section-body">
+          <div class="s-signal-grid" id="s-signal-grid"></div>
+        </div>
+      </div>
+
+      <!-- Going dark -->
+      <div class="s-section" id="s-sec-dark" style="display:none">
+        <div class="s-section-head" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display==='none'?'block':'none'">
+          <div class="s-section-title">Going Dark</div>
+          <div class="s-section-toggle">▾</div>
+        </div>
+        <div class="s-section-body" id="s-dark-list"></div>
+      </div>
+
+      <!-- Contagion -->
+      <div class="s-section" id="s-sec-contagion" style="display:none">
+        <div class="s-section-head" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display==='none'?'block':'none'">
+          <div class="s-section-title">Contagion Vectors</div>
+          <div class="s-section-toggle">▾</div>
+        </div>
+        <div class="s-section-body" id="s-contagion-list"></div>
+      </div>
+
+      <!-- Audio -->
+      <div class="s-section" id="s-sec-audio" style="display:none">
+        <div class="s-section-head" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display==='none'?'block':'none'">
+          <div class="s-section-title">Sabian Insight</div>
+          <div class="s-section-toggle">▾</div>
+        </div>
+        <div class="s-section-body">
+          <button class="s-audio-btn" id="s-audio-btn">Generate Audio Briefing</button>
+          <div class="s-audio-status" id="s-audio-status"></div>
+        </div>
+      </div>
+
+      <!-- Q&A -->
+      <div class="s-section" id="s-sec-qa" style="display:none">
+        <div class="s-section-head" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display==='none'?'block':'none'">
+          <div class="s-section-title">Ask Sabian</div>
+          <div class="s-section-toggle">▾</div>
+        </div>
+        <div class="s-section-body">
+          <textarea class="s-qa-textarea" id="s-qa-input" placeholder="What is driving the current score?&#10;How does this compare to historical analogues?&#10;What signal went dark first?"></textarea>
+          <button class="s-qa-btn" id="s-qa-btn">Ask →</button>
+          <div class="s-qa-response" id="s-qa-response" style="display:none"></div>
+        </div>
+      </div>
+
+    </div><!-- /s-panel-body -->
+  </div><!-- /s-intel-panel -->
+
+  <script src="/openmct/openmct.js"></script>
   <script src="/dashboard/sabian-plugin.js"></script>
 
   <script>
-    (function () {
-      // Open MCT exposes itself as window.openmct in v3.x
-      // or window.MCT (callable) in v2.x
-      // Handle both patterns
-      const mct = (typeof openmct !== 'undefined') ? openmct
-                : (typeof MCT === 'function')       ? MCT()
-                : null;
+  (function () {
 
-      if (!mct) {
-        document.getElementById('sabian-loading').querySelector('.sub').textContent =
-          'ERROR: Open MCT bundle not loaded — check /openmct/openmct.js is accessible';
-        console.error('Open MCT global not found. Run: npm install openmct');
-        return;
+    // ── Global threat board controller ────────────────────────────────────
+    const Global = {
+      visible: false,
+      loaded: false,
+
+      show() {
+        document.getElementById('s-global-panel').classList.remove('s-global-hidden');
+        document.getElementById('s-global-btn').classList.add('s-global-active');
+        this.visible = true;
+        if (!this.loaded) this.load();
+      },
+      hide() {
+        document.getElementById('s-global-panel').classList.add('s-global-hidden');
+        document.getElementById('s-global-btn').classList.remove('s-global-active');
+        this.visible = false;
+      },
+      toggle() { this.visible ? this.hide() : this.show(); },
+
+      bandColor(band) {
+        const c = { CRITICAL: 'var(--s-critical)', WARNING: 'var(--s-warning)',
+                    ELEVATED: 'var(--s-elevated)', STABLE: 'var(--s-stable)' };
+        return c[band] || 'var(--s-dim)';
+      },
+
+      async load() {
+        this.loaded = true;
+        try {
+          const r = await fetch('/public-api/global');
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          const data = await r.json();
+          this.render(data);
+        } catch (err) {
+          document.getElementById('s-top10-body').innerHTML =
+            `<div class="s-global-error">Failed to load: ${err.message}</div>`;
+        }
+      },
+
+      render(data) {
+        // Meta
+        const ts = data.generated_at ? new Date(data.generated_at).toUTCString() : '';
+        document.getElementById('s-global-meta').textContent =
+          `${data.country_count || 0} countries · avg score ${data.global_avg_score || '—'} · ${ts}`;
+
+        // Top 10
+        const top10 = document.getElementById('s-top10-body');
+        if (!data.top_10 || data.top_10.length === 0) {
+          top10.innerHTML = '<div class="s-global-loading">No data available</div>';
+        } else {
+          top10.innerHTML = data.top_10.map((c, i) => `
+            <div class="s-top10-row" data-country="${c.country}" title="Click to select ${c.country}">
+              <div class="s-top10-rank">${i + 1}</div>
+              <div class="s-top10-name">${c.country}</div>
+              <div class="s-top10-score" style="color:${this.bandColor(c.band)}">${c.score}</div>
+              <div class="s-top10-band band-${c.band}">${c.band}</div>
+              <div class="s-top10-theater">${c.theater || ''}</div>
+            </div>`).join('');
+
+          // Click to navigate to country
+          top10.querySelectorAll('.s-top10-row').forEach(row => {
+            row.addEventListener('click', () => {
+              const country = row.dataset.country;
+              Intel.country = country;
+              Intel.selectCountry(country);
+              this.hide();
+              if (!Intel.panelOpen) Intel.openPanel();
+            });
+          });
+        }
+
+        // Crossings
+        const crossEl = document.getElementById('s-crossings-body');
+        const crossings = data.recent_crossings || [];
+        document.getElementById('s-crossings-count').textContent = `(${crossings.length})`;
+        if (crossings.length === 0) {
+          crossEl.innerHTML = '<div class="s-global-loading">No crossings in last 7 days</div>';
+        } else {
+          crossEl.innerHTML = crossings.slice(0, 20).map(c => `
+            <div class="s-crossing-row">
+              <div class="s-crossing-name">${c.country}</div>
+              <div class="s-crossing-from band-${c.from}">${c.from || '—'}</div>
+              <div class="s-crossing-to band-${c.to}">${c.to || '—'}</div>
+              <div class="s-crossing-dir dir-${c.direction}">${c.direction === 'ASCENDING' ? '▲ WORSE' : '▼ BETTER'}</div>
+            </div>`).join('');
+        }
+
+        // Band bar
+        const bands = data.band_counts || {};
+        document.getElementById('s-avg-score').textContent =
+          `avg ${data.global_avg_score || '—'}`;
+        document.getElementById('s-band-bar').innerHTML = [
+          ['CRITICAL', bands.CRITICAL || 0],
+          ['WARNING',  bands.WARNING  || 0],
+          ['ELEVATED', bands.ELEVATED || 0],
+          ['STABLE',   bands.STABLE   || 0]
+        ].map(([band, n]) => `
+          <div class="s-band-item">
+            <div class="s-band-num" style="color:${this.bandColor(band)}">${n}</div>
+            <div class="s-band-lbl">${band}</div>
+          </div>`).join('');
+
+        // Theater rollup
+        const rollup = data.regional_rollup || {};
+        const theaters = ['AFRICOM','CENTCOM','EUCOM','INDOPACOM','SOUTHCOM'];
+        document.getElementById('s-theater-grid').innerHTML = theaters
+          .filter(t => rollup[t])
+          .map(t => {
+            const r = rollup[t];
+            const movDir = r.crossings_7d > 0 ? `▲ ${r.crossings_7d} crossing${r.crossings_7d > 1 ? 's' : ''} this week` : 'Stable this week';
+            const scoreCol = r.average_score >= 66 ? 'var(--s-warning)'
+                           : r.average_score >= 41 ? 'var(--s-elevated)' : 'var(--s-stable)';
+            return `
+              <div class="s-theater-card">
+                <div class="s-tc-name">${t}</div>
+                <div class="s-tc-score" style="color:${scoreCol}">${r.average_score}</div>
+                <div class="s-tc-meta">${r.country_count} countries · ${movDir}</div>
+                <div class="s-tc-bands">
+                  ${r.bands.CRITICAL > 0 ? `<div class="s-tc-band"><div class="s-tc-dot" style="background:var(--s-critical)"></div><span class="band-CRITICAL">${r.bands.CRITICAL}C</span></div>` : ''}
+                  ${r.bands.WARNING  > 0 ? `<div class="s-tc-band"><div class="s-tc-dot" style="background:var(--s-warning)"></div><span class="band-WARNING">${r.bands.WARNING}W</span></div>` : ''}
+                  ${r.bands.ELEVATED > 0 ? `<div class="s-tc-band"><div class="s-tc-dot" style="background:var(--s-elevated)"></div><span class="band-ELEVATED">${r.bands.ELEVATED}E</span></div>` : ''}
+                </div>
+              </div>`;
+          }).join('');
+      },
+
+      init() {
+        document.getElementById('s-global-btn').addEventListener('click', () => this.toggle());
+        document.getElementById('s-global-dismiss').addEventListener('click', () => this.hide());
       }
+    };
 
-      // ── Install standard Open MCT plugins ─────────────────────────────────
+    // ── Intel controller ───────────────────────────────────────────────────
+    const Intel = {
+      country: null,
+      apiKey:  localStorage.getItem('sabian_buyer_key') || '',
+      panelOpen: false,
 
-      // Espresso theme (dark — matches Sabian aesthetic)
-      if (mct.plugins.Espresso) mct.install(mct.plugins.Espresso());
+      // Panel open/close
+      openPanel() {
+        document.getElementById('s-intel-panel').classList.add('s-open');
+        document.getElementById('s-intel-btn').classList.add('s-intel-active');
+        this.panelOpen = true;
+      },
+      closePanel() {
+        document.getElementById('s-intel-panel').classList.remove('s-open');
+        document.getElementById('s-intel-btn').classList.remove('s-intel-active');
+        this.panelOpen = false;
+      },
+      togglePanel() {
+        this.panelOpen ? this.closePanel() : this.openPanel();
+      },
 
-      // Clock display in toolbar
-      if (mct.plugins.Clock) mct.install(mct.plugins.Clock({ enableClockIndicator: true }));
+      init(mct) {
+        // Panel toggle button
+        document.getElementById('s-intel-btn').addEventListener('click', () => this.togglePanel());
+        document.getElementById('s-panel-close').addEventListener('click', () => this.closePanel());
 
-      // Timeline view
-      if (mct.plugins.Timeline) mct.install(mct.plugins.Timeline());
+        // Keyboard: I = toggle intel, G = toggle global, Esc = close both
+        document.addEventListener('keydown', e => {
+          if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+          if (e.key === 'i' || e.key === 'I') this.togglePanel();
+          if (e.key === 'g' || e.key === 'G') Global.toggle();
+          if (e.key === 'Escape') { this.closePanel(); Global.hide(); }
+        });
 
-      // Plot / Charts
-      if (mct.plugins.Charts) mct.install(mct.plugins.Charts());
+        // Key gate
+        if (this.apiKey) document.getElementById('s-key-gate').style.display = 'none';
 
-      // Overlay plots
-      if (mct.plugins.OverlayPlot) mct.install(mct.plugins.OverlayPlot());
-      if (mct.plugins.StalenessIndicator) mct.install(mct.plugins.StalenessIndicator());
+        document.getElementById('s-key-submit').addEventListener('click', () => {
+          const k = document.getElementById('s-key-input').value.trim();
+          if (!k) return;
+          this.apiKey = k;
+          localStorage.setItem('sabian_buyer_key', k);
+          document.getElementById('s-key-gate').style.display = 'none';
+          if (this.country) this.loadIntelligence(this.country);
+        });
+        document.getElementById('s-key-input').addEventListener('keydown', e => {
+          if (e.key === 'Enter') document.getElementById('s-key-submit').click();
+        });
 
-      // Conductor — time range selection
-      if (mct.plugins.Conductor) {
-        mct.install(mct.plugins.Conductor({
-          menuOptions: [
-            { name: '90 days', timeSystem: 'utc',
-              bounds: {
-                start: Date.now() - 90 * 24 * 60 * 60 * 1000,
-                end:   Date.now()
-              }
+        // Audio
+        document.getElementById('s-audio-btn').addEventListener('click', () => this.loadAudio());
+
+        // Q&A
+        document.getElementById('s-qa-btn').addEventListener('click', () => this.ask());
+        document.getElementById('s-qa-input').addEventListener('keydown', e => {
+          if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.ask(); }
+        });
+
+        // Country selection via OpenMCT selection API
+        mct.selection.on('change', selection => {
+          const ctx  = selection[0] && selection[0].context;
+          const item = ctx && (ctx.item || ctx.object);
+          if (item && item.type === 'sabian.country') {
+            // Dismiss global board when country is selected
+            Global.hide();
+            this.selectCountry(item.name);
+            // Auto-open intel panel on first selection
+            if (!this.panelOpen) this.openPanel();
+          }
+        });
+      },
+
+      selectCountry(name) {
+        this.country = name;
+        document.getElementById('s-ph-country').textContent = name.toUpperCase();
+        document.getElementById('s-ph-score').textContent   = '';
+        document.getElementById('s-no-country').style.display = 'none';
+
+        // Show sections
+        ['s-sec-signals','s-sec-audio','s-sec-qa'].forEach(id =>
+          document.getElementById(id).style.display = 'block');
+
+        // Reset fields
+        document.getElementById('s-audio-status').textContent  = '';
+        document.getElementById('s-audio-btn').disabled        = false;
+        document.getElementById('s-audio-btn').textContent     = 'Generate Audio Briefing';
+        document.getElementById('s-qa-response').style.display = 'none';
+        document.getElementById('s-qa-response').textContent   = '';
+        document.getElementById('s-qa-input').value            = '';
+
+        this.loadSignals(name);
+
+        if (this.apiKey) {
+          ['s-sec-dark','s-sec-contagion'].forEach(id =>
+            document.getElementById(id).style.display = 'block');
+          this.loadDark(name);
+          this.loadContagion(name);
+        }
+      },
+
+      loadIntelligence(name) {
+        ['s-sec-dark','s-sec-contagion'].forEach(id =>
+          document.getElementById(id).style.display = 'block');
+        this.loadDark(name);
+        this.loadContagion(name);
+      },
+
+      // ── Signal sparklines ──────────────────────────────────────────────
+      async loadSignals(name) {
+        const grid = document.getElementById('s-signal-grid');
+        grid.innerHTML = '<div class="s-loading-msg">Loading signals...</div>';
+
+        try {
+          const r = await fetch(`/public-api/signals/${encodeURIComponent(name)}`);
+          if (!r.ok) { grid.innerHTML = '<div class="s-error-msg">No signal data</div>'; return; }
+          const data = await r.json();
+
+          // Update score header
+          const sh = data.scoreHistory || [];
+          if (sh.length > 0) {
+            const latest = sh[sh.length - 1];
+            const band = latest.score >= 81 ? 'CRITICAL'
+                       : latest.score >= 66 ? 'WARNING'
+                       : latest.score >= 41 ? 'ELEVATED' : 'STABLE';
+            const col  = latest.score >= 81 ? 'var(--s-critical)'
+                       : latest.score >= 66 ? 'var(--s-warning)'
+                       : latest.score >= 41 ? 'var(--s-elevated)' : 'var(--s-stable)';
+            document.getElementById('s-ph-score').innerHTML =
+              `<span style="color:${col}">${band}</span>&nbsp;·&nbsp;Score ${latest.score}&nbsp;·&nbsp;${latest.year}`;
+          }
+
+          // Update section title with count
+          document.getElementById('s-signals-title').textContent =
+            `Signal Profile — ${data.signalCount} signals`;
+
+          grid.innerHTML = '';
+          let n = 0;
+          for (const sig of data.signals) {
+            if (!sig.years || sig.years.length < 2) continue;
+            const vals   = sig.years.slice(-15).map(y => y.stress_z);
+            const latest = vals[vals.length - 1];
+            const col    = latest > 1.5  ? 'var(--s-critical)'
+                         : latest > 0.75 ? 'var(--s-warning)'
+                         : latest > 0.3  ? 'var(--s-elevated)'
+                         : latest < -0.5 ? 'var(--s-stable)'
+                         : 'var(--s-text)';
+            const card = document.createElement('div');
+            card.className = 's-sig-card';
+            card.innerHTML = `
+              <div class="s-sig-name">${sig.signal.replace(/_/g,' ')}</div>
+              <div class="s-sig-val" style="color:${col}">${latest.toFixed(2)}σ</div>
+              ${this.sparkline(vals, 110, 24)}
+            `;
+            grid.appendChild(card);
+            n++;
+          }
+          if (n === 0) grid.innerHTML = '<div class="s-error-msg">No scored signals for this country</div>';
+
+        } catch(e) {
+          grid.innerHTML = '<div class="s-error-msg">Load failed</div>';
+        }
+      },
+
+      sparkline(values, w, h) {
+        if (!values || values.length < 2) return '';
+        const min = Math.min(...values, -0.5);
+        const max = Math.max(...values, 1.0);
+        const rng = max - min || 1;
+        const pts = values.map((v, i) => {
+          const x = ((i / (values.length - 1)) * (w - 4) + 2).toFixed(1);
+          const y = (h - 2 - ((v - min) / rng) * (h - 4)).toFixed(1);
+          return `${x},${y}`;
+        }).join(' ');
+        const last = values[values.length - 1];
+        const stroke = last > 1.0 ? '#ff3333' : last > 0.5 ? '#ff9900' : '#00e676';
+        const zY = Math.max(2, Math.min(h-2, h - 2 - ((-min)/rng)*(h-4))).toFixed(1);
+        return `<svg class="s-spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+          <line x1="2" y1="${zY}" x2="${w-2}" y2="${zY}" stroke="#162035" stroke-width="0.75"/>
+          <polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="1.5"
+            stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>`;
+      },
+
+      // ── Going dark ─────────────────────────────────────────────────────
+      async loadDark(name) {
+        const el = document.getElementById('s-dark-list');
+        el.innerHTML = '<div class="s-loading-msg">Checking signals...</div>';
+        try {
+          const r = await fetch(`/api/analysis/${encodeURIComponent(name)}`, {
+            headers: { 'Authorization': `Bearer ${this.apiKey}` }
+          });
+          if (r.status === 401 || r.status === 403) {
+            el.innerHTML = '<div class="s-warn-msg">Invalid buyer key</div>'; return;
+          }
+          if (!r.ok) { el.innerHTML = '<div class="s-error-msg">Load failed</div>'; return; }
+          const data = await r.json();
+
+          const dark = (data.goingDark && data.goingDark.signals) || [];
+          if (!dark.length) { el.innerHTML = '<div class="s-ok-msg">All signals reporting</div>'; return; }
+
+          const yr = new Date().getFullYear();
+          el.innerHTML = dark.slice(0, 10).map(d => {
+            const sig = (d.signal || d.signal_name || '?').replace(/_/g,' ');
+            const dy  = d.dark_year || d.year || '?';
+            const age = yr - dy;
+            const col = age <= 2 ? 'var(--s-critical)'
+                      : age <= 5 ? 'var(--s-warning)'
+                      : 'var(--s-dim)';
+            return `<div class="s-dark-row">
+              <span class="s-dark-signal">${sig}</span>
+              <span class="s-dark-yr" style="color:${col}">${dy} · ${age}yr ago</span>
+            </div>`;
+          }).join('');
+        } catch { el.innerHTML = '<div class="s-error-msg">Load failed</div>'; }
+      },
+
+      // ── Contagion ──────────────────────────────────────────────────────
+      async loadContagion(name) {
+        const el = document.getElementById('s-contagion-list');
+        el.innerHTML = '<div class="s-loading-msg">Checking neighbors...</div>';
+        try {
+          const r = await fetch(`/api/intelligence/contagion/${encodeURIComponent(name)}`, {
+            headers: { 'Authorization': `Bearer ${this.apiKey}` }
+          });
+          if (!r.ok) { el.innerHTML = '<div class="s-error-msg">Load failed</div>'; return; }
+          const data = await r.json();
+
+          const paths = data.contagionPathways || data.pathways || data.neighbors || [];
+          if (!paths.length) { el.innerHTML = '<div class="s-ok-msg">No active contagion vectors</div>'; return; }
+
+          el.innerHTML = paths.slice(0, 8).map(p => {
+            const nb    = p.neighbor || p.country || p.name || '?';
+            const corr  = p.correlation !== undefined ? `r=${Number(p.correlation).toFixed(2)}` : '';
+            const lag   = p.lagYears || p.lag_years;
+            const detail = [corr, lag ? `lag ${lag}yr` : ''].filter(Boolean).join(' · ');
+            return `<div class="s-cont-row">
+              <div class="s-cont-country">${nb}</div>
+              ${detail ? `<div class="s-cont-detail">${detail}</div>` : ''}
+            </div>`;
+          }).join('');
+        } catch { el.innerHTML = '<div class="s-error-msg">Load failed</div>'; }
+      },
+
+      // ── Audio ──────────────────────────────────────────────────────────
+      async loadAudio() {
+        if (!this.country) return;
+        const status = document.getElementById('s-audio-status');
+        const btn    = document.getElementById('s-audio-btn');
+        if (!this.apiKey) {
+          status.textContent = 'Buyer key required.';
+          status.style.color = 'var(--s-warning)'; return;
+        }
+        btn.disabled = true; btn.textContent = 'Generating...';
+        status.textContent = 'Host A + Sabian generating — ~60 seconds';
+        status.style.color = 'var(--s-dim)';
+        try {
+          const r = await fetch(`/api/intelligence/${encodeURIComponent(this.country)}/audio`, {
+            headers: { 'Authorization': `Bearer ${this.apiKey}` }
+          });
+          if (!r.ok) {
+            status.textContent = 'Generation failed.';
+            status.style.color = 'var(--s-critical)';
+            btn.disabled = false; btn.textContent = 'Generate Audio Briefing'; return;
+          }
+          const data = await r.json();
+          const path = data.audio && (data.audio.filePath || data.audio.path || data.audio.url);
+          if (path) {
+            status.innerHTML = `<a href="${path}" download>↓ Download Sabian Insight — ${this.country}</a>`;
+          } else {
+            status.textContent = 'Generated — check audio_sessions/ folder.';
+          }
+          status.style.color = 'var(--s-stable)';
+          btn.textContent = 'Generate New Briefing'; btn.disabled = false;
+        } catch {
+          status.textContent = 'Request failed.';
+          status.style.color = 'var(--s-critical)';
+          btn.disabled = false; btn.textContent = 'Generate Audio Briefing';
+        }
+      },
+
+      // ── Q&A ────────────────────────────────────────────────────────────
+      async ask() {
+        const input = document.getElementById('s-qa-input');
+        const resp  = document.getElementById('s-qa-response');
+        const btn   = document.getElementById('s-qa-btn');
+        const q     = input.value.trim();
+        if (!q || !this.country) return;
+        if (!this.apiKey) {
+          resp.textContent = 'Buyer key required.';
+          resp.style.color = 'var(--s-warning)';
+          resp.style.display = 'block'; return;
+        }
+        btn.disabled = true; btn.textContent = 'Asking...';
+        resp.textContent = 'Sabian is reading the intelligence...';
+        resp.style.color = 'var(--s-dim)';
+        resp.style.display = 'block';
+        try {
+          const r = await fetch(`/api/intelligence/${encodeURIComponent(this.country)}/qa`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.apiKey}`
             },
-            { name: '30 days', timeSystem: 'utc',
-              bounds: {
-                start: Date.now() - 30 * 24 * 60 * 60 * 1000,
-                end:   Date.now()
-              }
-            },
-            { name: '7 days', timeSystem: 'utc',
-              bounds: {
-                start: Date.now() - 7 * 24 * 60 * 60 * 1000,
-                end:   Date.now()
-              }
-            }
-          ]
-        }));
+            body: JSON.stringify({ question: q })
+          });
+          if (!r.ok) {
+            resp.textContent = 'Request failed.';
+            resp.style.color = 'var(--s-critical)';
+            btn.disabled = false; btn.textContent = 'Ask →'; return;
+          }
+          const data = await r.json();
+          resp.textContent = data.sabianAnswer || 'No response.';
+          resp.style.color = 'var(--s-text)';
+          btn.disabled = false; btn.textContent = 'Ask →';
+        } catch {
+          resp.textContent = 'Connection failed.';
+          resp.style.color = 'var(--s-critical)';
+          btn.disabled = false; btn.textContent = 'Ask →';
+        }
       }
+    };
 
-      // ── Install Sabian plugin ──────────────────────────────────────────────
+    // ── Boot OpenMCT — full screen ─────────────────────────────────────────
+    const mct = (typeof openmct !== 'undefined') ? openmct
+              : (typeof MCT === 'function')       ? MCT()
+              : null;
 
-      mct.install(SabianPlugin({ apiBase: '/public-api' }));
+    if (!mct) {
+      document.querySelector('#s-loading .s-tagline').textContent =
+        'ERROR: OpenMCT bundle not loaded';
+      return;
+    }
 
-      // ── Start ──────────────────────────────────────────────────────────────
+    if (mct.plugins.Espresso)           mct.install(mct.plugins.Espresso());
+    if (mct.plugins.Clock)              mct.install(mct.plugins.Clock({ enableClockIndicator: true }));
+    if (mct.plugins.Timeline)           mct.install(mct.plugins.Timeline());
+    if (mct.plugins.Charts)             mct.install(mct.plugins.Charts());
+    if (mct.plugins.OverlayPlot)        mct.install(mct.plugins.OverlayPlot());
+    if (mct.plugins.StalenessIndicator) mct.install(mct.plugins.StalenessIndicator());
 
-      mct.start(document.body);
+    if (mct.plugins.Conductor) {
+      mct.install(mct.plugins.Conductor({
+        menuOptions: [
+          { name: '90 days', timeSystem: 'utc',
+            bounds: { start: Date.now() - 90*24*60*60*1000, end: Date.now() } },
+          { name: '30 days', timeSystem: 'utc',
+            bounds: { start: Date.now() - 30*24*60*60*1000, end: Date.now() } },
+          { name: '7 days',  timeSystem: 'utc',
+            bounds: { start: Date.now() -  7*24*60*60*1000, end: Date.now() } }
+        ]
+      }));
+    }
 
-      // Hide loading screen once MCT is ready
-      // MCT fires a 'start' event or we can just use a short timeout
-      setTimeout(() => {
-        document.body.classList.add('mct-ready');
-      }, 800);
+    mct.install(SabianPlugin({ apiBase: '/public-api' }));
 
-    })();
+    // Full screen — OpenMCT owns document.body
+    mct.start(document.body);
+
+    setTimeout(() => {
+      document.body.classList.add('s-ready');
+      Intel.init(mct);
+      Global.init();
+
+      // Show global landing board on first load
+      Global.show();
+
+      // Scrub any remaining "Open MCT" text from the rendered DOM
+      document.querySelectorAll('*').forEach(el => {
+        if (el.children.length === 0 &&
+            el.textContent &&
+            el.textContent.trim().toLowerCase() === 'open mct') {
+          el.textContent = 'Sabian Intelligence';
+        }
+      });
+    }, 900);
+
+  })();
   </script>
 </body>
 </html>

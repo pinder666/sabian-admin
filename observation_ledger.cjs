@@ -26,8 +26,26 @@
 // ---------------------------------------------------------------
 
 require('dotenv').config({ path: './.env' });
+const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 const { logToHive } = require('./logger.cjs');
+const { logAuditEvent } = require('./historical/audit_chain.cjs');
+
+function computeRowHash(fields, prevHash) {
+  const canonical = JSON.stringify(fields, Object.keys(fields).sort());
+  return crypto.createHash('sha256').update(canonical + prevHash).digest('hex');
+}
+
+async function getLastObsHash(supabase) {
+  const { data } = await supabase
+    .from('observations')
+    .select('row_hash')
+    .not('row_hash', 'is', null)
+    .order('id', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return data?.row_hash || 'genesis';
+}
 
 // Observation window in days, keyed by risk level at the crossing.
 // Matches the threshold window stated in the score output:
@@ -65,6 +83,20 @@ async function createObservation({ country, scan_date, convergence_score, risk_l
     const window_days      = WINDOW_DAYS[risk_level] || 90;
     const window_closes_at = addDays(scan_date, window_days);
 
+    // Compute row hash for chain integrity
+    const prevHash = await getLastObsHash(supabase);
+    const rowFields = {
+      convergence_score,
+      country,
+      direction,
+      previous_risk_level: previous_risk_level || null,
+      risk_level,
+      scan_date,
+      window_closes_at,
+      window_days,
+    };
+    const rowHash = computeRowHash(rowFields, prevHash);
+
     const { data, error } = await supabase
       .from('observations')
       .insert({
@@ -75,7 +107,9 @@ async function createObservation({ country, scan_date, convergence_score, risk_l
         previous_risk_level: previous_risk_level || null,
         direction,
         window_days,
-        window_closes_at
+        window_closes_at,
+        row_hash: rowHash,
+        prev_hash: prevHash,
       })
       .select('id')
       .single();
@@ -89,6 +123,16 @@ async function createObservation({ country, scan_date, convergence_score, risk_l
       data: { id: data.id, country, scan_date, risk_level, previous_risk_level, direction, window_closes_at },
       tags: ['ledger', country, risk_level.toLowerCase(), direction.toLowerCase()]
     });
+
+    logAuditEvent('threshold_crossing', country, {
+      scan_date,
+      score:            convergence_score,
+      from_band:        previous_risk_level || null,
+      to_band:          risk_level,
+      direction,
+      window_closes_at,
+      observation_id:   data.id,
+    }).catch(() => {});
 
     return { created: true, id: data.id, window_closes_at };
   } catch (err) {

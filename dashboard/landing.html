@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sabian — country risk made legible. 160 countries. 16 signals. One transparent, auditable score.">
-  <title>Sabian — Country Risk Intelligence</title>
+  <meta name="description" content="Sabian — sovereign risk intelligence at machine speed. 164 countries. 21,801 country-years of validated history. Continuous monitoring, cryptographically sealed.">
+  <title>Sabian — Sovereign Risk Intelligence</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -285,7 +285,7 @@
       line-height: 1.7;
     }
 
-    /* ── HOW IT WORKS ────────────────────────────────────────────────── */
+    /* ── PILLARS ─────────────────────────────────────────────────────── */
     .pillars {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -321,70 +321,35 @@
       line-height: 1.65;
     }
 
-    .equation {
-      font-family: var(--mono);
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      padding: 1.5rem 2rem;
-      border-radius: 4px;
-      font-size: 0.9rem;
-      color: var(--text);
-      line-height: 2;
-    }
-
-    .equation .comment {
-      color: var(--dim);
-      font-size: 0.8rem;
-    }
-
-    /* ── SIGNAL TABLE ────────────────────────────────────────────────── */
-    .signal-grid {
+    /* ── STATS ROW ───────────────────────────────────────────────────── */
+    .stats-row {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
     }
 
-    .signal-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+    .stat-block {
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      padding: 1.75rem;
+      text-align: center;
     }
 
-    .signal-num {
+    .stat-value {
       font-family: var(--mono);
-      font-size: 0.65rem;
-      color: var(--accent);
-      width: 1.4rem;
-      flex-shrink: 0;
-    }
-
-    .signal-info { flex: 1; min-width: 0; }
-
-    .signal-name {
-      font-size: 0.88rem;
-      color: var(--bright);
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .signal-source {
-      font-size: 0.72rem;
-      color: var(--dim);
-    }
-
-    .signal-weight {
-      font-family: var(--mono);
-      font-size: 0.8rem;
-      color: var(--accent);
+      font-size: 2.2rem;
       font-weight: 700;
-      flex-shrink: 0;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--dim);
+      line-height: 1.4;
     }
 
     /* ── RISK BANDS ──────────────────────────────────────────────────── */
@@ -610,10 +575,9 @@
 <nav>
   <a class="nav-logo" href="/">SABIAN<span>.</span>AI</a>
   <ul class="nav-links">
-    <li><a href="#how-it-works">How It Works</a></li>
-    <li><a href="#signals">Signals</a></li>
+    <li><a href="#evidence">Evidence Base</a></li>
+    <li><a href="#output">Output</a></li>
     <li><a href="#buyers">Use Cases</a></li>
-    <li><a href="/methodology" target="_blank">Methodology</a></li>
     <li><a class="btn btn-primary" href="/terminal">Enter Terminal</a></li>
   </ul>
 </nav>
@@ -621,16 +585,16 @@
 <!-- ── HERO ─────────────────────────────────────────────────────────────── -->
 <main>
   <div class="hero">
-    <p class="hero-tag">Country Risk Intelligence Terminal</p>
-    <h1>Make country risk<br><em>legible.</em></h1>
+    <p class="hero-tag">Sovereign Risk Intelligence</p>
+    <h1>Country risk at<br><em>machine speed.</em></h1>
     <p class="hero-sub">
-      160 countries. 16 open-source signals. One transparent, auditable score —
-      every point traceable to a source, a weight, and an arithmetic step.
-      No black box. No vendor lock-in. No prediction theater.
+      Analysts read reports, write memos, update quarterly. Sabian reads everything — continuously.
+      Every reading cryptographically sealed. Every outcome graded against the record.
+      21,801 country-years of validated history. 164 countries. One score.
     </p>
     <div class="hero-actions">
       <a href="/terminal" class="btn btn-primary">Enter Terminal</a>
-      <a href="#how-it-works" class="btn btn-outline">How It Works</a>
+      <a href="#evidence" class="btn btn-outline">See the Evidence</a>
     </div>
   </div>
 
@@ -651,85 +615,63 @@
     </div>
   </div>
 
-  <!-- ── HOW IT WORKS ───────────────────────────────────────────────────── -->
-  <section id="how-it-works">
+  <!-- ── THE GAP ────────────────────────────────────────────────────────── -->
+  <section id="evidence">
     <div class="section-inner">
-      <p class="section-tag">The Design</p>
-      <h2>Intelligence that shows its work.</h2>
+      <p class="section-tag">The Problem</p>
+      <h2>Analyst cycles can't keep up.</h2>
       <p class="lead">
-        Every score is a weighted average of live signals — computed in the open,
-        readable by any analyst, reproducible from first principles.
+        Traditional sovereign risk intelligence runs on weekly reports, quarterly reviews, reactive alerts after events.
+        The data exists to know sooner. The infrastructure to process it continuously did not. Until now.
       </p>
 
       <div class="pillars">
         <div class="pillar">
-          <div class="pillar-num">01 — Observe</div>
-          <h3>16 public data sources</h3>
-          <p>ACLED conflict events. FEWS NET food security. NASA satellite fire. OONI internet shutdowns. OFAC sanctions. GPSJam interference. All open, all citable, all auditable.</p>
+          <div class="pillar-num">01 — Continuous</div>
+          <h3>Every country, every day</h3>
+          <p>Daily automated scans across 164 countries. No analyst bottleneck. No quarterly lag. Changes detected as signals move, not after the news cycle.</p>
         </div>
         <div class="pillar">
-          <div class="pillar-num">02 — Score</div>
-          <h3>One transparent equation</h3>
-          <p>Weighted average. Null signals redistribute proportionally — no fabricated values injected. Every weight is labeled "judgment-set" and published, so any analyst can challenge them.</p>
+          <div class="pillar-num">02 — Sealed</div>
+          <h3>Cryptographically timestamped</h3>
+          <p>Every score is hash-chained and externally anchored. The record cannot be altered. What we said, when we said it — provable to any auditor.</p>
         </div>
         <div class="pillar">
-          <div class="pillar-num">03 — Record</div>
-          <h3>Timestamped observation ledger</h3>
-          <p>Every threshold crossing is recorded with a decision window. When the window closes, the observation is graded: HIT, MISS, or PARTIAL. The hit rate is published. Honestly.</p>
+          <div class="pillar-num">03 — Graded</div>
+          <h3>Outcomes measured honestly</h3>
+          <p>Every threshold crossing opens an observation window. When the window closes, the outcome is graded. The hit rate is published. No hiding.</p>
         </div>
       </div>
 
-      <div class="equation">
-        <div>convergence_score = round(</div>
-        <div>&nbsp;&nbsp;&nbsp;&nbsp;Σ ( signal_score<sub>i</sub> × weight<sub>i</sub> )</div>
-        <div>&nbsp;&nbsp;&nbsp;&nbsp;─────────────────────────────────</div>
-        <div>&nbsp;&nbsp;&nbsp;&nbsp;Σ ( live_weights )</div>
-        <div>)</div>
-        <br>
-        <div class="comment">// Null signals excluded from both numerator and denominator</div>
-        <div class="comment">// Weights labeled "judgment-set" — documented, challengeable, versioned</div>
+      <div class="stats-row">
+        <div class="stat-block">
+          <div class="stat-value">40,000+</div>
+          <div class="stat-label">Pattern tests validated</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-value">21,801</div>
+          <div class="stat-label">Country-years of history</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-value">153</div>
+          <div class="stat-label">Countries since 1960</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-value">0600 UTC</div>
+          <div class="stat-label">Daily scan time</div>
+        </div>
       </div>
     </div>
   </section>
 
   <div class="divider"></div>
 
-  <!-- ── SIGNALS ────────────────────────────────────────────────────────── -->
-  <section id="signals">
-    <div class="section-inner">
-      <p class="section-tag">The Signal Set</p>
-      <h2>16 signals. All public. All cited.</h2>
-      <p class="lead">Weights are judgment-set and documented. Any analyst can verify the source, re-run the computation, and challenge the weight.</p>
-
-      <div class="signal-grid">
-        <div class="signal-row"><span class="signal-num">01</span><div class="signal-info"><div class="signal-name">Conflict Events</div><div class="signal-source">ACLED / GDELT fallback</div></div><span class="signal-weight">16%</span></div>
-        <div class="signal-row"><span class="signal-num">02</span><div class="signal-info"><div class="signal-name">Food Security</div><div class="signal-source">FEWS NET — IPC phase</div></div><span class="signal-weight">15%</span></div>
-        <div class="signal-row"><span class="signal-num">03</span><div class="signal-info"><div class="signal-name">Governance</div><div class="signal-source">World Bank WGI</div></div><span class="signal-weight">12%</span></div>
-        <div class="signal-row"><span class="signal-num">04</span><div class="signal-info"><div class="signal-name">Displacement</div><div class="signal-source">UNHCR</div></div><span class="signal-weight">11%</span></div>
-        <div class="signal-row"><span class="signal-num">05</span><div class="signal-info"><div class="signal-name">Satellite Fire</div><div class="signal-source">NASA FIRMS VIIRS</div></div><span class="signal-weight">7%</span></div>
-        <div class="signal-row"><span class="signal-num">06</span><div class="signal-info"><div class="signal-name">Climate Stress</div><div class="signal-source">Open-Meteo</div></div><span class="signal-weight">7%</span></div>
-        <div class="signal-row"><span class="signal-num">07</span><div class="signal-info"><div class="signal-name">Social Unrest</div><div class="signal-source">ACLED Protests/Riots</div></div><span class="signal-weight">4%</span></div>
-        <div class="signal-row"><span class="signal-num">08</span><div class="signal-info"><div class="signal-name">Resource Conflict</div><div class="signal-source">Commodity price feeds</div></div><span class="signal-weight">4%</span></div>
-        <div class="signal-row"><span class="signal-num">09</span><div class="signal-info"><div class="signal-name">Fiscal Stress</div><div class="signal-source">IMF World Economic Outlook</div></div><span class="signal-weight">5%</span></div>
-        <div class="signal-row"><span class="signal-num">10</span><div class="signal-info"><div class="signal-name">Internet Freedom</div><div class="signal-source">OONI</div></div><span class="signal-weight">5%</span></div>
-        <div class="signal-row"><span class="signal-num">11</span><div class="signal-info"><div class="signal-name">GPS Jamming</div><div class="signal-source">gpsjam.org hexgrid</div></div><span class="signal-weight">3%</span></div>
-        <div class="signal-row"><span class="signal-num">12</span><div class="signal-info"><div class="signal-name">Sanctions Pressure</div><div class="signal-source">OFAC SDN + UN/EU programs</div></div><span class="signal-weight">3%</span></div>
-        <div class="signal-row"><span class="signal-num">13</span><div class="signal-info"><div class="signal-name">Maritime Trade</div><div class="signal-source">UNCTAD</div></div><span class="signal-weight">3%</span></div>
-        <div class="signal-row"><span class="signal-num">14</span><div class="signal-info"><div class="signal-name">Trade Collapse</div><div class="signal-source">UN Comtrade / IMF DOTS</div></div><span class="signal-weight">2%</span></div>
-        <div class="signal-row"><span class="signal-num">15</span><div class="signal-info"><div class="signal-name">Economic Stress</div><div class="signal-source">World Bank GDP/CPI</div></div><span class="signal-weight">2%</span></div>
-        <div class="signal-row"><span class="signal-num">16</span><div class="signal-info"><div class="signal-name">Seismic Risk</div><div class="signal-source">USGS</div></div><span class="signal-weight">1%</span></div>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ── RISK BANDS ─────────────────────────────────────────────────────── -->
-  <section>
+  <!-- ── OUTPUT ─────────────────────────────────────────────────────────── -->
+  <section id="output">
     <div class="section-inner">
       <p class="section-tag">The Output</p>
-      <h2>Four bands. Fixed thresholds. No surprises.</h2>
-      <p class="lead">Every score maps to a decision window. Every threshold crossing is recorded. The system cannot hide a deteriorating country.</p>
+      <h2>Four bands. Fixed thresholds. Graded outcomes.</h2>
+      <p class="lead">Every score maps to a decision window. Every threshold crossing is recorded. Every observation is graded when its window closes.</p>
 
       <div class="bands">
         <div class="band">
@@ -745,7 +687,7 @@
         <div class="band">
           <div class="band-score level-ELEVATED">41–65</div>
           <div class="band-label level-ELEVATED">Elevated</div>
-          <div class="band-desc">60–90 day watch. Monitor and prepare. 90-day observation window.</div>
+          <div class="band-desc">60–90 day watch window. Monitor and prepare contingencies.</div>
         </div>
         <div class="band">
           <div class="band-score level-STABLE">0–40</div>
@@ -762,29 +704,29 @@
   <section id="buyers">
     <div class="section-inner">
       <p class="section-tag">Use Cases</p>
-      <h2>Built for decision-makers who need to see clearly.</h2>
-      <p class="lead">Not a prediction. A legibility surface. For anyone whose decisions depend on knowing where risk is, how it's moving, and why.</p>
+      <h2>Built for organizations that operate at scale.</h2>
+      <p class="lead">Not a prediction. A legibility surface. For anyone whose decisions depend on knowing where risk is moving and when it moved.</p>
 
       <div class="buyers">
         <div class="buyer">
           <div class="buyer-icon">Defense / Intelligence</div>
           <h3>Theater situational awareness</h3>
-          <p>AFRICOM, INDOPACOM, EUCOM theater rollups. Daily score history. Observation ledger for forward planning. Methodology documentation for analyst review boards.</p>
+          <p>AFRICOM, INDOPACOM, EUCOM theater rollups. Daily score history. Observation ledger for forward planning. Sealed record for analyst review boards.</p>
         </div>
         <div class="buyer">
           <div class="buyer-icon">Insurance / Reinsurance</div>
           <h3>Sovereign risk underwriting</h3>
-          <p>Transparent scores that can be cited in underwriting documentation. Hit-rate dossier demonstrates forecast accuracy. API integration into existing risk models.</p>
+          <p>Scores that can be cited in underwriting documentation. Graded observation history demonstrates accuracy against outcomes. API integration into existing models.</p>
         </div>
         <div class="buyer">
           <div class="buyer-icon">Finance / Macro</div>
           <h3>Country risk signals for positioning</h3>
-          <p>Daily score feeds across 160 countries. Signal-level decomposition shows which factors are moving. Threshold-crossing alerts before the news cycle.</p>
+          <p>Daily score feeds across 164 countries. Threshold-crossing alerts before the news cycle. Historical depth for backtesting strategies.</p>
         </div>
         <div class="buyer">
           <div class="buyer-icon">Corporate Security</div>
           <h3>Operational country exposure</h3>
-          <p>Dashboard access for security teams tracking personnel and assets. Theater-level summaries. Custom briefings on request. No noise — only what changed.</p>
+          <p>Dashboard access for security teams tracking personnel and assets. Theater-level summaries. Custom briefings on request.</p>
         </div>
       </div>
     </div>
@@ -792,20 +734,20 @@
 
   <div class="divider"></div>
 
-  <!-- ── 90-DAY CLOCK ───────────────────────────────────────────────────── -->
+  <!-- ── PROOF RUN ──────────────────────────────────────────────────────── -->
   <section>
     <div class="section-inner">
       <p class="section-tag">The Track Record</p>
-      <h2>Every observation is on the clock.</h2>
-      <p class="lead">Sabian doesn't just score. It records. Every threshold crossing generates a timestamped observation with a decision window. At window close, the grade is published.</p>
+      <h2>90-day autonomous proof run.</h2>
+      <p class="lead">The system scans every country every day. Every band crossing enters the ledger. At window close, the grade is published. No intervention, no revision.</p>
 
       <div class="clock-block">
         <div class="clock-text">
-          <h3>90-Day Autonomous Run — Started May 22, 2026</h3>
+          <h3>Started May 26, 2026</h3>
           <p>
-            The system scans all 160 countries every day at 0600 UTC. Every band crossing enters the ledger.
-            By August 21, the dossier will contain every crossing, every grade, and an honest hit rate
-            — the evidence base for every buyer conversation that follows.
+            By August 22, the dossier will contain every crossing, every grade, and an honest hit rate
+            — the evidence base for every buyer conversation that follows. The record is sealed.
+            The outcomes are graded. The methodology is proprietary. The results speak.
           </p>
         </div>
         <div class="clock-display">
@@ -823,7 +765,7 @@
     <div class="section-inner">
       <div class="cta-block">
         <h2>The terminal is live.</h2>
-        <p>View real scores, open observations, and signal breakdowns for every monitored country. No login required.</p>
+        <p>View real scores, open observations, and theater rollups for every monitored country.</p>
         <div class="cta-actions">
           <a href="/terminal" class="btn btn-primary">Open Intelligence Terminal</a>
           <a href="mailto:support@sabian.ai?subject=Sabian Briefing Request" class="btn btn-outline">Request Briefing</a>
@@ -838,12 +780,11 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <strong>Sabian Global Inc.</strong><br>
-      Country Risk Intelligence Terminal &mdash; sabian.ai
+      Sovereign Risk Intelligence &mdash; sabian.ai
     </div>
 
     <ul class="footer-links">
       <li><a href="/terminal">Terminal</a></li>
-      <li><a href="/methodology">Methodology</a></li>
       <li><a href="mailto:support@sabian.ai">Contact</a></li>
     </ul>
 
@@ -853,7 +794,6 @@
 
 <!-- ── SCRIPTS ───────────────────────────────────────────────────────────── -->
 <script>
-  // ── Live score strip — pulls top CRITICAL + WARNING countries ──────────────
   async function loadLiveScores() {
     try {
       const resp = await fetch('/public-api/threats?limit=5');
@@ -877,14 +817,11 @@
       if (data.scan_date) {
         meta.textContent = 'Scan: ' + new Date(data.scan_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
       }
-    } catch (e) {
-      // API not yet connected — strip stays in loading state, not an error
-    }
+    } catch (e) {}
   }
 
-  // ── Running clock — days since May 22, 2026 ────────────────────────────────
   function updateClock() {
-    const start = new Date('2026-05-22T00:00:00Z');
+    const start = new Date('2026-05-26T00:00:00Z');
     const now   = new Date();
     const days  = Math.floor((now - start) / 86400000);
     const el    = document.getElementById('clock-days');

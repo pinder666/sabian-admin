@@ -9,12 +9,10 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
-const fetchFoodSecurity = require('./fews_food_security.cjs');
 const fetchGovernance = require('./worldbank_governance.cjs');
 const fetchDisplacement = require('./unhcr_displacement_feed.cjs');
 const fetchImportData = require('./comtrade_import_feed.cjs');
 const fetchImfDots = require('./imf_dots_feed.cjs');
-const { fetchConflictData } = require('./acled_conflict_feed.cjs');
 const fetchGdeltConflict = require('./gdelt_conflict_feed.cjs');
 const fetchFireHotspots = require('./firms_fire_feed.cjs');
 const fetchResourceConflict = require('./resource_conflict_feed.cjs');
@@ -23,7 +21,6 @@ const fetchOoni = require('./ooni_feed.cjs');
 const fetchImfFiscal = require('./imf_fiscal_feed.cjs');
 const fetchMaritime = require('./unctad_maritime_feed.cjs');
 const { fetchGpsJammingData }       = require('./gps_jamming_feed.cjs');
-const { fetchSocialUnrestData }     = require('./social_unrest_feed.cjs');
 const { fetchSanctionsData }        = require('./sanctions_feed.cjs');
 const { fetchCurrencyCollapseData }    = require('./exchangerate_feed.cjs');
 const { fetchFlightMovementData }      = require('./opensky_feed.cjs');
@@ -48,14 +45,16 @@ const { fetchPowerGridData }           = require('./power_grid_feed.cjs');
 const { fetchDamRiskData }             = require('./dam_risk_feed.cjs');
 const { fetchRailCorridorData }        = require('./rail_corridor_feed.cjs');
 const { fetchCyberThreatData }         = require('./cyber_threat_feed.cjs');
-const { fetchPredictionMarketData }    = require('./prediction_market_feed.cjs');
-const { fetchSocialVolumeData }        = require('./social_volume_feed.cjs');
-const { fetchUsdaFoodData }            = require('./usda_food_feed.cjs');
 const { fetchFaoFoodData }             = require('./fao_food_feed.cjs');
 const { fetchVdemGovernanceData }      = require('./vdem_governance_feed.cjs');
-const { fetchIomDisplacementData }     = require('./iom_displacement_feed.cjs');
 const { fetchUnhcrOdpData }            = require('./unhcr_odp_feed.cjs');
+const { fetchStructuralPressureData }  = require('./structural_pressure_feed.cjs');
 const { fetchOccrpData }               = require('./occrp_feed.cjs');
+const fetchFoodSecurity                = require('./fews_food_security.cjs');
+const { fetchUsdaFoodData }            = require('./usda_food_feed.cjs');
+const { fetchIomDisplacementData }     = require('./iom_displacement_feed.cjs');
+const { fetchSocialVolumeData }        = require('./social_volume_feed.cjs');
+const { fetchPredictionMarketData }    = require('./prediction_market_feed.cjs');
 
 // ISO2 codes — used by FEWS, World Bank, OONI, and IMF queries
 // All 160 monitored countries (159 global watch list + United States)
@@ -274,11 +273,11 @@ const COUNTRY_COORDS = {
 // Signal weights — must sum to 1.0
 // 47-signal model (v6): full infrastructure + governance + food + displacement + financial layer
 // All weights judgment-set — see METHODOLOGY.md for rationale.
-// Verified sum: 9+8+5+5+4+4 + 3×5 + 2×14 + 1×22 = 35+15+28+22 = 100 / 100 = 1.00
+// Verified sum = 1.00
 const WEIGHTS = {
   // Core fundamentals — highest weight: structural crisis indicators
   conflict:               0.09,
-  food_security:          0.08,
+  structural_pressure:    0.14,  // MDC composite: 5 behavioral/predictive signals merged
   governance:             0.05,
   displacement:           0.05,
   water_stress:           0.04,
@@ -291,7 +290,6 @@ const WEIGHTS = {
   currency_collapse:      0.03,
   // Operational monitoring signals
   imf_fiscal:             0.02,
-  usda_food:              0.02,
   fao_food:               0.02,
   vdem_governance:        0.02,
   occrp:                  0.02,
@@ -302,7 +300,6 @@ const WEIGHTS = {
   health_crisis:          0.02,
   cyber_threat:           0.02,
   gdelt_tone:             0.02,
-  iom_displacement:       0.02,
   unhcr_odp:              0.02,
   // Fine-grain signals
   economic_stress:        0.01,
@@ -314,7 +311,6 @@ const WEIGHTS = {
   tor_censorship:         0.01,
   internet_shutdown_ioda: 0.01,
   cable_disruption:       0.01,
-  social_volume:          0.01,
   night_lights:           0.01,
   flight_movement:        0.01,
   trade_collapse:         0.01,
@@ -326,6 +322,11 @@ const WEIGHTS = {
   rail_corridor:          0.01,
   dam_risk:               0.01,
   seismic_risk:           0.01,
+  // Behavioral & predictive — component signals of structural_pressure MDC
+  food_security:          0.08,
+  usda_food:              0.02,
+  iom_displacement:       0.02,
+  social_volume:          0.01,
   prediction_market:      0.01
 };
 
@@ -333,7 +334,7 @@ const WEIGHTS = {
 // freshness_window_hrs: how old the underlying data can be before it is considered stale
 // A WGI score updating annually is not stale — it is expected. Cadence is the honest window.
 const FRESHNESS_WINDOWS = {
-  'Conflict Events':   { hours: 24,   cadence: 'ACLED weekly / GDELT near-realtime' },
+  'Conflict Events':   { hours: 24,   cadence: 'GDELT near-realtime' },
   'Food Security':     { hours: 720,  cadence: 'Monthly — FEWS NET IPC updates' },
   'Governance':        { hours: 8760, cadence: 'Annual — World Bank WGI' },
   'Displacement':      { hours: 720,  cadence: 'Monthly — UNHCR' },
@@ -347,7 +348,7 @@ const FRESHNESS_WINDOWS = {
   'Fiscal Stress':     { hours: 2160, cadence: 'Quarterly — IMF WEO' },
   'Maritime Trade':    { hours: 720,  cadence: 'Monthly — UNCTAD' },
   'GPS Jamming':       { hours: 24,   cadence: 'Daily — gpsjam.org hexgrid (prev-day ~0800 UTC)' },
-  'Social Unrest':     { hours: 168,  cadence: 'ACLED weekly — protest/riot events 90-day window' },
+  'Social Unrest':     { hours: 168,  cadence: 'Dormant — ACLED removed, no replacement source' },
   'Sanctions Pressure':{ hours: 168,  cadence: 'Weekly — OFAC SDN list + static severity tier' },
   'Currency Collapse': { hours: 168,  cadence: 'Weekly — Alpha Vantage FX monthly series' },
   'Flight Movement':   { hours: 6,    cadence: '6-hourly — OpenSky Network ADS-B state vectors' },
@@ -382,6 +383,11 @@ const FRESHNESS_WINDOWS = {
   'Corruption Risk':    { hours: 8760, cadence: 'Annual — TI CPI 2024 + OCCRP Aleph entity count' }
 };
 
+// Minimum live signals required to emit a score.
+// Below this floor: return convergence_score: null — buyer sees "not yet scored", never a hedged number.
+// This is a silent backend gate. Buyer never sees the floor or why it triggered.
+const MIN_SIGNALS_FLOOR = 5;
+
 function getRiskLevel(score) {
   if (score >= 81) return 'CRITICAL';
   if (score >= 66) return 'WARNING';
@@ -394,35 +400,6 @@ function getThresholdWindow(score) {
   if (score >= 66) return '30-60 days — 55-day decision window';
   if (score >= 41) return '60-90 days — monitor and prepare';
   return '90+ days — no immediate trigger identified';
-}
-
-// FEWS IPC phase 1-5 → 0-100 risk (phase 1 = minimal risk, phase 5 = famine)
-async function scoreFoodSecurity(country, date) {
-  const iso = COUNTRY_ISO[country] || country;
-  const dateFrom = date ? subtractDays(date, 180) : null;
-  const dateTo = date || null;
-
-  try {
-    const result = await fetchFoodSecurity(iso, dateFrom, dateTo);
-
-    if (result.error || !result.worst_phase) {
-      return { name: 'Food Security', score: null, label: result.error || 'No IPC data', trend: 'unknown', source: 'FEWS_NET' };
-    }
-
-    const risk = Math.round(((result.worst_phase - 1) / 4) * 100);
-    return {
-      name: 'Food Security',
-      score: risk,
-      raw_phase: result.worst_phase,
-      label: `IPC Phase ${result.worst_phase} — ${result.worst_phase_label}`,
-      population_affected: result.total_affected_population,
-      emergency_regions: result.emergency_regions,
-      trend: result.worst_phase >= 4 ? 'critical' : result.worst_phase >= 3 ? 'deteriorating' : 'stable',
-      source: 'FEWS_NET'
-    };
-  } catch (err) {
-    return { name: 'Food Security', score: null, label: err.message, trend: 'unknown', source: 'FEWS_NET' };
-  }
 }
 
 // World Bank governance 0-100 (100 = good governance) → inverted for risk
@@ -504,31 +481,11 @@ async function scoreClimateStress(country, date) {
   }
 }
 
-// Conflict signal -- ACLED primary (fatalities + events), GDELT fallback (news coverage volume)
-// ACLED EULA: data may NOT be used for ML training -- convergence scoring only, never into hive
-// GDELT is free, no key, near real-time news-based conflict coverage index
+// Conflict signal -- GDELT news coverage volume (near real-time, no key required)
 async function scoreConflict(country, date) {
   const dateTo = date || null;
   const dateFrom = date ? subtractDays(date, 180) : null;
 
-  // Try ACLED first if key is set
-  if (process.env.ACLED_EMAIL && process.env.ACLED_API_KEY &&
-      !process.env.ACLED_API_KEY.startsWith('PASTE')) {
-    try {
-      const result = await fetchConflictData(country, dateFrom, dateTo);
-      if (!result.error && result.conflict_score !== null) {
-        return {
-          name: 'Conflict Events',
-          score: result.conflict_score,
-          label: `${result.total_fatalities} fatalities, ${result.total_events} events (${result.trend})`,
-          trend: result.trend || 'unknown',
-          source: 'ACLED'
-        };
-      }
-    } catch (_) { /* fall through to GDELT */ }
-  }
-
-  // GDELT fallback -- always available, no key required
   try {
     const gdeltResult = await fetchGdeltConflict(country, dateFrom, dateTo);
     if (gdeltResult.error) {
@@ -542,7 +499,7 @@ async function scoreConflict(country, date) {
       source: 'GDELT'
     };
   } catch (err) {
-    return { name: 'Conflict Events', score: null, label: err.message, trend: 'unknown', source: 'ACLED/GDELT' };
+    return { name: 'Conflict Events', score: null, label: err.message, trend: 'unknown', source: 'GDELT' };
   }
 }
 
@@ -800,28 +757,9 @@ async function scoreGpsJamming(country, date) {
   }
 }
 
-// Social Unrest — ACLED protest/riot layer, 90-day window
-// ACLED EULA: scoring only — data may NOT be used for ML training, never into hive
+// Social Unrest — dormant (ACLED removed 2026-06-01, no key, EULA risk)
 async function scoreSocialUnrest(country, date) {
-  const dateTo   = date || null;
-  const dateFrom = date ? subtractDays(date, 90) : null;
-  try {
-    const result = await fetchSocialUnrestData(country, dateFrom, dateTo);
-    if (result.social_unrest_score === null) {
-      return { name: 'Social Unrest', score: null, label: result.error || result.warning || 'No data', trend: 'unknown', source: 'ACLED' };
-    }
-    return {
-      name: 'Social Unrest',
-      score: result.social_unrest_score,
-      label: result.total_events > 0
-        ? `${result.total_events} events (${result.protest_count} protests, ${result.riot_count} riots), ${result.violent_pct}% violent (${result.trend})`
-        : (result.warning || 'No protest/riot events'),
-      trend: result.trend || 'stable',
-      source: 'ACLED'
-    };
-  } catch (err) {
-    return { name: 'Social Unrest', score: null, label: err.message, trend: 'unknown', source: 'ACLED' };
-  }
+  return { name: 'Social Unrest', score: null, label: 'Signal dormant — ACLED removed', trend: 'unknown', source: 'none' };
 }
 
 // Sanctions Pressure — OFAC SDN + static severity tier
@@ -1258,54 +1196,6 @@ async function scoreCyberThreat(country) {
   }
 }
 
-async function scorePredictionMarket(country) {
-  try {
-    const result = await fetchPredictionMarketData(country);
-    if (result.score === null) return { name: 'Prediction Market', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'Polymarket' };
-    return {
-      name: 'Prediction Market',
-      score: result.score,
-      label: result.avg_probability !== undefined ? `${(result.avg_probability * 100).toFixed(0)}% avg market-priced risk (${result.market_count} contracts)` : `Market risk ${result.score}/100`,
-      trend: result.trend || 'stable',
-      source: result.source || 'Polymarket'
-    };
-  } catch (err) {
-    return { name: 'Prediction Market', score: null, label: err.message, trend: 'unknown', source: 'Polymarket' };
-  }
-}
-
-async function scoreSocialVolume(country) {
-  try {
-    const result = await fetchSocialVolumeData(country);
-    if (result.score === null) return { name: 'Social Volume', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'Bluesky' };
-    return {
-      name: 'Social Volume',
-      score: result.score,
-      label: result.post_count_sample !== undefined ? `${result.post_count_sample} posts sampled — ${result.trend}` : `Social volume ${result.score}/100`,
-      trend: result.trend || 'stable',
-      source: 'Bluesky'
-    };
-  } catch (err) {
-    return { name: 'Social Volume', score: null, label: err.message, trend: 'unknown', source: 'Bluesky' };
-  }
-}
-
-async function scoreUsdaFood(country) {
-  try {
-    const result = await fetchUsdaFoodData(country);
-    if (result.score === null) return { name: 'USDA Food Supply', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'USDA_FAS' };
-    return {
-      name: 'USDA Food Supply',
-      score: result.score,
-      label: `Food supply balance: ${result.trend} (${result.source})`,
-      trend: result.trend || 'stable',
-      source: result.source || 'USDA_FAS'
-    };
-  } catch (err) {
-    return { name: 'USDA Food Supply', score: null, label: err.message, trend: 'unknown', source: 'USDA_FAS' };
-  }
-}
-
 async function scoreFaoFood(country) {
   try {
     const result = await fetchFaoFoodData(country);
@@ -1338,19 +1228,104 @@ async function scoreVdemGovernance(country) {
   }
 }
 
+async function scoreStructuralPressure(country) {
+  try {
+    const result = await fetchStructuralPressureData(country);
+    if (result.score === null) return { name: 'Structural Pressure', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'MDC_composite' };
+    return {
+      name: 'Structural Pressure',
+      score: result.score,
+      label: result.mdc_z !== undefined ? `MDC z=${result.mdc_z.toFixed(3)} (${result.dims} dims, ${result.year})` : `Structural pressure ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'MDC_composite'
+    };
+  } catch (err) {
+    return { name: 'Structural Pressure', score: null, label: err.message, trend: 'unknown', source: 'MDC_composite' };
+  }
+}
+
+async function scoreFoodSecurity(country) {
+  const iso = COUNTRY_ISO[country] || country;
+  try {
+    const result = await fetchFoodSecurity(iso);
+    if (!result || result.worst_phase === undefined || result.worst_phase === 0) {
+      return { name: 'Food Security', score: null, label: result?.warning || 'No IPC data', trend: 'unknown', source: 'FEWS_NET' };
+    }
+    // IPC phase 1-5 → 0-100 risk: phase 3+ is crisis
+    const score = Math.min(100, Math.round(result.worst_phase * 20));
+    return {
+      name: 'Food Security',
+      score,
+      label: `IPC phase ${result.worst_phase} (${result.worst_region || 'national'}), ${result.total_affected || 0} affected`,
+      trend: result.worst_phase >= 4 ? 'emergency' : result.worst_phase >= 3 ? 'crisis' : 'stable',
+      source: 'FEWS_NET'
+    };
+  } catch (err) {
+    return { name: 'Food Security', score: null, label: err.message, trend: 'unknown', source: 'FEWS_NET' };
+  }
+}
+
+async function scoreUsdaFood(country) {
+  try {
+    const result = await fetchUsdaFoodData(country);
+    if (result.score === null) return { name: 'USDA Food Supply', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'USDA_FAS' };
+    return {
+      name: 'USDA Food Supply',
+      score: result.score,
+      label: result.stocks_to_use !== undefined ? `Stocks/use ${result.stocks_to_use}% (${result.commodity})` : `Food supply risk ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'USDA_FAS'
+    };
+  } catch (err) {
+    return { name: 'USDA Food Supply', score: null, label: err.message, trend: 'unknown', source: 'USDA_FAS' };
+  }
+}
+
 async function scoreIomDisplacement(country) {
   try {
     const result = await fetchIomDisplacementData(country);
-    if (result.score === null) return { name: 'IOM Displacement', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'IOM_DTM' };
+    if (result.score === null) return { name: 'IOM Displacement', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'IDMC_IOM' };
     return {
       name: 'IOM Displacement',
       score: result.score,
-      label: result.idps_thousands !== undefined ? `${result.idps_thousands}k IDPs — ${result.trend}` : `IDP score ${result.score}/100`,
+      label: result.idps_thousands !== undefined ? `${result.idps_thousands}k IDPs (conflict: ${result.conflict_idps || 0}, disaster: ${result.disaster_idps || 0})` : `IDP risk ${result.score}/100`,
       trend: result.trend || 'stable',
-      source: 'IOM_DTM'
+      source: 'IDMC_IOM'
     };
   } catch (err) {
-    return { name: 'IOM Displacement', score: null, label: err.message, trend: 'unknown', source: 'IOM_DTM' };
+    return { name: 'IOM Displacement', score: null, label: err.message, trend: 'unknown', source: 'IDMC_IOM' };
+  }
+}
+
+async function scoreSocialVolume(country) {
+  try {
+    const result = await fetchSocialVolumeData(country);
+    if (result.score === null) return { name: 'Social Volume', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'Bluesky' };
+    return {
+      name: 'Social Volume',
+      score: result.score,
+      label: `${result.post_count_sample || 0} posts sampled, ${result.trend || 'normal'}`,
+      trend: result.trend || 'normal',
+      source: 'Bluesky'
+    };
+  } catch (err) {
+    return { name: 'Social Volume', score: null, label: err.message, trend: 'unknown', source: 'Bluesky' };
+  }
+}
+
+async function scorePredictionMarket(country) {
+  try {
+    const result = await fetchPredictionMarketData(country);
+    if (result.score === null) return { name: 'Prediction Market', score: null, label: result.reason || 'No contracts', trend: 'unknown', source: 'Polymarket' };
+    return {
+      name: 'Prediction Market',
+      score: result.score,
+      label: result.top_contract ? `${result.top_contract}: ${result.top_probability}%` : `Market risk ${result.score}/100`,
+      trend: result.trend || 'stable',
+      source: 'Polymarket'
+    };
+  } catch (err) {
+    return { name: 'Prediction Market', score: null, label: err.message, trend: 'unknown', source: 'Polymarket' };
   }
 }
 
@@ -1401,7 +1376,7 @@ async function runConvergence(country, date) {
 
   try {
     const [
-      conflictResult, foodResult, govResult, dispResult, fireResult, climateResult,
+      conflictResult, structuralResult, govResult, dispResult, fireResult, climateResult,
       tradeResult, econResult, resourceResult, seismicResult, ooniResult,
       imfFiscalResult, maritimeResult,
       gpsResult, unrestResult, sanctionsResult,
@@ -1410,64 +1385,65 @@ async function runConvergence(country, date) {
       nightLightsResult, darkVesselResult, cableResult,
       waterStressResult, sovereignCdsResult, electionResult,
       torResult, iodaResult, floodResult, portResult, pipelineResult,
-      powerGridResult, damResult, railResult, cyberResult, predictionResult,
-      socialVolResult, usdaFoodResult, faoFoodResult, vdemResult,
-      iomResult, unhcrOdpResult, occrpResult
+      powerGridResult, damResult, railResult, cyberResult,
+      faoFoodResult, vdemResult, unhcrOdpResult, occrpResult,
+      foodSecurityResult, usdaFoodResult, iomDisplacementResult, socialVolumeResult, predictionMarketResult
     ] = await Promise.all([
-      timedCall(scoreConflict,          country, date),
-      timedCall(scoreFoodSecurity,      country, date),
-      timedCall(scoreGovernance,        country, date),
-      timedCall(scoreDisplacement,      country, date),
-      timedCall(scoreFireHotspot,       country, date),
-      timedCall(scoreClimateStress,     country, date),
-      timedCall(scoreTradeCollapse,     country, date),
-      timedCall(scoreEconomicStress,    country, date),
-      timedCall(scoreResourceConflict,  country, date),
-      timedCall(scoreSeismicRisk,       country, date),
-      timedCall(scoreOoniInternet,      country, date),
-      timedCall(scoreImfFiscal,         country, date),
-      timedCall(scoreMaritimeTrade,     country, date),
-      timedCall(scoreGpsJamming,        country, date),
-      timedCall(scoreSocialUnrest,      country, date),
-      timedCall(scoreSanctionsPressure, country),
-      timedCall(scoreCurrencyCollapse,  country),
-      timedCall(scoreFlightMovement,    country),
-      timedCall(scoreHealthCrisis,      country),
-      timedCall(scoreEnergyStress,      country),
-      timedCall(scoreCapitalFlows,      country),
-      timedCall(scoreMilitaryProximity, country),
-      timedCall(scoreChokepoint,        country),
-      timedCall(scoreGdeltTone,         country),
-      timedCall(scoreNightLights,       country),
-      timedCall(scoreDarkVessel,        country),
-      timedCall(scoreCableDisruption,   country),
-      timedCall(scoreWaterStress,       country),
-      timedCall(scoreSovereignCds,      country),
-      timedCall(scoreElectionCalendar,  country),
-      timedCall(scoreTorCensorship,     country),
-      timedCall(scoreInternetIoda,      country),
-      timedCall(scoreFloodRisk,         country),
-      timedCall(scorePortCongestion,    country),
-      timedCall(scorePipelineRisk,      country),
-      timedCall(scorePowerGrid,         country),
-      timedCall(scoreDamRisk,           country),
-      timedCall(scoreRailCorridor,      country),
-      timedCall(scoreCyberThreat,       country),
-      timedCall(scorePredictionMarket,  country),
-      timedCall(scoreSocialVolume,      country),
-      timedCall(scoreUsdaFood,          country),
-      timedCall(scoreFaoFood,           country),
-      timedCall(scoreVdemGovernance,    country),
-      timedCall(scoreIomDisplacement,   country),
-      timedCall(scoreUnhcrOdp,          country),
-      timedCall(scoreOccrp,             country)
+      timedCall(scoreConflict,            country, date),
+      timedCall(scoreStructuralPressure,  country),
+      timedCall(scoreGovernance,          country, date),
+      timedCall(scoreDisplacement,        country, date),
+      timedCall(scoreFireHotspot,         country, date),
+      timedCall(scoreClimateStress,       country, date),
+      timedCall(scoreTradeCollapse,       country, date),
+      timedCall(scoreEconomicStress,      country, date),
+      timedCall(scoreResourceConflict,    country, date),
+      timedCall(scoreSeismicRisk,         country, date),
+      timedCall(scoreOoniInternet,        country, date),
+      timedCall(scoreImfFiscal,           country, date),
+      timedCall(scoreMaritimeTrade,       country, date),
+      timedCall(scoreGpsJamming,          country, date),
+      timedCall(scoreSocialUnrest,        country, date),
+      timedCall(scoreSanctionsPressure,   country),
+      timedCall(scoreCurrencyCollapse,    country),
+      timedCall(scoreFlightMovement,      country),
+      timedCall(scoreHealthCrisis,        country),
+      timedCall(scoreEnergyStress,        country),
+      timedCall(scoreCapitalFlows,        country),
+      timedCall(scoreMilitaryProximity,   country),
+      timedCall(scoreChokepoint,          country),
+      timedCall(scoreGdeltTone,           country),
+      timedCall(scoreNightLights,         country),
+      timedCall(scoreDarkVessel,          country),
+      timedCall(scoreCableDisruption,     country),
+      timedCall(scoreWaterStress,         country),
+      timedCall(scoreSovereignCds,        country),
+      timedCall(scoreElectionCalendar,    country),
+      timedCall(scoreTorCensorship,       country),
+      timedCall(scoreInternetIoda,        country),
+      timedCall(scoreFloodRisk,           country),
+      timedCall(scorePortCongestion,      country),
+      timedCall(scorePipelineRisk,        country),
+      timedCall(scorePowerGrid,           country),
+      timedCall(scoreDamRisk,             country),
+      timedCall(scoreRailCorridor,        country),
+      timedCall(scoreCyberThreat,         country),
+      timedCall(scoreFaoFood,             country),
+      timedCall(scoreVdemGovernance,      country),
+      timedCall(scoreUnhcrOdp,            country),
+      timedCall(scoreOccrp,               country),
+      timedCall(scoreFoodSecurity,        country),
+      timedCall(scoreUsdaFood,            country),
+      timedCall(scoreIomDisplacement,     country),
+      timedCall(scoreSocialVolume,        country),
+      timedCall(scorePredictionMarket,    country)
     ]);
 
     // Attach weight + freshness metadata to each signal result
     const signals = [
-      { weight: WEIGHTS.conflict,            ...conflictResult   },
-      { weight: WEIGHTS.food_security,       ...foodResult       },
-      { weight: WEIGHTS.governance,          ...govResult        },
+      { weight: WEIGHTS.conflict,            ...conflictResult     },
+      { weight: WEIGHTS.structural_pressure, ...structuralResult   },
+      { weight: WEIGHTS.governance,          ...govResult          },
       { weight: WEIGHTS.displacement,        ...dispResult       },
       { weight: WEIGHTS.fire_hotspot,        ...fireResult       },
       { weight: WEIGHTS.climate_stress,      ...climateResult    },
@@ -1504,14 +1480,15 @@ async function runConvergence(country, date) {
       { weight: WEIGHTS.dam_risk,               ...damResult          },
       { weight: WEIGHTS.rail_corridor,          ...railResult         },
       { weight: WEIGHTS.cyber_threat,           ...cyberResult        },
-      { weight: WEIGHTS.prediction_market,      ...predictionResult   },
-      { weight: WEIGHTS.social_volume,          ...socialVolResult    },
-      { weight: WEIGHTS.usda_food,              ...usdaFoodResult     },
       { weight: WEIGHTS.fao_food,               ...faoFoodResult      },
       { weight: WEIGHTS.vdem_governance,        ...vdemResult         },
-      { weight: WEIGHTS.iom_displacement,       ...iomResult          },
       { weight: WEIGHTS.unhcr_odp,              ...unhcrOdpResult     },
-      { weight: WEIGHTS.occrp,                  ...occrpResult        }
+      { weight: WEIGHTS.occrp,                  ...occrpResult        },
+      { weight: WEIGHTS.food_security,          ...foodSecurityResult },
+      { weight: WEIGHTS.usda_food,              ...usdaFoodResult     },
+      { weight: WEIGHTS.iom_displacement,       ...iomDisplacementResult },
+      { weight: WEIGHTS.social_volume,          ...socialVolumeResult },
+      { weight: WEIGHTS.prediction_market,      ...predictionMarketResult }
     ].map(s => ({
       ...s,
       freshness_window_hrs: FRESHNESS_WINDOWS[s.name]?.hours  || null,
@@ -1523,8 +1500,31 @@ async function runConvergence(country, date) {
     const scoredSignals = signals.filter(s => s.score !== null);
     const nullSignals   = signals.filter(s => s.score === null);
 
+    // source_health_snapshot — captured at scoring time for Host A audio layer.
+    // Lists what was healthy vs blocked so Host A can acknowledge gaps honestly.
+    const source_health_snapshot = {
+      scored_at:    new Date().toISOString(),
+      healthy:      scoredSignals.map(s => s.name),
+      blocked:      nullSignals.map(s => ({ name: s.name, reason: s.label || 'unavailable' })),
+    };
+
     const totalWeight = signals.reduce((s, sig) => s + sig.weight, 0); // nominally 1.0
     const liveWeight  = scoredSignals.reduce((s, sig) => s + sig.weight, 0);
+
+    // Silent floor — below MIN_SIGNALS_FLOOR the score is unreliable.
+    // Return null: buyer sees nothing for this country, never a hedged number.
+    if (scoredSignals.length < MIN_SIGNALS_FLOOR) {
+      return {
+        source: 'Sabian_Convergence_Engine_v6',
+        country,
+        date: targetDate,
+        convergence_score: null,
+        coverage_reason: 'insufficient_coverage',
+        signals_available: scoredSignals.length,
+        source_health_snapshot,
+        generated_at: new Date().toISOString()
+      };
+    }
 
     let convergenceScore = 0;
     let freshness_pct    = 0;
@@ -1603,6 +1603,7 @@ async function runConvergence(country, date) {
       signals_available: scoredSignals.length,
       signals_failed: nullSignals.map(s => s.name),
       freshness_pct,
+      source_health_snapshot,
       signals: enrichedSignals,
       decomposition,
       top_3_signals: top3Signals,

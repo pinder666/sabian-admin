@@ -1,0 +1,1409 @@
+[
+  {
+    "country": "Albania",
+    "year": 2008,
+    "flow": "export",
+    "value_usd": 381376,
+    "hs_code": "93"
+  },
+  {
+    "country": "Albania",
+    "year": 2010,
+    "flow": "import",
+    "value_usd": 2887546,
+    "hs_code": "93"
+  },
+  {
+    "country": "Albania",
+    "year": 2010,
+    "flow": "export",
+    "value_usd": 3724535,
+    "hs_code": "93"
+  },
+  {
+    "country": "Albania",
+    "year": 2011,
+    "flow": "import",
+    "value_usd": 3491861,
+    "hs_code": "93"
+  },
+  {
+    "country": "Albania",
+    "year": 2011,
+    "flow": "export",
+    "value_usd": 1920497,
+    "hs_code": "93"
+  },
+  {
+    "country": "Albania",
+    "year": 2012,
+    "flow": "import",
+    "value_usd": 2751120,
+    "hs_code": "93"
+  },
+  {
+    "country": "Albania",
+    "year": 2012,
+    "flow": "export",
+    "value_usd": 4461226,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2015,
+    "flow": "import",
+    "value_usd": 1571081.69,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2015,
+    "flow": "export",
+    "value_usd": 329.59,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2016,
+    "flow": "import",
+    "value_usd": 1203561.85,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2016,
+    "flow": "export",
+    "value_usd": 2314.15,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2017,
+    "flow": "import",
+    "value_usd": 1950504.69,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2017,
+    "flow": "export",
+    "value_usd": 289.11,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2018,
+    "flow": "import",
+    "value_usd": 21606055.615,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2018,
+    "flow": "export",
+    "value_usd": 509.116,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2019,
+    "flow": "import",
+    "value_usd": 64507457.007,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2019,
+    "flow": "export",
+    "value_usd": 1473.375,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2020,
+    "flow": "import",
+    "value_usd": 24432352.104,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2020,
+    "flow": "export",
+    "value_usd": 48.278,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2021,
+    "flow": "import",
+    "value_usd": 5192299.916,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2021,
+    "flow": "export",
+    "value_usd": 68.985,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2022,
+    "flow": "import",
+    "value_usd": 62091765.356,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2022,
+    "flow": "export",
+    "value_usd": 1076.528,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2023,
+    "flow": "import",
+    "value_usd": 22472531.369,
+    "hs_code": "93"
+  },
+  {
+    "country": "Angola",
+    "year": 2023,
+    "flow": "export",
+    "value_usd": 2272.015,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2005,
+    "flow": "import",
+    "value_usd": 6090949,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2005,
+    "flow": "export",
+    "value_usd": 10050351,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2018,
+    "flow": "export",
+    "value_usd": 9060074.67,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2019,
+    "flow": "import",
+    "value_usd": 10106504.83,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2019,
+    "flow": "export",
+    "value_usd": 6176659.71,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2020,
+    "flow": "import",
+    "value_usd": 10766629.39,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2020,
+    "flow": "export",
+    "value_usd": 6333109.29,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2021,
+    "flow": "import",
+    "value_usd": 17939180.4,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2021,
+    "flow": "export",
+    "value_usd": 2395425.53,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2022,
+    "flow": "import",
+    "value_usd": 21879412.6,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2022,
+    "flow": "export",
+    "value_usd": 12524414.79,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2023,
+    "flow": "import",
+    "value_usd": 21178898.98,
+    "hs_code": "93"
+  },
+  {
+    "country": "Argentina",
+    "year": 2023,
+    "flow": "export",
+    "value_usd": 8911258,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2005,
+    "flow": "import",
+    "value_usd": 7669660.751,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2005,
+    "flow": "export",
+    "value_usd": 3061114.067,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2006,
+    "flow": "import",
+    "value_usd": 9842414.553,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2006,
+    "flow": "export",
+    "value_usd": 4034350.08,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2007,
+    "flow": "import",
+    "value_usd": 10993142.636,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2007,
+    "flow": "export",
+    "value_usd": 2960898.532,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2008,
+    "flow": "import",
+    "value_usd": 7726456.963,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2008,
+    "flow": "export",
+    "value_usd": 1219594.169,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2009,
+    "flow": "import",
+    "value_usd": 9179551.305,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2009,
+    "flow": "export",
+    "value_usd": 1772236.51,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2010,
+    "flow": "import",
+    "value_usd": 8183230.789,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2010,
+    "flow": "export",
+    "value_usd": 1368182.367,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2011,
+    "flow": "import",
+    "value_usd": 7001554.529,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2011,
+    "flow": "export",
+    "value_usd": 1306012.914,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2012,
+    "flow": "import",
+    "value_usd": 4789864.125,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2021,
+    "flow": "export",
+    "value_usd": 277420.019,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2022,
+    "flow": "import",
+    "value_usd": 7717951.367,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2022,
+    "flow": "export",
+    "value_usd": 140914.755,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2023,
+    "flow": "import",
+    "value_usd": 5851958.767,
+    "hs_code": "93"
+  },
+  {
+    "country": "Ireland",
+    "year": 2023,
+    "flow": "export",
+    "value_usd": 108679.39,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2005,
+    "flow": "export",
+    "value_usd": 2590000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2006,
+    "flow": "export",
+    "value_usd": 1741000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2007,
+    "flow": "export",
+    "value_usd": 19874000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2008,
+    "flow": "export",
+    "value_usd": 200078000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2009,
+    "flow": "export",
+    "value_usd": 342672000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2010,
+    "flow": "export",
+    "value_usd": 314798000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2012,
+    "flow": "export",
+    "value_usd": 419077000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2021,
+    "flow": "import",
+    "value_usd": 28598000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2021,
+    "flow": "export",
+    "value_usd": 1453314000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2022,
+    "flow": "import",
+    "value_usd": 30307000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2022,
+    "flow": "export",
+    "value_usd": 1926296000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2023,
+    "flow": "import",
+    "value_usd": 50491000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Israel",
+    "year": 2023,
+    "flow": "export",
+    "value_usd": 1561195000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2005,
+    "flow": "import",
+    "value_usd": 105459479.985,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2005,
+    "flow": "export",
+    "value_usd": 507209531.546,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2006,
+    "flow": "import",
+    "value_usd": 195044375.747,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2006,
+    "flow": "export",
+    "value_usd": 841341287.39,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2007,
+    "flow": "import",
+    "value_usd": 370318322.68,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2007,
+    "flow": "export",
+    "value_usd": 1018741998.115,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2008,
+    "flow": "import",
+    "value_usd": 314578948.62,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2008,
+    "flow": "export",
+    "value_usd": 1253518494.644,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2009,
+    "flow": "import",
+    "value_usd": 305474480.768,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2009,
+    "flow": "export",
+    "value_usd": 1315395506.732,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2010,
+    "flow": "import",
+    "value_usd": 134804212,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2010,
+    "flow": "export",
+    "value_usd": 713801485,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2011,
+    "flow": "import",
+    "value_usd": 164640586,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2011,
+    "flow": "export",
+    "value_usd": 624066893,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2020,
+    "flow": "export",
+    "value_usd": 1369676669.117,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2021,
+    "flow": "export",
+    "value_usd": 1989361650.806,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2022,
+    "flow": "import",
+    "value_usd": 406971140.655,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2022,
+    "flow": "export",
+    "value_usd": 2030949770.048,
+    "hs_code": "93"
+  },
+  {
+    "country": "Italy",
+    "year": 2023,
+    "flow": "import",
+    "value_usd": 406384723.672,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2005,
+    "flow": "import",
+    "value_usd": 203087269,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2005,
+    "flow": "export",
+    "value_usd": 87636829,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2006,
+    "flow": "import",
+    "value_usd": 167241020,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2006,
+    "flow": "export",
+    "value_usd": 83596013,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2007,
+    "flow": "import",
+    "value_usd": 158960961,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2007,
+    "flow": "export",
+    "value_usd": 92478260,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2008,
+    "flow": "import",
+    "value_usd": 520083845,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2008,
+    "flow": "export",
+    "value_usd": 100186589,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2009,
+    "flow": "import",
+    "value_usd": 215928797,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2009,
+    "flow": "export",
+    "value_usd": 273355917,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2010,
+    "flow": "import",
+    "value_usd": 293010112,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2010,
+    "flow": "export",
+    "value_usd": 79487275,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2011,
+    "flow": "import",
+    "value_usd": 149668968,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2011,
+    "flow": "export",
+    "value_usd": 86711682,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2012,
+    "flow": "import",
+    "value_usd": 136003594,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2020,
+    "flow": "import",
+    "value_usd": 89116397.372,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2021,
+    "flow": "import",
+    "value_usd": 94376486.866,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2022,
+    "flow": "import",
+    "value_usd": 191142232.145,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2022,
+    "flow": "export",
+    "value_usd": 395087329.282,
+    "hs_code": "93"
+  },
+  {
+    "country": "Japan",
+    "year": 2023,
+    "flow": "import",
+    "value_usd": 229051741.288,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2005,
+    "flow": "import",
+    "value_usd": 3162326,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2005,
+    "flow": "export",
+    "value_usd": 594088,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2006,
+    "flow": "export",
+    "value_usd": 735696,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2007,
+    "flow": "import",
+    "value_usd": 9478676,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2007,
+    "flow": "export",
+    "value_usd": 10207,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2008,
+    "flow": "import",
+    "value_usd": 5560911,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2008,
+    "flow": "export",
+    "value_usd": 30599,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2009,
+    "flow": "export",
+    "value_usd": 259522,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2010,
+    "flow": "import",
+    "value_usd": 1653217,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2010,
+    "flow": "export",
+    "value_usd": 25830,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2013,
+    "flow": "import",
+    "value_usd": 8188762,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2018,
+    "flow": "export",
+    "value_usd": 12931.669,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2019,
+    "flow": "import",
+    "value_usd": 71507483.45,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2020,
+    "flow": "export",
+    "value_usd": 420074.35,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2021,
+    "flow": "export",
+    "value_usd": 51.59,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2022,
+    "flow": "import",
+    "value_usd": 48223555.527,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2023,
+    "flow": "import",
+    "value_usd": 80961907.349,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kenya",
+    "year": 2023,
+    "flow": "export",
+    "value_usd": 149031.793,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2005,
+    "flow": "import",
+    "value_usd": 266385093,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2006,
+    "flow": "import",
+    "value_usd": 300380137,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2007,
+    "flow": "import",
+    "value_usd": 392752765,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2008,
+    "flow": "import",
+    "value_usd": 490536780,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2008,
+    "flow": "export",
+    "value_usd": 232688916,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2009,
+    "flow": "import",
+    "value_usd": 241911013,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2009,
+    "flow": "export",
+    "value_usd": 215273390,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2010,
+    "flow": "import",
+    "value_usd": 478524018,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2010,
+    "flow": "export",
+    "value_usd": 244906721,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2011,
+    "flow": "import",
+    "value_usd": 376578786,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2012,
+    "flow": "import",
+    "value_usd": 298309187,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2013,
+    "flow": "import",
+    "value_usd": 296257337,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2013,
+    "flow": "export",
+    "value_usd": 390208376,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2014,
+    "flow": "export",
+    "value_usd": 450852473,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2015,
+    "flow": "import",
+    "value_usd": 310914228,
+    "hs_code": "93"
+  },
+  {
+    "country": "South Korea",
+    "year": 2023,
+    "flow": "import",
+    "value_usd": 263750774,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2006,
+    "flow": "export",
+    "value_usd": 3343771,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2007,
+    "flow": "export",
+    "value_usd": 1368445,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2008,
+    "flow": "export",
+    "value_usd": 1353212,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2009,
+    "flow": "export",
+    "value_usd": 588190,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2010,
+    "flow": "import",
+    "value_usd": 18476796,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2010,
+    "flow": "export",
+    "value_usd": 726056,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2011,
+    "flow": "import",
+    "value_usd": 19669920,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2011,
+    "flow": "export",
+    "value_usd": 1497130,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2013,
+    "flow": "import",
+    "value_usd": 27389966,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2013,
+    "flow": "export",
+    "value_usd": 2322744,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2014,
+    "flow": "import",
+    "value_usd": 41999981,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2015,
+    "flow": "import",
+    "value_usd": 19350627.636,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2015,
+    "flow": "export",
+    "value_usd": 757094.053,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2021,
+    "flow": "export",
+    "value_usd": 3655323,
+    "hs_code": "93"
+  },
+  {
+    "country": "Kuwait",
+    "year": 2022,
+    "flow": "export",
+    "value_usd": 1464789.994,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2005,
+    "flow": "import",
+    "value_usd": 2623164.339,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2006,
+    "flow": "import",
+    "value_usd": 12923358.836,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2006,
+    "flow": "export",
+    "value_usd": 13831.677,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2007,
+    "flow": "export",
+    "value_usd": 30653.481,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2008,
+    "flow": "export",
+    "value_usd": 241218.528,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2009,
+    "flow": "export",
+    "value_usd": 1081133.187,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2010,
+    "flow": "export",
+    "value_usd": 902562,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2011,
+    "flow": "import",
+    "value_usd": 16341678,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2011,
+    "flow": "export",
+    "value_usd": 620554,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2012,
+    "flow": "export",
+    "value_usd": 403454,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2013,
+    "flow": "import",
+    "value_usd": 15133714,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2014,
+    "flow": "import",
+    "value_usd": 8595258.359,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2014,
+    "flow": "export",
+    "value_usd": 1390314.346,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2015,
+    "flow": "import",
+    "value_usd": 8903229.124,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2015,
+    "flow": "export",
+    "value_usd": 515453.416,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2016,
+    "flow": "import",
+    "value_usd": 16679352.359,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2017,
+    "flow": "import",
+    "value_usd": 14775466.075,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2017,
+    "flow": "export",
+    "value_usd": 1335098.804,
+    "hs_code": "93"
+  },
+  {
+    "country": "Latvia",
+    "year": 2023,
+    "flow": "export",
+    "value_usd": 6468904.692,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2005,
+    "flow": "export",
+    "value_usd": 422000,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2007,
+    "flow": "import",
+    "value_usd": 7959410,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2008,
+    "flow": "import",
+    "value_usd": 15233990,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2008,
+    "flow": "export",
+    "value_usd": 1180636,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2009,
+    "flow": "export",
+    "value_usd": 235889,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2010,
+    "flow": "export",
+    "value_usd": 950076,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2011,
+    "flow": "export",
+    "value_usd": 724110,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2012,
+    "flow": "export",
+    "value_usd": 323156,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2013,
+    "flow": "import",
+    "value_usd": 23248738,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2013,
+    "flow": "export",
+    "value_usd": 215988,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2014,
+    "flow": "import",
+    "value_usd": 22964254,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2014,
+    "flow": "export",
+    "value_usd": 325933,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2015,
+    "flow": "export",
+    "value_usd": 317798.032,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2016,
+    "flow": "import",
+    "value_usd": 15540016,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2016,
+    "flow": "export",
+    "value_usd": 588422,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2017,
+    "flow": "import",
+    "value_usd": 16067162,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2017,
+    "flow": "export",
+    "value_usd": 1076981,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2018,
+    "flow": "export",
+    "value_usd": 661469,
+    "hs_code": "93"
+  },
+  {
+    "country": "Lebanon",
+    "year": 2019,
+    "flow": "import",
+    "value_usd": 10831383.56,
+    "hs_code": "93"
+  },
+  {
+    "country": "Libya",
+    "year": 2007,
+    "flow": "import",
+    "value_usd": 47981,
+    "hs_code": "93"
+  },
+  {
+    "country": "Libya",
+    "year": 2009,
+    "flow": "import",
+    "value_usd": 57759,
+    "hs_code": "93"
+  },
+  {
+    "country": "Libya",
+    "year": 2010,
+    "flow": "import",
+    "value_usd": 49919,
+    "hs_code": "93"
+  },
+  {
+    "country": "Libya",
+    "year": 2016,
+    "flow": "import",
+    "value_usd": 562605,
+    "hs_code": "93"
+  }
+]

@@ -1,0 +1,4626 @@
+{
+  "metadata": {
+    "generatedAt": "2026-05-26T21:21:32.343Z",
+    "signalCount": 43,
+    "totalTests": 1028,
+    "testCounts": {
+      "a": 631,
+      "b": 120,
+      "c": 84,
+      "d": 8,
+      "e": 99,
+      "f": 11,
+      "g": 8,
+      "h": 15,
+      "i": 52,
+      "total": 1028
+    },
+    "crisisEvents": 87
+  },
+  "testA": [
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "power_grid",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": 0.9157,
+      "n": 88,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": 0.8767,
+      "n": 88,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": 0.8472,
+      "n": 30,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "corruption_risk",
+      "lag": 0,
+      "r": 0.8397,
+      "n": 30,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "night_lights",
+      "lag": 0,
+      "r": 0.8323,
+      "n": 29,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": 0.7689,
+      "n": 102,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "fao_food_import",
+      "lag": 0,
+      "r": 0.7464,
+      "n": 30,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.7271,
+      "n": 30,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "night_lights",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": 0.7178,
+      "n": 86,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "maritime_trade",
+      "lag": 0,
+      "r": 0.7042,
+      "n": 19,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "power_grid",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.6567,
+      "n": 88,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "imf_fiscal",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": -0.643,
+      "n": 30,
+      "strength": "MODERATE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.6317,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.6291,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "night_lights",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": 0.6269,
+      "n": 100,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "usda_food_supply",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.5769,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "pipeline_risk",
+      "signal_b": "rail_corridor",
+      "lag": 0,
+      "r": 0.5571,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "sovereign_cds",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.5535,
+      "n": 102,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "maritime_trade",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": 0.5459,
+      "n": 55,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "resource_conflict",
+      "lag": 0,
+      "r": 0.5342,
+      "n": 20,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "maritime_trade",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": 0.5275,
+      "n": 67,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.5246,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "power_grid",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.5174,
+      "n": 88,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "sanctions_pressure",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.5162,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "resource_conflict",
+      "lag": 0,
+      "r": -0.5126,
+      "n": 20,
+      "strength": "MODERATE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.507,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "port_congestion",
+      "lag": 0,
+      "r": -0.5011,
+      "n": 30,
+      "strength": "MODERATE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "economic_stress",
+      "signal_b": "trade_collapse",
+      "lag": 0,
+      "r": 0.4965,
+      "n": 5485,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.4926,
+      "n": 35,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "sovereign_cds",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.4911,
+      "n": 102,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.4824,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "rail_corridor",
+      "lag": 0,
+      "r": 0.4816,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "internet_freedom",
+      "signal_b": "pipeline_risk",
+      "lag": 0,
+      "r": 0.4649,
+      "n": 100,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "night_lights",
+      "lag": 0,
+      "r": 0.4609,
+      "n": 102,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "maritime_trade",
+      "signal_b": "port_congestion",
+      "lag": 0,
+      "r": -0.4535,
+      "n": 68,
+      "strength": "WEAK",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": 0.4279,
+      "n": 88,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "sanctions_pressure",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.4238,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "governance",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": -0.4234,
+      "n": 91,
+      "strength": "WEAK",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.4179,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": 0.4176,
+      "n": 396,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "night_lights",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.4172,
+      "n": 102,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.4094,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "iom_displacement",
+      "signal_b": "rail_corridor",
+      "lag": 0,
+      "r": 0.4002,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "internet_freedom",
+      "signal_b": "resource_conflict",
+      "lag": 0,
+      "r": 0.3998,
+      "n": 20,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "iom_displacement",
+      "lag": 0,
+      "r": 0.3985,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "rail_corridor",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.3956,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "pipeline_risk",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.3937,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "trade_collapse",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": -0.3931,
+      "n": 86,
+      "strength": "WEAK",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.3911,
+      "n": 30,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "resource_conflict",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": 0.3908,
+      "n": 20,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "displacement",
+      "signal_b": "trade_collapse",
+      "lag": 0,
+      "r": 0.3891,
+      "n": 49,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": 0.3876,
+      "n": 102,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.3815,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.3808,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "fao_food_import",
+      "lag": 0,
+      "r": 0.3726,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "port_congestion",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": -0.3696,
+      "n": 88,
+      "strength": "WEAK",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "resource_conflict",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.3643,
+      "n": 20,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "port_congestion",
+      "lag": 0,
+      "r": 0.3613,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "maritime_trade",
+      "lag": 0,
+      "r": 0.3584,
+      "n": 68,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "military_proximity",
+      "lag": 0,
+      "r": 0.3519,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.3511,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "chokepoint",
+      "lag": 0,
+      "r": -0.3505,
+      "n": 30,
+      "strength": "WEAK",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "port_congestion",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": -0.345,
+      "n": 102,
+      "strength": "WEAK",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "pipeline_risk",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.3434,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "dam_risk",
+      "lag": 0,
+      "r": 0.3396,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "iom_displacement",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.3396,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "internet_freedom",
+      "lag": 0,
+      "r": 0.3387,
+      "n": 100,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "vdem_governance",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.3346,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.3317,
+      "n": 30,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "displacement",
+      "signal_b": "seismic_risk",
+      "lag": 0,
+      "r": 0.3287,
+      "n": 61,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "displacement",
+      "signal_b": "economic_stress",
+      "lag": 0,
+      "r": 0.3279,
+      "n": 51,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "maritime_trade",
+      "signal_b": "pipeline_risk",
+      "lag": 0,
+      "r": -0.3262,
+      "n": 68,
+      "strength": "WEAK",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.3217,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "internet_freedom",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.3206,
+      "n": 100,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "sanctions_pressure",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": 0.3202,
+      "n": 102,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "unhcr_refugees",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.3186,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "internet_freedom",
+      "lag": 0,
+      "r": -0.3173,
+      "n": 28,
+      "strength": "WEAK",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": -0.3169,
+      "n": 102,
+      "strength": "WEAK",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "iom_displacement",
+      "lag": 0,
+      "r": 0.3123,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "pipeline_risk",
+      "lag": 0,
+      "r": 0.3122,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fire_hotspot",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.3085,
+      "n": 36,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "economic_stress",
+      "signal_b": "seismic_risk",
+      "lag": 0,
+      "r": 0.3074,
+      "n": 449,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "port_congestion",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.3071,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "sanctions_pressure",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.3067,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "rail_corridor",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.3024,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": -0.3018,
+      "n": 88,
+      "strength": "WEAK",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "military_proximity",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.3015,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "internet_freedom",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.2926,
+      "n": 100,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "resource_conflict",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.2905,
+      "n": 20,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "night_lights",
+      "signal_b": "pipeline_risk",
+      "lag": 0,
+      "r": -0.2877,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "election_calendar",
+      "lag": 0,
+      "r": 0.2818,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "health_crisis",
+      "signal_b": "pipeline_risk",
+      "lag": 0,
+      "r": 0.2816,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "health_crisis",
+      "lag": 0,
+      "r": -0.2796,
+      "n": 30,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "health_crisis",
+      "signal_b": "rail_corridor",
+      "lag": 0,
+      "r": 0.2784,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "maritime_trade",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.2773,
+      "n": 68,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.2761,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "maritime_trade",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": -0.2742,
+      "n": 68,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "pipeline_risk",
+      "lag": 0,
+      "r": 0.2719,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "unhcr_refugees",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.2717,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "night_lights",
+      "lag": 0,
+      "r": 0.2667,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.2657,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "maritime_trade",
+      "signal_b": "night_lights",
+      "lag": 0,
+      "r": 0.2647,
+      "n": 68,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "maritime_trade",
+      "lag": 0,
+      "r": -0.2629,
+      "n": 68,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "displacement",
+      "signal_b": "imf_fiscal",
+      "lag": 0,
+      "r": 0.2595,
+      "n": 25,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "health_crisis",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": -0.2577,
+      "n": 88,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "economic_stress",
+      "signal_b": "health_crisis",
+      "lag": 0,
+      "r": 0.2572,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "power_grid",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.2549,
+      "n": 88,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "health_crisis",
+      "signal_b": "night_lights",
+      "lag": 0,
+      "r": -0.2545,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "health_crisis",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": -0.253,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "displacement",
+      "signal_b": "gdelt_conflict",
+      "lag": 0,
+      "r": 0.2499,
+      "n": 17,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "economic_stress",
+      "lag": 0,
+      "r": -0.2421,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "port_congestion",
+      "lag": 0,
+      "r": -0.2369,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.2327,
+      "n": 30,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "sovereign_cds",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.2317,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.2316,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "pipeline_risk",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.2315,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "health_crisis",
+      "signal_b": "iom_displacement",
+      "lag": 0,
+      "r": 0.2266,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "iom_displacement",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.2262,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "military_proximity",
+      "signal_b": "vdem_governance",
+      "lag": 0,
+      "r": 0.2253,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "power_grid",
+      "signal_b": "resource_conflict",
+      "lag": 0,
+      "r": 0.2198,
+      "n": 17,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "internet_freedom",
+      "signal_b": "military_proximity",
+      "lag": 0,
+      "r": 0.2178,
+      "n": 100,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "economic_stress",
+      "signal_b": "resource_conflict",
+      "lag": 0,
+      "r": -0.2166,
+      "n": 20,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "economic_stress",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.2161,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "rail_corridor",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.2092,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "port_congestion",
+      "signal_b": "resource_conflict",
+      "lag": 0,
+      "r": -0.2089,
+      "n": 20,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "port_congestion",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.2086,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.2083,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "iom_displacement",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.2081,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "internet_freedom",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.2058,
+      "n": 100,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": 0.205,
+      "n": 88,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "pipeline_risk",
+      "lag": 0,
+      "r": 0.2033,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fire_hotspot",
+      "signal_b": "seismic_risk",
+      "lag": 0,
+      "r": 0.2016,
+      "n": 199,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "rail_corridor",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.2001,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "internet_freedom",
+      "lag": 0,
+      "r": 0.1995,
+      "n": 100,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.1993,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "military_proximity",
+      "lag": 0,
+      "r": 0.1991,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "health_crisis",
+      "signal_b": "resource_conflict",
+      "lag": 0,
+      "r": -0.1974,
+      "n": 20,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "internet_freedom",
+      "signal_b": "rail_corridor",
+      "lag": 0,
+      "r": 0.1974,
+      "n": 100,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "resource_conflict",
+      "lag": 0,
+      "r": 0.1971,
+      "n": 20,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "military_proximity",
+      "signal_b": "night_lights",
+      "lag": 0,
+      "r": -0.1954,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "iom_displacement",
+      "signal_b": "night_lights",
+      "lag": 0,
+      "r": 0.1919,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": 0.1839,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "power_grid",
+      "signal_b": "seismic_risk",
+      "lag": 0,
+      "r": 0.182,
+      "n": 296,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "rail_corridor",
+      "lag": 0,
+      "r": 0.1814,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "iom_displacement",
+      "signal_b": "seismic_risk",
+      "lag": 0,
+      "r": 0.1801,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "resource_conflict",
+      "lag": 0,
+      "r": 0.1792,
+      "n": 20,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "iom_displacement",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": 0.1792,
+      "n": 88,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "diaspora_remittance",
+      "signal_b": "night_lights",
+      "lag": 0,
+      "r": -0.1785,
+      "n": 332,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "iom_displacement",
+      "lag": 0,
+      "r": 0.1768,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "health_crisis",
+      "signal_b": "port_congestion",
+      "lag": 0,
+      "r": 0.176,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "pipeline_risk",
+      "signal_b": "resource_conflict",
+      "lag": 0,
+      "r": 0.1754,
+      "n": 20,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "iom_displacement",
+      "lag": 0,
+      "r": 0.1743,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "resource_conflict",
+      "signal_b": "seismic_risk",
+      "lag": 0,
+      "r": 0.173,
+      "n": 20,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "pipeline_risk",
+      "lag": 0,
+      "r": -0.1702,
+      "n": 30,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "corruption_risk",
+      "lag": 0,
+      "r": -0.17,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "iom_displacement",
+      "signal_b": "pipeline_risk",
+      "lag": 0,
+      "r": 0.1698,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "pipeline_risk",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.169,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.1686,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "economic_stress",
+      "signal_b": "internet_freedom",
+      "lag": 0,
+      "r": -0.1686,
+      "n": 100,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "maritime_trade",
+      "signal_b": "seismic_risk",
+      "lag": 0,
+      "r": -0.1684,
+      "n": 68,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "dam_risk",
+      "signal_b": "health_crisis",
+      "lag": 0,
+      "r": 0.1676,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "internet_freedom",
+      "lag": 0,
+      "r": 0.1669,
+      "n": 100,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "election_calendar",
+      "lag": 0,
+      "r": 0.1651,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "usda_food_supply",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.1639,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "economic_stress",
+      "signal_b": "military_proximity",
+      "lag": 0,
+      "r": -0.1623,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "internet_freedom",
+      "signal_b": "maritime_trade",
+      "lag": 0,
+      "r": -0.1623,
+      "n": 68,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "port_congestion",
+      "signal_b": "seismic_risk",
+      "lag": 0,
+      "r": 0.1609,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "iom_displacement",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.159,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "displacement",
+      "signal_b": "fire_hotspot",
+      "lag": 0,
+      "r": 0.1587,
+      "n": 46,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "internet_freedom",
+      "signal_b": "port_congestion",
+      "lag": 0,
+      "r": 0.1568,
+      "n": 100,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "health_crisis",
+      "lag": 0,
+      "r": -0.1563,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "economic_stress",
+      "signal_b": "fao_food_import",
+      "lag": 0,
+      "r": -0.1556,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "power_grid",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.1552,
+      "n": 88,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "economic_stress",
+      "signal_b": "imf_fiscal",
+      "lag": 0,
+      "r": 0.1524,
+      "n": 884,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "pipeline_risk",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": -0.1524,
+      "n": 88,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "displacement",
+      "signal_b": "governance",
+      "lag": 0,
+      "r": -0.1521,
+      "n": 31,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "health_crisis",
+      "lag": 0,
+      "r": -0.1517,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": 0.1499,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "military_proximity",
+      "signal_b": "port_congestion",
+      "lag": 0,
+      "r": 0.1483,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "night_lights",
+      "lag": 0,
+      "r": -0.1474,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "internet_freedom",
+      "signal_b": "usda_food_supply",
+      "lag": 0,
+      "r": 0.1474,
+      "n": 100,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "maritime_trade",
+      "signal_b": "rail_corridor",
+      "lag": 0,
+      "r": -0.1468,
+      "n": 68,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "rail_corridor",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.146,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "gdelt_conflict",
+      "signal_b": "seismic_risk",
+      "lag": 0,
+      "r": 0.1459,
+      "n": 71,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "fao_food_import",
+      "lag": 0,
+      "r": 0.1454,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "military_proximity",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.1448,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "seismic_risk",
+      "signal_b": "sovereign_cds",
+      "lag": 0,
+      "r": -0.1444,
+      "n": 102,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": 0.1436,
+      "n": 88,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "governance",
+      "signal_b": "power_grid",
+      "lag": 0,
+      "r": 0.1433,
+      "n": 3322,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "internet_freedom",
+      "lag": 0,
+      "r": 0.1432,
+      "n": 100,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "water_stress",
+      "lag": 0,
+      "r": 0.143,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "chokepoint",
+      "signal_b": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.1413,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "election_calendar",
+      "signal_b": "maritime_trade",
+      "lag": 0,
+      "r": 0.1403,
+      "n": 68,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "health_crisis",
+      "signal_b": "maritime_trade",
+      "lag": 0,
+      "r": -0.1399,
+      "n": 68,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "corruption_risk",
+      "signal_b": "pipeline_risk",
+      "lag": 0,
+      "r": 0.1398,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "election_calendar",
+      "lag": 0,
+      "r": 0.1394,
+      "n": 30,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "capital_flows",
+      "signal_b": "gdelt_conflict",
+      "lag": 0,
+      "r": 0.1381,
+      "n": 126,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "pipeline_risk",
+      "signal_b": "port_congestion",
+      "lag": 0,
+      "r": 0.1377,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "fao_food_import",
+      "signal_b": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.1369,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "pairwise_lag0",
+      "signal_a": "iom_displacement",
+      "signal_b": "port_congestion",
+      "lag": 0,
+      "r": 0.1369,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    }
+  ],
+  "testB": [
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "power_grid",
+      "signal_b": "sovereign_cds",
+      "lag": 4,
+      "r": -0.7384,
+      "n": 98,
+      "strength": "STRONG",
+      "direction": "inverse",
+      "baseR": 0.9157
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "power_grid",
+      "signal_b": "usda_food_supply",
+      "lag": 4,
+      "r": -0.4498,
+      "n": 100,
+      "strength": "WEAK",
+      "direction": "inverse",
+      "baseR": 0.6567
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "imf_fiscal",
+      "signal_b": "vdem_governance",
+      "lag": 1,
+      "r": -0.6077,
+      "n": 30,
+      "strength": "MODERATE",
+      "direction": "inverse",
+      "baseR": -0.643
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "imf_fiscal",
+      "signal_b": "vdem_governance",
+      "lag": 2,
+      "r": -0.4751,
+      "n": 31,
+      "strength": "WEAK",
+      "direction": "inverse",
+      "baseR": -0.643
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "imf_fiscal",
+      "signal_b": "vdem_governance",
+      "lag": 3,
+      "r": -0.4181,
+      "n": 32,
+      "strength": "WEAK",
+      "direction": "inverse",
+      "baseR": -0.643
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "imf_fiscal",
+      "signal_b": "vdem_governance",
+      "lag": 4,
+      "r": -0.416,
+      "n": 32,
+      "strength": "WEAK",
+      "direction": "inverse",
+      "baseR": -0.643
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "power_grid",
+      "signal_b": "vdem_governance",
+      "lag": 1,
+      "r": -0.4085,
+      "n": 89,
+      "strength": "WEAK",
+      "direction": "inverse",
+      "baseR": 0.5174
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "power_grid",
+      "signal_b": "vdem_governance",
+      "lag": 2,
+      "r": -0.4095,
+      "n": 89,
+      "strength": "WEAK",
+      "direction": "inverse",
+      "baseR": 0.5174
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "power_grid",
+      "signal_b": "vdem_governance",
+      "lag": 3,
+      "r": -0.3866,
+      "n": 89,
+      "strength": "WEAK",
+      "direction": "inverse",
+      "baseR": 0.5174
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "power_grid",
+      "signal_b": "vdem_governance",
+      "lag": 4,
+      "r": -0.2321,
+      "n": 189,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse",
+      "baseR": 0.5174
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "economic_stress",
+      "signal_b": "trade_collapse",
+      "lag": 1,
+      "r": 0.1373,
+      "n": 5418,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive",
+      "baseR": 0.4965
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "economic_stress",
+      "signal_b": "trade_collapse",
+      "lag": 2,
+      "r": -0.0106,
+      "n": 5359,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse",
+      "baseR": 0.4965
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "economic_stress",
+      "signal_b": "trade_collapse",
+      "lag": 3,
+      "r": 0.0163,
+      "n": 5306,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive",
+      "baseR": 0.4965
+    },
+    {
+      "test": "pairwise_lagged",
+      "signal_a": "economic_stress",
+      "signal_b": "trade_collapse",
+      "lag": 4,
+      "r": -0.0037,
+      "n": 5245,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse",
+      "baseR": 0.4965
+    }
+  ],
+  "testC": [
+    {
+      "test": "signal_to_score",
+      "signal": "diaspora_remittance",
+      "lag": 0,
+      "r": 0.7731,
+      "n": 462,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "economic_stress",
+      "lag": 0,
+      "r": 0.7496,
+      "n": 7660,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "night_lights",
+      "lag": 0,
+      "r": 0.7279,
+      "n": 500,
+      "strength": "STRONG",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "corruption_risk",
+      "lag": 0,
+      "r": 0.6941,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "trade_collapse",
+      "lag": 0,
+      "r": 0.6733,
+      "n": 5492,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "diaspora_remittance",
+      "lag": 1,
+      "r": 0.6434,
+      "n": 449,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "usda_food_supply",
+      "lag": 0,
+      "r": 0.6413,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "fao_food_import",
+      "lag": 0,
+      "r": 0.6318,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "capital_flows",
+      "lag": 0,
+      "r": 0.6236,
+      "n": 808,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "sovereign_cds",
+      "lag": 0,
+      "r": 0.6097,
+      "n": 102,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "vdem_governance",
+      "lag": 3,
+      "r": 0.6067,
+      "n": 95,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "diaspora_remittance",
+      "lag": 2,
+      "r": 0.5644,
+      "n": 438,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "governance",
+      "lag": 0,
+      "r": 0.5579,
+      "n": 3597,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "imf_fiscal",
+      "lag": 0,
+      "r": 0.5552,
+      "n": 1266,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "water_stress",
+      "lag": 0,
+      "r": 0.5001,
+      "n": 104,
+      "strength": "MODERATE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "capital_flows",
+      "lag": 1,
+      "r": 0.4946,
+      "n": 763,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "resource_conflict",
+      "lag": 0,
+      "r": 0.4919,
+      "n": 20,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "seismic_risk",
+      "lag": 0,
+      "r": 0.4899,
+      "n": 688,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "diaspora_remittance",
+      "lag": 3,
+      "r": 0.4862,
+      "n": 428,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "imf_fiscal",
+      "lag": 1,
+      "r": 0.4752,
+      "n": 1233,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "night_lights",
+      "lag": 1,
+      "r": 0.4712,
+      "n": 390,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "sanctions_pressure",
+      "lag": 0,
+      "r": 0.4706,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "displacement",
+      "lag": 0,
+      "r": 0.4514,
+      "n": 152,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "fire_hotspot",
+      "lag": 0,
+      "r": 0.4248,
+      "n": 851,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "dam_risk",
+      "lag": 0,
+      "r": 0.4234,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "night_lights",
+      "lag": 2,
+      "r": 0.4232,
+      "n": 379,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "imf_fiscal",
+      "lag": 2,
+      "r": 0.4163,
+      "n": 1200,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "power_grid",
+      "lag": 0,
+      "r": 0.4081,
+      "n": 4189,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "rail_corridor",
+      "lag": 0,
+      "r": 0.3886,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "capital_flows",
+      "lag": 2,
+      "r": 0.3848,
+      "n": 748,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "night_lights",
+      "lag": 3,
+      "r": 0.383,
+      "n": 368,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "pipeline_risk",
+      "lag": 0,
+      "r": 0.3797,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "gdelt_conflict",
+      "lag": 0,
+      "r": 0.3698,
+      "n": 168,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "internet_freedom",
+      "lag": 0,
+      "r": 0.3625,
+      "n": 100,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "imf_fiscal",
+      "lag": 3,
+      "r": 0.3525,
+      "n": 1165,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "iom_displacement",
+      "lag": 0,
+      "r": 0.3458,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "fire_hotspot",
+      "lag": 1,
+      "r": 0.338,
+      "n": 838,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "election_calendar",
+      "lag": 0,
+      "r": 0.3378,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "vdem_governance",
+      "lag": 0,
+      "r": 0.337,
+      "n": 199,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "unhcr_refugees",
+      "lag": 0,
+      "r": 0.3354,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "fire_hotspot",
+      "lag": 2,
+      "r": 0.3329,
+      "n": 823,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "military_proximity",
+      "lag": 0,
+      "r": 0.3248,
+      "n": 104,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "power_grid",
+      "lag": 1,
+      "r": 0.3244,
+      "n": 4100,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "capital_flows",
+      "lag": 3,
+      "r": 0.311,
+      "n": 733,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "fire_hotspot",
+      "lag": 3,
+      "r": 0.3061,
+      "n": 809,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "governance",
+      "lag": 1,
+      "r": 0.304,
+      "n": 3500,
+      "strength": "WEAK",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "vdem_governance",
+      "lag": 2,
+      "r": -0.293,
+      "n": 38,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "power_grid",
+      "lag": 2,
+      "r": 0.287,
+      "n": 4008,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "governance",
+      "lag": 2,
+      "r": 0.2709,
+      "n": 3410,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "economic_stress",
+      "lag": 1,
+      "r": 0.2544,
+      "n": 7466,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "power_grid",
+      "lag": 3,
+      "r": 0.2431,
+      "n": 3917,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "vdem_governance",
+      "lag": 1,
+      "r": -0.2292,
+      "n": 38,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "gdelt_conflict",
+      "lag": 1,
+      "r": 0.1642,
+      "n": 163,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "trade_collapse",
+      "lag": 1,
+      "r": 0.1627,
+      "n": 5409,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "economic_stress",
+      "lag": 2,
+      "r": 0.1318,
+      "n": 7376,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "governance",
+      "lag": 3,
+      "r": 0.1255,
+      "n": 3408,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "maritime_trade",
+      "lag": 0,
+      "r": 0.1097,
+      "n": 68,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "economic_stress",
+      "lag": 3,
+      "r": 0.1032,
+      "n": 7376,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "chokepoint",
+      "lag": 0,
+      "r": 0.101,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "displacement",
+      "lag": 1,
+      "r": 0.0955,
+      "n": 144,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "port_congestion",
+      "lag": 0,
+      "r": 0.0916,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "gdelt_conflict",
+      "lag": 2,
+      "r": 0.0718,
+      "n": 155,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "seismic_risk",
+      "lag": 1,
+      "r": 0.057,
+      "n": 584,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "displacement",
+      "lag": 3,
+      "r": 0.0482,
+      "n": 142,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "displacement",
+      "lag": 2,
+      "r": 0.0357,
+      "n": 144,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "seismic_risk",
+      "lag": 2,
+      "r": 0.0317,
+      "n": 577,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "health_crisis",
+      "lag": 0,
+      "r": 0.0316,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "gdelt_conflict",
+      "lag": 3,
+      "r": -0.022,
+      "n": 147,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "trade_collapse",
+      "lag": 3,
+      "r": 0.0138,
+      "n": 5327,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "seismic_risk",
+      "lag": 3,
+      "r": -0.0092,
+      "n": 570,
+      "strength": "NEGLIGIBLE",
+      "direction": "inverse"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "trade_collapse",
+      "lag": 2,
+      "r": 0.0068,
+      "n": 5332,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "dark_vessel",
+      "lag": 0,
+      "r": 0,
+      "n": 37,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "flood_risk",
+      "lag": 0,
+      "r": 0,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "gdelt_tone",
+      "lag": 0,
+      "r": 0,
+      "n": 188,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "gdelt_tone",
+      "lag": 1,
+      "r": 0,
+      "n": 181,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "gdelt_tone",
+      "lag": 2,
+      "r": 0,
+      "n": 172,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "gdelt_tone",
+      "lag": 3,
+      "r": 0,
+      "n": 163,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "prediction_market",
+      "lag": 0,
+      "r": 0,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "social_volume",
+      "lag": 0,
+      "r": 0,
+      "n": 104,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    },
+    {
+      "test": "signal_to_score",
+      "signal": "tor_censorship",
+      "lag": 0,
+      "r": 0,
+      "n": 24,
+      "strength": "NEGLIGIBLE",
+      "direction": "positive"
+    }
+  ],
+  "testD": [
+    {
+      "test": "regional_divergence",
+      "signal": "economic_stress",
+      "regionStats": {
+        "Sub-Saharan Africa": {
+          "n": 754,
+          "mean": -0.073,
+          "median": -0.076
+        },
+        "MENA": {
+          "n": 383,
+          "mean": 0.077,
+          "median": 0.067
+        },
+        "Europe & FSU": {
+          "n": 391,
+          "mean": -0.118,
+          "median": -0.042
+        },
+        "South & Southeast Asia": {
+          "n": 297,
+          "mean": -0.019,
+          "median": -0.03
+        },
+        "Latin America": {
+          "n": 293,
+          "mean": 0.102,
+          "median": 0.038
+        },
+        "East Asia & Pacific": {
+          "n": 101,
+          "mean": -0.129,
+          "median": -0.028
+        }
+      },
+      "highestStressRegion": "MENA",
+      "lowestStressRegion": "Sub-Saharan Africa",
+      "medianSpread": 0.143,
+      "regionsWithData": 6
+    },
+    {
+      "test": "regional_divergence",
+      "signal": "governance",
+      "regionStats": {
+        "Sub-Saharan Africa": {
+          "n": 728,
+          "mean": 0.055,
+          "median": 0.007
+        },
+        "MENA": {
+          "n": 369,
+          "mean": 0.031,
+          "median": 0.053
+        },
+        "Europe & FSU": {
+          "n": 368,
+          "mean": 0.044,
+          "median": -0.007
+        },
+        "South & Southeast Asia": {
+          "n": 276,
+          "mean": -0.019,
+          "median": -0.003
+        },
+        "Latin America": {
+          "n": 276,
+          "mean": -0.025,
+          "median": -0.02
+        },
+        "East Asia & Pacific": {
+          "n": 115,
+          "mean": 0.029,
+          "median": 0.011
+        }
+      },
+      "highestStressRegion": "MENA",
+      "lowestStressRegion": "Latin America",
+      "medianSpread": 0.073,
+      "regionsWithData": 6
+    },
+    {
+      "test": "regional_divergence",
+      "signal": "trade_collapse",
+      "regionStats": {
+        "Sub-Saharan Africa": {
+          "n": 600,
+          "mean": -0.123,
+          "median": -0.061
+        },
+        "MENA": {
+          "n": 288,
+          "mean": -0.015,
+          "median": 0
+        },
+        "Europe & FSU": {
+          "n": 296,
+          "mean": -0.032,
+          "median": -0.005
+        },
+        "South & Southeast Asia": {
+          "n": 253,
+          "mean": 0.014,
+          "median": 0.02
+        },
+        "Latin America": {
+          "n": 290,
+          "mean": 0.012,
+          "median": 0.022
+        },
+        "East Asia & Pacific": {
+          "n": 42,
+          "mean": -0.074,
+          "median": -0.07
+        }
+      },
+      "highestStressRegion": "Latin America",
+      "lowestStressRegion": "East Asia & Pacific",
+      "medianSpread": 0.092,
+      "regionsWithData": 6
+    },
+    {
+      "test": "regional_divergence",
+      "signal": "capital_flows",
+      "regionStats": {
+        "Sub-Saharan Africa": {
+          "n": 317,
+          "mean": 0.391,
+          "median": 0.014
+        },
+        "MENA": {
+          "n": 110,
+          "mean": -0.288,
+          "median": 0.002
+        },
+        "Europe & FSU": {
+          "n": 54,
+          "mean": 1.652,
+          "median": 0.325
+        },
+        "South & Southeast Asia": {
+          "n": 57,
+          "mean": -0.115,
+          "median": 0.008
+        },
+        "Latin America": {
+          "n": 81,
+          "mean": -0.179,
+          "median": 0.009
+        }
+      },
+      "highestStressRegion": "Europe & FSU",
+      "lowestStressRegion": "MENA",
+      "medianSpread": 0.323,
+      "regionsWithData": 5
+    },
+    {
+      "test": "regional_divergence",
+      "signal": "imf_fiscal",
+      "regionStats": {
+        "Sub-Saharan Africa": {
+          "n": 414,
+          "mean": -0.013,
+          "median": 0
+        },
+        "MENA": {
+          "n": 249,
+          "mean": 0.016,
+          "median": -0.073
+        },
+        "Europe & FSU": {
+          "n": 31,
+          "mean": 0.141,
+          "median": 0.096
+        },
+        "South & Southeast Asia": {
+          "n": 108,
+          "mean": 0.923,
+          "median": 0.011
+        },
+        "Latin America": {
+          "n": 279,
+          "mean": 0.092,
+          "median": 0.038
+        }
+      },
+      "highestStressRegion": "Europe & FSU",
+      "lowestStressRegion": "MENA",
+      "medianSpread": 0.169,
+      "regionsWithData": 5
+    },
+    {
+      "test": "regional_divergence",
+      "signal": "fire_hotspot",
+      "regionStats": {
+        "Sub-Saharan Africa": {
+          "n": 339,
+          "mean": 31.856,
+          "median": 0
+        },
+        "MENA": {
+          "n": 105,
+          "mean": 1160.69,
+          "median": 3.333
+        },
+        "Europe & FSU": {
+          "n": 54,
+          "mean": -0.068,
+          "median": 0
+        },
+        "South & Southeast Asia": {
+          "n": 103,
+          "mean": 0,
+          "median": 0
+        },
+        "Latin America": {
+          "n": 184,
+          "mean": 0.021,
+          "median": 0
+        },
+        "East Asia & Pacific": {
+          "n": 27,
+          "mean": -0.012,
+          "median": 0
+        }
+      },
+      "highestStressRegion": "MENA",
+      "lowestStressRegion": "East Asia & Pacific",
+      "medianSpread": 3.333,
+      "regionsWithData": 6
+    },
+    {
+      "test": "regional_divergence",
+      "signal": "displacement",
+      "regionStats": {
+        "Sub-Saharan Africa": {
+          "n": 57,
+          "mean": 10903568.403,
+          "median": 0.693
+        },
+        "Europe & FSU": {
+          "n": 6,
+          "mean": 46199.236,
+          "median": 0.487
+        },
+        "South & Southeast Asia": {
+          "n": 10,
+          "mean": 35.558,
+          "median": 0
+        },
+        "Latin America": {
+          "n": 8,
+          "mean": 19465016324.609,
+          "median": 6.943
+        }
+      },
+      "highestStressRegion": "Latin America",
+      "lowestStressRegion": "South & Southeast Asia",
+      "medianSpread": 6.943,
+      "regionsWithData": 4
+    },
+    {
+      "test": "regional_divergence",
+      "signal": "power_grid",
+      "regionStats": {
+        "Sub-Saharan Africa": {
+          "n": 739,
+          "mean": -0.111,
+          "median": -0.083
+        },
+        "MENA": {
+          "n": 375,
+          "mean": -0.056,
+          "median": 0
+        },
+        "Europe & FSU": {
+          "n": 360,
+          "mean": 0.307,
+          "median": 0.037
+        },
+        "South & Southeast Asia": {
+          "n": 285,
+          "mean": -0.086,
+          "median": -0.079
+        },
+        "Latin America": {
+          "n": 280,
+          "mean": -0.118,
+          "median": -0.155
+        },
+        "East Asia & Pacific": {
+          "n": 110,
+          "mean": 0.014,
+          "median": -0.036
+        }
+      },
+      "highestStressRegion": "Europe & FSU",
+      "lowestStressRegion": "Latin America",
+      "medianSpread": 0.192,
+      "regionsWithData": 6
+    }
+  ],
+  "testE": [
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "governance",
+        "imf_fiscal"
+      ],
+      "validTriples": 758,
+      "allThreeElevated": 2,
+      "activationRate": 0.0026,
+      "meanScoreWhenElevated": 69.7,
+      "meanScoreBaseline": 50.6,
+      "scoreBoost": 19.1,
+      "n_elevated": 2
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "trade_collapse",
+        "governance"
+      ],
+      "validTriples": 2894,
+      "allThreeElevated": 7,
+      "activationRate": 0.0024,
+      "meanScoreWhenElevated": 66.4,
+      "meanScoreBaseline": 51.4,
+      "scoreBoost": 15,
+      "n_elevated": 7
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "fire_hotspot",
+        "capital_flows"
+      ],
+      "validTriples": 203,
+      "allThreeElevated": 10,
+      "activationRate": 0.0493,
+      "meanScoreWhenElevated": 80.3,
+      "meanScoreBaseline": 65.7,
+      "scoreBoost": 14.6,
+      "n_elevated": 10
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "trade_collapse",
+        "imf_fiscal"
+      ],
+      "validTriples": 693,
+      "allThreeElevated": 3,
+      "activationRate": 0.0043,
+      "meanScoreWhenElevated": 62.4,
+      "meanScoreBaseline": 50.3,
+      "scoreBoost": 12.1,
+      "n_elevated": 3
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "governance",
+        "fire_hotspot",
+        "seismic_risk"
+      ],
+      "validTriples": 134,
+      "allThreeElevated": 2,
+      "activationRate": 0.0149,
+      "meanScoreWhenElevated": 78.5,
+      "meanScoreBaseline": 69.1,
+      "scoreBoost": 9.4,
+      "n_elevated": 2
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "governance",
+        "fire_hotspot",
+        "capital_flows"
+      ],
+      "validTriples": 194,
+      "allThreeElevated": 8,
+      "activationRate": 0.0412,
+      "meanScoreWhenElevated": 75.6,
+      "meanScoreBaseline": 66.4,
+      "scoreBoost": 9.2,
+      "n_elevated": 8
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "governance",
+        "imf_fiscal"
+      ],
+      "validTriples": 609,
+      "allThreeElevated": 3,
+      "activationRate": 0.0049,
+      "meanScoreWhenElevated": 56.8,
+      "meanScoreBaseline": 50,
+      "scoreBoost": 6.8,
+      "n_elevated": 3
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "governance",
+        "vdem_governance"
+      ],
+      "validTriples": 87,
+      "allThreeElevated": 1,
+      "activationRate": 0.0115,
+      "meanScoreWhenElevated": 58,
+      "meanScoreBaseline": 52.9,
+      "scoreBoost": 5.1,
+      "n_elevated": 1
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "governance",
+        "vdem_governance"
+      ],
+      "validTriples": 77,
+      "allThreeElevated": 1,
+      "activationRate": 0.013,
+      "meanScoreWhenElevated": 58,
+      "meanScoreBaseline": 53.3,
+      "scoreBoost": 4.7,
+      "n_elevated": 1
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "power_grid",
+        "governance"
+      ],
+      "validTriples": 2728,
+      "allThreeElevated": 3,
+      "activationRate": 0.0011,
+      "meanScoreWhenElevated": 54.2,
+      "meanScoreBaseline": 51.3,
+      "scoreBoost": 2.9,
+      "n_elevated": 3
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "governance",
+        "fire_hotspot"
+      ],
+      "validTriples": 490,
+      "allThreeElevated": 1,
+      "activationRate": 0.002,
+      "meanScoreWhenElevated": 58,
+      "meanScoreBaseline": 55.1,
+      "scoreBoost": 2.9,
+      "n_elevated": 1
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "power_grid",
+        "imf_fiscal"
+      ],
+      "validTriples": 810,
+      "allThreeElevated": 1,
+      "activationRate": 0.0012,
+      "meanScoreWhenElevated": 53.6,
+      "meanScoreBaseline": 50.9,
+      "scoreBoost": 2.7,
+      "n_elevated": 1
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "governance",
+        "fire_hotspot"
+      ],
+      "validTriples": 647,
+      "allThreeElevated": 1,
+      "activationRate": 0.0015,
+      "meanScoreWhenElevated": 58,
+      "meanScoreBaseline": 55.7,
+      "scoreBoost": 2.3,
+      "n_elevated": 1
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "governance",
+        "fire_hotspot"
+      ],
+      "validTriples": 637,
+      "allThreeElevated": 1,
+      "activationRate": 0.0016,
+      "meanScoreWhenElevated": 58,
+      "meanScoreBaseline": 55.9,
+      "scoreBoost": 2.1,
+      "n_elevated": 1
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "fire_hotspot",
+        "capital_flows",
+        "seismic_risk"
+      ],
+      "validTriples": 167,
+      "allThreeElevated": 11,
+      "activationRate": 0.0659,
+      "meanScoreWhenElevated": 69,
+      "meanScoreBaseline": 67.8,
+      "scoreBoost": 1.2,
+      "n_elevated": 11
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "power_grid",
+        "capital_flows"
+      ],
+      "validTriples": 246,
+      "allThreeElevated": 1,
+      "activationRate": 0.0041,
+      "meanScoreWhenElevated": 58,
+      "meanScoreBaseline": 57.5,
+      "scoreBoost": 0.5,
+      "n_elevated": 1
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "trade_collapse",
+        "gdelt_tone"
+      ],
+      "validTriples": 50,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 58.5,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "power_grid",
+        "gdelt_tone"
+      ],
+      "validTriples": 65,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 56.1,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "governance",
+        "gdelt_tone"
+      ],
+      "validTriples": 73,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 56.2,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "imf_fiscal",
+        "fire_hotspot"
+      ],
+      "validTriples": 389,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 51,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "imf_fiscal",
+        "capital_flows"
+      ],
+      "validTriples": 162,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 52,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "imf_fiscal",
+        "seismic_risk"
+      ],
+      "validTriples": 111,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 52.9,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "imf_fiscal",
+        "gdelt_tone"
+      ],
+      "validTriples": 52,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 50.3,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "fire_hotspot",
+        "gdelt_tone"
+      ],
+      "validTriples": 56,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 58.4,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "capital_flows",
+        "gdelt_tone"
+      ],
+      "validTriples": 51,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 52.3,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "economic_stress",
+        "seismic_risk",
+        "gdelt_tone"
+      ],
+      "validTriples": 35,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 52.8,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "power_grid",
+        "gdelt_tone"
+      ],
+      "validTriples": 44,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 58.6,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "governance",
+        "gdelt_tone"
+      ],
+      "validTriples": 50,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 58.5,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "imf_fiscal",
+        "fire_hotspot"
+      ],
+      "validTriples": 284,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 50,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "imf_fiscal",
+        "capital_flows"
+      ],
+      "validTriples": 77,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 50.1,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "imf_fiscal",
+        "seismic_risk"
+      ],
+      "validTriples": 31,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 51.1,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "imf_fiscal",
+        "gdelt_tone"
+      ],
+      "validTriples": 34,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 50.2,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "fire_hotspot",
+        "gdelt_tone"
+      ],
+      "validTriples": 34,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 63.1,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "trade_collapse",
+        "capital_flows",
+        "gdelt_tone"
+      ],
+      "validTriples": 31,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 52.9,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "governance",
+        "imf_fiscal"
+      ],
+      "validTriples": 728,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 50.5,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "governance",
+        "gdelt_tone"
+      ],
+      "validTriples": 78,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 58.3,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "imf_fiscal",
+        "fire_hotspot"
+      ],
+      "validTriples": 382,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 50.9,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "imf_fiscal",
+        "capital_flows"
+      ],
+      "validTriples": 157,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 51.9,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "imf_fiscal",
+        "seismic_risk"
+      ],
+      "validTriples": 107,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 52.7,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "imf_fiscal",
+        "gdelt_tone"
+      ],
+      "validTriples": 53,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 49.9,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "fire_hotspot",
+        "gdelt_tone"
+      ],
+      "validTriples": 63,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 60.6,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "capital_flows",
+        "gdelt_tone"
+      ],
+      "validTriples": 59,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 56.1,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "power_grid",
+        "seismic_risk",
+        "gdelt_tone"
+      ],
+      "validTriples": 45,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 57.7,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "governance",
+        "imf_fiscal",
+        "fire_hotspot"
+      ],
+      "validTriples": 387,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 50.8,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "governance",
+        "imf_fiscal",
+        "gdelt_tone"
+      ],
+      "validTriples": 61,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 49.8,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "governance",
+        "fire_hotspot",
+        "gdelt_tone"
+      ],
+      "validTriples": 73,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 60.4,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "governance",
+        "capital_flows",
+        "gdelt_tone"
+      ],
+      "validTriples": 67,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 56.3,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "governance",
+        "seismic_risk",
+        "gdelt_tone"
+      ],
+      "validTriples": 52,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 57.3,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "imf_fiscal",
+        "fire_hotspot",
+        "capital_flows"
+      ],
+      "validTriples": 155,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 51,
+      "scoreBoost": null,
+      "n_elevated": 0
+    },
+    {
+      "test": "three_signal_cluster",
+      "signals": [
+        "imf_fiscal",
+        "fire_hotspot",
+        "seismic_risk"
+      ],
+      "validTriples": 76,
+      "allThreeElevated": 0,
+      "activationRate": 0,
+      "meanScoreWhenElevated": null,
+      "meanScoreBaseline": 52.3,
+      "scoreBoost": null,
+      "n_elevated": 0
+    }
+  ],
+  "testF": [
+    {
+      "test": "asymmetry",
+      "signal": "capital_flows",
+      "collapseEvents": 99,
+      "recoveryEvents": 87,
+      "medianCollapseYears": 3,
+      "medianRecoveryYears": 4,
+      "asymmetryRatio": 1.33,
+      "finding": "RECOVERY_SLOWER"
+    },
+    {
+      "test": "asymmetry",
+      "signal": "governance",
+      "collapseEvents": 328,
+      "recoveryEvents": 122,
+      "medianCollapseYears": 4,
+      "medianRecoveryYears": 4,
+      "asymmetryRatio": 1,
+      "finding": "SYMMETRIC"
+    },
+    {
+      "test": "asymmetry",
+      "signal": "diaspora_remittance",
+      "collapseEvents": 36,
+      "recoveryEvents": 19,
+      "medianCollapseYears": 4,
+      "medianRecoveryYears": 4,
+      "asymmetryRatio": 1,
+      "finding": "SYMMETRIC"
+    },
+    {
+      "test": "asymmetry",
+      "signal": "imf_fiscal",
+      "collapseEvents": 73,
+      "recoveryEvents": 44,
+      "medianCollapseYears": 4,
+      "medianRecoveryYears": 2,
+      "asymmetryRatio": 0.5,
+      "finding": "COLLAPSE_SLOWER"
+    },
+    {
+      "test": "asymmetry",
+      "signal": "fire_hotspot",
+      "collapseEvents": 89,
+      "recoveryEvents": 79,
+      "medianCollapseYears": 2,
+      "medianRecoveryYears": 1,
+      "asymmetryRatio": 0.5,
+      "finding": "COLLAPSE_SLOWER"
+    },
+    {
+      "test": "asymmetry",
+      "signal": "displacement",
+      "collapseEvents": 36,
+      "recoveryEvents": 15,
+      "medianCollapseYears": 6,
+      "medianRecoveryYears": 3,
+      "asymmetryRatio": 0.5,
+      "finding": "COLLAPSE_SLOWER"
+    },
+    {
+      "test": "asymmetry",
+      "signal": "gdelt_conflict",
+      "collapseEvents": 20,
+      "recoveryEvents": 10,
+      "medianCollapseYears": 2,
+      "medianRecoveryYears": 1,
+      "asymmetryRatio": 0.5,
+      "finding": "COLLAPSE_SLOWER"
+    },
+    {
+      "test": "asymmetry",
+      "signal": "power_grid",
+      "collapseEvents": 226,
+      "recoveryEvents": 82,
+      "medianCollapseYears": 5,
+      "medianRecoveryYears": 2,
+      "asymmetryRatio": 0.4,
+      "finding": "COLLAPSE_SLOWER"
+    },
+    {
+      "test": "asymmetry",
+      "signal": "economic_stress",
+      "collapseEvents": 2071,
+      "recoveryEvents": 582,
+      "medianCollapseYears": 3,
+      "medianRecoveryYears": 1,
+      "asymmetryRatio": 0.33,
+      "finding": "COLLAPSE_SLOWER"
+    },
+    {
+      "test": "asymmetry",
+      "signal": "trade_collapse",
+      "collapseEvents": 1390,
+      "recoveryEvents": 300,
+      "medianCollapseYears": 3,
+      "medianRecoveryYears": 1,
+      "asymmetryRatio": 0.33,
+      "finding": "COLLAPSE_SLOWER"
+    },
+    {
+      "test": "asymmetry",
+      "signal": "seismic_risk",
+      "collapseEvents": 261,
+      "recoveryEvents": 78,
+      "medianCollapseYears": 3,
+      "medianRecoveryYears": 1,
+      "asymmetryRatio": 0.33,
+      "finding": "COLLAPSE_SLOWER"
+    }
+  ],
+  "testG": [
+    {
+      "test": "first_mover",
+      "signal": "economic_stress",
+      "timesFirstToActivate": 30,
+      "shareOfCrisisEvents": 0.345
+    },
+    {
+      "test": "first_mover",
+      "signal": "capital_flows",
+      "timesFirstToActivate": 6,
+      "shareOfCrisisEvents": 0.069
+    },
+    {
+      "test": "first_mover",
+      "signal": "governance",
+      "timesFirstToActivate": 5,
+      "shareOfCrisisEvents": 0.057
+    },
+    {
+      "test": "first_mover",
+      "signal": "trade_collapse",
+      "timesFirstToActivate": 3,
+      "shareOfCrisisEvents": 0.034
+    },
+    {
+      "test": "first_mover",
+      "signal": "seismic_risk",
+      "timesFirstToActivate": 3,
+      "shareOfCrisisEvents": 0.034
+    },
+    {
+      "test": "first_mover",
+      "signal": "displacement",
+      "timesFirstToActivate": 1,
+      "shareOfCrisisEvents": 0.011
+    },
+    {
+      "test": "first_mover",
+      "signal": "power_grid",
+      "timesFirstToActivate": 1,
+      "shareOfCrisisEvents": 0.011
+    },
+    {
+      "test": "first_mover",
+      "signal": "gdelt_conflict",
+      "timesFirstToActivate": 1,
+      "shareOfCrisisEvents": 0.011
+    }
+  ],
+  "testH": [
+    {
+      "test": "going_dark",
+      "signal": "power_grid",
+      "timesWentDarkBeforeElevation": 8,
+      "rateVsElevated": 0.0183
+    },
+    {
+      "test": "going_dark",
+      "signal": "economic_stress",
+      "timesWentDarkBeforeElevation": 7,
+      "rateVsElevated": 0.0161
+    },
+    {
+      "test": "going_dark",
+      "signal": "governance",
+      "timesWentDarkBeforeElevation": 6,
+      "rateVsElevated": 0.0138
+    },
+    {
+      "test": "going_dark",
+      "signal": "trade_collapse",
+      "timesWentDarkBeforeElevation": 6,
+      "rateVsElevated": 0.0138
+    },
+    {
+      "test": "going_dark",
+      "signal": "diaspora_remittance",
+      "timesWentDarkBeforeElevation": 4,
+      "rateVsElevated": 0.0092
+    },
+    {
+      "test": "going_dark",
+      "signal": "night_lights",
+      "timesWentDarkBeforeElevation": 3,
+      "rateVsElevated": 0.0069
+    },
+    {
+      "test": "going_dark",
+      "signal": "capital_flows",
+      "timesWentDarkBeforeElevation": 2,
+      "rateVsElevated": 0.0046
+    },
+    {
+      "test": "going_dark",
+      "signal": "fire_hotspot",
+      "timesWentDarkBeforeElevation": 2,
+      "rateVsElevated": 0.0046
+    },
+    {
+      "test": "going_dark",
+      "signal": "vdem_governance",
+      "timesWentDarkBeforeElevation": 2,
+      "rateVsElevated": 0.0046
+    },
+    {
+      "test": "going_dark",
+      "signal": "seismic_risk",
+      "timesWentDarkBeforeElevation": 2,
+      "rateVsElevated": 0.0046
+    },
+    {
+      "test": "going_dark",
+      "signal": "imf_fiscal",
+      "timesWentDarkBeforeElevation": 0,
+      "rateVsElevated": 0
+    },
+    {
+      "test": "going_dark",
+      "signal": "displacement",
+      "timesWentDarkBeforeElevation": 0,
+      "rateVsElevated": 0
+    },
+    {
+      "test": "going_dark",
+      "signal": "gdelt_tone",
+      "timesWentDarkBeforeElevation": 0,
+      "rateVsElevated": 0
+    },
+    {
+      "test": "going_dark",
+      "signal": "gdelt_conflict",
+      "timesWentDarkBeforeElevation": 0,
+      "rateVsElevated": 0
+    },
+    {
+      "test": "going_dark",
+      "signal": "food_security",
+      "timesWentDarkBeforeElevation": 0,
+      "rateVsElevated": 0
+    }
+  ],
+  "testI": [
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "diaspora_remittance",
+      "n": 5,
+      "elevationRate": 1,
+      "meanStressZ": 13.018
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "fire_hotspot",
+      "n": 91,
+      "elevationRate": 0.8901,
+      "meanStressZ": 1463.844
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "capital_flows",
+      "n": 138,
+      "elevationRate": 0.7246,
+      "meanStressZ": 1.974
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "displacement",
+      "n": 9,
+      "elevationRate": 0.6667,
+      "meanStressZ": 17371323494.61
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "imf_fiscal",
+      "n": 14,
+      "elevationRate": 0.5714,
+      "meanStressZ": 7.052
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "economic_stress",
+      "n": 131,
+      "elevationRate": 0.5038,
+      "meanStressZ": 1.319
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "seismic_risk",
+      "n": 70,
+      "elevationRate": 0.2286,
+      "meanStressZ": 0.734
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "trade_collapse",
+      "n": 69,
+      "elevationRate": 0.2029,
+      "meanStressZ": 0.176
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "power_grid",
+      "n": 83,
+      "elevationRate": 0.1446,
+      "meanStressZ": 0.426
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "governance",
+      "n": 86,
+      "elevationRate": 0.1279,
+      "meanStressZ": 0.07
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "gdelt_conflict",
+      "n": 18,
+      "elevationRate": 0.0556,
+      "meanStressZ": 0.187
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "CRITICAL",
+      "signal": "gdelt_tone",
+      "n": 19,
+      "elevationRate": 0,
+      "meanStressZ": 0
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "diaspora_remittance",
+      "n": 17,
+      "elevationRate": 0.9412,
+      "meanStressZ": 1.393
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "capital_flows",
+      "n": 27,
+      "elevationRate": 0.8889,
+      "meanStressZ": 2.852
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "economic_stress",
+      "n": 188,
+      "elevationRate": 0.8617,
+      "meanStressZ": 1.467
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "night_lights",
+      "n": 11,
+      "elevationRate": 0.8182,
+      "meanStressZ": 1.527
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "trade_collapse",
+      "n": 100,
+      "elevationRate": 0.67,
+      "meanStressZ": 0.992
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "imf_fiscal",
+      "n": 17,
+      "elevationRate": 0.5882,
+      "meanStressZ": 1.53
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "seismic_risk",
+      "n": 35,
+      "elevationRate": 0.5429,
+      "meanStressZ": 2.122
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "displacement",
+      "n": 15,
+      "elevationRate": 0.5333,
+      "meanStressZ": 1.342
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "governance",
+      "n": 34,
+      "elevationRate": 0.5,
+      "meanStressZ": 1.505
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "power_grid",
+      "n": 49,
+      "elevationRate": 0.2857,
+      "meanStressZ": 1.233
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "ELEVATED",
+      "signal": "fire_hotspot",
+      "n": 19,
+      "elevationRate": 0.0526,
+      "meanStressZ": -0.068
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "displacement",
+      "n": 74,
+      "elevationRate": 0.3378,
+      "meanStressZ": 1.167
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "capital_flows",
+      "n": 326,
+      "elevationRate": 0.3221,
+      "meanStressZ": 0.507
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "vdem_governance",
+      "n": 60,
+      "elevationRate": 0.2833,
+      "meanStressZ": -0.403
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "gdelt_conflict",
+      "n": 77,
+      "elevationRate": 0.1818,
+      "meanStressZ": 0.471
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "diaspora_remittance",
+      "n": 197,
+      "elevationRate": 0.1726,
+      "meanStressZ": 0.332
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "seismic_risk",
+      "n": 292,
+      "elevationRate": 0.1301,
+      "meanStressZ": 0.25
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "economic_stress",
+      "n": 3684,
+      "elevationRate": 0.1129,
+      "meanStressZ": 0.277
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "governance",
+      "n": 1799,
+      "elevationRate": 0.1073,
+      "meanStressZ": 0.25
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "trade_collapse",
+      "n": 2747,
+      "elevationRate": 0.0928,
+      "meanStressZ": 0.223
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "imf_fiscal",
+      "n": 640,
+      "elevationRate": 0.0906,
+      "meanStressZ": 0.223
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "power_grid",
+      "n": 2171,
+      "elevationRate": 0.0861,
+      "meanStressZ": 0.173
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "night_lights",
+      "n": 205,
+      "elevationRate": 0.0683,
+      "meanStressZ": 0.199
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "fire_hotspot",
+      "n": 358,
+      "elevationRate": 0.0419,
+      "meanStressZ": 0.042
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STRESSED",
+      "signal": "gdelt_tone",
+      "n": 82,
+      "elevationRate": 0,
+      "meanStressZ": 0
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "vdem_governance",
+      "n": 136,
+      "elevationRate": 0.6838,
+      "meanStressZ": -0.185
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "food_security",
+      "n": 8,
+      "elevationRate": 0.375,
+      "meanStressZ": -0.417
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "night_lights",
+      "n": 281,
+      "elevationRate": 0.3594,
+      "meanStressZ": -1.133
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "seismic_risk",
+      "n": 291,
+      "elevationRate": 0.3024,
+      "meanStressZ": -0.623
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "capital_flows",
+      "n": 317,
+      "elevationRate": 0.2524,
+      "meanStressZ": -0.473
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "displacement",
+      "n": 54,
+      "elevationRate": 0.2222,
+      "meanStressZ": -0.017
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "gdelt_conflict",
+      "n": 70,
+      "elevationRate": 0.1429,
+      "meanStressZ": -7.697
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "economic_stress",
+      "n": 3657,
+      "elevationRate": 0.1354,
+      "meanStressZ": -0.367
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "trade_collapse",
+      "n": 2576,
+      "elevationRate": 0.1203,
+      "meanStressZ": -0.321
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "diaspora_remittance",
+      "n": 243,
+      "elevationRate": 0.0823,
+      "meanStressZ": -0.277
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "governance",
+      "n": 1678,
+      "elevationRate": 0.0757,
+      "meanStressZ": -0.237
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "power_grid",
+      "n": 1886,
+      "elevationRate": 0.0673,
+      "meanStressZ": -0.142
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "fire_hotspot",
+      "n": 383,
+      "elevationRate": 0.0601,
+      "meanStressZ": -0.058
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "imf_fiscal",
+      "n": 595,
+      "elevationRate": 0.0387,
+      "meanStressZ": -0.177
+    },
+    {
+      "test": "risk_band_composition",
+      "band": "STABLE",
+      "signal": "gdelt_tone",
+      "n": 84,
+      "elevationRate": 0,
+      "meanStressZ": 0
+    }
+  ]
+}

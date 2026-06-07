@@ -4,9 +4,10 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
+const ffmpeg = require('fluent-ffmpeg');
 const { v4: uuidv4 } = require('uuid');
 const { createClient } = require('@supabase/supabase-js');
-const { analyzeDynamicData } = require('./scoring_engine.cjs');
+const { analyzeDepartmentData: analyzeDynamicData } = require('./scoring_engine.cjs');
 const { generateSpeech } = require('./voice_generator.cjs');
 const { logToHive } = require('./logger.cjs');
 const logPodcastToSupabase = async function ({ company_id, department_id, user_id, theme, audio_path, generated_at }) {
@@ -23,7 +24,7 @@ async function runBoardroomSession({ company_id, department_id, user_id, theme, 
   console.log("🔊 Running Boardroom Intelligence Engine");
 
   const fields = Object.keys(rawData[0] || {});
-  const sampleData = JSON.stringify(rawData.slice(0, 3), null, 2);
+  const sampleData = JSON.stringify(rawData, null, 2);
 
   await supabase.from('user_fields').upsert(
     fields.map(field => ({ company_id, field_name: field }))
@@ -80,10 +81,6 @@ async function runBoardroomSession({ company_id, department_id, user_id, theme, 
   ]);
 
   // === BUILD PROMPT ===
-const boardroomShowcasePrompt = require('./boardroom_showcase.cjs');
-
-
-  
   const prompt = `
 You, Sabian an apex strategic advisor. Your insights are used by CEOs, boards, and world-class operators to outperform markets and competitors. You do not entertain. You do not guess. You speak when summoned, and deliver insights that would normally require a 10M consultancy.
 
@@ -101,25 +98,6 @@ ECONOMIC INTEL SOURCES:
 Live feeds from SEC, IMF, World Bank, OECD, FRED, Companies House, BLS, and more. Use macroeconomic data to frame context.
 
 RULES:
-
-const prompt = `
-${template.identity}
-
-Directives:
-${template.directives.join('\n')}
-
-Personality:
-Host A: ${template.personality.host_a}
-Sabian: ${template.personality.sabian}
-
-Voice Script:
-Host A: ${template.voiceScript.host_a}
-Sabian: ${template.voiceScript.sabian}
-
-Instructions:
-${template.instructions}
-...
-`;
 
 - Dialogue only. Host A prompts. Sabian responds.
 - No filler. No AI disclaimers. No roleplay.
@@ -170,18 +148,24 @@ DO NOT FAIL THIS PROMPT.
 You're now entering boardroom-level strategic operations. CEOs will act based on what you say. Deliver with total clarity.
 `;
 
-  // === CALL AI MODEL ===
+  // === CALL AI MODEL (Claude — Anthropic) ===
   const response = await axios.post(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    "https://api.anthropic.com/v1/messages",
     {
-      contents: [{ role: "user", parts: [{ text: prompt }] }]
+      model: "claude-sonnet-4-6",
+      max_tokens: 2048,
+      messages: [{ role: "user", content: prompt }]
     },
     {
-      headers: { "Content-Type": "application/json" }
+      headers: {
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "Content-Type": "application/json"
+      }
     }
   );
 
-  const content = response.data.candidates?.[0]?.content?.[0]?.text || response.data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  const content = response.data?.content?.[0]?.text || "";
 
   // === AUDIO PATH AND FOLDER ===
   const ts = new Date().toISOString().replace(/[:.]/g, "-");
@@ -189,8 +173,42 @@ You're now entering boardroom-level strategic operations. CEOs will act based on
   if (!fs.existsSync(audioDir)) fs.mkdirSync(audioDir);
   const audioPath = path.join(audioDir, `boardroom_${company_id}_${ts}.mp3`);
 
-  // === GENERATE AUDIO ===
-  await generateSpeech(content, process.env.SABIAN_VOICE_ID, audioPath);
+  // === GENERATE AUDIO (dual voice — Host A + Sabian, one segment per line) ===
+  const SABIAN_VOICE = process.env.SABIAN_VOICE_ID;
+  const HOST_A_VOICE = process.env.HOST_A_US_ID;
+
+  const dialogueLines = content
+    .split('\n')
+    .map(l => l.trim().replace(/^[-–—•*"'`]+\s*/, ''))     // strip leading markdown/bullets
+    .filter(l => /^host a:/i.test(l) || /^sabian:/i.test(l));
+
+  const segDir = path.join(audioDir, `segs_${ts}`);
+  if (!fs.existsSync(segDir)) fs.mkdirSync(segDir, { recursive: true });
+
+  const segments = [];
+  for (let i = 0; i < dialogueLines.length; i++) {
+    const isSabian = /^sabian:/i.test(dialogueLines[i]);
+    const voiceId  = isSabian ? SABIAN_VOICE : HOST_A_VOICE;
+    const spoken   = dialogueLines[i]
+      .replace(/^host a:\s*/i, '')
+      .replace(/^sabian:\s*/i, '')
+      .replace(/[*`]/g, '')
+      .trim();
+    if (!spoken) continue;
+    const segPath = path.join(segDir, `seg_${String(i).padStart(3, '0')}.mp3`);
+    await generateSpeech(spoken, voiceId, segPath);
+    segments.push(segPath);
+  }
+
+  await new Promise((resolve, reject) => {
+    const chain = ffmpeg();
+    segments.forEach(s => chain.input(s));
+    chain.on('end', resolve).on('error', reject).mergeToFile(audioPath);
+  });
+
+  // cleanup per-line segments
+  segments.forEach(s => { try { fs.unlinkSync(s); } catch (_) {} });
+  try { fs.rmdirSync(segDir); } catch (_) {}
 
   // === LOG PODCAST TO SUPABASE ===
   await logPodcastToSupabase({
@@ -214,14 +232,6 @@ You're now entering boardroom-level strategic operations. CEOs will act based on
 
 module.exports = { runBoardroomSession };
 
-// Trigger example run
-const rawData = require("./company_earnings_data.json");
-
-runBoardroomSession({
-  company_id: "example_company",
-  department_id: "sales",
-  user_id: "admin",
-  theme: "Boardroom Strategy",
-  duration: 35,
-  rawData
-});
+// PNSIQ demo run — test fuel for tuning the audio insight (disposable, not production)
+const feed = require("./pnsiq_demo_feed.json");
+runBoardroomSession(feed);

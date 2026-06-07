@@ -1,11 +1,11 @@
+// DECOMMISSIONED 2026-06-01. ACLED removed from Sabian — no API key, no data, EULA risk
+// (EULA: data may NOT be used for ML training). File kept for audit trail.
+// All imports are null stubs. Conflict scoring now runs via GDELT only.
+//
 // acled_conflict_feed.cjs
 // ACLED -- Armed Conflict Location & Event Data
 // Auth: email + API access key in query params (NOT OAuth)
-// Get access key: log in at developer.acleddata.com > Account Settings > API Access Key
-// Add to .env: ACLED_EMAIL=your@email.com  ACLED_API_KEY=your_access_key
 // EULA restriction: data may NOT be used to train/develop ML models
-// Use: convergence scoring only -- never feed into hive learning layer
-// Follows fred_macro_data.cjs pattern
 
 require('dotenv').config({ path: './.env' });
 const https = require('https');

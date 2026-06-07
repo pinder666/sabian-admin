@@ -1,137 +1,339 @@
 // fred_capital_feed.cjs
-// Capital Flows & Banking Stress Signal — FRED (Federal Reserve Economic Data)
-// Score 0–100: higher = greater capital flight / financial stress risk
-// Sources: FRED FX rate series, financial stress indices, sovereign spread proxies
-// Cadence: 24h — FRED updates daily for most series
-// Key: process.env.FRED_API_KEY
+// Capital Flows Signal — World Bank FDI Net Inflows (% of GDP)
+// Indicator: BX.KLT.DINV.WD.GD.ZS
+// Score 0–100: higher = greater capital volatility / stress
+// Cadence: Annual — World Bank updates yearly
+// Upserts to historical_signal_readings with signal_key='capital_flows', source='world_bank_wdi'
 
 require('dotenv').config({ path: './.env' });
 const https = require('https');
+const { createClient } = require('@supabase/supabase-js');
 const { logToHive } = require('./logger.cjs');
 
-const FRED_KEY = process.env.FRED_API_KEY || '';
+const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
-// Country → FRED FX series ID (units: local currency per USD)
-// Higher value = weaker local currency = capital flight pressure
-const FRED_FX_SERIES = {
-  'Australia':     'DEXUSAL',  // USD per AUD (inverted)
-  'Brazil':        'DEXBZUS',
-  'Canada':        'DEXCAUS',
-  'China':         'DEXCHUS',
-  'Colombia':      'DEXCOUS',
-  'Denmark':       'DEXDNUS',
-  'European Union':'DEXUSEU',  // USD per EUR (inverted)
-  'France':        'DEXUSEU',
-  'Germany':       'DEXUSEU',
-  'Greece':        'DEXUSEU',
-  'Hungary':       'DEXHUS',
-  'India':         'DEXINUS',
-  'Israel':        'DEXIAUS',  // NIS per USD
-  'Japan':         'DEXJPUS',
-  'Malaysia':      'DEXMAUS',
-  'Mexico':        'DEXMXUS',
-  'New Zealand':   'DEXUSNZ',  // USD per NZD (inverted)
-  'Norway':        'DEXNOUS',
-  'Pakistan':      'DEXPAUS',
-  'Philippines':   'DEXPAUS',
-  'Poland':        'DEXPZUS',
-  'Russia':        'DEXRUUS',
-  'Saudi Arabia':  'DEXSAUS',
-  'Singapore':     'DEXSIUS',
-  'South Africa':  'DEXSFUS',
-  'South Korea':   'DEXKOUS',
-  'Sri Lanka':     'DEXSLUS',
-  'Sweden':        'DEXSDUS',
-  'Switzerland':   'DEXSZUS',
-  'Taiwan':        'DEXTAUS',
-  'Thailand':      'DEXTHUS',
-  'Turkey':        'DEXTUS',
-  'UAE':           'DEXUAE',
-  'Ukraine':       'DEXUAUS',  // UAH per USD proxy
-  'United Kingdom':'DEXUSUK',  // USD per GBP (inverted)
-  'United States': 'DTWEXBGS', // Trade-weighted USD index
-  'Venezuela':     'DEXVZUS',
-  'Vietnam':       'DEXVNUS'
+const INDICATOR = 'BX.KLT.DINV.WD.GD.ZS';
+
+// Full 212-country ISO2 map — matches historical_signal_readings country names
+const ISO_MAP = {
+  'Abkhazia': null,              // No World Bank data (disputed territory)
+  'Afghanistan': 'AF',
+  'Albania': 'AL',
+  'Algeria': 'DZ',
+  'Andorra': 'AD',
+  'Angola': 'AO',
+  'Antigua & Barbuda': 'AG',
+  'Argentina': 'AR',
+  'Armenia': 'AM',
+  'Australia': 'AU',
+  'Austria': 'AT',
+  'Azerbaijan': 'AZ',
+  'Bahamas': 'BS',
+  'Bahrain': 'BH',
+  'Bangladesh': 'BD',
+  'Barbados': 'BB',
+  'Belarus': 'BY',
+  'Belgium': 'BE',
+  'Belize': 'BZ',
+  'Benin': 'BJ',
+  'Bhutan': 'BT',
+  'Bolivia': 'BO',
+  'Bosnia': 'BA',
+  'Botswana': 'BW',
+  'Brazil': 'BR',
+  'Brunei': 'BN',
+  'Bulgaria': 'BG',
+  'Burkina Faso': 'BF',
+  'Burundi': 'BI',
+  'CAR': 'CF',
+  'Cambodia': 'KH',
+  'Cameroon': 'CM',
+  'Canada': 'CA',
+  'Cape Verde': 'CV',
+  'Chad': 'TD',
+  'Chile': 'CL',
+  'China': 'CN',
+  'Colombia': 'CO',
+  'Comoros': 'KM',
+  'Congo': 'CG',
+  'Costa Rica': 'CR',
+  'Croatia': 'HR',
+  'Cuba': 'CU',
+  'Cyprus': 'CY',
+  'Czech Republic': 'CZ',
+  'Czechoslovakia': null,        // Historical — dissolved 1993
+  'DRC': 'CD',
+  'Democratic Republic of Vietnam': null,  // Historical — unified 1976
+  'Denmark': 'DK',
+  'Djibouti': 'DJ',
+  'Dominica': 'DM',
+  'Dominican Republic': 'DO',
+  'East Germany': null,          // Historical — reunified 1990
+  'Ecuador': 'EC',
+  'Egypt': 'EG',
+  'El Salvador': 'SV',
+  'Equatorial Guinea': 'GQ',
+  'Eritrea': 'ER',
+  'Estonia': 'EE',
+  'Eswatini': 'SZ',
+  'Ethiopia': 'ET',
+  'Federated States of Micronesia': 'FM',
+  'Fiji': 'FJ',
+  'Finland': 'FI',
+  'France': 'FR',
+  'Gabon': 'GA',
+  'Gambia': 'GM',
+  'Georgia': 'GE',
+  'German Federal Republic': null,  // Historical — use Germany
+  'Germany': 'DE',
+  'Ghana': 'GH',
+  'Greece': 'GR',
+  'Grenada': 'GD',
+  'Guatemala': 'GT',
+  'Guinea': 'GN',
+  'Guinea-Bissau': 'GW',
+  'Guyana': 'GY',
+  'Haiti': 'HT',
+  'Honduras': 'HN',
+  'Hong Kong': 'HK',
+  'Hungary': 'HU',
+  'Iceland': 'IS',
+  'India': 'IN',
+  'Indonesia': 'ID',
+  'Iran': 'IR',
+  'Iraq': 'IQ',
+  'Ireland': 'IE',
+  'Israel': 'IL',
+  'Italy': 'IT',
+  'Ivory Coast': 'CI',
+  'Jamaica': 'JM',
+  'Japan': 'JP',
+  'Jordan': 'JO',
+  'Kazakhstan': 'KZ',
+  'Kenya': 'KE',
+  'Kiribati': 'KI',
+  'Kosovo': 'XK',
+  'Kuwait': 'KW',
+  'Kyrgyzstan': 'KG',
+  'Laos': 'LA',
+  'Latvia': 'LV',
+  'Lebanon': 'LB',
+  'Lesotho': 'LS',
+  'Liberia': 'LR',
+  'Libya': 'LY',
+  'Liechtenstein': 'LI',
+  'Lithuania': 'LT',
+  'Luxembourg': 'LU',
+  'Macau': 'MO',
+  'Madagascar': 'MG',
+  'Malawi': 'MW',
+  'Malaysia': 'MY',
+  'Maldives': 'MV',
+  'Mali': 'ML',
+  'Malta': 'MT',
+  'Marshall Islands': 'MH',
+  'Mauritania': 'MR',
+  'Mauritius': 'MU',
+  'Mexico': 'MX',
+  'Micronesia': 'FM',
+  'Moldova': 'MD',
+  'Monaco': 'MC',
+  'Mongolia': 'MN',
+  'Montenegro': 'ME',
+  'Morocco': 'MA',
+  'Mozambique': 'MZ',
+  'Myanmar': 'MM',
+  'Namibia': 'NA',
+  'Nauru': 'NR',
+  'Nepal': 'NP',
+  'Netherlands': 'NL',
+  'New Zealand': 'NZ',
+  'Nicaragua': 'NI',
+  'Niger': 'NE',
+  'Nigeria': 'NG',
+  'North Korea': 'KP',
+  'North Macedonia': 'MK',
+  'Norway': 'NO',
+  'Oman': 'OM',
+  'Pakistan': 'PK',
+  'Palau': 'PW',
+  'Palestine': 'PS',
+  'Panama': 'PA',
+  'Papua New Guinea': 'PG',
+  'Paraguay': 'PY',
+  'Peru': 'PE',
+  'Philippines': 'PH',
+  'Poland': 'PL',
+  'Portugal': 'PT',
+  'Puerto Rico': 'PR',
+  'Qatar': 'QA',
+  'Republic of Vietnam': null,   // Historical — unified 1976
+  'Romania': 'RO',
+  'Russia': 'RU',
+  'Russia (Soviet Union)': null, // Historical — use Russia
+  'Rwanda': 'RW',
+  'Samoa': 'WS',
+  'San Marino': 'SM',
+  'Sao Tome and Principe': 'ST',
+  'Saudi Arabia': 'SA',
+  'Senegal': 'SN',
+  'Serbia': 'RS',
+  'Seychelles': 'SC',
+  'Sierra Leone': 'SL',
+  'Singapore': 'SG',
+  'Slovakia': 'SK',
+  'Slovenia': 'SI',
+  'Solomon Islands': 'SB',
+  'Somalia': 'SO',
+  'South Africa': 'ZA',
+  'South Korea': 'KR',
+  'South Ossetia': null,         // No World Bank data (disputed territory)
+  'South Sudan': 'SS',
+  'South Yemen': null,           // Historical — unified 1990
+  'Spain': 'ES',
+  'Sri Lanka': 'LK',
+  'St. Kitts and Nevis': 'KN',
+  'St. Lucia': 'LC',
+  'St. Vincent': 'VC',
+  'St. Vincent and the Grenadines': 'VC',
+  'Sudan': 'SD',
+  'Suriname': 'SR',
+  'Sweden': 'SE',
+  'Switzerland': 'CH',
+  'Syria': 'SY',
+  'Taiwan': 'TW',
+  'Tajikistan': 'TJ',
+  'Tanzania': 'TZ',
+  'Thailand': 'TH',
+  'Timor-Leste': 'TL',
+  'Togo': 'TG',
+  'Tonga': 'TO',
+  'Trinidad and Tobago': 'TT',
+  'Tunisia': 'TN',
+  'Turkey': 'TR',
+  'Turkmenistan': 'TM',
+  'Tuvalu': 'TV',
+  'UAE': 'AE',
+  'UK': 'GB',
+  'Uganda': 'UG',
+  'Ukraine': 'UA',
+  'United States': 'US',
+  'Uruguay': 'UY',
+  'Uzbekistan': 'UZ',
+  'Vanuatu': 'VU',
+  'Vatican': 'VA',
+  'Venezuela': 'VE',
+  'Vietnam': 'VN',
+  'Yemen': 'YE',
+  'Yugoslavia': null,            // Historical — dissolved 1992
+  'Zambia': 'ZM',
+  'Zimbabwe': 'ZW'
 };
 
-// Global financial stress index — applies as a baseline multiplier to all countries
-const GLOBAL_STRESS_SERIES = 'STLFSI4';  // St. Louis Fed Financial Stress Index
-
-function fetchFREDSeries(seriesId, limit = 60) {
+function fetchWorldBankIndicator(iso2) {
   return new Promise((resolve, reject) => {
-    const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=desc&limit=${limit}`;
-    https.get(url, { timeout: 10000 }, res => {
+    const startYear = 1970;
+    const endYear = new Date().getFullYear();
+    const url = `https://api.worldbank.org/v2/country/${iso2}/indicator/${INDICATOR}?date=${startYear}:${endYear}&format=json&per_page=200`;
+
+    https.get(url, { timeout: 30000 }, res => {
       let body = '';
       res.on('data', d => body += d);
       res.on('end', () => {
-        try { resolve(JSON.parse(body)); }
-        catch (e) { resolve(null); }
+        try {
+          const json = JSON.parse(body);
+          resolve(json);
+        } catch (e) {
+          resolve(null);
+        }
       });
-    }).on('error', () => resolve(null)).on('timeout', () => resolve(null));
+    }).on('error', e => reject(e)).on('timeout', () => resolve(null));
   });
 }
 
-// Static capital stress baseline for countries without FRED FX coverage
-// Based on IMF capital flow volatility and sovereign debt ratings
-const CAPITAL_BASELINE = {
-  'Afghanistan': 75, 'CAR': 60, 'DRC': 65, 'Ethiopia': 50, 'Haiti': 70,
-  'Iraq': 55, 'Libya': 62, 'Mali': 48, 'Myanmar': 58, 'Niger': 45,
-  'North Korea': 80, 'Somalia': 72, 'South Sudan': 78, 'Sudan': 68,
-  'Syria': 85, 'Yemen': 80, 'Zimbabwe': 72, 'Burkina Faso': 42,
-  'Burundi': 55, 'Chad': 50, 'Eritrea': 65, 'Guinea': 45,
-  'Guinea-Bissau': 50, 'Liberia': 48, 'Malawi': 52, 'Mozambique': 45,
-  'Rwanda': 35, 'Sierra Leone': 50, 'Togo': 38
-};
-
 async function fetchCapitalFlowsData(country) {
-  if (CAPITAL_BASELINE[country] !== undefined) {
-    return { score: CAPITAL_BASELINE[country], source: 'baseline' };
+  const iso2 = ISO_MAP[country];
+  if (!iso2) {
+    return { score: null, reason: 'no_iso_mapping' };
   }
 
-  if (!FRED_KEY) return { score: null, reason: 'no_api_key' };
-
-  const seriesId = FRED_FX_SERIES[country];
-  if (!seriesId) return { score: null, reason: 'no_fred_series' };
-
   try {
-    const [fxResp, stressResp] = await Promise.all([
-      fetchFREDSeries(seriesId, 90),
-      fetchFREDSeries(GLOBAL_STRESS_SERIES, 5)
-    ]);
+    const json = await fetchWorldBankIndicator(iso2);
+    const observations = json?.[1] || [];
 
-    const obs = fxResp?.observations?.filter(o => o.value !== '.' && o.value !== 'NA') || [];
-    if (obs.length < 20) return { score: null, reason: 'insufficient_data' };
-
-    // 90-day FX trend — depreciation vs USD
-    const recent   = parseFloat(obs[0].value);
-    const prev90   = parseFloat(obs[Math.min(obs.length - 1, 89)].value);
-
-    // Inverted series (USD per local) need special handling
-    const inverted = ['DEXUSAL','DEXUSEU','DEXUSNZ','DEXUSUK'].includes(seriesId);
-    const changePct = inverted
-      ? ((prev90 - recent) / prev90) * 100   // declining USD/local = local weakening
-      : ((recent - prev90) / prev90) * 100;  // rising local/USD = local weakening
-
-    const fxScore = Math.min(50, Math.max(0, Math.round(changePct * 1.5)));
-
-    // Global financial stress overlay (St. Louis FSI: >1 = elevated, >2 = high)
-    let globalStress = 0;
-    const stressObs = stressResp?.observations?.filter(o => o.value !== '.' && o.value !== 'NA') || [];
-    if (stressObs.length > 0) {
-      const fsi = parseFloat(stressObs[0].value);
-      if (fsi > 2)      globalStress = 20;
-      else if (fsi > 1) globalStress = 10;
-      else if (fsi > 0) globalStress = 5;
+    if (observations.length === 0) {
+      return { score: null, reason: 'no_data' };
     }
 
-    const score = Math.min(100, fxScore + globalStress);
+    // Build rows for upsert to historical_signal_readings
+    const rows = [];
+    for (const obs of observations) {
+      if (obs.value === null) continue;
+
+      rows.push({
+        country:      country,
+        signal_key:   'capital_flows',
+        signal_name:  'Capital Flows',
+        date:         `${obs.date}-01-01`,
+        raw_value:    parseFloat(String(obs.value)),
+        raw_metadata: {
+          indicator:    INDICATOR,
+          country_iso:  obs.countryiso3code || iso2,
+          date_raw:     obs.date
+        },
+        source:       'world_bank_wdi'
+      });
+    }
+
+    // Upsert to database
+    if (rows.length > 0) {
+      const { error } = await sb
+        .from('historical_signal_readings')
+        .upsert(rows, {
+          onConflict: 'country,signal_key,date,source',
+          ignoreDuplicates: false
+        });
+
+      if (error) {
+        logToHive({ source: 'fred_capital_feed', level: 'warn', event: 'upsert_error', data: { country, error: error.message } });
+      }
+    }
+
+    // Return most recent value for live scoring
+    const latest = observations.find(o => o.value !== null);
+    if (!latest) {
+      return { score: null, reason: 'all_null' };
+    }
+
+    const fdiPct = parseFloat(String(latest.value));
+
+    // Score: FDI as % of GDP
+    // Negative FDI = capital outflow = high stress
+    // Very high positive FDI can also signal vulnerability (hot money)
+    // Scoring: negative values → high score, moderate positive → low score, very high → elevated
+    let score;
+    if (fdiPct < -5) {
+      score = 90;  // Severe capital flight
+    } else if (fdiPct < -2) {
+      score = 75;
+    } else if (fdiPct < 0) {
+      score = 60;
+    } else if (fdiPct < 2) {
+      score = 40;  // Low/stable inflows
+    } else if (fdiPct < 5) {
+      score = 30;  // Healthy inflows
+    } else if (fdiPct < 10) {
+      score = 35;  // Strong inflows
+    } else {
+      score = 50;  // Very high — potential hot money vulnerability
+    }
+
     return {
       score,
-      fx_change_pct:  Math.round(changePct * 10) / 10,
-      fx_score:       fxScore,
-      global_stress:  globalStress,
-      series:         seriesId,
-      source:         'fred'
+      fdi_pct:       Math.round(fdiPct * 100) / 100,
+      year:          latest.date,
+      rows_upserted: rows.length,
+      source:        'world_bank_wdi'
     };
   } catch (err) {
     logToHive({ source: 'fred_capital_feed', level: 'warn', event: 'fetch_error', data: { country, error: err.message } });

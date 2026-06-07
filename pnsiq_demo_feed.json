@@ -1,0 +1,29 @@
+{
+  "company_id": "pnsiq_demo",
+  "department_id": "executive",
+  "user_id": "ceo_demo",
+  "duration": 2,
+  "theme": "PNSIQ — the DAILY CEO boardroom insight for the wholesale apparel brand named in the data. Runs every day; it is SHORT. LENGTH: 150 WORDS MAXIMUM, about seventy seconds. Longer = failure. Get straight to the data — the FIRST line names the most urgent item; no preamble. FACTS ONLY — THIS IS THE MOST IMPORTANT RULE: every single thing either speaker says is either a figure or fact present in the data, or a plain action taken directly on that fact. NOTHING ELSE. No invented people, roles, departments, or processes — NEVER 'the attorney', 'the CFO', 'the buying team', or any actor not in the data. No interpretations, opinions, motives, or characterizations — NEVER 'going dark', 'the rep hasn't moved them', 'pre-exit behavior', 'they are ahead of this'. No invented numbers, accounts, filings, or events. If it is not in the data, it is NOT said. Real, or silent. VOICE: (1) no first person — no 'I', 'we', 'us', 'my', 'our'; they are outside intelligence briefing ON the company. (2) refer to the brand by its NAME from the data, in the third person. (3) zero technical language — never say AI, model, algorithm, data, feed, score, metric. (4) wholesale apparel terms only — accounts, reorders, sell-through, dead stock and carry, chargeback dispute windows, FW26 and SS25, reps, buyer appointments. (5) EXACT figures, never rounded or garbled. RHYTHM — THIS IS A CONVERSATION AND AN INTERROGATION, NOT A READ-OUT. HOST A is the interrogator, not a narrator. She does NOT simply read a figure and ask 'what do we do' — she challenges and digs: which one cannot wait, why is it still open, what connects these accounts, is it being handled, what is the real number at stake. She REACTS to Sabian's answers and pushes further on the same point when it matters — genuine back-and-forth with tension, not a march through a list. Her questions are anchored in the real figures, but she never just recites them and never states an opinion as fact. SABIAN answers each in ONE move — the fact and the plain action on it (respond to the dispute before the window closes; contact the account today; place or mark the inventory before the deadline) — twenty words maximum, and he gives her something sharp enough to push on; never two topics in a turn, never an invented actor. Cover only the two or three things that matter most today, but truly INTERROGATE them. FIVE exchanges maximum, about seventy seconds. WHAT TO SAY: voice ONLY the two or three things that matter most TODAY, lead with the most time-sensitive, leave out everything steady or already handled. SABIAN is the oracle of the wholesale apparel industry — authoritative and never wrong because he speaks only from fact; he is connected to live external sources beyond the brand's books (court and bankruptcy filings, port and shipping, trade signals) but names an external event ONLY if it is actually present in the data. POSITIONING: PNSIQ catches things EARLY, with runway — state this as FACT (the windows are still open, nothing has expired), never as a last-minute panic. CLOSE: Sabian names the single first action and states, as fact, that the windows are still open. OUTPUT: dialogue only, every line begins with exactly 'Host A:' or 'Sabian:'; strict back-and-forth. No markdown, no bold, no asterisks, no headings, no bullet points, no numbered lists, and absolutely NO Department Score, Risk Score, Opportunity Lever, Execution Mode, or any rating or summary block of any kind — the briefing ends on Sabian's final spoken line.",
+  "rawData": [
+    { "company": "William Springs Apparel", "industry": "wholesale apparel", "revenue_band": "mid-market" },
+    { "metric": "revenue_mtd", "value": 4200000, "plan": 4800000, "period": "month_to_date" },
+    { "metric": "revenue_ytd", "value": 48600000, "plan": 49000000, "period": "year_to_date" },
+    { "metric": "accounts_at_risk_flagged", "count": 3, "exposure": 160000, "period": "current" },
+    { "metric": "disputes_expiring_this_week", "value": 28400, "count": 2 },
+    { "account": "Maison Juniper", "annual_value": 93000, "days_silent": 47, "last_order": 14200, "chargeback_open": 18200, "chargeback_ref": "CB-311150", "dispute_days_left": 23 },
+    { "account": "Cedar Boutique", "annual_value": 38000, "days_silent": 89, "last_order": 0, "chargeback_open": 0 },
+    { "account": "Yarrow Collective", "annual_value": 29000, "days_silent": 61, "last_order": 0, "chargeback_open": 0 },
+    { "account": "Willow", "annual_value": 0, "days_silent": 0, "last_order": 0, "chargeback_open": 10200, "chargeback_ref": "CB-928524", "dispute_days_left": 19 },
+    { "engine": "chargebacks", "open_cases": 154, "total_disputed": 283890, "expected_recovery": 151233, "expiring_30d": 152, "expiring_30d_critical": 12, "q1_recovered": 124000, "q1_disputed": 156000, "q1_recovery_rate": 0.79 },
+    { "engine": "attrition", "accounts_at_risk": 109, "revenue_at_risk": 2368274, "recoverable_if_act": 2481377 },
+    { "engine": "dead_stock", "styles_flagged": 469, "total_aged_value": 35572770, "expected_recovery": 19661092 },
+    { "style": "Refined Shirtdress", "carry": 340000, "units": 4200, "accounts": 8, "weeks_to_q2": 6, "markdown_pending_days": 18 },
+    { "style": "Essential Twill", "carry": 68000, "units": 1100, "accounts": 0 },
+    { "metric": "dead_stock_carry_flagged", "value": 408000, "styles": 2 },
+    { "metric": "reps", "total": 12, "on_quota": 7 },
+    { "account": "Mercer Collective", "fw26_order": 28400, "fw26_styles": 14, "session": "completed" },
+    { "account": "Heron Studio", "annual_value": 42000, "fw26_order": 0, "fw26_styles": 0, "session": "unfinished" },
+    { "account": "Birch", "first_order": 24000, "locations": 3, "session": "new" },
+    { "metric": "recovered_to_date", "value": 428100 }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "generatedAt": "2026-05-25T23:41:39.724Z",
+  "totalRecords": 2472,
+  "patterns": {
+    "mobilization": {
+      "definition": "High score (≥70) + rising spending (>10%) + stable behavioral signals",
+      "sampleSize": 5,
+      "outcomes": {
+        "withNextYear": 5,
+        "scoreIncreased": 1,
+        "scoreDecreased": 4,
+        "scoreStable": 1
+      },
+      "findings": [
+        {
+          "country": "Ethiopia",
+          "year": 1978,
+          "score": 82.15,
+          "spending_pct_change": 21.249197724153703,
+          "has_behavioral_data": false,
+          "next_year_score": 53.58
+        },
+        {
+          "country": "Ethiopia",
+          "year": 1988,
+          "score": 99,
+          "spending_pct_change": 24.005845384460628,
+          "has_behavioral_data": false,
+          "next_year_score": 53.57
+        },
+        {
+          "country": "Ethiopia",
+          "year": 1997,
+          "score": 78.81,
+          "spending_pct_change": 57.910193156073454,
+          "has_behavioral_data": false,
+          "next_year_score": 77.06
+        },
+        {
+          "country": "Ethiopia",
+          "year": 1998,
+          "score": 77.06,
+          "spending_pct_change": 117.66526598842842,
+          "has_behavioral_data": false,
+          "next_year_score": 82.23
+        },
+        {
+          "country": "Ethiopia",
+          "year": 1999,
+          "score": 82.23,
+          "spending_pct_change": 30.64485503222481,
+          "has_behavioral_data": false,
+          "next_year_score": 68.2
+        }
+      ]
+    },
+    "disconnect": {
+      "definition": "Stable score (<65) + rising spending (>20%) + behavioral signals deteriorating",
+      "sampleSize": 0,
+      "outcomes": null,
+      "findings": []
+    },
+    "inaction": {
+      "definition": "High score (≥70) + flat spending (<5% change) + behavioral signals deteriorating",
+      "sampleSize": 1,
+      "outcomes": {
+        "withNextYear": 1,
+        "scoreIncreased": 0,
+        "scoreDecreased": 1,
+        "scoreStable": 1
+      },
+      "findings": [
+        {
+          "country": "Ethiopia",
+          "year": 1996,
+          "score": 80.47,
+          "spending_change": 4.874046670262285,
+          "has_behavioral_data": false,
+          "behavioral_changes": {},
+          "next_year_score": 78.81,
+          "next_year_band": null
+        }
+      ]
+    }
+  }
+}

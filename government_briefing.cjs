@@ -19,10 +19,65 @@ function ensureDir(dirPath) {
   if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
 }
 
+// ── Buyer-facing signal name mask ─────────────────────────────────────────────
+// Never expose source/provider names to buyers. Map to operational categories.
+const SIGNAL_MASK = {
+  'VDem Governance':        'Governance Index',
+  'Political Stability':    'Political Stability',
+  'Corruption Risk':        'Corruption Index',
+  'Election Calendar':      'Political Transition Risk',
+  'GDELT Conflict':         'Conflict Activity',
+  'GDELT Tone':             'Media Sentiment',
+  'Conflict Events':        'Conflict Activity',
+  'IOM Displacement':       'Displacement Tracking',
+  'UNHCR Displacement':     'Displacement Tracking',
+  'Displacement':           'Displacement Tracking',
+  'USDA Food Supply':       'Food Supply Assessment',
+  'FAO Food Import':        'Food Import Dependency',
+  'Food Security':          'Food Security Index',
+  'FEWS Food Security':     'Food Security Index',
+  'Satellite Fire':         'Environmental Stress Indicator',
+  'Climate Stress':         'Climate Risk Index',
+  'Water Stress':           'Water Security Index',
+  'Energy Stress':          'Energy Security Index',
+  'Power Grid':             'Infrastructure Reliability',
+  'Night Lights':           'Economic Activity Index',
+  'Sovereign CDS':          'Sovereign Credit Risk',
+  'Economic Stress':        'Economic Stability Index',
+  'Currency Collapse':      'Currency Stability',
+  'Capital Flows':          'Capital Flow Monitor',
+  'Trade Collapse':         'Trade Disruption Index',
+  'Fiscal Stress':          'Fiscal Health Index',
+  'Sanctions Pressure':     'Sanctions Exposure',
+  'Resource Conflict':      'Resource Security Index',
+  'Social Volume':          'Public Sentiment Index',
+  'Internet Freedom':       'Digital Access Index',
+  'Tor Censorship':         'Information Control Index',
+  'Cable Disruption':       'Communications Risk Index',
+  'OONI Censorship':        'Information Control Index',
+  'Health Crisis':          'Public Health Index',
+  'Maritime Trade':         'Maritime Activity Index',
+  'Flight Movement':        'Air Traffic Index',
+  'GPS Jamming':            'Navigation Disruption Index',
+  'Prediction Market':      'Market Risk Sentiment',
+  'Cyber Threat':           'Cyber Risk Index',
+  'IMF Fiscal':             'Fiscal Health Index',
+  'WorldBank Governance':   'Governance Index',
+  'NASA Fire':              'Environmental Stress Indicator',
+};
+
+function maskSignalName(name) {
+  if (!name) return name;
+  for (const [src, display] of Object.entries(SIGNAL_MASK)) {
+    if (name.toLowerCase().includes(src.toLowerCase())) return display;
+  }
+  return name;
+}
+
 // ── Claude script generation ──────────────────────────────────────────────────
 
 async function generateScript(country, convergenceData, mode, targetDate) {
-  const { convergence_score, risk_level, threshold_window, signals, top_3_signals } = convergenceData;
+  const { convergence_score, risk_level, signals, top_3_signals } = convergenceData;
 
   const signalSummary = (signals || [])
     .filter(s => s.score !== null)
@@ -33,46 +88,49 @@ async function generateScript(country, convergenceData, mode, targetDate) {
     .map((s, i) => `${i + 1}. ${s.name} at ${s.score}/100 — ${s.label}`)
     .join('\n');
 
-  const retroContext = mode === 'retroactive'
-    ? `This is a RETROACTIVE briefing. The date is ${targetDate}. You are presenting what Sabian's signals showed on that date — before any public event occurred. This demonstrates Sabian's advance warning capability.`
-    : `This is a FORWARD briefing. Today is ${targetDate}. You are presenting Sabian's current live assessment and near-term prediction.`;
+  const prompt = `You are writing an intelligence briefing script for Sabian — an autonomous intelligence platform.
 
-  const prompt = `You are writing a classified-level intelligence briefing script for Sabian — an autonomous signal convergence platform used by military commanders.
+Briefing date: ${targetDate}
+Country: ${country.toUpperCase()}
+Convergence Score: ${convergence_score}/100 — ${risk_level}
 
-${retroContext}
-
-CONVERGENCE DATA FOR ${country.toUpperCase()}:
-- Convergence Score: ${convergence_score}/100
-- Risk Level: ${risk_level}
-- Threshold Window: ${threshold_window}
-- Signals scored:
+Full signal dataset:
 ${signalSummary}
 
-Top 3 driving signals:
+Top 3 signals:
 ${top3}
 
-OUTPUT FORMAT — MANDATORY:
-- Dialogue ONLY between Host A (senior military analyst) and Sabian (AI oracle).
-- Every single line MUST start with exactly "Host A:" or "Sabian:".
-- No bullets, no markdown, no headings, no stage directions.
-- Host A opens. Host A closes.
-- Sabian speaks with absolute precision — cites the specific scores, names the signals, states the window.
-- Tone: classified briefing room, not a podcast. Urgent, data-driven, no corporate language.
-- Length: 90-120 seconds of spoken audio. Approximately 10-14 dialogue lines total.
-- Closing line: Host A ends with the exact number of days of decision space Sabian is manufacturing.
-- ${mode === 'retroactive' ? 'CRITICAL: Host A must reference that this briefing was generated BEFORE the public event occurred — emphasizing the advance warning.' : 'CRITICAL: End with a clear forward prediction and the action window.'}
+THE TWO VOICES:
 
-EXAMPLE TONE (do not copy, only match the register):
-Host A: You're looking at Mali. What does Sabian see?
-Sabian: Convergence at seventy-four. Food emergency across one hundred and twenty-nine regions. Political stability collapsed to twenty-three out of one hundred. Zero rainfall in fourteen days against forty-one degree heat. The conditions for a threshold crossing are complete.
-Host A: How long?
-Sabian: Fifty-five days. That is the decision window. After that, options collapse.
+SABIAN — the most capable non-government intelligence system in operation. Every answer anchored to a specific signal name and exact score. No inference, no projection, no hedging. Sharp, specific, complete. Goes straight to mechanism and action. Never explains context Host A already has. Never says "suggests", "could", "may", "typically", "API", "feed", "algorithm", "model", "weighted", or anything describing internal architecture.
 
-Now write the full script for ${country} in ${mode} mode at ${targetDate}:`;
+HOST A — she controls the conversation through her questions. The questions she asks determine what Sabian is forced to answer. She is not reacting to the data — she is using the data to drive the room toward the decisions that must be made. Her questions are structured in this order:
+
+  1. OPEN: State the top 3 signals with scores and ask Sabian for the convergence — what do these together mean and what is the decision.
+  2. CONFIDENCE CHALLENGE: Ask how Sabian knows this read is correct. Force Sabian to explain why the signals are reliable, what corroborates them, and what would change the read. This is where the product earns credibility.
+  3. CONTRADICTION DRILL: Identify two signals that point in opposite directions and ask Sabian to reconcile. The contradiction is where the real intelligence lives.
+  4. HIDDEN SIGNAL: Identify a signal that is absent or flat when it should not be — and ask why. Force Sabian to explain what that silence means.
+  5. DECISION GATE: Ask Sabian what the single signal movement is that converts this from monitor to act now. This is the action trigger.
+  6. CLOSE: State the watch list and actions. No date, no time. Flat.
+
+She addresses Sabian by name only when opening a new line of inquiry. Sabian never addresses her — only answers.
+
+TONE — BOTH VOICES:
+- Clinical. Data-exact. No theatre. No urgency language. No dramatic phrases.
+- Two professionals working a live dataset. Clean. Flat. Precise.
+- Neither voice names what they are doing. No meta-commentary.
+- CRITICAL: Never describe scoring methodology, signal weights, formulas, thresholds, or code mechanics.
+
+MANDATORY FORMAT:
+- Every line starts with exactly "Host A:" or "Sabian:". No exceptions.
+- No bullets, no markdown, no stage directions, no parentheticals.
+- Approximately 12-16 lines total.
+
+Write the full script now:`;
 
   const requestBody = JSON.stringify({
     model: 'claude-opus-4-7',
-    max_tokens: 1024,
+    max_tokens: 2048,
     messages: [
       {
         role: 'user',
@@ -176,8 +234,10 @@ function parseDialogueLines(raw) {
 
 // ── Main briefing runner ──────────────────────────────────────────────────────
 
-async function runBriefing(country, mode = 'forward', date = null) {
-  const targetDate = date || new Date().toISOString().slice(0, 10);
+async function runBriefing(country, mode = 'forward', date = null, scriptOnly = false) {
+  const now = new Date();
+  const todayReal = `${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}/${now.getFullYear()} ${String(now.getUTCHours()).padStart(2,'0')}:${String(now.getUTCMinutes()).padStart(2,'0')} UTC`;
+  const targetDate = date || now.toISOString().slice(0, 10);
   const ts = new Date().toISOString().replace(/[:.]/g, '-');
   const safeCountry = country.replace(/\s+/g, '_').toLowerCase();
 
@@ -187,20 +247,46 @@ async function runBriefing(country, mode = 'forward', date = null) {
   console.log(`Country: ${country} | Mode: ${mode} | Date: ${targetDate}\n`);
 
   try {
-    // ── Step 1: Run convergence engine ────────────────────────────────────────
-    console.log('Running convergence engine...');
-    const convergenceData = await runConvergence(country, date);
+    // ── Step 1: Use most recent locked score from Supabase ───────────────────
+    // Score is set by the daily scan — briefings never re-derive it.
+    // This guarantees the same score every time until the next scan completes.
+    let convergenceData;
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
-    if (convergenceData.error) {
-      throw new Error(`Convergence failed: ${convergenceData.error}`);
+    const { data: stored } = await sb
+      .from('convergence_scores')
+      .select('*')
+      .eq('country', country)
+      .order('scan_date', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (stored && stored.convergence_score != null) {
+      console.log(`Locked score: ${stored.convergence_score}/100 — ${stored.risk_level} (scan: ${stored.scan_date})`);
+      convergenceData = {
+        convergence_score: stored.convergence_score,
+        risk_level:        stored.risk_level,
+        threshold_window:  stored.threshold_window,
+        signals:           stored.top_3_signals || [],
+        top_3_signals:     stored.top_3_signals || [],
+        signals_available: stored.signals_available,
+        signals_failed:    stored.signals_failed || [],
+        scan_date:         stored.scan_date,
+      };
+    } else {
+      // No Supabase record at all — run engine once and it will save to Supabase
+      console.log(`No stored score for ${country} — running engine to establish baseline...`);
+      convergenceData = await runConvergence(country, null, { save: true });
+      if (convergenceData.error) throw new Error(`Convergence failed: ${convergenceData.error}`);
     }
 
-    console.log(`Convergence score: ${convergenceData.convergence_score}/100 — ${convergenceData.risk_level}`);
-    console.log(`Threshold window: ${convergenceData.threshold_window}\n`);
+    console.log(`Convergence score: ${convergenceData.convergence_score}/100 — ${convergenceData.risk_level}\n`);
 
     // ── Step 2: Generate briefing script via Claude ───────────────────────────
     console.log('Generating briefing script...');
-    const rawScript = await generateScript(country, convergenceData, mode, targetDate);
+    const rawScript = await generateScript(country, convergenceData, mode, date ? targetDate : todayReal);
     console.log('\nScript generated:\n');
     console.log(rawScript);
     console.log('\n');
@@ -211,7 +297,14 @@ async function runBriefing(country, mode = 'forward', date = null) {
     const lines = parseDialogueLines(rawScript);
     if (!lines.length) throw new Error('No valid dialogue lines found (expected Host A:/Sabian:)');
 
-    console.log(`Parsed ${lines.length} dialogue lines. Generating audio...\n`);
+    console.log(`Parsed ${lines.length} dialogue lines.`);
+
+    if (scriptOnly) {
+      console.log('\n-- SCRIPT ONLY MODE — no audio generated --');
+      return { status: 'script_only', country, mode, date: targetDate, script: rawScript, script_path: scriptPath, lines: lines.length };
+    }
+
+    console.log('Generating audio...\n');
 
     // ── Step 3: TTS per line ──────────────────────────────────────────────────
     const sabianVoiceId = process.env.SABIAN_VOICE_ID;
@@ -300,11 +393,16 @@ async function runBriefing(country, mode = 'forward', date = null) {
 
 module.exports = runBriefing;
 
-// Standalone: node government_briefing.cjs Mali retroactive 2026-03-01
-//             node government_briefing.cjs Sudan forward
+// Standalone:
+//   node government_briefing.cjs Mali forward                          — live, full audio
+//   node government_briefing.cjs Mali retroactive 2026-03-01           — retroactive, full audio
+//   node government_briefing.cjs Mali forward --script                 — script only, no audio
+//   node government_briefing.cjs Mali retroactive 2026-03-01 --script  — retroactive, script only
 if (require.main === module) {
-  const country = process.argv[2] || 'Mali';
-  const mode    = process.argv[3] || 'forward';
-  const date    = process.argv[4] || null;
-  runBriefing(country, mode, date).catch(console.error);
+  const args       = process.argv.slice(2).filter(a => !a.startsWith('--'));
+  const country    = args[0] || 'Mali';
+  const mode       = args[1] || 'forward';
+  const date       = args[2] || null;
+  const scriptOnly = process.argv.includes('--script');
+  runBriefing(country, mode, date, scriptOnly).catch(console.error);
 }

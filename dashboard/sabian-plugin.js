@@ -2,17 +2,62 @@
  * sabian-plugin.js
  * Open MCT telemetry adapter for Sabian Intelligence Terminal
  *
- * Wires the Sabian API into Open MCT's domain object + telemetry system.
- * Consumes /public-api/* (no auth required — read-only surface).
- *
- * Objects registered:
- *   sabian:root          — navigation root
- *   sabian:theater-*     — theater folders (AFRICOM, CENTCOM, EUCOM, INDOPACOM, SOUTHCOM)
- *   sabian:country-*     — country telemetry objects (160 countries)
- *   sabian:ledger-root   — observation ledger folder
+ * Objects:
+ *   sabian:root           — navigation root
+ *   sabian:theater-*      — theater folders (AFRICOM, CENTCOM, EUCOM, INDOPACOM, SOUTHCOM)
+ *   sabian:country-*      — country convergence score telemetry (160 countries)
+ *   sabian-signal:{c}::{s} — individual signal telemetry under each country
  */
 
-// ── Theater → country mapping (mirrors global_scan.cjs getTheater()) ──────────
+// ── Signals with historical data (52 signals) ────────────────────────────────
+// Updated 2026-05-30 to match actual database contents
+// NOTE: internet_shutdown_ioda excluded (0 readings in table)
+const ALL_SIGNALS = [
+  'cable_disruption','capital_flows','chokepoint','climate_stress','conflict',
+  'corruption_risk','currency_collapse','cyber_threat','dam_risk','dark_vessel',
+  'defense_spending','diaspora_remittance','displacement','economic_stress','election_calendar',
+  'energy_stress','fao_food','fire_hotspot','flight_movement','flood_risk',
+  'food_security','food_stress','gdelt_conflict','gdelt_tone','governance',
+  'gps_jamming','health_crisis','imf_fiscal','iom_displacement','maritime_trade',
+  'military_proximity','night_lights','occrp','ooni_internet','pipeline_risk',
+  'port_congestion','power_grid','prediction_market','rail_corridor','resource_conflict',
+  'sanctions_pressure','seismic_risk','social_unrest','social_volume','sovereign_cds',
+  'structural_pressure','tor_censorship','trade_collapse','unhcr_odp','usda_food',
+  'vdem_governance','water_stress'
+];
+
+// Signal categories for display grouping (52 signals)
+const SIGNAL_CATEGORY = {
+  // Institutional / Governance
+  governance: 'institutional', vdem_governance: 'institutional', corruption_risk: 'institutional',
+  election_calendar: 'institutional', occrp: 'institutional', ooni_internet: 'institutional',
+  // Economic
+  economic_stress: 'economic', capital_flows: 'economic', trade_collapse: 'economic',
+  imf_fiscal: 'economic', currency_collapse: 'economic', sovereign_cds: 'economic',
+  // Humanitarian
+  displacement: 'humanitarian', unhcr_odp: 'humanitarian', structural_pressure: 'humanitarian',
+  health_crisis: 'humanitarian', food_security: 'humanitarian', iom_displacement: 'humanitarian',
+  // Conflict
+  gdelt_conflict: 'conflict', gdelt_tone: 'conflict', conflict: 'conflict',
+  military_proximity: 'conflict', resource_conflict: 'conflict', social_unrest: 'conflict',
+  defense_spending: 'conflict', gps_jamming: 'conflict',
+  // Infrastructure
+  power_grid: 'infrastructure', pipeline_risk: 'infrastructure', rail_corridor: 'infrastructure',
+  port_congestion: 'infrastructure', dam_risk: 'infrastructure', chokepoint: 'infrastructure',
+  maritime_trade: 'infrastructure', cable_disruption: 'infrastructure', flight_movement: 'infrastructure',
+  // Environmental
+  fire_hotspot: 'environmental', seismic_risk: 'environmental', flood_risk: 'environmental',
+  water_stress: 'environmental', energy_stress: 'environmental', climate_stress: 'environmental',
+  // Behavioral / Predictive
+  night_lights: 'behavioral', diaspora_remittance: 'behavioral', fao_food: 'behavioral',
+  food_stress: 'behavioral', usda_food: 'behavioral', social_volume: 'behavioral',
+  prediction_market: 'behavioral',
+  // Geopolitical
+  sanctions_pressure: 'geopolitical', tor_censorship: 'geopolitical',
+  cyber_threat: 'geopolitical', dark_vessel: 'geopolitical'
+};
+
+// ── Theater → country mapping ─────────────────────────────────────────────────
 const THEATER_MAP = {
   AFRICOM: [
     'Mali','Burkina Faso','Niger','Sudan','Ethiopia','Somalia','DRC','CAR','Chad',
@@ -46,10 +91,12 @@ const THEATER_MAP = {
     'Argentina','Chile','Paraguay','Uruguay','Guyana','Suriname',
     'Trinidad and Tobago','Panama','Costa Rica','Nicaragua','Honduras',
     'Guatemala','El Salvador','Cuba','Dominican Republic','Jamaica','Belize','Mexico'
+  ],
+  NORTHCOM: [
+    'United States'
   ]
 };
 
-// Countries not in any theater → GLOBAL
 const ALL_THEATER_COUNTRIES = Object.values(THEATER_MAP).flat();
 
 function getTheater(country) {
@@ -67,12 +114,10 @@ function theaterKey(theater) {
   return 'theater-' + theater.toLowerCase();
 }
 
-// ── Risk level → Open MCT limit definitions ────────────────────────────────────
-const LIMITS = {
-  CRITICAL: { cssClass: 'is-limit--red',    name: 'CRITICAL' },
-  WARNING:  { cssClass: 'is-limit--yellow', name: 'WARNING'  },
-  ELEVATED: { cssClass: 'is-limit--cyan',   name: 'ELEVATED' }
-};
+// Signal namespace key: "{country}::{signal}"
+function signalNsKey(country, signal) {
+  return country + '::' + signal;
+}
 
 // ── Plugin factory ─────────────────────────────────────────────────────────────
 
@@ -96,11 +141,16 @@ function SabianPlugin(options = {}) {
       creatable: false
     });
 
-    // ── All country domain objects ────────────────────────────────────────────
+    openmct.types.addType('sabian.signal', {
+      name:        'Signal Telemetry',
+      description: 'Individual signal reading over time',
+      cssClass:    'icon-telemetry-aggregate',
+      creatable:   false
+    });
 
-    const allCountries = Object.values(THEATER_MAP).flat();
-    // Add United States (GLOBAL theater)
-    if (!allCountries.includes('United States')) allCountries.push('United States');
+    // ── Country objects ───────────────────────────────────────────────────────
+
+    const allCountries = [...ALL_THEATER_COUNTRIES];
 
     const countryObjects = {};
     for (const name of allCountries) {
@@ -112,17 +162,17 @@ function SabianPlugin(options = {}) {
         theater:    getTheater(name),
         telemetry: {
           values: [
-            { key: 'utc',         name: 'Timestamp',   format: 'utc',    hints: { domain: 1 } },
-            { key: 'value',       name: 'Risk Score',  format: 'number', hints: { range: 1, priority: 1 },
-              min: 0, max: 100 },
-            { key: 'risk_level',  name: 'Risk Level',  format: 'string', hints: { range: 2 } },
-            { key: 'freshness',   name: 'Freshness %', format: 'number', hints: { range: 3 } }
+            { key: 'utc',        name: 'Timestamp',  format: 'utc',    hints: { domain: 1 } },
+            { key: 'value',      name: 'Risk Score', format: 'number', hints: { range: 1, priority: 1 }, min: 0, max: 100 },
+            { key: 'risk_level', name: 'Risk Level', format: 'string', hints: { range: 2 } },
+            { key: 'freshness',  name: 'Freshness%', format: 'number', hints: { range: 3 } }
           ]
         }
       };
     }
 
-    // Theater folder objects
+    // ── Theater objects ───────────────────────────────────────────────────────
+
     const theaterObjects = {};
     for (const theater of [...Object.keys(THEATER_MAP), 'GLOBAL']) {
       const key = theaterKey(theater);
@@ -130,11 +180,12 @@ function SabianPlugin(options = {}) {
         identifier:  { namespace: 'sabian', key },
         type:        'sabian.theater',
         name:        theater,
-        composition: []  // filled by composition provider
+        composition: []
       };
     }
 
-    // Root object
+    // ── Root object ───────────────────────────────────────────────────────────
+
     const rootObject = {
       identifier:  { namespace: 'sabian', key: 'root' },
       type:        'folder',
@@ -142,40 +193,75 @@ function SabianPlugin(options = {}) {
       composition: Object.keys(theaterObjects).map(k => ({ namespace: 'sabian', key: k }))
     };
 
-    // ── Object provider ───────────────────────────────────────────────────────
+    // ── Object provider — sabian namespace ───────────────────────────────────
 
     openmct.objects.addProvider('sabian', {
       get(identifier) {
         const key = identifier.key;
-        if (key === 'root') return Promise.resolve(rootObject);
-        if (countryObjects[key]) return Promise.resolve(countryObjects[key]);
-        if (theaterObjects[key]) return Promise.resolve(theaterObjects[key]);
+        if (key === 'root')            return Promise.resolve(rootObject);
+        if (countryObjects[key])       return Promise.resolve(countryObjects[key]);
+        if (theaterObjects[key])       return Promise.resolve(theaterObjects[key]);
         return Promise.reject(new Error('Unknown Sabian object: ' + key));
       }
     });
 
+    // ── Object provider — sabian-signal namespace ─────────────────────────────
+    // Key format: "{countryName}::{signalName}"
+
+    openmct.objects.addProvider('sabian-signal', {
+      get(identifier) {
+        const [country, signal] = identifier.key.split('::');
+        if (!country || !signal) return Promise.reject(new Error('Invalid signal key'));
+        const category = SIGNAL_CATEGORY[signal] || 'other';
+        return Promise.resolve({
+          identifier,
+          type: 'sabian.signal',
+          name: signal.replace(/_/g, ' '),
+          country,
+          signal,
+          category,
+          telemetry: {
+            values: [
+              { key: 'utc',   name: 'Year',        format: 'utc',    hints: { domain: 1 } },
+              { key: 'value', name: 'Signal Value', format: 'number', hints: { range: 1, priority: 1 } }
+            ]
+          }
+        });
+      }
+    });
+
     // ── Composition provider ──────────────────────────────────────────────────
-    // Returns children of theater folders and root
 
     openmct.composition.addProvider({
       appliesTo(obj) {
         return obj.identifier.namespace === 'sabian' &&
-               (obj.type === 'sabian.theater' || obj.key === 'root');
+               (obj.type === 'sabian.theater' || obj.identifier.key === 'root' || obj.type === 'sabian.country');
       },
       load(obj) {
+        // Root → theaters
         if (obj.identifier.key === 'root') {
           return Promise.resolve(
             [...Object.keys(THEATER_MAP), 'GLOBAL'].map(t => ({ namespace: 'sabian', key: theaterKey(t) }))
           );
         }
-        // Theater → its countries
-        const theaterName = obj.name;  // e.g. 'AFRICOM'
-        const countries   = THEATER_MAP[theaterName] || [];
-        if (theaterName === 'GLOBAL') {
-          const globalCountries = allCountries.filter(c => !ALL_THEATER_COUNTRIES.includes(c));
-          return Promise.resolve(globalCountries.map(c => ({ namespace: 'sabian', key: countryKey(c) })));
+        // Theater → countries
+        if (obj.type === 'sabian.theater') {
+          const theaterName = obj.name;
+          if (theaterName === 'GLOBAL') {
+            const globalCountries = allCountries.filter(c => !ALL_THEATER_COUNTRIES.includes(c));
+            return Promise.resolve(globalCountries.map(c => ({ namespace: 'sabian', key: countryKey(c) })));
+          }
+          const countries = THEATER_MAP[theaterName] || [];
+          return Promise.resolve(countries.map(c => ({ namespace: 'sabian', key: countryKey(c) })));
         }
-        return Promise.resolve(countries.map(c => ({ namespace: 'sabian', key: countryKey(c) })));
+        // Country → signal objects
+        if (obj.type === 'sabian.country') {
+          const country = obj.name;
+          return Promise.resolve(
+            ALL_SIGNALS.map(signal => ({ namespace: 'sabian-signal', key: signalNsKey(country, signal) }))
+          );
+        }
+        return Promise.resolve([]);
       }
     });
 
@@ -183,7 +269,7 @@ function SabianPlugin(options = {}) {
 
     openmct.objects.addRoot({ namespace: 'sabian', key: 'root' });
 
-    // ── Telemetry provider — historical ───────────────────────────────────────
+    // ── Telemetry provider — country score ────────────────────────────────────
 
     openmct.telemetry.addProvider({
 
@@ -191,16 +277,13 @@ function SabianPlugin(options = {}) {
         return obj.identifier.namespace === 'sabian' && obj.type === 'sabian.country';
       },
 
-      async request(obj, options) {
+      async request(obj) {
         const name = obj.name;
-        const days = 90;
         try {
-          const resp = await fetch(`${API}/country/${encodeURIComponent(name)}?days=${days}`);
+          const resp = await fetch(`${API}/country/${encodeURIComponent(name)}?days=90`);
           if (!resp.ok) return [];
           const data = await resp.json();
-          const history = data.history || [];
-          // Sort ascending by date for Open MCT timeline
-          return history
+          return (data.history || [])
             .filter(h => h.convergence_score !== null && h.scan_date)
             .sort((a, b) => new Date(a.scan_date) - new Date(b.scan_date))
             .map(h => ({
@@ -212,15 +295,12 @@ function SabianPlugin(options = {}) {
         } catch { return []; }
       },
 
-      // ── Realtime subscription — polls /threats every 5 minutes ─────────────
-
       supportsSubscribe(obj) {
         return obj.identifier.namespace === 'sabian' && obj.type === 'sabian.country';
       },
 
       subscribe(obj, callback) {
         const name = obj.name;
-
         const poll = async () => {
           try {
             const resp = await fetch(`${API}/threats`);
@@ -235,15 +315,12 @@ function SabianPlugin(options = {}) {
                 freshness:  entry.freshness_pct || 0
               });
             }
-          } catch { /* ignore fetch errors in subscription */ }
+          } catch { /* ignore */ }
         };
-
-        poll(); // fire immediately on subscribe
-        const interval = setInterval(poll, 5 * 60 * 1000); // every 5 minutes
+        poll();
+        const interval = setInterval(poll, 5 * 60 * 1000);
         return () => clearInterval(interval);
       },
-
-      // ── Limit evaluator — colors score by risk band ───────────────────────
 
       supportsLimits(obj) {
         return obj.identifier.namespace === 'sabian' && obj.type === 'sabian.country';
@@ -260,11 +337,42 @@ function SabianPlugin(options = {}) {
           }
         };
       }
+    });
 
+    // ── Telemetry provider — individual signal ────────────────────────────────
+
+    openmct.telemetry.addProvider({
+
+      supportsRequest(obj) {
+        return obj.identifier.namespace === 'sabian-signal' && obj.type === 'sabian.signal';
+      },
+
+      async request(obj) {
+        const { country, signal } = obj;
+        if (!country || !signal) return [];
+        try {
+          const resp = await fetch(
+            `${API}/signal/${encodeURIComponent(country)}/${encodeURIComponent(signal)}`
+          );
+          if (!resp.ok) return [];
+          const data = await resp.json();
+          return (data.readings || [])
+            .filter(r => r.value !== null && r.value !== undefined)
+            .map(r => ({ utc: r.utc, value: r.value }));
+        } catch { return []; }
+      },
+
+      supportsSubscribe(obj) {
+        return obj.identifier.namespace === 'sabian-signal' && obj.type === 'sabian.signal';
+      },
+
+      subscribe() {
+        // Signals are annual — no live subscription needed
+        return () => {};
+      }
     });
 
   };
 }
 
-// Expose globally for script-tag loading
 window.SabianPlugin = SabianPlugin;

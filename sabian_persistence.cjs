@@ -61,8 +61,28 @@
 // -----------------------------------------------------------
 
 require('dotenv').config({ path: './.env' });
+const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 const { logToHive } = require('./logger.cjs');
+const { logAuditEvent } = require('./historical/audit_chain.cjs');
+
+// ── Row-level hash chain helpers ──────────────────────────────────────────────
+
+function computeRowHash(fields, prevHash) {
+  const canonical = JSON.stringify(fields, Object.keys(fields).sort());
+  return crypto.createHash('sha256').update(canonical + prevHash).digest('hex');
+}
+
+async function getLastRowHash(supabase, tableName) {
+  const { data } = await supabase
+    .from(tableName)
+    .select('row_hash')
+    .not('row_hash', 'is', null)
+    .order('id', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return data?.row_hash || 'genesis';
+}
 
 let _client = null;
 
@@ -84,6 +104,20 @@ function getClient() {
 async function saveConvergenceScore(country, scanDate, result, theater) {
   try {
     const supabase = getClient();
+
+    // Compute row hash for chain integrity
+    const prevHash = await getLastRowHash(supabase, 'convergence_scores');
+    const rowFields = {
+      country,
+      convergence_score: result.convergence_score,
+      freshness_pct:     result.freshness_pct ?? null,
+      risk_level:        result.risk_level,
+      scan_date:         scanDate,
+      signals_available: result.signals_available,
+      trajectory:        result.trajectory || 'STABLE',
+    };
+    const rowHash = computeRowHash(rowFields, prevHash);
+
     const { error } = await supabase
       .from('convergence_scores')
       .upsert({
@@ -96,7 +130,10 @@ async function saveConvergenceScore(country, scanDate, result, theater) {
         signals_failed: result.signals_failed || [],
         threshold_window: result.threshold_window,
         top_3_signals: result.top_3_signals || [],
-        freshness_pct: result.freshness_pct ?? null
+        freshness_pct: result.freshness_pct ?? null,
+        trajectory: result.trajectory || 'STABLE',
+        row_hash: rowHash,
+        prev_hash: prevHash,
       }, { onConflict: 'country,scan_date' });
 
     if (error) throw error;
@@ -108,6 +145,15 @@ async function saveConvergenceScore(country, scanDate, result, theater) {
       data: { country, scan_date: scanDate, convergence_score: result.convergence_score },
       tags: ['persistence', 'supabase', country]
     });
+
+    logAuditEvent('score_computed', country, {
+      scan_date:        scanDate,
+      score:            result.convergence_score,
+      risk_level:       result.risk_level,
+      trajectory:       result.trajectory || 'STABLE',
+      signals_used:     result.signals_available,
+      theater:          theater || null,
+    }).catch(() => {});
 
     return { saved: true };
   } catch (err) {

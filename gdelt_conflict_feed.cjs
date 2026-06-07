@@ -2,7 +2,7 @@
 // GDELT DOC 2.0 API -- Global Database of Events, Language and Tone
 // Free, no key required, no Cloudflare, near real-time (news-based, 24-48hr latency)
 // Signal: normalized volume intensity of conflict/violence coverage per country
-// Used as conflict signal when ACLED_API_KEY is not set or ACLED is unreachable
+// Primary conflict signal — ACLED removed 2026-06-01, GDELT is the production source
 // Follows fred_macro_data.cjs pattern
 
 require('dotenv').config({ path: './.env' });

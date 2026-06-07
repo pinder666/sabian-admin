@@ -1,0 +1,25 @@
+{
+  "generatedAt": "2026-05-25T23:53:49.903Z",
+  "totalRecords": 1916,
+  "crisisThresholds": {
+    "weather": {
+      "fire_hotspot": 80,
+      "seismic_risk": 75
+    },
+    "communication": {
+      "gdelt_tone": -5,
+      "tone_drop": -30
+    },
+    "power": {
+      "power_grid": 70
+    },
+    "convergence": {
+      "score": 70,
+      "trajectory": 5
+    }
+  },
+  "crisisEventsDetected": 0,
+  "crisisEvents": [],
+  "withOutcomes": [],
+  "finding": "Three-signal crisis combination (weather + communication + power) is RARE in historical data. When all three fire simultaneously, it represents an exceptional event."
+}

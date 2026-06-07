@@ -58,3 +58,4 @@ NUL
 
 # Supabase backup data files (large — not in git)
 backups/
+NELDA 6.0/
