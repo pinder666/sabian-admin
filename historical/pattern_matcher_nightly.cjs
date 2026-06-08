@@ -22,11 +22,6 @@ const DAILY_REPORT_TABLE = 'pattern_daily_reports';
 // ── The 388 findings (structured for matching) ────────────────────────────────
 
 const FINDINGS = [
-  // Country pair findings
-  { id: 1, category: 'Country Pairs', title: 'Armenia-Israel perfect correlation', matchFn: (c, bd, score) => c === 'Armenia' || c === 'Israel' },
-  { id: 15, category: 'Repeat Crisis', title: 'Repeat crisis country', matchFn: (c) => ['Armenia', 'CAR', 'Ethiopia', 'Georgia', 'Guinea-Bissau', 'Israel', 'Mexico'].includes(c) },
-  { id: 12, category: 'Transmission', title: 'Brazil transmission node', matchFn: (c) => c === 'Brazil' },
-
   // Signal-based findings
   { id: 6, category: 'Pre-Crisis', title: 'economic_stress year -1', matchFn: (c, bd) => (bd?.economic_stress?.stress_z || 0) > 0.5 },
   { id: 11, category: 'Capital Flows', title: 'capital_flows chronic crisis', matchFn: (c, bd) => (bd?.capital_flows?.stress_z || 0) > 1.0 },
@@ -48,10 +43,6 @@ const FINDINGS = [
   // Cluster findings (require cluster lookup)
   { id: 9, category: 'Cluster', title: 'high-fire cluster risk', matchFn: (c, bd, score, cluster) => cluster?.cluster_label === 'high-fire' },
   { id: 10, category: 'Cluster', title: 'high-economic-stress stability', matchFn: (c, bd, score, cluster) => cluster?.cluster_label === 'high-economic-stress' },
-
-  // Universal findings (apply to all)
-  { id: 2, category: 'Recovery', title: 'Recovery asymmetry', matchFn: () => true },
-  { id: 4, category: 'Going Dark', title: 'Governance goes dark first', matchFn: () => true },
 ];
 
 // ── Load current scores and clusters ──────────────────────────────────────────
