@@ -1577,6 +1577,22 @@ app.get('/api/regional/:region', requireTier('buyer'), async (req, res) => {
   }
 });
 
+// ── Extraction Intelligence (buyer tier) ─────────────────────────────────
+app.get('/api/extraction/events', requireTier('buyer'), async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const { data, error } = await sb
+      .from('extraction_events')
+      .select('id,country,year,pattern_type,confidence,signal_snapshot,outcome_description,detected_at')
+      .order('year', { ascending: false });
+    if (error) throw error;
+    res.json({ events: data, count: data.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Public landing — stripped version (no full country list, no breakdown)
 app.get('/public-api/global', async (req, res) => {
   try {
