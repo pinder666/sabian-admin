@@ -175,6 +175,7 @@ async function loadAllScores() {
   while (true) {
     const { data, error } = await sb.from('historical_convergence_scores')
       .select('country, year, score, breakdown, signals_used')
+      .lte('year', 2026)
       .range(page * 1000, (page + 1) * 1000 - 1)
       .order('year');
     if (error) throw error;
@@ -454,7 +455,7 @@ function testThreeSignalClusters(matrix) {
         }
 
         totalTests++;
-        if (allElevated.length >= 5 && baseline.length >= 10) {
+        if (allElevated.length >= 30 && baseline.length >= 30) {
           const avgElev = mean(allElevated);
           const avgBase = mean(baseline);
           results.push({
@@ -608,7 +609,7 @@ function testCoActivation(matrix) {
       const observedRate = bothElevated / totalWithBoth;
       const expectedRate = baseRates[sigA] * baseRates[sigB];
       const lift = expectedRate > 0 ? observedRate / expectedRate : null;
-      if (lift !== null && lift > 1.5) {
+      if (lift !== null && lift > 1.5 && lift < 1000 && bothElevated >= 10 && expectedRate >= 0.001) {
         results.push({
           sigA, sigB,
           n: totalWithBoth,
@@ -1293,7 +1294,7 @@ async function main() {
   const darkestCountries = findDarkestCountries(matrix);
   const silenceVsScore  = testSilenceVsScore(matrix);
   const threeSigClusters = testThreeSignalClusters(matrix);
-  const monteCarlo      = testMonteCarlo(matrix);
+  const monteCarlo      = {}; // Test G disabled: synthetic-score construction does not mirror real scoring formula, produced impossible values
   const conditionalProb = testConditionalProbability(matrix);
   const coActivation    = testCoActivation(matrix);
   const recoveryCurves  = testRecoveryCurves(matrix);
