@@ -269,6 +269,13 @@ app.get('/api/observations/:country', requireTier('buyer'), async (req, res) => 
 
 // ── Observation ledger — global stats (hit rate, dossier summary) ─────────────
 // GET /api/observations/stats
+app.get('/public-api/observations/stats', async (req, res) => {
+  try {
+    const stats = await getLedgerStats();
+    res.json(stats);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 app.get('/api/observations/stats', requireTier('buyer'), async (req, res) => {
   try {
     const stats = await getLedgerStats();
@@ -346,6 +353,24 @@ app.get('/public-api/theater/:name', async (req, res) => {
     const warning   = countries.filter(s => s.risk_level === 'WARNING');
     const avg       = countries.length ? Math.round(countries.reduce((s, c) => s + (c.convergence_score || 0), 0) / countries.length) : null;
     res.json({ theater, country_count: countries.length, average_score: avg, critical_count: critical.length, warning_count: warning.length, critical_countries: critical.map(c => c.country), warning_countries: warning.map(c => c.country), all: countries });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/public-api/findings', async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const { data, error } = await sb
+      .from('latent_findings')
+      .select('*')
+      .gte('n', 30)
+      .order('n', { ascending: false });
+    if (error) throw error;
+    const gated = (data || []).filter(f =>
+      f.ci_low !== null && f.ci_high !== null &&
+      !(f.ci_low <= 0 && f.ci_high >= 0)
+    );
+    res.json({ count: gated.length, findings: gated });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
