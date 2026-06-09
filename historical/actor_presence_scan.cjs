@@ -30,6 +30,52 @@ const CL_KEY = process.env.COURTLISTENER_API_KEY;
 const CH_KEY = process.env.CH_API_KEY;
 const DELAY_MS = 1200; // SEC rate limit: max 10 req/sec, we stay well under
 
+const ISO2 = {
+  'Abkhazia':'GE','Afghanistan':'AF','Albania':'AL','Algeria':'DZ','Andorra':'AD',
+  'Angola':'AO','Antigua & Barbuda':'AG','Argentina':'AR','Armenia':'AM','Australia':'AU',
+  'Austria':'AT','Azerbaijan':'AZ','Bahamas':'BS','Bahrain':'BH','Bangladesh':'BD',
+  'Barbados':'BB','Belarus':'BY','Belgium':'BE','Belize':'BZ','Benin':'BJ','Bhutan':'BT',
+  'Bolivia':'BO','Bosnia':'BA','Botswana':'BW','Brazil':'BR','Brunei':'BN','Bulgaria':'BG',
+  'Burkina Faso':'BF','Burundi':'BI','CAR':'CF','Cambodia':'KH','Cameroon':'CM',
+  'Canada':'CA','Cape Verde':'CV','Chad':'TD','Chile':'CL','China':'CN','Colombia':'CO',
+  'Comoros':'KM','Congo':'CG','Costa Rica':'CR','Côte d\'Ivoire':'CI','Côte d ́Ivoire':'CI',
+  'Ivory Coast':'CI','Croatia':'HR','Cuba':'CU','Cyprus':'CY','Czech Republic':'CZ',
+  'Czechoslovakia':'CZ','DRC':'CD','Democratic Republic of Vietnam':'VN','Denmark':'DK',
+  'Djibouti':'DJ','Dominica':'DM','Dominican Republic':'DO','East Germany':'DE',
+  'Ecuador':'EC','Egypt':'EG','El Salvador':'SV','Equatorial Guinea':'GQ','Eritrea':'ER',
+  'Estonia':'EE','Eswatini':'SZ','Ethiopia':'ET','Federated States of Micronesia':'FM',
+  'Micronesia':'FM','Fiji':'FJ','Finland':'FI','France':'FR','Gabon':'GA','Gambia':'GM',
+  'Georgia':'GE','German Federal Republic':'DE','Germany':'DE','Ghana':'GH','Greece':'GR',
+  'Grenada':'GD','Guatemala':'GT','Guinea':'GN','Guinea-Bissau':'GW','Guyana':'GY',
+  'Haiti':'HT','Honduras':'HN','Hong Kong':'HK','Hungary':'HU','Iceland':'IS','India':'IN',
+  'Indonesia':'ID','Iran':'IR','Iraq':'IQ','Ireland':'IE','Israel':'IL','Italy':'IT',
+  'Jamaica':'JM','Japan':'JP','Jordan':'JO','Kazakhstan':'KZ','Kenya':'KE','Kiribati':'KI',
+  'Kosovo':'XK','Kuwait':'KW','Kyrgyzstan':'KG','Laos':'LA','Latvia':'LV','Lebanon':'LB',
+  'Lesotho':'LS','Liberia':'LR','Libya':'LY','Liechtenstein':'LI','Lithuania':'LT',
+  'Luxembourg':'LU','Macau':'MO','Madagascar':'MG','Malawi':'MW','Malaysia':'MY',
+  'Maldives':'MV','Mali':'ML','Malta':'MT','Marshall Islands':'MH','Mauritania':'MR',
+  'Mauritius':'MU','Mexico':'MX','Moldova':'MD','Monaco':'MC','Mongolia':'MN',
+  'Montenegro':'ME','Morocco':'MA','Mozambique':'MZ','Myanmar':'MM','Namibia':'NA',
+  'Nauru':'NR','Nepal':'NP','Netherlands':'NL','New Zealand':'NZ','Nicaragua':'NI',
+  'Niger':'NE','Nigeria':'NG','North Korea':'KP','North Macedonia':'MK','Norway':'NO',
+  'Oman':'OM','Pakistan':'PK','Palau':'PW','Palestine':'PS','Panama':'PA',
+  'Papua New Guinea':'PG','Paraguay':'PY','Peru':'PE','Philippines':'PH','Poland':'PL',
+  'Portugal':'PT','Puerto Rico':'PR','Qatar':'QA','Republic of Vietnam':'VN',
+  'Romania':'RO','Russia':'RU','Russia (Soviet Union)':'RU','Rwanda':'RW','Samoa':'WS',
+  'San Marino':'SM','Sao Tome and Principe':'ST','Saudi Arabia':'SA','Senegal':'SN',
+  'Serbia':'RS','Seychelles':'SC','Sierra Leone':'SL','Singapore':'SG','Slovakia':'SK',
+  'Slovenia':'SI','Solomon Islands':'SB','Somalia':'SO','South Africa':'ZA',
+  'South Korea':'KR','South Ossetia':'GE','South Sudan':'SS','South Yemen':'YE',
+  'Spain':'ES','Sri Lanka':'LK','St. Kitts and Nevis':'KN','St. Lucia':'LC',
+  'St. Vincent':'VC','St. Vincent and the Grenadines':'VC','Sudan':'SD','Suriname':'SR',
+  'Sweden':'SE','Switzerland':'CH','Syria':'SY','Taiwan':'TW','Tajikistan':'TJ',
+  'Tanzania':'TZ','Thailand':'TH','Timor-Leste':'TL','Togo':'TG','Tonga':'TO',
+  'Trinidad and Tobago':'TT','Tunisia':'TN','Turkey':'TR','Turkmenistan':'TM',
+  'Tuvalu':'TV','UAE':'AE','UK':'GB','Uganda':'UG','Ukraine':'UA','United States':'US',
+  'Uruguay':'UY','Uzbekistan':'UZ','Vanuatu':'VU','Vatican':'VA','Venezuela':'VE',
+  'Vietnam':'VN','Yemen':'YE','Yugoslavia':'RS','Zambia':'ZM','Zimbabwe':'ZW'
+};
+
 // ── HTTP helpers ──────────────────────────────────────────────────────────────
 
 function fetchJson(url, headers = {}) {
@@ -50,15 +96,22 @@ function sleep(ms) {
   return new Promise(r => setTimeout(r, ms));
 }
 
-// ── Load all extraction events ────────────────────────────────────────────────
+// ── Load all countries ────────────────────────────────────────────────────────
 
-async function loadEvents() {
-  const { data, error } = await sb
-    .from('extraction_events')
-    .select('id,country,year,pattern_type,confidence,signal_snapshot')
-    .order('year', { ascending: true });
-  if (error) throw error;
-  return data;
+async function loadCountries() {
+  let all = new Set(), from = 0, step = 1000;
+  while (true) {
+    const { data, error } = await sb
+      .from('historical_convergence_scores')
+      .select('country')
+      .range(from, from + step - 1);
+    if (error) throw error;
+    if (!data.length) break;
+    data.forEach(r => all.add(r.country));
+    if (data.length < step) break;
+    from += step;
+  }
+  return [...all].sort();
 }
 
 // ── Source A: SEC EDGAR full-text search ──────────────────────────────────────
@@ -68,26 +121,32 @@ async function loadEvents() {
 async function scanEdgarFullText(country, year, eventId, signalSnapshot) {
   const rows = [];
   const query = encodeURIComponent('"' + country + '"');
-  const url = `https://efts.sec.gov/LATEST/search-index?q=${query}&hits.hits._source=display_names,file_num,form_type,file_date`;
-  const result = await fetchJson(url);
-  if (!result || !result.hits || !result.hits.hits) return rows;
-  for (const hit of result.hits.hits) {
-    const src = hit._source || {};
-    const entityName = src.display_names?.[0]?.replace(/\s*\(CIK[^)]*\)/,'').trim() || null;
-    if (!entityName) continue;
-    rows.push({
-      event_id:        eventId,
-      country,
-      year,
-      entity_name:     entityName,
-      entity_id:       Array.isArray(src.file_num) ? src.file_num[0] : (src.file_num || null),
-      filing_type:     src.form_type || 'UNKNOWN',
-      filing_date:     src.file_date ? src.file_date.slice(0, 10) : null,
-      filing_source:   'SEC_EDGAR_FULLTEXT',
-      source_url:      `https://efts.sec.gov/LATEST/search-index?q=${query}`,
-      raw_excerpt:     JSON.stringify(src).slice(0, 500),
-      signal_snapshot: signalSnapshot
-    });
+  let from = 0;
+  while (true) {
+    const url = `https://efts.sec.gov/LATEST/search-index?q=${query}&from=${from}&hits.hits._source=display_names,file_num,form_type,file_date`;
+    const result = await fetchJson(url);
+    if (!result || !result.hits || !result.hits.hits || result.hits.hits.length === 0) break;
+    for (const hit of result.hits.hits) {
+      const src = hit._source || {};
+      const entityName = src.display_names?.[0]?.replace(/\s*\(CIK[^)]*\)/,'').trim() || null;
+      if (!entityName) continue;
+      rows.push({
+        event_id:        eventId,
+        country,
+        year,
+        entity_name:     entityName,
+        entity_id:       Array.isArray(src.file_num) ? src.file_num[0] : (src.file_num || null),
+        filing_type:     src.form_type || 'UNKNOWN',
+        filing_date:     src.file_date ? src.file_date.slice(0, 10) : null,
+        filing_source:   'SEC_EDGAR_FULLTEXT',
+        source_url:      `https://efts.sec.gov/LATEST/search-index?q=${query}`,
+        raw_excerpt:     JSON.stringify(src).slice(0, 500),
+        signal_snapshot: signalSnapshot
+      });
+    }
+    if (result.hits.hits.length < 100) break;
+    from += 100;
+    await sleep(DELAY_MS);
   }
   return rows;
 }
@@ -226,36 +285,43 @@ async function scanCompaniesHouse(country, year, eventId, signalSnapshot) {
 
 // ── Source E: GLEIF – Legal Entity Identifier lookup ─────────────────────────
 // GLEIF maps legal entity relationships globally — parent/child/branch.
-// Searches by country name to find all LEI-registered entities in that country.
+// Searches by ISO2 code to find all LEI-registered entities in that country.
 // Free, no key needed. Catches actors across name changes and SPV structures.
 
 async function scanGLEIF(country, year, eventId, signalSnapshot) {
   const rows = [];
-  const query = encodeURIComponent(country);
-  const url = `https://api.gleif.org/api/v1/lei-records?filter[entity.legalAddress.country]=${query}&page[size]=100&page[number]=1`;
-
-  const result = await fetchJson(url, { 'Accept': 'application/vnd.api+json' });
-  if (!result || !result.data) return rows;
-
-  for (const item of result.data) {
-    const entity = item.attributes?.entity || {};
-    const name = entity.legalName?.name;
-    if (!name) continue;
-    rows.push({
-      event_id:        eventId,
-      country,
-      year,
-      entity_name:     name.trim(),
-      entity_id:       item.attributes?.lei || null,
-      filing_type:     entity.category || 'LEI_ENTITY',
-      filing_date:     item.attributes?.registration?.initialRegistrationDate?.slice(0,10) || null,
-      filing_source:   'GLEIF',
-      source_url:      `https://search.gleif.org/#/record/${item.attributes?.lei}`,
-      raw_excerpt:     JSON.stringify(entity).slice(0, 500),
-      signal_snapshot: signalSnapshot
-    });
+  const iso2 = ISO2[country];
+  if (!iso2) {
+    console.log(`  GLEIF: no ISO2 for "${country}", skipping`);
+    return rows;
   }
-
+  let page = 1;
+  while (true) {
+    const url = `https://api.gleif.org/api/v1/lei-records?filter[entity.legalAddress.country]=${iso2}&page[size]=100&page[number]=${page}`;
+    const result = await fetchJson(url, { 'Accept': 'application/vnd.api+json' });
+    if (!result || !result.data || !result.data.length) break;
+    for (const item of result.data) {
+      const entity = item.attributes?.entity || {};
+      const name = entity.legalName?.name;
+      if (!name) continue;
+      rows.push({
+        event_id:        eventId,
+        country,
+        year,
+        entity_name:     name.trim(),
+        entity_id:       item.attributes?.lei || null,
+        filing_type:     entity.category || 'LEI_ENTITY',
+        filing_date:     item.attributes?.registration?.initialRegistrationDate?.slice(0,10) || null,
+        filing_source:   'GLEIF',
+        source_url:      `https://search.gleif.org/#/record/${item.attributes?.lei}`,
+        raw_excerpt:     JSON.stringify(entity).slice(0, 500),
+        signal_snapshot: signalSnapshot
+      });
+    }
+    if (result.data.length < 100) break;
+    page++;
+    await sleep(DELAY_MS);
+  }
   return rows;
 }
 
@@ -268,24 +334,28 @@ async function writeRows(rows) {
   const seen = new Set();
   for (const r of rows) {
     const key = `${r.event_id}|${r.entity_name}|${r.filing_type}|${r.filing_date}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      unique.push(r);
-    }
+    if (!seen.has(key)) { seen.add(key); unique.push(r); }
   }
 
   const CHUNK = 500;
   let totalWritten = 0;
   for (let i = 0; i < unique.length; i += CHUNK) {
     const chunk = unique.slice(i, i + CHUNK);
-    const { error } = await sb
-      .from('actor_presence_raw')
-      .upsert(chunk, { onConflict: 'id', ignoreDuplicates: true });
-    if (error) {
-      console.error(`  [WRITE ERROR chunk ${i}-${i+CHUNK}]`, error.message);
-    } else {
-      totalWritten += chunk.length;
+    let attempts = 0, success = false;
+    while (attempts < 3 && !success) {
+      const { error } = await sb
+        .from('actor_presence_raw')
+        .upsert(chunk, { onConflict: 'id', ignoreDuplicates: true });
+      if (error) {
+        attempts++;
+        console.error(`  [CHUNK ERROR attempt ${attempts} chunk ${i}-${i+CHUNK}]`, error.message);
+        await sleep(2000 * attempts);
+      } else {
+        success = true;
+        totalWritten += chunk.length;
+      }
     }
+    if (!success) console.error(`  [CHUNK FAILED permanently chunk ${i}-${i+CHUNK}]`);
   }
   console.log(`  [WROTE] ${totalWritten} rows`);
 }
@@ -293,53 +363,43 @@ async function writeRows(rows) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('\n═══════════════════════════════════════════════════════');
-  console.log('SABIAN ACTOR PRESENCE SCAN');
-  console.log('Raw pull — no filters, no assumptions, everything in');
-  console.log('═══════════════════════════════════════════════════════\n');
+  console.log('\n' + '═'.repeat(55));
+  console.log('SABIAN ACTOR PRESENCE SCAN — ALL COUNTRIES RAW');
+  console.log('No event gate. No filters. No assumptions.');
+  console.log('═'.repeat(55) + '\n');
 
-  const events = await loadEvents();
-  console.log(`Loaded ${events.length} extraction events\n`);
+  const countries = await loadCountries();
+  console.log(`Loaded ${countries.length} countries from historical_convergence_scores\n`);
 
   let totalRows = 0;
 
-  for (const event of events) {
-    console.log(`[${event.country} ${event.year}] ${event.pattern_type}`);
+  for (const country of countries) {
+    console.log(`[${country}]`);
 
     const allRows = [];
 
     try {
-      const a = await scanEdgarFullText(
-        event.country, event.year, event.id, event.signal_snapshot
-      );
+      const a = await scanEdgarFullText(country, null, null, null);
       console.log(`  EDGAR full-text: ${a.length} entities`);
       allRows.push(...a);
       await sleep(DELAY_MS);
 
-      const b = await scanEdgar13F(
-        event.country, event.year, event.id, event.signal_snapshot
-      );
+      const b = await scanEdgar13F(country, null, null, null);
       console.log(`  EDGAR 13F:       ${b.length} entities`);
       allRows.push(...b);
       await sleep(DELAY_MS);
 
-      const c = await scanCourtListener(
-        event.country, event.year, event.id, event.signal_snapshot
-      );
+      const c = await scanCourtListener(country, null, null, null);
       console.log(`  CourtListener:   ${c.length} cases`);
       allRows.push(...c);
       await sleep(DELAY_MS);
 
-      const d = await scanCompaniesHouse(
-        event.country, event.year, event.id, event.signal_snapshot
-      );
+      const d = await scanCompaniesHouse(country, null, null, null);
       console.log(`  Companies House: ${d.length} entities`);
       allRows.push(...d);
       await sleep(DELAY_MS);
 
-      const e = await scanGLEIF(
-        event.country, event.year, event.id, event.signal_snapshot
-      );
+      const e = await scanGLEIF(country, null, null, null);
       console.log(`  GLEIF:           ${e.length} entities`);
       allRows.push(...e);
       await sleep(DELAY_MS);
@@ -353,9 +413,9 @@ async function main() {
     console.log('');
   }
 
-  console.log('═══════════════════════════════════════════════════════');
+  console.log('═'.repeat(55));
   console.log(`SCAN COMPLETE — ${totalRows} raw presence rows written`);
-  console.log('═══════════════════════════════════════════════════════\n');
+  console.log('═'.repeat(55) + '\n');
 }
 
 main().catch(err => {
