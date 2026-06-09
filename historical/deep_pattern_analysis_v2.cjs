@@ -1050,10 +1050,23 @@ function findDarkestCountries(matrix) {
 
   const results = [];
   for (const [country, rows] of byCountry) {
+    // Signals this country EVER reported across its full history
+    const everPresent = new Set();
+    for (const row of rows) {
+      for (const sig of Object.keys(row.signals)) everPresent.add(sig);
+    }
+    const coverageUniverse = everPresent.size;
     const latestRow = rows.sort((a, b) => b.year - a.year)[0];
+    // Dark = was ever present for this country but absent in latest row
+    let darkSignals = 0;
+    for (const sig of everPresent) {
+      if (latestRow.signals[sig] === undefined) darkSignals++;
+    }
     const presentSignals = Object.keys(latestRow.signals).length;
-    const darkSignals = ALL_SIGNALS.length - presentSignals;
-    results.push({ country, year: latestRow.year, darkSignals, presentSignals, score: latestRow.score });
+    // Only meaningful if the country had real coverage to lose
+    if (coverageUniverse >= 5) {
+      results.push({ country, year: latestRow.year, darkSignals, presentSignals, coverageUniverse, score: latestRow.score });
+    }
   }
 
   return results.sort((a, b) => b.darkSignals - a.darkSignals).slice(0, 20);
@@ -1131,7 +1144,7 @@ function generateReport(findings) {
   // Darkest countries
   lines.push('## D3. DARKEST COUNTRIES (Most Signals Currently Dark)');
   for (const c of darkestCountries.slice(0, 10)) {
-    lines.push(`${c.country} (${c.year}): ${c.darkSignals} of ${ALL_SIGNALS.length} signals dark, score=${c.score}`);
+    lines.push(`${c.country} (${c.year}): ${c.darkSignals} of ${c.coverageUniverse} ever-present signals now dark, score=${c.score}`);
   }
   lines.push('');
 
