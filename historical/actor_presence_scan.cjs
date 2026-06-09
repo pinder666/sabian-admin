@@ -27,6 +27,7 @@ const EDGAR_HEADERS = {
 };
 
 const CL_KEY = process.env.COURTLISTENER_API_KEY;
+const CH_KEY = process.env.CH_API_KEY;
 const DELAY_MS = 1200; // SEC rate limit: max 10 req/sec, we stay well under
 
 // ── HTTP helpers ──────────────────────────────────────────────────────────────
@@ -173,6 +174,56 @@ async function scanCourtListener(country, year, eventId, signalSnapshot) {
   return rows;
 }
 
+// ── Source D: UK Companies House ─────────────────────────────────────────────
+// Searches for UK-registered companies with the country name in their name.
+// Catches SPVs and holding companies deliberately named after target countries.
+
+async function scanCompaniesHouse(country, year, eventId, signalSnapshot) {
+  const rows = [];
+  if (!CH_KEY) return rows;
+
+  const query = encodeURIComponent(country);
+  const url = `https://api.company-information.service.gov.uk/search/companies?q=${query}&items_per_page=100`;
+
+  const result = await new Promise((resolve, reject) => {
+    const options = {
+      headers: {
+        Authorization: 'Basic ' + Buffer.from(CH_KEY + ':').toString('base64'),
+        'User-Agent': 'SabianBrain/1.0 (contact@sabian.ai)'
+      }
+    };
+    https.get(url, options, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try { resolve(JSON.parse(data)); }
+        catch (e) { resolve(null); }
+      });
+    }).on('error', reject);
+  });
+
+  if (!result || !result.items) return rows;
+
+  for (const item of result.items) {
+    if (!item.title) continue;
+    rows.push({
+      event_id:        eventId,
+      country,
+      year,
+      entity_name:     item.title.trim(),
+      entity_id:       item.company_number || null,
+      filing_type:     item.company_type || 'UK_COMPANY',
+      filing_date:     item.date_of_creation || null,
+      filing_source:   'UK_COMPANIES_HOUSE',
+      source_url:      `https://find-and-update.company-information.service.gov.uk/company/${item.company_number}`,
+      raw_excerpt:     JSON.stringify(item).slice(0, 500),
+      signal_snapshot: signalSnapshot
+    });
+  }
+
+  return rows;
+}
+
 // ── Write rows to Supabase ────────────────────────────────────────────────────
 
 async function writeRows(rows) {
@@ -234,6 +285,13 @@ async function main() {
       );
       console.log(`  CourtListener:   ${c.length} cases`);
       allRows.push(...c);
+      await sleep(DELAY_MS);
+
+      const d = await scanCompaniesHouse(
+        event.country, event.year, event.id, event.signal_snapshot
+      );
+      console.log(`  Companies House: ${d.length} entities`);
+      allRows.push(...d);
       await sleep(DELAY_MS);
 
     } catch (err) {
