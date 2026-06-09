@@ -369,3 +369,22 @@ to near-zero for almost all inputs.
 2. sovereign_cds — normalization bug, next to trace
 3. gdelt_conflict — only 1,008 rows, needs investigation
 4. Final rebuild: baseline_discovery + convergence_history (run ONCE after all signals clean)
+
+---
+
+## STATUS: DONE 2026-06-09 (Day 5)
+
+- [x] Fixed CH_API_KEY double-prefix bug in .env — Companies House live (verified Tesco 200, Barclays 200)
+- [x] Removed ACLED from .env completely — not using it
+- [x] Added Companies House as Source D in actor_presence_scan.cjs (searches UK entities by country name, catches SPVs)
+- [x] Added GLEIF as Source E (ISO2 lookup, entity continuity, catches actors across name changes)
+- [x] Fixed writeRows chunking to 500 rows — solves Supabase TypeError fetch failed on 10,000-entity Argentina events
+- [x] Full scan run: 106,985 rows across 59 events with A+B+C+D (pre-chunking)
+- [x] 3 Argentina events (1995, 2016, 2020) failed on old single-batch write — chunking fix now in place, re-run fills them via ignoreDuplicates
+
+## NEXT (start of next session)
+
+1. Re-run node historical/actor_presence_scan.cjs — chunking fills the 3 failed Argentina events + GLEIF adds Source E to all events. Verify the 3 Argentina write lines succeed.
+2. Run repetition query (no LIMIT) — entities in 3+ events, different countries, different patterns. Build behavior-weighted separator: litigation > distressed holding > passive custodial. NO name bias.
+3. OpenCorporates as Source F (free tier, BVI/Cayman/Jersey shells).
+4. THEN: engine swap, latent_findings table, 4 anchors.
