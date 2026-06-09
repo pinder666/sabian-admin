@@ -224,6 +224,41 @@ async function scanCompaniesHouse(country, year, eventId, signalSnapshot) {
   return rows;
 }
 
+// ── Source E: GLEIF – Legal Entity Identifier lookup ─────────────────────────
+// GLEIF maps legal entity relationships globally — parent/child/branch.
+// Searches by country name to find all LEI-registered entities in that country.
+// Free, no key needed. Catches actors across name changes and SPV structures.
+
+async function scanGLEIF(country, year, eventId, signalSnapshot) {
+  const rows = [];
+  const query = encodeURIComponent(country);
+  const url = `https://api.gleif.org/api/v1/lei-records?filter[entity.legalAddress.country]=${query}&page[size]=100&page[number]=1`;
+
+  const result = await fetchJson(url, { 'Accept': 'application/vnd.api+json' });
+  if (!result || !result.data) return rows;
+
+  for (const item of result.data) {
+    const entity = item.attributes?.entity || {};
+    const name = entity.legalName?.name;
+    if (!name) continue;
+    rows.push({
+      event_id:        eventId,
+      country,
+      year,
+      entity_name:     name.trim(),
+      entity_id:       item.attributes?.lei || null,
+      filing_type:     entity.category || 'LEI_ENTITY',
+      filing_date:     item.attributes?.registration?.initialRegistrationDate?.slice(0,10) || null,
+      filing_source:   'GLEIF',
+      source_url:      `https://search.gleif.org/#/record/${item.attributes?.lei}`,
+      raw_excerpt:     JSON.stringify(entity).slice(0, 500),
+      signal_snapshot: signalSnapshot
+    });
+  }
+
+  return rows;
+}
+
 // ── Write rows to Supabase ────────────────────────────────────────────────────
 
 async function writeRows(rows) {
@@ -239,12 +274,20 @@ async function writeRows(rows) {
     }
   }
 
-  const { error } = await sb
-    .from('actor_presence_raw')
-    .upsert(unique, { onConflict: 'id', ignoreDuplicates: true });
-
-  if (error) console.error('  [WRITE ERROR]', error.message);
-  else console.log(`  [WROTE] ${unique.length} rows`);
+  const CHUNK = 500;
+  let totalWritten = 0;
+  for (let i = 0; i < unique.length; i += CHUNK) {
+    const chunk = unique.slice(i, i + CHUNK);
+    const { error } = await sb
+      .from('actor_presence_raw')
+      .upsert(chunk, { onConflict: 'id', ignoreDuplicates: true });
+    if (error) {
+      console.error(`  [WRITE ERROR chunk ${i}-${i+CHUNK}]`, error.message);
+    } else {
+      totalWritten += chunk.length;
+    }
+  }
+  console.log(`  [WROTE] ${totalWritten} rows`);
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -292,6 +335,13 @@ async function main() {
       );
       console.log(`  Companies House: ${d.length} entities`);
       allRows.push(...d);
+      await sleep(DELAY_MS);
+
+      const e = await scanGLEIF(
+        event.country, event.year, event.id, event.signal_snapshot
+      );
+      console.log(`  GLEIF:           ${e.length} entities`);
+      allRows.push(...e);
       await sleep(DELAY_MS);
 
     } catch (err) {
