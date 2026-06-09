@@ -39,14 +39,24 @@ const OUT_JSON = path.join(__dirname, 'deep_pattern_findings_v2.json');
 // ── 33 signals confirmed in convergence breakdown ─────────────────────────────
 
 const ALL_SIGNALS = [
-  'dam_risk','chokepoint','flood_risk','governance','power_grid',
-  'fire_hotspot','night_lights','seismic_risk','water_stress','capital_flows',
-  'health_crisis','pipeline_risk','rail_corridor',
-  'sovereign_cds','maritime_trade','trade_collapse','unhcr_refugees','corruption_risk',
-  'economic_stress','fao_food_import','port_congestion','vdem_governance','internet_freedom',
-  'currency_collapse','election_calendar',
-  'resource_conflict','military_proximity','sanctions_pressure','structural_pressure',
-  'food_security','usda_food','iom_displacement','social_volume','prediction_market'
+  // Physical
+  'dam_risk','chokepoint','flood_risk','power_grid','fire_hotspot','night_lights',
+  'seismic_risk','water_stress','pipeline_risk','rail_corridor','cable_disruption',
+  'dark_vessel','gps_jamming',
+  // Economic
+  'capital_flows','sovereign_cds','maritime_trade','trade_collapse','corruption_risk',
+  'economic_stress','fao_food','port_congestion','currency_collapse','sanctions_pressure',
+  'structural_pressure','usda_food','imf_fiscal','defense_spending','diaspora_remittance',
+  'energy_stress','climate_stress',
+  // Humanitarian
+  'health_crisis','unhcr_odp','iom_displacement','displacement','food_security',
+  'social_unrest',
+  // Governance
+  'governance','vdem_governance','election_calendar','ooni_internet','tor_censorship',
+  'cyber_threat','occrp',
+  // Security/Behavioral
+  'resource_conflict','conflict','military_proximity','social_volume','prediction_market',
+  'flight_movement','gdelt_conflict','gdelt_tone'
 ];
 
 const CORE_SIGNALS = [
