@@ -1244,7 +1244,19 @@ function makeSparkSVG(history, w, h, level) {
 async function loadFindings() {
   try {
     const data = await apiFetch('/public-api/findings');
-    const findings = (data.findings || []).slice(0, 4);
+    const PINNED = [
+      { type: 'asymmetry',             signal_a: 'vdem_governance' },
+      { type: 'conditional_probability', signal_a: 'vdem_governance' },
+      { type: 'signal_correlation',    signal_a: 'maritime_trade', signal_b: 'health_crisis' },
+      { type: 'signal_correlation',    signal_a: 'trade_collapse', signal_b: 'economic_stress' }
+    ];
+    const findings = PINNED.map(p =>
+      (data.findings || []).find(f =>
+        f.finding_type === p.type &&
+        f.signal_a === p.signal_a &&
+        (!p.signal_b || f.signal_b === p.signal_b)
+      )
+    ).filter(Boolean);
     if (!findings.length) return;
     const bar = document.getElementById('findings-bar');
     bar.innerHTML = findings.map(f => {
