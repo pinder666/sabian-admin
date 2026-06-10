@@ -35,7 +35,8 @@
       "Bash(SKIP_AUDIO=1 node vrtx/engine/vrtx_engine.cjs)",
       "Bash(git commit *)",
       "Bash(git rm *)",
-      "Bash(timeout 30)"
+      "Bash(timeout 30)",
+      "PowerShell(Copy-Item *)"
     ]
   }
 }
