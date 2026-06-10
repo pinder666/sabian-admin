@@ -136,7 +136,7 @@ const MIN_SIGNALS_FLOOR = 3;
 
 // Score scaling: each z-unit = 15 score points from baseline of 50
 const SCORE_CENTER = 50;
-const SCORE_SCALE  = 15;
+const SCORE_SCALE  = 18;
 
 function buildGlobalBaselines(baselines) {
   // Compute cross-country median and IQR per signal.
@@ -160,6 +160,41 @@ function buildGlobalBaselines(baselines) {
     };
   }
   return out;
+}
+
+// Derive each signal's stress threshold from its OWN global z-distribution.
+// τ = the percentile where this signal becomes genuinely abnormal across all country-years.
+// No hand-picked threshold — each signal declares its own from its own spread.
+function deriveSignalThresholds(ts, globalBl, percentile) {
+  const perSignalZ = {};
+  for (const [country, signals] of Object.entries(ts)) {
+    for (const [signal, byYear] of Object.entries(signals)) {
+      const gbl = globalBl[signal];
+      if (!gbl || gbl.iqr === 0) continue;
+      const direction = STRESS_DIRECTION[signal];
+      if (direction === undefined) continue;
+      for (const value of Object.values(byYear)) {
+        const gz = ((value - gbl.median) / gbl.iqr) * direction;
+        if (!perSignalZ[signal]) perSignalZ[signal] = [];
+        perSignalZ[signal].push(gz);
+      }
+    }
+  }
+  const tau = {};
+  for (const [signal, zs] of Object.entries(perSignalZ)) {
+    zs.sort((a, b) => a - b);
+    const idx = Math.floor(zs.length * percentile);
+    tau[signal] = zs[Math.min(idx, zs.length - 1)];
+  }
+  return tau;
+}
+
+// The score ceiling is the observed spread of raw_stress, not an invented number.
+// SCORE_REF = a high percentile of all actual raw_stress values across all country-years.
+function deriveScoreRef(rawStressValues, percentile) {
+  const sorted = [...rawStressValues].sort((a, b) => a - b);
+  const idx = Math.floor(sorted.length * percentile);
+  return sorted[Math.min(idx, sorted.length - 1)] || 1;
 }
 
 // ── Table check ───────────────────────────────────────────────────────────────
@@ -364,21 +399,13 @@ async function loadSourceBaselines() {
 // tsSrc and srcBl are optional. When present, any signal that has source-specific baselines
 // in srcBl is z-scored per source then averaged — never averaging raw values from
 // incompatible measurement scales (e.g. WHO GHO mortality vs World Bank composite).
-function scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl, globalBl) {
+function scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl, globalBl, tau, scoreRef) {
   const signals = ts[country] || {};
-  const countryBaselines = baselines[country] || {};
-  const countrySrcBl  = (srcBl  && srcBl[country])  || {};
-  const countrySrcTs  = (tsSrc  && tsSrc[country])   || {};
-
-  let weightedStressSum = 0;
-  let weightSum = 0;
-  const breakdown = {};
+  const stressEntries = [];
   let available = 0;
 
   for (const [signal, byYear] of Object.entries(signals)) {
-    // Skip signals whose dataset ended before this year — frozen in record, not live inputs
     if (SIGNAL_ENDPOINTS[signal] !== undefined && year > SIGNAL_ENDPOINTS[signal]) continue;
-
     const value = byYear[year];
     if (value === undefined) continue;
     available++;
@@ -390,93 +417,43 @@ function scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl, glo
     if (!tier) continue;
     const weight = TIER_WEIGHT[tier] || 0.2;
 
-    // ── Source-aware path ───────────────────────────────────────────────────
-    // Used when baseline_discovery has produced per-source baselines for this signal.
-    // Each source is z-scored against its own baseline; z-scores are then averaged.
-    // This prevents incompatible measurement scales (e.g. WHO GHO mortality 0-100
-    // vs World Bank composite 0-100) from contaminating each other's IQR.
-    const signalSrcBl = countrySrcBl[signal];
-    const signalSrcTs = countrySrcTs[signal];
-    if (signalSrcBl && signalSrcTs && Object.keys(signalSrcBl).length > 1) {
-      const sourceZs = [];
-      for (const [src, srcBaseline] of Object.entries(signalSrcBl)) {
-        const srcValue = signalSrcTs[src]?.[year];
-        if (srcValue === undefined) continue;
-        if (!srcBaseline || srcBaseline.iqr === 0) continue;
-        sourceZs.push((srcValue - srcBaseline.median) / srcBaseline.iqr);
-      }
-      if (sourceZs.length === 0) continue;
-      const z      = sourceZs.reduce((a, b) => a + b, 0) / sourceZs.length;
-      const stressZ = z * direction;
-      weightedStressSum += stressZ * weight;
-      weightSum += weight;
-      breakdown[signal] = {
-        z:            parseFloat(z.toFixed(3)),
-        stress_z:     parseFloat(stressZ.toFixed(3)),
-        weight,
-        contribution: parseFloat((stressZ * weight).toFixed(3)),
-        sources_z:    Object.fromEntries(
-          Object.keys(signalSrcBl)
-            .map((src, i) => [src, parseFloat((sourceZs[i] ?? 0).toFixed(3))])
-        ),
-      };
-      continue;
-    }
+    const gbl = globalBl?.[signal];
+    if (!gbl || gbl.iqr === 0) continue;
 
-    // ── Combined path (unchanged for all single-source signals) ────────────
-    const baseline = countryBaselines[signal];
-    if (!baseline) continue;
+    const gz = ((value - gbl.median) / gbl.iqr) * direction;
+    const signalTau = tau[signal] ?? 0;
+    const excess = Math.max(0, gz - signalTau);
+    stressEntries.push({ signal, gz, excess, weight, value });
+  }
 
-    const z = (value - baseline.median) / baseline.iqr;
-    const stressZ = z * direction;
+  if (stressEntries.length < MIN_SIGNALS_FLOOR) return null;
 
-    weightedStressSum += stressZ * weight;
-    weightSum += weight;
+  const rawStress = stressEntries.reduce((s, e) => s + e.weight * e.excess, 0);
 
-    breakdown[signal] = {
-      z:         parseFloat(z.toFixed(3)),
-      stress_z:  parseFloat(stressZ.toFixed(3)),
-      weight:    weight,
-      contribution: parseFloat((stressZ * weight).toFixed(3)),
+  // Score = this country-year's position in the observed raw_stress distribution
+  let score;
+  if (scoreRef) {
+    score = Math.max(1, Math.min(99, SCORE_CENTER + (rawStress / scoreRef) * SCORE_SCALE));
+  } else {
+    // first pass (computing the distribution): return rawStress for ref derivation
+    return { country, year, rawStress, _rawOnly: true };
+  }
+
+  const breakdown = {};
+  for (const e of stressEntries.filter(e => e.excess > 0)) {
+    breakdown[e.signal] = {
+      gz:           parseFloat(e.gz.toFixed(3)),
+      excess:       parseFloat(e.excess.toFixed(3)),
+      weight:       e.weight,
+      contribution: parseFloat((e.weight * e.excess).toFixed(3)),
     };
   }
 
-  if (weightSum === 0) return null;
-
-  const signalsUsed = Object.keys(breakdown).length;
-  if (signalsUsed < MIN_SIGNALS_FLOOR) return null;
-
-  const weightedMean = weightedStressSum / weightSum;
-  const relativeScore = SCORE_CENTER + (weightedMean * SCORE_SCALE);
-
-  // Absolute eye: re-score each signal against global baseline, take max of both eyes.
-  // Prevents chronically distressed countries from absorbing acute crises into their own norm.
-  let absWeightedSum = 0, absWeightSum = 0;
-  if (globalBl) {
-    for (const [signal, bd] of Object.entries(breakdown)) {
-      const gbl = globalBl[signal];
-      if (!gbl) continue;
-      const value = (ts[country]?.[signal]?.[year]);
-      if (value === undefined) continue;
-      const direction = STRESS_DIRECTION[signal];
-      if (!direction) continue;
-      const tier = tiers[signal];
-      const weight = TIER_WEIGHT[tier] || 0.2;
-      const gz = ((value - gbl.median) / gbl.iqr) * direction;
-      absWeightedSum += gz * weight;
-      absWeightSum += weight;
-    }
-  }
-  const absoluteScore = absWeightSum > 0
-    ? SCORE_CENTER + ((absWeightedSum / absWeightSum) * SCORE_SCALE)
-    : relativeScore;
-  const score = Math.max(1, Math.min(99, Math.max(relativeScore, absoluteScore)));
-
   return {
-    country,
-    year,
+    country, year,
     score:             parseFloat(score.toFixed(2)),
-    signals_used:      signalsUsed,
+    raw_stress:        parseFloat(rawStress.toFixed(4)),
+    signals_used:      stressEntries.length,
     signals_available: available,
     breakdown,
     computed_at:       new Date().toISOString(),
@@ -535,6 +512,11 @@ async function main() {
   const globalBl = buildGlobalBaselines(baselines);
   console.log(`  ${Object.keys(globalBl).length} signals with global baselines.\n`);
 
+  console.log('  Deriving per-signal stress thresholds from data (p75 of each signal z-distribution)...');
+  const { ts: tsForTau, tsSrc: tsSrcForTau } = await loadAllReadings();
+  const tau = deriveSignalThresholds(tsForTau, globalBl, 0.75);
+  console.log(`  ${Object.keys(tau).length} signal thresholds derived from data.\n`);
+
   console.log('  Loading source-specific baselines...');
   const srcBl = await loadSourceBaselines();
   const srcBlSignals = new Set(Object.values(srcBl).flatMap(c => Object.keys(c)));
@@ -559,9 +541,21 @@ async function main() {
   let scored = 0;
   let skipped = 0;
 
+  // Pass 1 — collect raw_stress values to derive the score reference ceiling from real data
+  console.log('  Pass 1: collecting raw stress distribution...');
+  const rawStressValues = [];
   for (const { country, year } of pairs) {
-    const result = scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl, globalBl);
-    if (result) {
+    const result = scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl, globalBl, tau, null);
+    if (result?._rawOnly) rawStressValues.push(result.rawStress);
+  }
+  const scoreRef = deriveScoreRef(rawStressValues, 0.97);
+  console.log(`  Score reference ceiling (p97 of raw stress): ${scoreRef.toFixed(4)}\n`);
+
+  // Pass 2 — score using the data-derived reference
+  console.log('  Pass 2: scoring all country-years against self-derived reference...');
+  for (const { country, year } of pairs) {
+    const result = scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl, globalBl, tau, scoreRef);
+    if (result && !result._rawOnly) {
       rows.push(result);
       scored++;
     } else {
