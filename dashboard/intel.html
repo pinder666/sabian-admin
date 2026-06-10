@@ -579,9 +579,6 @@
       </div>
     </div>
 
-    <!-- Anchor Findings Bar -->
-    <div id="findings-bar" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1.5rem"></div>
-
     <!-- Status bar -->
     <div class="status-bar" id="status-bar">
       <div class="stat-cell">
@@ -1239,42 +1236,6 @@ function makeSpark(history, w, h, strokeColor, fill) {
 function makeSparkSVG(history, w, h, level) {
   const color = riskColor(level || (history?.length ? (history[history.length-1].risk_level || 'STABLE') : 'STABLE'));
   return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" class="sparkline">${makeSpark(history, w, h, color, true)}</svg>`;
-}
-
-async function loadFindings() {
-  try {
-    const data = await apiFetch('/public-api/findings');
-    const PINNED = [
-      { type: 'asymmetry',             signal_a: 'vdem_governance' },
-      { type: 'conditional_probability', signal_a: 'vdem_governance' },
-      { type: 'signal_correlation',    signal_a: 'maritime_trade', signal_b: 'health_crisis' },
-      { type: 'signal_correlation',    signal_a: 'trade_collapse', signal_b: 'economic_stress' }
-    ];
-    const findings = PINNED.map(p =>
-      (data.findings || []).find(f =>
-        f.finding_type === p.type &&
-        f.signal_a === p.signal_a &&
-        (!p.signal_b || f.signal_b === p.signal_b)
-      )
-    ).filter(Boolean);
-    if (!findings.length) return;
-    const bar = document.getElementById('findings-bar');
-    bar.innerHTML = findings.map(f => {
-      const typeLabel = {
-        signal_correlation:    'CORRELATION',
-        bootstrap_correlation: 'VERIFIED',
-        conditional_probability: 'CONDITIONAL',
-        asymmetry:             'ASYMMETRY',
-        first_mover:           'FIRST MOVER'
-      }[f.finding_type] || f.finding_type.toUpperCase();
-      const sigLabel = [f.signal_a, f.signal_b].filter(Boolean).join(' ↔ ').replace(/_/g,' ').toUpperCase();
-      return `<div style="background:var(--panel);padding:0.85rem 1.1rem">
-        <div style="font-family:var(--mono);font-size:0.58rem;letter-spacing:0.1em;color:var(--accent);margin-bottom:4px">${typeLabel} · n=${f.n.toLocaleString()}</div>
-        <div style="font-family:var(--mono);font-size:0.7rem;color:var(--bright);margin-bottom:3px">${sigLabel}</div>
-        <div style="font-size:0.72rem;color:var(--dim)">${f.statistic}</div>
-      </div>`;
-    }).join('');
-  } catch(e) { /* silent fail */ }
 }
 
 // ── LOAD THREATS (initial data) ────────────────────────────────────────────
@@ -1941,7 +1902,6 @@ async function loadExtractionEvents() {
 
 // ── BOOT ───────────────────────────────────────────────────────────────────
 loadThreats();
-loadFindings();
 </script>
 </body>
 </html>
