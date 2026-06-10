@@ -138,6 +138,30 @@ const MIN_SIGNALS_FLOOR = 3;
 const SCORE_CENTER = 50;
 const SCORE_SCALE  = 15;
 
+function buildGlobalBaselines(baselines) {
+  // Compute cross-country median and IQR per signal.
+  // Used as the absolute eye: z-scores against the global distribution
+  // so chronically distressed countries still spike during acute crises.
+  const perSignal = {};
+  for (const countryBl of Object.values(baselines)) {
+    for (const [signal, bl] of Object.entries(countryBl)) {
+      if (!perSignal[signal]) perSignal[signal] = { medians: [], iqrs: [] };
+      if (bl.median !== null && bl.median !== undefined) perSignal[signal].medians.push(bl.median);
+      if (bl.iqr > 0) perSignal[signal].iqrs.push(bl.iqr);
+    }
+  }
+  const out = {};
+  for (const [signal, { medians, iqrs }] of Object.entries(perSignal)) {
+    medians.sort((a, b) => a - b);
+    iqrs.sort((a, b) => a - b);
+    out[signal] = {
+      median: medians[Math.floor(medians.length / 2)] ?? 0,
+      iqr:    iqrs[Math.floor(iqrs.length / 2)] || 1,
+    };
+  }
+  return out;
+}
+
 // ── Table check ───────────────────────────────────────────────────────────────
 
 async function checkTable() {
@@ -340,7 +364,7 @@ async function loadSourceBaselines() {
 // tsSrc and srcBl are optional. When present, any signal that has source-specific baselines
 // in srcBl is z-scored per source then averaged — never averaging raw values from
 // incompatible measurement scales (e.g. WHO GHO mortality vs World Bank composite).
-function scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl) {
+function scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl, globalBl) {
   const signals = ts[country] || {};
   const countryBaselines = baselines[country] || {};
   const countrySrcBl  = (srcBl  && srcBl[country])  || {};
@@ -423,7 +447,30 @@ function scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl) {
   if (signalsUsed < MIN_SIGNALS_FLOOR) return null;
 
   const weightedMean = weightedStressSum / weightSum;
-  const score = Math.max(1, Math.min(99, SCORE_CENTER + (weightedMean * SCORE_SCALE)));
+  const relativeScore = SCORE_CENTER + (weightedMean * SCORE_SCALE);
+
+  // Absolute eye: re-score each signal against global baseline, take max of both eyes.
+  // Prevents chronically distressed countries from absorbing acute crises into their own norm.
+  let absWeightedSum = 0, absWeightSum = 0;
+  if (globalBl) {
+    for (const [signal, bd] of Object.entries(breakdown)) {
+      const gbl = globalBl[signal];
+      if (!gbl) continue;
+      const value = (ts[country]?.[signal]?.[year]);
+      if (value === undefined) continue;
+      const direction = STRESS_DIRECTION[signal];
+      if (!direction) continue;
+      const tier = tiers[signal];
+      const weight = TIER_WEIGHT[tier] || 0.2;
+      const gz = ((value - gbl.median) / gbl.iqr) * direction;
+      absWeightedSum += gz * weight;
+      absWeightSum += weight;
+    }
+  }
+  const absoluteScore = absWeightSum > 0
+    ? SCORE_CENTER + ((absWeightedSum / absWeightSum) * SCORE_SCALE)
+    : relativeScore;
+  const score = Math.max(1, Math.min(99, Math.max(relativeScore, absoluteScore)));
 
   return {
     country,
@@ -484,6 +531,10 @@ async function main() {
   const baselines = await loadBaselines();
   console.log(`  ${Object.keys(baselines).length} countries with baselines.\n`);
 
+  console.log('  Building global baselines...');
+  const globalBl = buildGlobalBaselines(baselines);
+  console.log(`  ${Object.keys(globalBl).length} signals with global baselines.\n`);
+
   console.log('  Loading source-specific baselines...');
   const srcBl = await loadSourceBaselines();
   const srcBlSignals = new Set(Object.values(srcBl).flatMap(c => Object.keys(c)));
@@ -509,7 +560,7 @@ async function main() {
   let skipped = 0;
 
   for (const { country, year } of pairs) {
-    const result = scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl);
+    const result = scoreCountryYear(country, year, ts, baselines, tiers, tsSrc, srcBl, globalBl);
     if (result) {
       rows.push(result);
       scored++;
