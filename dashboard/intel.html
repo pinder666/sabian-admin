@@ -1006,6 +1006,8 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     if (btn.dataset.view === 'ledger' && !ledgerLoaded) loadLedger();
     if (btn.dataset.view === 'freshness' && !freshnessLoaded) loadFreshness();
     if (btn.dataset.view === 'heatmap' && !heatmapLoaded) loadHeatmap();
+    if (btn.dataset.view === 'patterns' && !patternsLoaded) loadPatterns();
+    if (btn.dataset.view === 'extraction-live' && !extractionLoaded) loadExtractionSignatures();
   });
 });
 
