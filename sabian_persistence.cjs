@@ -180,25 +180,22 @@ async function getHistory(country, days) {
   try {
     const supabase = getClient();
 
-    // Pull from historical_convergence_scores (the 214-country table).
-    // 'days' is reinterpreted as 'years' here since this table is annual,
-    // but we expose it as a synthetic daily scan_date for the dashboard.
-    const yearsBack = Math.max(1, Math.ceil((days || 90) / 365));
+    // 1. FOUNDATION: full annual arc from historical_convergence_scores.
+    //    This is the decades-deep truth — Luxembourg in the 1970s shows real.
+    const yearsBack = Math.max(5, Math.ceil((days || 90) / 365));
     const currentYear = new Date().getFullYear();
-    const sinceYear = currentYear - Math.max(yearsBack, 5);
+    const sinceYear = currentYear - yearsBack;
 
-    const { data, error } = await supabase
+    const { data: annual, error } = await supabase
       .from('historical_convergence_scores')
       .select('year, score, breakdown')
       .eq('country', country)
       .gte('year', sinceYear)
       .lte('year', currentYear)
       .order('year', { ascending: true });
-
     if (error) throw error;
 
-    // Map to dashboard shape
-    const history = (data || []).map(row => {
+    const history = (annual || []).map(row => {
       const score = row.score || 0;
       let risk_level = 'STABLE';
       if (score >= 81)      risk_level = 'CRITICAL';
@@ -210,6 +207,7 @@ async function getHistory(country, days) {
         year: row.year,
         convergence_score: score,
         risk_level,
+        is_live: false,
         signals_available: Object.keys(bd).length,
         top_3_signals: Object.entries(bd)
           .filter(([, v]) => v && typeof v === 'object' && v.stress_z != null)
@@ -218,6 +216,22 @@ async function getHistory(country, days) {
           .slice(0, 3)
       };
     });
+
+    // 2. LIVE TAIL: append daily convergence_scores points (today's eyes).
+    const since = new Date();
+    since.setDate(since.getDate() - (days || 90));
+    const { data: daily } = await supabase
+      .from('convergence_scores')
+      .select('scan_date, convergence_score, risk_level, signals_available, top_3_signals')
+      .eq('country', country)
+      .gte('scan_date', since.toISOString().slice(0, 10))
+      .order('scan_date', { ascending: true });
+
+    if (daily && daily.length) {
+      for (const d of daily) {
+        history.push({ ...d, year: +d.scan_date.slice(0, 4), is_live: true });
+      }
+    }
 
     return { country, days, history };
   } catch (err) {
@@ -232,8 +246,31 @@ async function getLatestScores() {
   try {
     const supabase = getClient();
     const currentYear = new Date().getFullYear();
+    const today = new Date().toISOString().slice(0, 10);
 
-    // Paginate to avoid Supabase 1000-row cap
+    // 1. LIVE: newest daily rows from convergence_scores (the countries scanned today).
+    const { data: daily, error: dErr } = await supabase
+      .from('convergence_scores')
+      .select('country, scan_date, convergence_score, risk_level, theater, top_3_signals, signals_available')
+      .order('scan_date', { ascending: false })
+      .limit(5000);
+    if (dErr) throw dErr;
+
+    const latest = {};
+    for (const row of (daily || [])) {
+      if (!latest[row.country]) {
+        const dataAge = currentYear - (+String(row.scan_date).slice(0, 4) || currentYear);
+        latest[row.country] = {
+          ...row,
+          year: +String(row.scan_date).slice(0, 4),
+          data_age_years: dataAge,
+          freshness: 'CURRENT',
+          is_live: true
+        };
+      }
+    }
+
+    // 2. FOUNDATION: newest annual row per country, for every country the daily scan skipped.
     const all = [];
     const PAGE = 1000;
     let from = 0;
@@ -252,15 +289,15 @@ async function getLatestScores() {
       from += PAGE;
     }
 
-    // Latest row per country
-    const latestByCountry = {};
+    const annualLatest = {};
     for (const row of all) {
-      if (!latestByCountry[row.country] || row.year > latestByCountry[row.country].year) {
-        latestByCountry[row.country] = row;
+      if (!annualLatest[row.country] || row.year > annualLatest[row.country].year) {
+        annualLatest[row.country] = row;
       }
     }
 
-    const results = Object.values(latestByCountry).map(row => {
+    for (const row of Object.values(annualLatest)) {
+      if (latest[row.country]) continue; // live row already wins
       const score = row.score || 0;
       let risk_level = 'STABLE';
       if (score >= 81)      risk_level = 'CRITICAL';
@@ -280,7 +317,7 @@ async function getLatestScores() {
       else if (dataAge >= 6) freshness = 'STALE';
       else if (dataAge >= 2) freshness = 'AGING';
 
-      return {
+      latest[row.country] = {
         country: row.country,
         scan_date: `${row.year}-12-31`,
         year: row.year,
@@ -291,10 +328,11 @@ async function getLatestScores() {
         theater: null,
         top_3_signals,
         signals_available: Object.keys(bd).length,
+        is_live: false
       };
-    });
+    }
 
-    return results.sort((a, b) => (b.convergence_score || 0) - (a.convergence_score || 0));
+    return Object.values(latest).sort((a, b) => (b.convergence_score || 0) - (a.convergence_score || 0));
   } catch (err) {
     console.error('[getLatestScores]', err.message);
     return { error: err.message };
