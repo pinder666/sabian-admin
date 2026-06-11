@@ -1188,7 +1188,7 @@ function renderThreatsTable(rows) {
         const job = queue[idx++];
         try {
           let hist = historyCache[job.country];
-          if (!hist) {
+          if (!hist || hist.length < 2) {
             const r = await fetch('/public-api/country/' + encodeURIComponent(job.country) + '?days=90');
             const d = await r.json();
             hist = d.history || [];
