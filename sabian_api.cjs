@@ -1595,6 +1595,47 @@ app.get('/public-api/proof-seal', async (req, res) => {
 });
 // ═══ END MINED PATTERNS ENDPOINTS ════════════════════════════════════════════
 
+
+// ═══ EXTRACTION SIGNATURES ENDPOINT ════════════════════════════════════════
+app.get('/public-api/extraction/signatures', async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const country    = req.query.country    || null;
+    const pattern_id = req.query.pattern_id || null;
+    const confidence = req.query.confidence || null;
+
+    let q = sb
+      .from('extraction_signatures')
+      .select('id, country, event_date, event_type, date_range_start, date_range_end, pattern_id, actor_count, recurring_count, primary_window, confidence, detected_at')
+      .order('confidence', { ascending: true })
+      .order('detected_at', { ascending: false });
+
+    if (country)    q = q.eq('country', country);
+    if (pattern_id) q = q.eq('pattern_id', pattern_id);
+    if (confidence) q = q.eq('confidence', confidence);
+
+    const { data, error } = await q;
+    if (error) throw error;
+
+    // Summary counts
+    const counts = { VULTURE_PLAY: 0, INSIDER_EXIT: 0, ACTIVE_POSITIONING: 0 };
+    const conf   = { HIGH: 0, MEDIUM: 0, REVIEW: 0 };
+    for (const r of (data || [])) {
+      if (counts[r.pattern_id] !== undefined) counts[r.pattern_id]++;
+      if (conf[r.confidence]   !== undefined) conf[r.confidence]++;
+    }
+
+    res.json({
+      total: (data || []).length,
+      by_pattern: counts,
+      by_confidence: conf,
+      signatures: data || []
+    });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+// ═══ END EXTRACTION SIGNATURES ENDPOINT ════════════════════════════════════
+
 cron.schedule('0 6 * * *', () => {
     console.log('[CRON] Daily global scan starting — 0600 UTC');
     logToHive({ source: 'sabian_api', level: 'intel', event: 'cron_scan_start', data: { time: new Date().toISOString() }, tags: ['cron'] });
