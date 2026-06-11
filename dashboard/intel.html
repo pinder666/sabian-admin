@@ -1071,8 +1071,8 @@ async function loadThreats() {
     document.getElementById('stat-stable').textContent   = counts.STABLE   || 0;
     document.getElementById('stat-avg').textContent      = avg;
     const scanDate = allCountries[0]?.scan_date || '—';
-    document.getElementById('stat-date').textContent     = scanDate;
-    document.getElementById('scan-date-nav').textContent = scanDate;
+    document.getElementById('stat-date').textContent = scanDate ? scanDate.slice(0,4) : '—';
+    document.getElementById('scan-date-nav').textContent = scanDate ? scanDate.slice(0,4) : '—';
     document.getElementById('tab-threats-count').textContent = `(${allCountries.length})`;
     document.getElementById('tab-spark-count').textContent   = `(${allCountries.length})`;
     document.getElementById('tab-fresh-count').textContent   = `(${allCountries.length})`;
@@ -1163,7 +1163,18 @@ function renderThreatsTable(rows) {
       <td>${badge(c.risk_level)}</td>
       <td>${sparkHtml}</td>
       <td><div class="signal-chips">${chips}</div></td>
-      <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">${c.scan_date||'—'}</td>
+      <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">
+        ${(()=>{
+          const yr = c.year || (c.scan_date ? c.scan_date.slice(0,4) : null);
+          const age = yr ? (new Date().getFullYear() - parseInt(yr)) : null;
+          let badge = '';
+          if (age === null) return '—';
+          if (age >= 11) badge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--critical);border:1px solid rgba(255,60,60,0.3);padding:1px 4px;border-radius:2px">ANCIENT</span>';
+          else if (age >= 6) badge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--warning);border:1px solid rgba(255,170,0,0.3);padding:1px 4px;border-radius:2px">STALE</span>';
+          else if (age >= 2) badge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--dim);border:1px solid var(--border);padding:1px 4px;border-radius:2px">AGING</span>';
+          return yr + badge;
+        })()}
+      </td>
     </tr>`;
   });
 
