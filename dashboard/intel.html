@@ -953,6 +953,7 @@ function sigDesc(rawName) {
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let allCountries   = [];
+let selectedCountry = null; // shared across all tabs
 let ledgerData     = [];
 let ledgerAllObs   = [];
 let historyCache   = {};
@@ -1002,11 +1003,37 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     const vid = 'view-' + btn.dataset.view;
     document.getElementById(vid).classList.add('active');
     // extraction-live tab handled below
-    if (btn.dataset.view === 'sparklines' && !sparkloaded) loadSparklines();
-    if (btn.dataset.view === 'ledger' && !ledgerLoaded) loadLedger();
-    if (btn.dataset.view === 'freshness' && !freshnessLoaded) loadFreshness();
-    if (btn.dataset.view === 'heatmap' && !heatmapLoaded) loadHeatmap();
+    if (btn.dataset.view === 'sparklines') {
+      if (selectedCountry) {
+        const ssearch = document.getElementById('spark-search');
+        if (ssearch) ssearch.value = selectedCountry;
+      }
+      if (!sparkloaded) loadSparklines(); else filterSparklines();
+    }
+    if (btn.dataset.view === 'ledger') {
+      if (selectedCountry) {
+        const ldrop = document.getElementById('ledger-country');
+        if (ldrop) {
+          for (const opt of ldrop.options) {
+            if (opt.value === selectedCountry) { ldrop.value = selectedCountry; break; }
+          }
+        }
+      }
+      if (!ledgerLoaded) loadLedger(); else renderLedger();
+    }
+    if (btn.dataset.view === 'freshness') {
+      if (selectedCountry) {
+        const fsearch = document.getElementById('fresh-search');
+        if (fsearch) fsearch.value = selectedCountry;
+      }
+      if (!freshnessLoaded) loadFreshness(); else filterFreshness();
+    }
+    if (btn.dataset.view === 'heatmap') {
+      if (!heatmapLoaded) loadHeatmap(); else renderHeatmap();
+    }
     if (btn.dataset.view === 'patterns' && !patternsLoaded) loadPatterns();
+    // Show/update selected country indicator
+    updateSelectedBanner();
     if (btn.dataset.view === 'extraction-live' && !extractionLoaded) loadExtractionSignatures();
   });
 });
@@ -1048,6 +1075,44 @@ function makeSparkSVG(history, w, h, level) {
 }
 
 // ── LOAD THREATS (initial data) ────────────────────────────────────────────
+function updateSelectedBanner() {
+  const existing = document.getElementById('selected-country-banner');
+  if (existing) existing.remove();
+  if (!selectedCountry) return;
+  const activeView = document.querySelector('.view.active');
+  if (!activeView) return;
+  const banner = document.createElement('div');
+  banner.id = 'selected-country-banner';
+  banner.style.cssText = 'display:flex;align-items:center;gap:10px;padding:7px 14px;background:rgba(26,111,255,0.08);border:1px solid rgba(26,111,255,0.2);border-radius:6px;margin-bottom:14px;font-family:var(--mono);font-size:0.72rem;';
+  banner.innerHTML = '<span style="color:var(--dim);letter-spacing:0.08em;text-transform:uppercase">Focused on</span>'
+    + '<span style="color:var(--bright);font-weight:700">' + selectedCountry + '</span>'
+    + '<button onclick="clearSelectedCountry()" style="margin-left:auto;background:none;border:none;color:var(--dim);cursor:pointer;font-size:0.9rem;padding:0 4px" title="Clear filter">×</button>';
+  activeView.insertBefore(banner, activeView.firstChild);
+}
+
+function clearSelectedCountry() {
+  selectedCountry = null;
+  // Clear all search inputs
+  ['search-input','spark-search','fresh-search'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const ldrop = document.getElementById('ledger-country');
+  if (ldrop) ldrop.value = '';
+  const existing = document.getElementById('selected-country-banner');
+  if (existing) existing.remove();
+  // Re-render current view
+  const activeBtn = document.querySelector('.tab-btn.active');
+  if (activeBtn) {
+    const view = activeBtn.dataset.view;
+    if (view === 'threats') filterThreats();
+    if (view === 'sparklines') filterSparklines();
+    if (view === 'freshness') filterFreshness();
+    if (view === 'ledger') loadLedger();
+    if (view === 'heatmap') renderHeatmap();
+  }
+}
+
 async function loadThreats() {
   try {
     const data = await apiFetch('/public-api/threats');
@@ -1597,6 +1662,17 @@ function generateInsight(country, current, history, openObsList) {
 }
 
 // ── COUNTRY DETAIL PANEL ───────────────────────────────────────────────────
+function setSelectedCountry(country) {
+  selectedCountry = country;
+  // Update ledger country dropdown if it exists
+  const ldrop = document.getElementById('ledger-country');
+  if (ldrop) {
+    for (const opt of ldrop.options) {
+      if (opt.value === country) { ldrop.value = country; break; }
+    }
+  }
+}
+
 async function openDetail(encodedCountry) {
   const country = decodeURIComponent(encodedCountry);
   document.getElementById('dp-country').textContent = country;
