@@ -1,72 +1,13 @@
 // sabian_persistence.cjs
 // Sabian Supabase persistence layer
-// Stores convergence scores, signal readings, and global scan results
-// 90-day accumulation enables latent pattern discovery -- this is the memory that makes Sabian worth billions
-//
-// Required .env vars:
-//   SUPABASE_URL=https://qdxgcyawpqxhhjprqyas.supabase.co
-//   SUPABASE_SERVICE_ROLE_KEY=<service_role_key from Supabase dashboard>
-//
-// Run schema SQL once in Supabase SQL editor before first use:
-// -----------------------------------------------------------
-// CREATE TABLE IF NOT EXISTS convergence_scores (
-//   id                BIGSERIAL PRIMARY KEY,
-//   country           TEXT NOT NULL,
-//   scan_date         DATE NOT NULL,
-//   convergence_score INTEGER,
-//   risk_level        TEXT,
-//   theater           TEXT,
-//   signals_available INTEGER,
-//   signals_failed    TEXT[],
-//   threshold_window  TEXT,
-//   top_3_signals     JSONB,
-//   freshness_pct     INTEGER,
-//   created_at        TIMESTAMPTZ DEFAULT NOW()
-// );
-// CREATE UNIQUE INDEX IF NOT EXISTS idx_convergence_country_date ON convergence_scores(country, scan_date);
-//
-// If upgrading an existing table, run once in Supabase SQL editor:
-//   ALTER TABLE convergence_scores ADD COLUMN IF NOT EXISTS freshness_pct INTEGER;
-//
-// CREATE TABLE IF NOT EXISTS signal_readings (
-//   id            BIGSERIAL PRIMARY KEY,
-//   country       TEXT NOT NULL,
-//   scan_date     DATE NOT NULL,
-//   signal_name   TEXT NOT NULL,
-//   score         INTEGER,
-//   label         TEXT,
-//   trend         TEXT,
-//   source        TEXT,
-//   raw_data      JSONB,
-//   created_at    TIMESTAMPTZ DEFAULT NOW()
-// );
-// CREATE INDEX IF NOT EXISTS idx_signals_country_date ON signal_readings(country, scan_date);
-// CREATE INDEX IF NOT EXISTS idx_signals_signal_date ON signal_readings(signal_name, scan_date);
-//
-// CREATE TABLE IF NOT EXISTS global_scans (
-//   id            BIGSERIAL PRIMARY KEY,
-//   scan_date     DATE NOT NULL UNIQUE,
-//   countries_scored INTEGER,
-//   critical_count INTEGER,
-//   warning_count  INTEGER,
-//   elevated_count INTEGER,
-//   stable_count   INTEGER,
-//   failed_count   INTEGER,
-//   patterns       TEXT[],
-//   top_5          JSONB,
-//   elapsed_seconds NUMERIC,
-//   full_results   JSONB,
-//   created_at    TIMESTAMPTZ DEFAULT NOW()
-// );
-// -----------------------------------------------------------
+// FIXED: getLatestScores now reads from historical_convergence_scores (214 countries)
+//        instead of convergence_scores (153 countries, old live scan table)
 
 require('dotenv').config({ path: './.env' });
 const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 const { logToHive } = require('./logger.cjs');
 const { logAuditEvent } = require('./historical/audit_chain.cjs');
-
-// ── Row-level hash chain helpers ──────────────────────────────────────────────
 
 function computeRowHash(fields, prevHash) {
   const canonical = JSON.stringify(fields, Object.keys(fields).sort());
@@ -99,13 +40,9 @@ function getClient() {
   return _client;
 }
 
-// Save or update a single country convergence score for a given date
-// Uses upsert -- safe to call repeatedly on the same country+date
 async function saveConvergenceScore(country, scanDate, result, theater) {
   try {
     const supabase = getClient();
-
-    // Compute row hash for chain integrity
     const prevHash = await getLastRowHash(supabase, 'convergence_scores');
     const rowFields = {
       country,
@@ -168,14 +105,10 @@ async function saveConvergenceScore(country, scanDate, result, theater) {
   }
 }
 
-// Save individual signal readings for a country+date (all 8 signals)
-// Deletes existing readings for this country+date first, then inserts fresh
 async function saveSignalReadings(country, scanDate, signals) {
   if (!signals || !signals.length) return { saved: false, error: 'No signals provided' };
   try {
     const supabase = getClient();
-
-    // Delete old readings for this country+date before insert
     await supabase
       .from('signal_readings')
       .delete()
@@ -213,7 +146,6 @@ async function saveSignalReadings(country, scanDate, signals) {
   }
 }
 
-// Save a full global scan summary (called once per global_scan.cjs run)
 async function saveGlobalScan(scanDate, summary, results, patterns, elapsed) {
   try {
     const supabase = getClient();
@@ -239,30 +171,12 @@ async function saveGlobalScan(scanDate, summary, results, patterns, elapsed) {
       }, { onConflict: 'scan_date' });
 
     if (error) throw error;
-
-    logToHive({
-      source: 'sabian_persistence',
-      level: 'intel',
-      event: 'global_scan_saved',
-      data: { scan_date: scanDate, countries_scored: results.length },
-      tags: ['persistence', 'global_scan']
-    });
-
     return { saved: true };
   } catch (err) {
-    logToHive({
-      source: 'sabian_persistence',
-      level: 'error',
-      event: 'global_scan_save_failed',
-      data: { scan_date: scanDate, message: err.message },
-      tags: ['persistence', 'error']
-    });
     return { saved: false, error: err.message };
   }
 }
 
-// Get historical convergence scores for a country (last N days)
-// Used to detect trend acceleration, plot 90-day arc
 async function getHistory(country, days) {
   try {
     const supabase = getClient();
@@ -284,32 +198,78 @@ async function getHistory(country, days) {
   }
 }
 
-// Get latest score for every country in the watch list (dashboard view)
+// ═══════════════════════════════════════════════════════════════════
+// FIXED: reads from historical_convergence_scores (214 countries)
+// ═══════════════════════════════════════════════════════════════════
 async function getLatestScores() {
   try {
     const supabase = getClient();
-    const { data, error } = await supabase
-      .from('convergence_scores')
-      .select('country, scan_date, convergence_score, risk_level, theater, top_3_signals')
-      .order('scan_date', { ascending: false })
-      .limit(500); // enough for 50 countries * 10 recent scans
+    const currentYear = new Date().getFullYear();
 
-    if (error) throw error;
-
-    // Deduplicate -- keep latest per country
-    const latest = {};
-    for (const row of (data || [])) {
-      if (!latest[row.country]) latest[row.country] = row;
+    // Pull latest year per country from the 214-country historical table.
+    // Paginate to avoid Supabase default 1000-row cap.
+    const all = [];
+    const PAGE = 1000;
+    let from = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from('historical_convergence_scores')
+        .select('country, year, score, breakdown')
+        .lte('year', currentYear)
+        .order('country', { ascending: true })
+        .order('year', { ascending: false })
+        .range(from, from + PAGE - 1);
+      if (error) throw error;
+      if (!data || !data.length) break;
+      all.push(...data);
+      if (data.length < PAGE) break;
+      from += PAGE;
     }
 
-    return Object.values(latest).sort((a, b) => (b.convergence_score || 0) - (a.convergence_score || 0));
+    // Reduce to latest year per country
+    const latestByCountry = {};
+    for (const row of all) {
+      if (!latestByCountry[row.country] || row.year > latestByCountry[row.country].year) {
+        latestByCountry[row.country] = row;
+      }
+    }
+
+    // Map to the shape the dashboard expects
+    const results = Object.values(latestByCountry).map(row => {
+      const score = row.score || 0;
+      let risk_level = 'STABLE';
+      if (score >= 81)      risk_level = 'CRITICAL';
+      else if (score >= 66) risk_level = 'WARNING';
+      else if (score >= 41) risk_level = 'ELEVATED';
+
+      // Build top_3_signals from breakdown (each entry: { stress_z, ... })
+      const bd = row.breakdown || {};
+      const top_3_signals = Object.entries(bd)
+        .filter(([, v]) => v && typeof v === 'object' && v.stress_z != null)
+        .map(([name, v]) => ({ name, score: Math.round(Math.abs(+v.stress_z) * 30), stress_z: +v.stress_z }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
+
+      return {
+        country: row.country,
+        scan_date: `${row.year}-12-31`,
+        convergence_score: score,
+        risk_level,
+        theater: null,
+        top_3_signals,
+        signals_available: Object.keys(bd).length,
+        year: row.year,
+      };
+    });
+
+    // Sort by score descending
+    return results.sort((a, b) => (b.convergence_score || 0) - (a.convergence_score || 0));
   } catch (err) {
+    console.error('[getLatestScores]', err.message);
     return { error: err.message };
   }
 }
 
-// Get the most dangerous signal pattern across all countries on a given date
-// Supports the latent pattern discovery that runs after 90 days
 async function getSignalPatterns(signalName, scoreThreshold, days) {
   try {
     const supabase = getClient();
@@ -332,11 +292,10 @@ async function getSignalPatterns(signalName, scoreThreshold, days) {
   }
 }
 
-// Test connection -- call on startup to verify Supabase is reachable
 async function testConnection() {
   try {
     const supabase = getClient();
-    const { error } = await supabase.from('convergence_scores').select('id').limit(1);
+    const { error } = await supabase.from('historical_convergence_scores').select('country').limit(1);
     if (error) throw error;
     return { connected: true, url: process.env.SUPABASE_URL };
   } catch (err) {
@@ -354,15 +313,10 @@ module.exports = {
   testConnection
 };
 
-// Standalone test: node sabian_persistence.cjs
 if (require.main === module) {
   testConnection()
     .then(r => {
       console.log('Supabase connection test:', JSON.stringify(r, null, 2));
-      if (r.connected) {
-        console.log('\nConnection OK -- Sabian persistence layer is live.');
-        console.log('Run the SQL schema in Supabase SQL editor if tables do not exist yet.');
-      }
     })
     .catch(console.error);
 }
