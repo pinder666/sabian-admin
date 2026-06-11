@@ -1143,9 +1143,10 @@ function renderThreatsTable(rows) {
     const top3 = c.top_3_signals || [];
     const chips = top3.map(s => `<span class="signal-chip" title="${sigDesc(s.name)}">${sigDisplay(s.name)}</span>`).join('');
     const cached = historyCache[c.country];
-    const sparkHtml = cached
+    const sparkCellId = 'spark-cell-' + i;
+    const sparkHtml = (cached && cached.length >= 2)
       ? makeSparkSVG(cached, 100, 28, c.risk_level)
-      : `<span class="spark-no-data">—</span>`;
+      : `<span class="spark-no-data">…</span>`;
     html += `<tr onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
       <td style="font-family:var(--mono);font-size:0.7rem;color:var(--dim)">${i+1}</td>
       <td><span class="country-name">${c.country}</span></td>
@@ -1156,7 +1157,7 @@ function renderThreatsTable(rows) {
         </div>
       </td>
       <td>${badge(c.risk_level)}</td>
-      <td>${sparkHtml}</td>
+      <td id="${sparkCellId}">${sparkHtml}</td>
       <td><div class="signal-chips">${chips}</div></td>
       <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">
         ${(()=>{
@@ -1175,6 +1176,38 @@ function renderThreatsTable(rows) {
 
   html += '</tbody></table>';
   document.getElementById('threat-table-wrap').innerHTML = html;
+
+  // Fill sparklines: fetch history for each visible country (cached after first load),
+  // then redraw its spark cell in place. Concurrency-limited so we don't hammer the API.
+  (async () => {
+    const queue = rows.map((c, i) => ({ country: c.country, level: c.risk_level, cellId: 'spark-cell-' + i }));
+    const CONCURRENCY = 6;
+    let idx = 0;
+    async function worker() {
+      while (idx < queue.length) {
+        const job = queue[idx++];
+        try {
+          let hist = historyCache[job.country];
+          if (!hist) {
+            const r = await fetch('/public-api/country/' + encodeURIComponent(job.country) + '?days=90');
+            const d = await r.json();
+            hist = d.history || [];
+            historyCache[job.country] = hist;
+          }
+          const cell = document.getElementById(job.cellId);
+          if (cell) {
+            cell.innerHTML = (hist && hist.length >= 2)
+              ? makeSparkSVG(hist, 100, 28, job.level)
+              : '<span class="spark-no-data">—</span>';
+          }
+        } catch (e) {
+          const cell = document.getElementById(job.cellId);
+          if (cell) cell.innerHTML = '<span class="spark-no-data">—</span>';
+        }
+      }
+    }
+    await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  })();
 }
 
 // ── SPARKLINES VIEW ────────────────────────────────────────────────────────
