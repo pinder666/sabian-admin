@@ -1468,7 +1468,134 @@ try {
   const { runBackup }      = require('./sabian_backup.cjs');
 
   // Daily scan — 0600 UTC every day
-  cron.schedule('0 6 * * *', () => {
+  
+// ═══ MINED PATTERNS ENDPOINTS (added by patch_dashboard.cjs) ════════════════
+app.get('/public-api/patterns/unknown-unknowns', async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const { data, error } = await sb
+      .from('miner_findings')
+      .select('id, category, payload, run_id, created_at')
+      .in('category', ['unknown_unknown', 'signal_correlation'])
+      .order('created_at', { ascending: false })
+      .limit(500);
+    if (error) throw error;
+    const filtered = (data || []).filter(row => {
+      const p = row.payload || {};
+      const r = p.r ?? p.spearman_r ?? p.correlation ?? null;
+      const n = p.n ?? p.n_pairs ?? 0;
+      return r !== null && Math.abs(r) >= 0.5 && n >= 30;
+    }).sort((a, b) => {
+      const ra = Math.abs(a.payload?.r ?? a.payload?.spearman_r ?? 0);
+      const rb = Math.abs(b.payload?.r ?? b.payload?.spearman_r ?? 0);
+      return rb - ra;
+    }).slice(0, 50);
+    res.json({ count: filtered.length, findings: filtered });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/public-api/patterns/going-dark', async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const { data, error } = await sb
+      .from('miner_findings')
+      .select('id, category, payload, run_id, created_at')
+      .in('category', ['going_dark_event', 'going_dark_by_signal', 'going_dark_sequence', 'darkest_country', 'absence_as_signal'])
+      .order('created_at', { ascending: false })
+      .limit(300);
+    if (error) throw error;
+    res.json({ count: (data || []).length, findings: data || [] });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/public-api/patterns/lead-indicators', async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const { data, error } = await sb
+      .from('miner_findings')
+      .select('id, category, payload, run_id, created_at')
+      .in('category', ['lead_indicator', 'signal_to_score', 'compound_amplification', 'first_mover', 'conditional_probability'])
+      .order('created_at', { ascending: false })
+      .limit(500);
+    if (error) throw error;
+    const filtered = (data || []).filter(row => {
+      const p = row.payload || {};
+      const r = p.r ?? p.spearman_r ?? p.correlation ?? null;
+      const n = p.n ?? p.n_pairs ?? 0;
+      return r === null || (Math.abs(r) >= 0.4 && n >= 30);
+    }).slice(0, 200);
+    res.json({ count: filtered.length, findings: filtered });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/public-api/patterns/summary', async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const all = [];
+    const PAGE = 1000;
+    let from = 0;
+    while (true) {
+      const { data, error } = await sb
+        .from('miner_findings')
+        .select('category, run_id, created_at')
+        .order('created_at', { ascending: false })
+        .range(from, from + PAGE - 1);
+      if (error) throw error;
+      if (!data || !data.length) break;
+      all.push(...data);
+      if (data.length < PAGE) break;
+      from += PAGE;
+    }
+    const counts = {};
+    let latestRun = null;
+    let latestRunId = null;
+    for (const row of all) {
+      counts[row.category] = (counts[row.category] || 0) + 1;
+      if (!latestRun || row.created_at > latestRun) {
+        latestRun = row.created_at;
+        latestRunId = row.run_id;
+      }
+    }
+    res.json({ total: all.length, latest_run: latestRun, latest_run_id: latestRunId, by_category: counts });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/public-api/proof-seal', async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const { data, error } = await sb
+      .from('chain_anchors')
+      .select('id, anchor_date, anchor_hash, rfc3161_status, ots_status, ots_confirmed, created_at')
+      .order('anchor_date', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return res.json({ sealed: false, message: 'No anchor sealed yet' });
+    const ageDays = Math.floor((Date.now() - new Date(data.anchor_date).getTime()) / 86400000);
+    let status = 'GREEN';
+    if (ageDays > 14) status = 'RED';
+    else if (ageDays > 7) status = 'YELLOW';
+    res.json({
+      sealed: true,
+      anchor_id: data.id,
+      anchor_date: data.anchor_date,
+      anchor_hash: data.anchor_hash,
+      age_days: ageDays,
+      status,
+      rfc3161_status: data.rfc3161_status,
+      ots_status: data.ots_status,
+      ots_confirmed: data.ots_confirmed
+    });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+// ═══ END MINED PATTERNS ENDPOINTS ════════════════════════════════════════════
+
+cron.schedule('0 6 * * *', () => {
     console.log('[CRON] Daily global scan starting — 0600 UTC');
     logToHive({ source: 'sabian_api', level: 'intel', event: 'cron_scan_start', data: { time: new Date().toISOString() }, tags: ['cron'] });
     runGlobalScan(null, { save: true }).catch(err =>

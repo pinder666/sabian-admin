@@ -540,7 +540,7 @@
   <button class="tab-btn" data-view="ledger">Observation Ledger <span class="tab-label-num" id="tab-ledger-count"></span></button>
   <button class="tab-btn" data-view="freshness">Signal Freshness <span class="tab-label-num" id="tab-fresh-count"></span></button>
   <button class="tab-btn" data-view="heatmap">Signal Heatmap</button>
-  <button class="tab-btn" data-view="extraction">Extraction Intelligence</button>
+  <button class="tab-btn" data-view="patterns">Mined Patterns <span class="tab-label-num" id="tab-patterns-count"></span></button>
 </div>
 
 <main>
@@ -762,285 +762,41 @@
   </div>
 
   <!-- ── EXTRACTION INTELLIGENCE VIEW ─────────────────────────────────────── -->
-  <div class="view" id="view-extraction">
-
-    <!-- Locked state (shown when no valid buyer key) -->
-    <div id="extraction-locked" style="display:none">
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:1.5rem">
-        <div style="font-family:var(--mono);font-size:0.85rem;color:var(--dim);letter-spacing:0.1em">RESTRICTED INTELLIGENCE LAYER</div>
-        <div style="font-family:var(--mono);font-size:0.72rem;color:var(--dim);max-width:340px;text-align:center;line-height:1.8">This layer requires a buyer access key. Contact Sabian Holdings Ltd to request access.</div>
-        <input id="buyer-key-input" type="password" placeholder="Enter access key" style="background:var(--panel);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:0.8rem;padding:0.6rem 1rem;border-radius:4px;width:340px;outline:none">
-        <button onclick="checkBuyerKey()" style="background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:var(--mono);font-size:0.75rem;padding:0.5rem 2rem;border-radius:4px;cursor:pointer;letter-spacing:0.1em">AUTHENTICATE</button>
-        <div id="key-error" style="font-family:var(--mono);font-size:0.7rem;color:var(--critical);display:none">Invalid access key</div>
-      </div>
-    </div>
-
-    <!-- Unlocked content (shown when valid buyer key) -->
-    <div id="extraction-content">
-
-    <!-- Extraction Pattern Types -->
-    <div class="section-hdr">
-      <span class="section-title">Seven Extraction Patterns</span>
-      <span class="section-meta">Documented across 15 sovereign crises</span>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1.5rem">
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--critical);margin-bottom:4px">VULTURE PLAY</div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">Buy post-default at 10-30¢. Refuse restructuring. Litigate pari passu. Receive 100¢ after 5-15 years.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">Elliott/Aurelius — Argentina 1,270% return</div>
-      </div>
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:4px">INFRASTRUCTURE TRAP</div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">State lender positions during baseline. Crisis converts debt to strategic asset equity or long-term concession.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">China: Hambantota Port (99yr lease), Citgo pledge</div>
-      </div>
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--critical);margin-bottom:4px">INSIDER EXIT</div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">Connected elites convert local currency to dollars before capital controls. Public frozen.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">Lebanon: $4B moved by elites before controls — Oct 2019</div>
-      </div>
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:4px">CURRENCY ATTACK</div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">Short overvalued currency. Pressure central bank reserves. Profit on forced devaluation.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">Soros: $2B profit — Thailand/Asia 1997</div>
-      </div>
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:4px">OIL-FOR-LOAN TRAP</div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">Commodity loans priced at peak. Price crash forces 2-3× more commodity shipments for same repayment.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">Venezuela: Rosneft $6.5B at $100/bbl — then oil fell to $40</div>
-      </div>
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--dim);margin-bottom:4px">HIDDEN DEBT REVEAL</div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">Secret loans surface. IMF/World Bank freeze. Access lost. Collapse.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">Mozambique: $2B hidden — Credit Suisse fined $500M</div>
-      </div>
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--dim);margin-bottom:4px">CONDITIONALITY BACKFIRE</div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">IMF conditions (bank closures, subsidy cuts) accelerate panic, trigger riots, enable regime change.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">Indonesia: 16 bank closures → bank runs → Suharto fall</div>
-      </div>
-    </div>
-
-    <!-- Repeat Actors -->
-    <div class="section-hdr">
-      <span class="section-title">Systematic Extractors</span>
-      <span class="section-meta">Appear in 3+ crises — same playbook, different countries</span>
-    </div>
-    <table class="threat-table" style="margin-bottom:1.5rem">
-      <thead><tr>
-        <th>Actor</th><th>Type</th><th>Crises</th><th>Signature Move</th><th>Documented Return</th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td style="font-family:var(--mono);color:var(--bright)">Elliott Management / NML Capital</td>
-          <td><span class="badge badge-CRITICAL">Vulture</span></td>
-          <td>5+</td>
-          <td>Buy at 10–30¢, litigate pari passu for 100¢</td>
-          <td style="color:var(--critical)">1,270% (Argentina)</td>
-        </tr>
-        <tr>
-          <td style="font-family:var(--mono);color:var(--bright)">China CDB / Exim Bank</td>
-          <td><span class="badge badge-WARNING">State Lender</span></td>
-          <td>5+</td>
-          <td>Infrastructure loan → distress → equity/concession</td>
-          <td style="color:var(--warning)">99-yr ports, oil fields</td>
-        </tr>
-        <tr>
-          <td style="font-family:var(--mono);color:var(--bright)">Aurelius Capital Management</td>
-          <td><span class="badge badge-CRITICAL">Vulture</span></td>
-          <td>4+</td>
-          <td>Co-lead holdout with Elliott, repeat litigant</td>
-          <td style="color:var(--critical)">Part of $4.65B Argentina settlement</td>
-        </tr>
-        <tr>
-          <td style="font-family:var(--mono);color:var(--bright)">Greylock Capital Management</td>
-          <td><span class="badge badge-ELEVATED">Restructurer</span></td>
-          <td>6+</td>
-          <td>Leads bondholder committees in 50+ workouts</td>
-          <td style="color:var(--elevated)">Fees + positioned debt</td>
-        </tr>
-        <tr>
-          <td style="font-family:var(--mono);color:var(--bright)">BlackRock</td>
-          <td><span class="badge badge-STABLE">Institutional</span></td>
-          <td>4+</td>
-          <td>Large EM sovereign debt holder — participates in restructurings</td>
-          <td style="color:var(--dim)">Takes haircut, portfolio approach</td>
-        </tr>
-        <tr>
-          <td style="font-family:var(--mono);color:var(--bright)">Glencore</td>
-          <td><span class="badge badge-WARNING">Resource</span></td>
-          <td>3+</td>
-          <td>Acquires mining rights pre-crisis, exits with royalty stream</td>
-          <td style="color:var(--warning)">$1.5B + 3% gross revenue (Zambia)</td>
-        </tr>
-        <tr>
-          <td style="font-family:var(--mono);color:var(--bright)">Rosneft (Russian State)</td>
-          <td><span class="badge badge-WARNING">State Lender</span></td>
-          <td>2+</td>
-          <td>Emergency liquidity → strategic asset collateral</td>
-          <td style="color:var(--warning)">49.9% Citgo (Venezuela)</td>
-        </tr>
-        <tr>
-          <td style="font-family:var(--mono);color:var(--bright)">George Soros / Quantum Fund</td>
-          <td><span class="badge badge-CRITICAL">Currency</span></td>
-          <td>3+</td>
-          <td>Short overvalued currencies, attack reserves</td>
-          <td style="color:var(--critical)">$2B+ (UK+Asia)</td>
-        </tr>
-        <tr>
-          <td style="font-family:var(--mono);color:var(--bright)">Dart Management</td>
-          <td><span class="badge badge-CRITICAL">Vulture</span></td>
-          <td>2+</td>
-          <td>Buy at 60–70¢, holdout, receive 100¢</td>
-          <td style="color:var(--critical)">40–50% in months (Greece)</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Live Extraction Events -->
-    <div class="section-hdr">
-      <span class="section-title">Verified Extraction Events</span>
-      <span class="section-meta">Live from database — detected by signal signature</span>
-    </div>
-    <div id="extraction-events-wrap">
-      <div class="loading-msg">Authenticate to load extraction events...</div>
-    </div>
-
-    <!-- Counter-Cases: Countries That Broke the Pattern -->
-    <div class="section-hdr" style="margin-top:1.5rem">
-      <span class="section-title">Countries That Broke the Pattern</span>
-      <span class="section-meta">5 cases — same vulnerability, different outcome</span>
-    </div>
-    <div style="padding:1rem 1.25rem;background:rgba(0,184,212,0.04);border:1px solid rgba(0,184,212,0.2);border-radius:6px;margin-bottom:1rem">
-      <div style="font-size:0.82rem;color:var(--text);line-height:1.6;max-width:860px">
-        Five countries entered conditions identical to the extraction dataset and avoided systematic value transfer.
-        The same signals that preceded Argentina 2001, Greece 2012, and Venezuela 2017 were present in all five.
-        The escape came from <strong style="color:var(--accent)">specific structural actions, not better economic conditions.</strong>
-      </div>
-      <div style="margin-top:0.75rem;display:flex;gap:2rem;flex-wrap:wrap">
-        <div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--dim)">CASES DOCUMENTED</span><br><span style="font-family:var(--mono);font-size:1.4rem;color:var(--accent)">5</span></div>
-        <div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--dim)">ESCAPE PATTERNS</span><br><span style="font-family:var(--mono);font-size:1.4rem;color:var(--accent)">6</span></div>
-        <div><span style="font-family:var(--mono);font-size:0.68rem;color:var(--dim)">VULTURE LITIGATION</span><br><span style="font-family:var(--mono);font-size:1.4rem;color:var(--stable)">ZERO</span></div>
-      </div>
-    </div>
-
-    <!-- Five counter-case cards -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1.25rem">
-
-      <!-- South Korea 1997 -->
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--accent)">SOUTH KOREA 1997</div>
-          <div style="font-family:var(--mono);font-size:0.58rem;color:var(--stable);background:rgba(0,230,118,0.08);padding:2px 6px;border-radius:2px">SPEED + NO DEFAULT</div>
-        </div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">Currency attack, IMF required, banking system insolvent. Escaped via complete restructuring in 18 months — faster than accumulation could occur.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">IMF $57B, 18-month banking overhaul, no holdout litigation possible</div>
-      </div>
-
-      <!-- Malaysia 1998 -->
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--accent)">MALAYSIA 1998</div>
-          <div style="font-family:var(--mono);font-size:0.58rem;color:var(--stable);background:rgba(0,230,118,0.08);padding:2px 6px;border-radius:2px">CAPITAL CONTROLS</div>
-        </div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">Ringgit under attack, capital flight, stock market −75%. Rejected IMF. Pegged currency Sep 1, 1998. Blocked offshore ringgit trading — eliminated currency attack mechanism entirely.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">Same Sabian signals as Thailand/Indonesia. Single-day policy decision broke the pattern.</div>
-      </div>
-
-      <!-- Uruguay 2003 -->
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--accent)">URUGUAY 2003</div>
-          <div style="font-family:var(--mono);font-size:0.58rem;color:var(--stable);background:rgba(0,230,118,0.08);padding:2px 6px;border-radius:2px">CACs + VOLUNTARY</div>
-        </div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">Argentina contagion, GDP −11%, bank run. 93% participation in 3-month voluntary exchange. CACs bound the 7% holdouts — no pari passu veto, no Elliott play possible.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">Uruguay had identical signals to Argentina. Escape mechanism: contract law, not economics.</div>
-      </div>
-
-      <!-- Poland 1990s -->
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--accent)">POLAND 1994</div>
-          <div style="font-family:var(--mono);font-size:0.58rem;color:var(--stable);background:rgba(0,230,118,0.08);padding:2px 6px;border-radius:2px">CREDIBILITY ANCHOR</div>
-        </div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">$48.5B communist debt, 640% hyperinflation, GDP −9%. Brady Plan covered all commercial debt at once — no loose claims. EU accession path kept bonds above distressed pricing.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">Same signals as Russia 1998 (which produced massive extraction). EU anchor was the difference.</div>
-      </div>
-
-      <!-- Jamaica 2010/2013 -->
-      <div style="background:var(--panel);padding:1rem 1.25rem">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--accent)">JAMAICA 2010 / 2013</div>
-          <div style="font-family:var(--mono);font-size:0.58rem;color:var(--stable);background:rgba(0,230,118,0.08);padding:2px 6px;border-radius:2px">JURISDICTIONAL WALL</div>
-        </div>
-        <div style="font-size:0.8rem;color:var(--text);margin-bottom:6px;line-height:1.5">140% debt-to-GDP — worse than Greece when Greece was extracted. Two restructurings, zero vulture litigation. Debt was Jamaican law, held by Jamaican banks and pension funds. Elliott has no claim in Kingston.</div>
-        <div style="font-size:0.72rem;color:var(--dim);font-style:italic">JDX 99% participation (2010). NDX2 99.5% participation (2013). Zero external default.</div>
-      </div>
-
-    </div>
-
-    <!-- Six Escape Patterns -->
-    <div class="section-hdr">
-      <span class="section-title">Six Escape Patterns</span>
-      <span class="section-meta">Structural factors that break the extraction mechanism</span>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1.25rem">
-      <div style="background:var(--panel);padding:0.9rem 1.1rem">
-        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:4px">A — NO DEFAULT</div>
-        <div style="font-size:0.78rem;color:var(--text);line-height:1.5">Voluntary exchange while bonds still above 50¢. No default = no distressed entry price = no vulture play.</div>
-        <div style="font-size:0.68rem;color:var(--dim);margin-top:4px">Korea · Uruguay · Jamaica</div>
-      </div>
-      <div style="background:var(--panel);padding:0.9rem 1.1rem">
-        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:4px">B — SPEED</div>
-        <div style="font-size:0.78rem;color:var(--text);line-height:1.5">Restructuring with hard deadline + pre-committed majority completes before accumulation is possible.</div>
-        <div style="font-size:0.68rem;color:var(--dim);margin-top:4px">Korea (18 months) · Uruguay (3 months)</div>
-      </div>
-      <div style="background:var(--panel);padding:0.9rem 1.1rem">
-        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:4px">C — COLLECTIVE ACTION CLAUSES</div>
-        <div style="font-size:0.78rem;color:var(--text);line-height:1.5">CACs bind holdouts to majority votes. Eliminates the individual veto that makes the Elliott play work.</div>
-        <div style="font-size:0.68rem;color:var(--dim);margin-top:4px">Uruguay · Now in most new sovereign bonds post-2003</div>
-      </div>
-      <div style="background:var(--panel);padding:0.9rem 1.1rem">
-        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:4px">D — JURISDICTIONAL WALL</div>
-        <div style="font-size:0.78rem;color:var(--text);line-height:1.5">Domestic debt under domestic law, held domestically. No SDNY filing. No UK court. No international leverage.</div>
-        <div style="font-size:0.68rem;color:var(--dim);margin-top:4px">Jamaica — 140% debt-to-GDP, zero litigation</div>
-      </div>
-      <div style="background:var(--panel);padding:0.9rem 1.1rem">
-        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:4px">E — CAPITAL CONTROLS</div>
-        <div style="font-size:0.78rem;color:var(--text);line-height:1.5">Blocking capital movement eliminates the currency attack mechanism. Same event = crisis signal AND potential escape.</div>
-        <div style="font-size:0.68rem;color:var(--dim);margin-top:4px">Malaysia — Sep 1, 1998 peg announcement</div>
-      </div>
-      <div style="background:var(--panel);padding:0.9rem 1.1rem">
-        <div style="font-family:var(--mono);font-size:0.6rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:4px">F — CREDIBILITY ANCHOR</div>
-        <div style="font-size:0.78rem;color:var(--text);line-height:1.5">External institutional anchor (EU accession, regional integration) maintains bond prices above distressed levels and creates political durability for reform.</div>
-        <div style="font-size:0.68rem;color:var(--dim);margin-top:4px">Poland — EU accession path vs Russia (no anchor)</div>
-      </div>
-    </div>
-
-    <!-- Structural gap note -->
-    <div style="padding:0.9rem 1.1rem;background:rgba(255,200,0,0.04);border:1px solid rgba(255,200,0,0.15);border-radius:6px;margin-bottom:1.5rem">
-      <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:6px">CURRENT DATA GAP — STRUCTURAL OVERLAYS</div>
-      <div style="font-size:0.78rem;color:var(--dim);line-height:1.7">
-        Sabian reads vulnerability. It does not determine outcome. Two countries with identical signal profiles can produce opposite outcomes based on debt composition (domestic vs. external ratio, governing law), CAC presence in bond documentation, and institutional anchor strength.
-        Adding these structural overlays — from IMF Article IV reports and World Bank International Debt Statistics — upgrades the product from <em>diagnosis</em> to <em>diagnosis + prescription</em>.
-        This layer is in development.
-      </div>
-    </div>
-
-    <!-- Honest Limitations -->
-    <div style="padding:1rem 1.25rem;background:var(--panel);border:1px solid var(--border);border-radius:6px">
-      <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:0.5rem">METHODOLOGY NOTES</div>
-      <ul style="font-size:0.8rem;color:var(--dim);line-height:1.8;padding-left:1.2rem">
-        <li>Signal data is annual. Actor moves are quarterly. Precise lead time requires quarterly signal data (in development).</li>
-        <li>70% of gradual crises show 12-36 month Sabian lead. 30% (sudden attacks) show concurrent or limited advance signal.</li>
-        <li>All actor positions documented from public sources: SEC 13F filings, EITI, AidData BRI tracker, court records, regulatory filings.</li>
-        <li>Currency attack crises (Thailand, Russia) are hardest to lead — manufactured events, not organic deterioration.</li>
-        <li>This layer grows as 13F data is cross-referenced against live ELEVATED/CRITICAL countries in real time.</li>
-      </ul>
-    </div>
-
-    </div><!-- end extraction-content -->
+  <div class="view" id="view-patterns">
+  <div id="proof-seal-bar" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:6px;margin-bottom:1.5rem;font-family:var(--mono);font-size:0.72rem">
+    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--dim)" id="proof-seal-dot"></span>
+    <span style="color:var(--dim);letter-spacing:0.08em;text-transform:uppercase">Proof Chain</span>
+    <span id="proof-seal-status" style="color:var(--text)">checking…</span>
+    <span style="flex:1"></span>
+    <span id="proof-seal-meta" style="color:var(--dim);font-size:0.65rem"></span>
   </div>
+  <div class="status-bar" id="patterns-summary-bar">
+    <div class="stat-cell"><div class="stat-label">Findings</div><div class="stat-value" id="ps-total">—</div><div class="stat-sub">in this run</div></div>
+    <div class="stat-cell"><div class="stat-label">Unknown Unknowns</div><div class="stat-value critical" id="ps-unknown">—</div><div class="stat-sub">r ≥ 0.5, n ≥ 30</div></div>
+    <div class="stat-cell"><div class="stat-label">Going Dark</div><div class="stat-value warning" id="ps-dark">—</div><div class="stat-sub">signal silence events</div></div>
+    <div class="stat-cell"><div class="stat-label">Lead Indicators</div><div class="stat-value elevated" id="ps-lead">—</div><div class="stat-sub">precursor correlations</div></div>
+    <div class="stat-cell"><div class="stat-label">Latest Run</div><div class="stat-value" id="ps-run" style="font-size:0.9rem">—</div><div class="stat-sub">UTC</div></div>
+  </div>
+  <div class="section-hdr"><span class="section-title">Unknown Unknowns</span><span class="section-meta">Signal correlations the miner found blind</span></div>
+  <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">Pairs of signals that move together at strength r ≥ 0.5 across n ≥ 30 country-year observations. No analyst told the system to look for these — the miner ran a full lag-0 correlation sweep across all signal pairs and these surfaced above noise.</p>
+  <div id="unknown-unknowns-wrap"><div class="loading-msg">Loading unknown unknowns…</div></div>
+  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">Going Dark Events</span><span class="section-meta">Countries whose signals went silent for 2+ years — silence as a signal</span></div>
+  <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">A country's data stops appearing in normal feeds before something happens. The miner identifies multi-year windows where a signal flatlines, then measures score delta over the dark period. Large negative deltas signal undetected deterioration.</p>
+  <div id="going-dark-wrap"><div class="loading-msg">Loading going-dark events…</div></div>
+  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">Lead Indicators</span><span class="section-meta">Signal A at year T predicts Signal B at year T+lag</span></div>
+  <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">Lagged correlations across all signal pairs for lags 1–10 years. Where correlation strengthens at lag, signal A is treated as a precursor to signal B. The strongest — health crisis → refugee outflows at 4–8 year lag, r &gt; 0.83 — is a clear precursor chain.</p>
+  <div id="lead-indicators-wrap"><div class="loading-msg">Loading lead indicators…</div></div>
+  <div style="padding:1rem 1.25rem;background:var(--panel);border:1px solid var(--border);border-radius:6px;margin-top:2rem">
+    <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:0.5rem">Methodology</div>
+    <ul style="font-size:0.8rem;color:var(--dim);line-height:1.8;padding-left:1.2rem">
+      <li>Findings persist to a hash-chained miner_findings table. Every row is timestamped and sealed weekly into a Bitcoin OpenTimestamps proof anchor.</li>
+      <li>Correlations are Spearman rank, computed across all country-year pairs where both signals have data. Minimum n = 30 to surface.</li>
+      <li>Going-dark windows are 2+ consecutive years where a signal value held flat at baseline, with score delta measured dark-start vs dark-end.</li>
+      <li>Lead indicators sweep lags 1–10 years. Where correlation strengthens at lag, signal A is treated as a precursor.</li>
+      <li>The miner runs nightly. Every claim is provable from a row ID against a sealed anchor.</li>
+    </ul>
+  </div>
+</div>
 
 </main>
 
@@ -1901,6 +1657,131 @@ async function loadExtractionEvents() {
 }
 
 // ── BOOT ───────────────────────────────────────────────────────────────────
+
+// ═══ MINED PATTERNS LOADER ════════════════════════════════════════════════
+let patternsLoaded = false;
+
+async function loadPatterns() {
+  patternsLoaded = true;
+  const [sealRes, summaryRes, uuRes, gdRes, leadRes] = await Promise.allSettled([
+    apiFetch('/public-api/proof-seal'),
+    apiFetch('/public-api/patterns/summary'),
+    apiFetch('/public-api/patterns/unknown-unknowns'),
+    apiFetch('/public-api/patterns/going-dark'),
+    apiFetch('/public-api/patterns/lead-indicators')
+  ]);
+
+  if (sealRes.status === 'fulfilled' && sealRes.value.sealed) {
+    const s = sealRes.value;
+    const color = s.status === 'GREEN' ? 'var(--stable)' : s.status === 'YELLOW' ? 'var(--warning)' : 'var(--critical)';
+    document.getElementById('proof-seal-dot').style.background = color;
+    document.getElementById('proof-seal-dot').style.boxShadow = '0 0 8px ' + color;
+    document.getElementById('proof-seal-status').textContent = 'SEALED ' + s.anchor_date + ' · anchor #' + s.anchor_id + ' · ' + s.age_days + 'd ago';
+    document.getElementById('proof-seal-status').style.color = color;
+    document.getElementById('proof-seal-meta').textContent = 'OTS ' + (s.ots_status || 'pending') + ' · RFC3161 ' + (s.rfc3161_status || 'pending');
+  } else {
+    document.getElementById('proof-seal-dot').style.background = 'var(--critical)';
+    document.getElementById('proof-seal-status').textContent = 'NO ANCHOR — chain may have died';
+    document.getElementById('proof-seal-status').style.color = 'var(--critical)';
+  }
+
+  if (summaryRes.status === 'fulfilled') {
+    const s = summaryRes.value;
+    const c = s.by_category || {};
+    document.getElementById('ps-total').textContent = s.total != null ? s.total : '—';
+    document.getElementById('ps-unknown').textContent = (c.unknown_unknown || 0) + (c.signal_correlation || 0);
+    document.getElementById('ps-dark').textContent = (c.going_dark_event || 0) + (c.going_dark_by_signal || 0) + (c.going_dark_sequence || 0) + (c.darkest_country || 0);
+    document.getElementById('ps-lead').textContent = (c.lead_indicator || 0) + (c.signal_to_score || 0) + (c.compound_amplification || 0) + (c.first_mover || 0);
+    document.getElementById('ps-run').textContent = s.latest_run ? s.latest_run.slice(0, 16).replace('T', ' ') : '—';
+    document.getElementById('tab-patterns-count').textContent = '(' + (s.total || 0) + ')';
+  }
+
+  if (uuRes.status === 'fulfilled' && uuRes.value.findings) renderUnknownUnknowns(uuRes.value.findings);
+  else document.getElementById('unknown-unknowns-wrap').innerHTML = '<div class="error-msg">Failed to load.</div>';
+
+  if (gdRes.status === 'fulfilled' && gdRes.value.findings) renderGoingDark(gdRes.value.findings);
+  else document.getElementById('going-dark-wrap').innerHTML = '<div class="error-msg">Failed to load.</div>';
+
+  if (leadRes.status === 'fulfilled' && leadRes.value.findings) renderLeadIndicators(leadRes.value.findings);
+  else document.getElementById('lead-indicators-wrap').innerHTML = '<div class="error-msg">Failed to load.</div>';
+}
+
+function renderUnknownUnknowns(findings) {
+  if (!findings.length) { document.getElementById('unknown-unknowns-wrap').innerHTML = '<div class="loading-msg">None at current threshold.</div>'; return; }
+  let html = '<table class="threat-table"><thead><tr><th>#</th><th>Signal A</th><th>Signal B</th><th>r</th><th>n</th><th>Lag</th></tr></thead><tbody>';
+  findings.forEach((f, i) => {
+    const p = f.payload || {};
+    const r = p.r != null ? p.r : (p.spearman_r != null ? p.spearman_r : 0);
+    const absR = Math.abs(r);
+    const color = absR >= 0.8 ? 'var(--critical)' : absR >= 0.65 ? 'var(--warning)' : 'var(--elevated)';
+    const sigA = (p.sigA || p.signal_a || '').replace(/_/g, ' ');
+    const sigB = (p.sigB || p.signal_b || '').replace(/_/g, ' ');
+    html += '<tr><td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">' + (i+1) + '</td>'
+         + '<td><span class="country-name">' + sigA + '</span></td>'
+         + '<td><span class="country-name">' + sigB + '</span></td>'
+         + '<td><span class="score-num" style="color:' + color + '">' + r.toFixed(3) + '</span><div class="score-bar-wrap" style="margin-top:3px"><div class="score-bar"><div class="score-bar-fill" style="width:' + (absR*100) + '%;background:' + color + '"></div></div></div></td>'
+         + '<td style="font-family:var(--mono);font-size:0.82rem">' + (p.n || '—') + '</td>'
+         + '<td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">' + (p.lag === 0 ? 'same-year' : (p.lag || 0) + 'y') + '</td></tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('unknown-unknowns-wrap').innerHTML = html;
+}
+
+function renderGoingDark(findings) {
+  if (!findings.length) { document.getElementById('going-dark-wrap').innerHTML = '<div class="loading-msg">None surfaced.</div>'; return; }
+  const filtered = findings.filter(f => f.payload && (f.payload.darkYears || 0) >= 2).sort((a,b) => (a.payload.scoreDelta||0)-(b.payload.scoreDelta||0)).slice(0, 60);
+  let html = '<table class="threat-table"><thead><tr><th>#</th><th>Country</th><th>Signal</th><th>Dark Window</th><th>Years</th><th>Score Δ</th><th>Score at Return</th></tr></thead><tbody>';
+  filtered.forEach((f, i) => {
+    const p = f.payload || {};
+    const delta = p.scoreDelta || 0;
+    const dc = delta < -20 ? 'var(--critical)' : delta < -5 ? 'var(--warning)' : delta > 5 ? 'var(--stable)' : 'var(--dim)';
+    const sig = (p.signal || '').replace(/_/g, ' ');
+    html += '<tr><td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">' + (i+1) + '</td>'
+         + '<td><span class="country-name">' + (p.country || '—') + '</span></td>'
+         + '<td><span class="signal-chip">' + sig + '</span></td>'
+         + '<td style="font-family:var(--mono);font-size:0.78rem">' + p.darkStart + '—' + p.darkEnd + '</td>'
+         + '<td style="font-family:var(--mono);font-size:0.82rem;font-weight:700">' + p.darkYears + 'y</td>'
+         + '<td><span class="score-num" style="color:' + dc + '">' + (delta > 0 ? '+' : '') + delta.toFixed(1) + '</span></td>'
+         + '<td style="font-family:var(--mono);font-size:0.78rem">' + (p.scoreAtReturn || 0).toFixed(1) + '</td></tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('going-dark-wrap').innerHTML = html;
+}
+
+function renderLeadIndicators(findings) {
+  if (!findings.length) { document.getElementById('lead-indicators-wrap').innerHTML = '<div class="loading-msg">None surfaced.</div>'; return; }
+  const byPair = {};
+  findings.forEach(f => {
+    const p = f.payload || {};
+    const sigA = p.sigA || p.signal_a || p.signal;
+    const sigB = p.sigB || p.signal_b;
+    if (!sigA) return;
+    const key = sigB ? sigA + '|' + sigB : sigA;
+    const absR = Math.abs(p.r || 0);
+    if (!byPair[key] || absR > Math.abs(byPair[key].payload.r || 0)) byPair[key] = f;
+  });
+  const pairs = Object.values(byPair).filter(f => Math.abs(f.payload.r || 0) >= 0.4).sort((a,b) => Math.abs(b.payload.r||0)-Math.abs(a.payload.r||0)).slice(0, 40);
+  let html = '<table class="threat-table"><thead><tr><th>#</th><th>Predictor (Signal A)</th><th>Outcome (Signal B)</th><th>Best Lag</th><th>r</th><th>n</th></tr></thead><tbody>';
+  pairs.forEach((f, i) => {
+    const p = f.payload || {};
+    const r = p.r || 0;
+    const absR = Math.abs(r);
+    const color = absR >= 0.7 ? 'var(--critical)' : absR >= 0.5 ? 'var(--warning)' : 'var(--elevated)';
+    const sigA = (p.sigA || p.signal_a || p.signal || '').replace(/_/g, ' ');
+    const sigB = (p.sigB || p.signal_b || 'convergence score').replace(/_/g, ' ');
+    html += '<tr><td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">' + (i+1) + '</td>'
+         + '<td><span class="country-name">' + sigA + '</span></td>'
+         + '<td><span class="country-name">' + sigB + '</span></td>'
+         + '<td style="font-family:var(--mono);font-size:0.82rem;font-weight:700">' + (p.lag === 0 ? 'same-year' : (p.lag || 0) + 'y') + '</td>'
+         + '<td><span class="score-num" style="color:' + color + '">' + r.toFixed(3) + '</span><div class="score-bar-wrap" style="margin-top:3px"><div class="score-bar"><div class="score-bar-fill" style="width:' + (absR*100) + '%;background:' + color + '"></div></div></div></td>'
+         + '<td style="font-family:var(--mono);font-size:0.82rem">' + (p.n || '—') + '</td></tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('lead-indicators-wrap').innerHTML = html;
+}
+// ═══ END MINED PATTERNS LOADER ═══════════════════════════════════════════════
+
+
 loadThreats();
 </script>
 </body>
