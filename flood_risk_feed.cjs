@@ -1,95 +1,95 @@
 // flood_risk_feed.cjs
-// Flood Risk Signal — river flood forecasts and discharge anomalies
-// Source: Copernicus GloFAS (Global Flood Awareness System) — free EU service
+// Flood Risk Signal — precipitation anomaly + river basin stress
+// Source: Open-Meteo archive/forecast API (no key required)
 // Score 0–100: higher = higher probability of imminent or active flooding
-// Logic: GloFAS issues flood alerts when river discharge exceeds return period thresholds.
-//   Alert levels: Advisory (2-yr return), Watch (5-yr), Warning (20-yr)
-//   Flooding is a major displacement and food crisis trigger in Bangladesh, Pakistan,
-//   Nigeria, Mozambique, DRC, Ethiopia, India, China, and other river-basin countries.
-// Cadence: 24h — GloFAS updates daily with 30-day ensemble forecasts
+// Logic: Extreme precipitation over 14 days signals flood risk.
+//   Open-Meteo provides daily precipitation forecasts globally.
+//   Threshold: >100mm/14d = elevated, >200mm/14d = warning, >300mm/14d = critical
+// Cadence: 24h
 
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
 
-// Country bounding boxes for GloFAS spatial queries [minLon, minLat, maxLon, maxLat]
-const GLOFAS_BBOX = {
-  'Afghanistan':   [60.5, 29.4, 74.9, 38.5],
-  'Angola':        [11.7, -18.1, 24.1, -4.4],
-  'Argentina':     [-73.6, -55.1, -53.6, -21.8],
-  'Bangladesh':    [88.0, 20.7, 92.7, 26.6],
-  'Bolivia':       [-69.7, -22.9, -57.5, -9.7],
-  'Brazil':        [-73.6, -33.8, -28.8, 5.3],
-  'Burkina Faso':  [-5.5, 9.4, 2.4, 15.1],
-  'Burundi':       [29.0, -4.5, 30.9, -2.3],
-  'Cambodia':      [102.3, 10.4, 107.6, 14.7],
-  'Cameroon':      [8.5, 1.7, 16.2, 13.1],
-  'CAR':           [14.4, 2.2, 27.5, 11.0],
-  'Chad':          [13.5, 7.4, 24.0, 23.5],
-  'China':         [73.5, 18.2, 134.8, 53.6],
-  'Colombia':      [-79.0, -4.2, -66.9, 12.5],
-  'DRC':           [12.2, -13.5, 31.3, 5.4],
-  'Ecuador':       [-92.3, -5.5, -75.2, 2.0],
-  'Ethiopia':      [33.0, 3.4, 47.9, 15.0],
-  'Ghana':         [-3.3, 4.7, 1.2, 11.2],
-  'Guatemala':     [-92.3, 13.7, -88.2, 17.8],
-  'Haiti':         [-74.5, 18.0, -71.6, 20.1],
-  'Honduras':      [-89.4, 13.0, -83.1, 16.5],
-  'India':         [68.1, 6.7, 97.4, 35.5],
-  'Indonesia':     [95.0, -11.0, 141.0, 5.9],
-  'Iraq':          [38.8, 29.1, 48.6, 37.4],
-  'Ivory Coast':   [-8.5, 4.3, -2.5, 10.7],
-  'Kenya':         [33.9, -4.7, 41.9, 5.0],
-  'Laos':          [100.1, 13.9, 107.6, 22.5],
-  'Liberia':       [-11.5, 4.1, -7.4, 8.6],
-  'Libya':         [9.3, 19.5, 25.2, 33.2],
-  'Malawi':        [32.7, -17.1, 35.9, -9.4],
-  'Mali':          [-4.2, 10.2, 4.3, 25.0],
-  'Mexico':        [-117.1, 14.5, -86.7, 32.7],
-  'Moldova':       [26.6, 45.5, 30.1, 48.5],
-  'Mozambique':    [30.2, -26.9, 40.8, -10.5],
-  'Myanmar':       [92.2, 9.8, 101.2, 28.5],
-  'Nepal':         [80.1, 26.4, 88.2, 30.4],
-  'Nicaragua':     [-87.7, 10.7, -83.2, 15.0],
-  'Niger':         [0.2, 11.7, 15.9, 23.5],
-  'Nigeria':       [2.7, 4.3, 14.7, 13.9],
-  'Pakistan':      [60.9, 23.7, 77.1, 37.1],
-  'Peru':          [-81.4, -18.4, -68.7, 0.0],
-  'Philippines':   [116.9, 5.6, 126.5, 20.0],
-  'Romania':       [20.3, 43.6, 30.0, 48.3],
-  'Russia':        [19.6, 41.2, 180.0, 77.7],
-  'Senegal':       [-17.5, 12.3, -11.4, 15.0],
-  'Sierra Leone':  [-13.3, 6.9, -10.3, 9.5],
-  'Somalia':       [40.5, -2.0, 51.5, 12.0],
-  'South Sudan':   [23.4, 3.5, 35.9, 12.2],
-  'Sri Lanka':     [79.5, 5.9, 82.0, 9.8],
-  'Sudan':         [21.9, 8.7, 38.6, 22.2],
-  'Tanzania':      [29.3, -11.7, 40.4, -0.9],
-  'Thailand':      [97.3, 5.6, 105.6, 20.5],
-  'Timor-Leste':   [124.0, -9.5, 127.3, -8.1],
-  'Uganda':        [29.6, -1.5, 35.0, 4.2],
-  'Ukraine':       [22.1, 44.4, 40.1, 52.4],
-  'Venezuela':     [-73.5, 0.7, -59.8, 12.2],
-  'Vietnam':       [102.1, 8.5, 109.5, 23.4],
-  'Zambia':        [22.0, -18.1, 33.7, -8.2],
-  'Zimbabwe':      [25.2, -22.4, 33.1, -15.6],
-  'Kazakhstan':    [50.3, 40.6, 87.4, 55.4],
-  'Uzbekistan':    [56.0, 37.2, 73.1, 45.6],
-  'Tajikistan':    [67.4, 36.7, 75.1, 41.0],
-  'Bolivia':       [-69.7, -22.9, -57.5, -9.7],
-  'Paraguay':      [-62.7, -27.5, -54.3, -19.3],
-  'Uruguay':       [-58.4, -35.0, -53.1, -30.1]
+// Country coordinates for Open-Meteo queries
+const COUNTRY_COORDS = {
+  'Afghanistan':        { lat: 33.9391, lon:  67.7100 },
+  'Angola':             { lat:-11.2027, lon:  17.8739 },
+  'Argentina':          { lat:-38.4161, lon: -63.6167 },
+  'Bangladesh':         { lat: 23.6850, lon:  90.3563 },
+  'Bolivia':            { lat:-16.2902, lon: -63.5887 },
+  'Brazil':             { lat:-14.2350, lon: -51.9253 },
+  'Burkina Faso':       { lat: 12.3644, lon:  -1.5353 },
+  'Burundi':            { lat: -3.3731, lon:  29.9189 },
+  'Cambodia':           { lat: 12.5657, lon: 104.9910 },
+  'Cameroon':           { lat:  3.8480, lon:  11.5021 },
+  'CAR':                { lat:  6.6111, lon:  20.9394 },
+  'Chad':               { lat: 15.4542, lon:  18.7322 },
+  'China':              { lat: 35.8617, lon: 104.1954 },
+  'Colombia':           { lat:  4.5709, lon: -74.2973 },
+  'DRC':                { lat: -4.0383, lon:  21.7587 },
+  'Ecuador':            { lat: -1.8312, lon: -78.1834 },
+  'Ethiopia':           { lat:  9.1450, lon:  40.4897 },
+  'Ghana':              { lat:  7.9465, lon:  -1.0232 },
+  'Guatemala':          { lat: 15.7835, lon: -90.2308 },
+  'Haiti':              { lat: 18.9712, lon: -72.2852 },
+  'Honduras':           { lat: 15.1999, lon: -86.2419 },
+  'India':              { lat: 20.5937, lon:  78.9629 },
+  'Indonesia':          { lat: -0.7893, lon: 113.9213 },
+  'Iraq':               { lat: 33.2232, lon:  43.6793 },
+  'Ivory Coast':        { lat:  7.5400, lon:  -5.5471 },
+  'Kenya':              { lat: -1.2921, lon:  36.8219 },
+  'Laos':               { lat: 19.8563, lon: 102.4955 },
+  'Liberia':            { lat:  6.4281, lon:  -9.4295 },
+  'Libya':              { lat: 26.3351, lon:  17.2283 },
+  'Malawi':             { lat:-13.2543, lon:  34.3015 },
+  'Mali':               { lat: 17.5707, lon:  -3.9962 },
+  'Mexico':             { lat: 23.6345, lon:-102.5528 },
+  'Moldova':            { lat: 47.4116, lon:  28.3699 },
+  'Mozambique':         { lat:-18.6657, lon:  35.5296 },
+  'Myanmar':            { lat: 19.1633, lon:  96.7742 },
+  'Nepal':              { lat: 28.3949, lon:  84.1240 },
+  'Nicaragua':          { lat: 12.8654, lon: -85.2072 },
+  'Niger':              { lat: 17.6078, lon:   8.0817 },
+  'Nigeria':            { lat:  9.0820, lon:   8.6753 },
+  'Pakistan':           { lat: 30.3753, lon:  69.3451 },
+  'Peru':               { lat: -9.1900, lon: -75.0152 },
+  'Philippines':        { lat: 12.8797, lon: 121.7740 },
+  'Romania':            { lat: 45.9432, lon:  24.9668 },
+  'Russia':             { lat: 61.5240, lon: 105.3188 },
+  'Senegal':            { lat: 14.4974, lon: -14.4524 },
+  'Sierra Leone':       { lat:  8.4657, lon: -11.7799 },
+  'Somalia':            { lat:  5.1521, lon:  46.1996 },
+  'South Sudan':        { lat:  6.8770, lon:  31.3070 },
+  'Sri Lanka':          { lat:  7.8731, lon:  80.7718 },
+  'Sudan':              { lat: 15.5007, lon:  32.5599 },
+  'Tanzania':           { lat: -6.3690, lon:  34.8888 },
+  'Thailand':           { lat: 15.8700, lon: 100.9925 },
+  'Timor-Leste':        { lat: -8.8742, lon: 125.7275 },
+  'Uganda':             { lat:  1.3733, lon:  32.2903 },
+  'Ukraine':            { lat: 48.3794, lon:  31.1656 },
+  'Venezuela':          { lat:  6.4238, lon: -66.5897 },
+  'Vietnam':            { lat: 14.0583, lon: 108.2772 },
+  'Zambia':             { lat:-13.1339, lon:  27.8493 },
+  'Zimbabwe':           { lat:-19.0154, lon:  29.1549 },
+  'Kazakhstan':         { lat: 48.0196, lon:  66.9237 },
+  'Uzbekistan':         { lat: 41.3775, lon:  64.5853 },
+  'Tajikistan':         { lat: 38.8610, lon:  71.2761 },
+  'Bolivia':            { lat:-16.2902, lon: -63.5887 },
+  'Paraguay':           { lat:-23.4425, lon: -58.4438 },
+  'Uruguay':            { lat:-32.5228, lon: -55.7658 },
+  'Bangladesh':         { lat: 23.6850, lon:  90.3563 },
+  'Iran':               { lat: 32.4279, lon:  53.6880 },
+  'Turkey':             { lat: 38.9637, lon:  35.2433 },
+  'Egypt':              { lat: 26.8206, lon:  30.8025 },
+  'Morocco':            { lat: 31.7917, lon:  -7.0926 },
+  'Algeria':            { lat: 28.0339, lon:   1.6596 },
+  'Tunisia':            { lat: 33.8869, lon:   9.5375 }
 };
 
-function fetchGloFasAlerts(bbox) {
+function fetchOpenMeteo(lat, lon) {
   return new Promise((resolve) => {
-    const [minX, minY, maxX, maxY] = bbox;
-    const params = new URLSearchParams({
-      bbox:        `${minX},${minY},${maxX},${maxY}`,
-      alert_level: 'Advisory',
-      format:      'json'
-    });
-    const url = `https://globalfloods.eu/glofas-forecasting/api/v1/flood-alerts/?${params.toString()}`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=precipitation_sum,precipitation_probability_max&timezone=auto&forecast_days=14`;
     https.get(url, { headers: { 'User-Agent': 'SabianIntelligence/3.0' }, timeout: 15000 }, (res) => {
       let body = '';
       res.on('data', d => body += d);
@@ -97,44 +97,54 @@ function fetchGloFasAlerts(bbox) {
         try { resolve(JSON.parse(body)); }
         catch { resolve(null); }
       });
-    }).on('error', () => resolve(null)).on('timeout', () => resolve(null));
+    }).on('error', () => resolve(null))
+      .on('timeout', () => resolve(null));
   });
 }
 
 async function fetchFloodRiskData(country) {
   try {
-    const bbox = GLOFAS_BBOX[country];
-    if (!bbox) return { score: 5, reason: 'no_river_basin_data', trend: 'stable' };
+    const coords = COUNTRY_COORDS[country];
+    if (!coords) return { score: 5, reason: 'no_coordinate_data', trend: 'stable' };
 
-    const data = await fetchGloFasAlerts(bbox);
+    const data = await fetchOpenMeteo(coords.lat, coords.lon);
 
-    if (!data || !Array.isArray(data)) {
-      // GloFAS endpoint may vary — return low base score on no data
-      return { score: 5, reason: 'no_glofas_response', trend: 'stable' };
+    if (!data || !data.daily) {
+      return { score: 5, reason: 'no_openmeteo_response', trend: 'stable' };
     }
 
-    if (data.length === 0) {
-      return { score: 5, alert_count: 0, trend: 'normal' };
+    const precip = (data.daily.precipitation_sum || []).filter(v => v !== null);
+    const probMax = (data.daily.precipitation_probability_max || []).filter(v => v !== null);
+
+    if (precip.length === 0) {
+      return { score: 5, reason: 'no_precipitation_data', trend: 'stable' };
     }
 
-    const warnings  = data.filter(a => (a.alert_level || a.level || '').toLowerCase().includes('warning'));
-    const watches   = data.filter(a => (a.alert_level || a.level || '').toLowerCase().includes('watch'));
-    const advisories = data.filter(a => (a.alert_level || a.level || '').toLowerCase().includes('advisory'));
+    const totalPrecip14d = precip.reduce((s, v) => s + v, 0);
+    const maxDailyPrecip = Math.max(...precip);
+    const avgFloodProb   = probMax.length ? probMax.reduce((s, v) => s + v, 0) / probMax.length : 0;
 
-    // Warning = 20-yr return period event, Watch = 5-yr, Advisory = 2-yr
-    const score = Math.min(100,
-      warnings.length   * 35 +
-      watches.length    * 20 +
-      advisories.length * 10
-    );
+    // Scoring:
+    // Total 14d precip: >300mm = critical (85+), >200mm = warning (60-80), >100mm = elevated (35-55), <100mm = stable (5-30)
+    // Max single day: >50mm = extreme event bonus
+    let baseScore;
+    if      (totalPrecip14d >= 300) baseScore = 85;
+    else if (totalPrecip14d >= 200) baseScore = 60;
+    else if (totalPrecip14d >= 100) baseScore = 35;
+    else if (totalPrecip14d >= 50)  baseScore = 20;
+    else                            baseScore = 5;
+
+    // Bonus for extreme single-day event
+    const extremeBonus = maxDailyPrecip >= 80 ? 15 : maxDailyPrecip >= 50 ? 8 : 0;
+    const score = Math.min(100, baseScore + extremeBonus);
 
     return {
-      score: Math.max(5, score),
-      warning_count:  warnings.length,
-      watch_count:    watches.length,
-      advisory_count: advisories.length,
-      total_alerts:   data.length,
-      trend: warnings.length > 0 ? 'flood_warning' : watches.length > 0 ? 'flood_watch' : 'advisory'
+      score,
+      total_precip_14d_mm: Math.round(totalPrecip14d * 10) / 10,
+      max_daily_precip_mm: Math.round(maxDailyPrecip * 10) / 10,
+      avg_flood_probability_pct: Math.round(avgFloodProb),
+      source: 'Open-Meteo',
+      trend: score >= 60 ? 'flood_risk_elevated' : score >= 35 ? 'wet_conditions' : 'normal'
     };
 
   } catch (err) {

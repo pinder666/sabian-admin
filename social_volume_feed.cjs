@@ -1,22 +1,21 @@
 // social_volume_feed.cjs
 // Social Volume Signal — open social firehose volume anomaly detection
-// Source: Bluesky Jetstream (public WebSocket firehose — no API key required)
+// Source: Twitter/X API v2 recent search (TWITTER_BEARER_TOKEN)
 // Score 0–100: higher = abnormal spike in social volume about this country
 // Logic: Social volume spikes precede verified conflict reports by 2–6 hours.
-//   Bluesky Jetstream is the only remaining open social firehose after Twitter API lockdown.
-//   We sample a time window, count country mentions, and compare to rolling baseline.
 // Cadence: 6h — sample-based, not continuous
 
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
 
+const TWITTER_BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
+
 // Country mention keywords — primary terms that identify the country in short text
-// Deliberately conservative to reduce false positives
 const COUNTRY_KEYWORDS = {
   'Russia': ['russia', 'russian', 'moscow', 'putin', 'kremlin'],
-  'Ukraine': ['ukraine', 'ukrainian', 'kyiv', 'zelensky', 'kharkiv', 'zaporizhzhia'],
-  'China': ['china', 'chinese', 'beijing', 'xi jinping', 'prc', 'taiwan strait'],
+  'Ukraine': ['ukraine', 'ukrainian', 'kyiv', 'zelensky', 'kharkiv'],
+  'China': ['china', 'chinese', 'beijing', 'xi jinping', 'prc'],
   'Iran': ['iran', 'iranian', 'tehran', 'irgc', 'khamenei'],
   'Israel': ['israel', 'israeli', 'idf', 'tel aviv', 'netanyahu', 'hamas', 'gaza'],
   'North Korea': ['north korea', 'dprk', 'kim jong', 'pyongyang'],
@@ -48,22 +47,27 @@ const COUNTRY_KEYWORDS = {
   'Georgia': ['georgia crisis', 'tbilisi protest', 'georgian opposition']
 };
 
-// Bluesky public search API (no auth required for recent posts)
-function fetchBlueSkyMentions(keywords) {
+function fetchTwitterSearch(query) {
   return new Promise((resolve) => {
-    const q = encodeURIComponent(keywords.slice(0, 2).join(' OR '));
-    const url = `https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=${q}&limit=100&sort=latest`;
-    https.get(url, {
-      headers: { 'User-Agent': 'SabianIntelligence/3.0' },
+    if (!TWITTER_BEARER_TOKEN) return resolve(null);
+    const q = encodeURIComponent(`(${query}) lang:en -is:retweet`);
+    const url = `https://api.twitter.com/2/tweets/search/recent?query=${q}&max_results=100&tweet.fields=public_metrics`;
+    const options = {
+      headers: {
+        'Authorization': `Bearer ${TWITTER_BEARER_TOKEN}`,
+        'User-Agent': 'SabianIntelligence/3.0'
+      },
       timeout: 12000
-    }, (res) => {
+    };
+    https.get(url, options, (res) => {
       let body = '';
       res.on('data', d => body += d);
       res.on('end', () => {
-        try { resolve(JSON.parse(body)); }
+        try { resolve({ status: res.statusCode, data: JSON.parse(body) }); }
         catch { resolve(null); }
       });
-    }).on('error', () => resolve(null)).on('timeout', () => resolve(null));
+    }).on('error', () => resolve(null))
+      .on('timeout', () => resolve(null));
   });
 }
 
@@ -72,34 +76,40 @@ async function fetchSocialVolumeData(country) {
     const keywords = COUNTRY_KEYWORDS[country];
     if (!keywords) return { score: 5, reason: 'no_keyword_data', trend: 'stable' };
 
-    const result = await fetchBlueSkyMentions(keywords);
-
-    if (!result || !result.posts) {
-      return { score: 5, reason: 'no_bluesky_response', trend: 'stable' };
+    if (!TWITTER_BEARER_TOKEN) {
+      return { score: null, reason: 'no_twitter_bearer_token', trend: 'unknown' };
     }
 
-    const posts = result.posts || [];
-    const count = posts.length;
+    const query = keywords.slice(0, 3).join(' OR ');
+    const result = await fetchTwitterSearch(query);
 
-    // Engagement weighting — posts with replies/reposts/likes signal amplified attention
+    if (!result || result.status !== 200 || !result.data?.data) {
+      // Rate limited or no results
+      if (result?.status === 429) {
+        return { score: null, reason: 'twitter_rate_limited', trend: 'unknown' };
+      }
+      return { score: 5, reason: 'no_twitter_results', trend: 'stable' };
+    }
+
+    const tweets = result.data.data || [];
+    const count = tweets.length;
+
+    // Engagement weighting
     let engagementScore = 0;
-    for (const post of posts) {
-      const replies  = post.replyCount  || 0;
-      const reposts  = post.repostCount || 0;
-      const likes    = post.likeCount   || 0;
-      engagementScore += Math.min(5, Math.log1p(replies + reposts + likes));
+    for (const tweet of tweets) {
+      const m = tweet.public_metrics || {};
+      const engagement = (m.reply_count || 0) + (m.retweet_count || 0) + (m.like_count || 0);
+      engagementScore += Math.min(5, Math.log1p(engagement));
     }
 
-    // Raw volume score: 100 posts in query window = signal
     const volumeScore  = Math.min(60, Math.round((count / 100) * 60));
     const engBonus     = Math.min(40, Math.round(engagementScore));
-
-    const score = Math.min(100, volumeScore + engBonus);
+    const score        = Math.min(100, volumeScore + engBonus);
 
     return {
       score,
       post_count_sample: count,
-      source: 'Bluesky_public_API',
+      source: 'Twitter_API_v2',
       trend: score >= 65 ? 'viral_spike' : score >= 35 ? 'elevated_mention' : 'normal'
     };
 
