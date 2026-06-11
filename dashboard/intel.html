@@ -1143,7 +1143,7 @@ function renderThreatsTable(rows) {
     const top3 = c.top_3_signals || [];
     const chips = top3.map(s => `<span class="signal-chip" title="${sigDesc(s.name)}">${sigDisplay(s.name)}</span>`).join('');
     const cached = historyCache[c.country];
-    const sparkCellId = 'spark-cell-' + i;
+    const sparkCellId = 'spark-cell-' + c.country.replace(/[^a-zA-Z0-9]/g, '_');
     const sparkHtml = (cached && cached.length >= 2)
       ? makeSparkSVG(cached, 100, 28, c.risk_level)
       : `<span class="spark-no-data">…</span>`;
@@ -1180,7 +1180,7 @@ function renderThreatsTable(rows) {
   // Fill sparklines: fetch history for each visible country (cached after first load),
   // then redraw its spark cell in place. Concurrency-limited so we don't hammer the API.
   (async () => {
-    const queue = rows.map((c, i) => ({ country: c.country, level: c.risk_level, cellId: 'spark-cell-' + i }));
+    const queue = rows.map((c, i) => ({ country: c.country, level: c.risk_level, cellId: 'spark-cell-' + c.country.replace(/[^a-zA-Z0-9]/g, '_') }));
     const CONCURRENCY = 6;
     let idx = 0;
     async function worker() {
