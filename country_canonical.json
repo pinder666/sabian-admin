@@ -1,0 +1,1072 @@
+{
+  "Abkhazia": {
+    "canonical": "Abkhazia",
+    "defunct": false,
+    "last_year": 2019
+  },
+  "Afghanistan": {
+    "canonical": "Afghanistan",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Albania": {
+    "canonical": "Albania",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Algeria": {
+    "canonical": "Algeria",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Andorra": {
+    "canonical": "Andorra",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Angola": {
+    "canonical": "Angola",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Antigua & Barbuda": {
+    "canonical": "Antigua & Barbuda",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Argentina": {
+    "canonical": "Argentina",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Armenia": {
+    "canonical": "Armenia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Australia": {
+    "canonical": "Australia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Austria": {
+    "canonical": "Austria",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Azerbaijan": {
+    "canonical": "Azerbaijan",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Bahamas": {
+    "canonical": "Bahamas",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Bahrain": {
+    "canonical": "Bahrain",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Bangladesh": {
+    "canonical": "Bangladesh",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Barbados": {
+    "canonical": "Barbados",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Belarus": {
+    "canonical": "Belarus",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Belgium": {
+    "canonical": "Belgium",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Belize": {
+    "canonical": "Belize",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Benin": {
+    "canonical": "Benin",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Bhutan": {
+    "canonical": "Bhutan",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Bolivia": {
+    "canonical": "Bolivia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Bosnia": {
+    "canonical": "Bosnia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Botswana": {
+    "canonical": "Botswana",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Brazil": {
+    "canonical": "Brazil",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Brunei": {
+    "canonical": "Brunei",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Bulgaria": {
+    "canonical": "Bulgaria",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Burkina Faso": {
+    "canonical": "Burkina Faso",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Burundi": {
+    "canonical": "Burundi",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Cambodia": {
+    "canonical": "Cambodia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Cameroon": {
+    "canonical": "Cameroon",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Canada": {
+    "canonical": "Canada",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Cape Verde": {
+    "canonical": "Cape Verde",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "CAR": {
+    "canonical": "CAR",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Chad": {
+    "canonical": "Chad",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Chile": {
+    "canonical": "Chile",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "China": {
+    "canonical": "China",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Colombia": {
+    "canonical": "Colombia",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Comoros": {
+    "canonical": "Comoros",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Congo": {
+    "canonical": "Congo",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Costa Rica": {
+    "canonical": "Costa Rica",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Côte d ́Ivoire": {
+    "canonical": "Ivory Coast",
+    "defunct": false,
+    "last_year": 2010
+  },
+  "Côte d’Ivoire": {
+    "canonical": "Ivory Coast",
+    "defunct": false,
+    "last_year": 2016
+  },
+  "Croatia": {
+    "canonical": "Croatia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Cuba": {
+    "canonical": "Cuba",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Cyprus": {
+    "canonical": "Cyprus",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Czech Republic": {
+    "canonical": "Czech Republic",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Czechoslovakia": {
+    "canonical": "Czechoslovakia",
+    "defunct": true,
+    "last_year": 1992
+  },
+  "Democratic Republic of Vietnam": {
+    "canonical": "Democratic Republic of Vietnam",
+    "defunct": false,
+    "last_year": 2016
+  },
+  "Denmark": {
+    "canonical": "Denmark",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Djibouti": {
+    "canonical": "Djibouti",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Dominica": {
+    "canonical": "Dominica",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Dominican Republic": {
+    "canonical": "Dominican Republic",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "DRC": {
+    "canonical": "DRC",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "East Germany": {
+    "canonical": "East Germany",
+    "defunct": true,
+    "last_year": 1990
+  },
+  "Ecuador": {
+    "canonical": "Ecuador",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Egypt": {
+    "canonical": "Egypt",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "El Salvador": {
+    "canonical": "El Salvador",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Equatorial Guinea": {
+    "canonical": "Equatorial Guinea",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Eritrea": {
+    "canonical": "Eritrea",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Estonia": {
+    "canonical": "Estonia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Eswatini": {
+    "canonical": "Eswatini",
+    "defunct": false,
+    "last_year": 2025
+  },
+  "Ethiopia": {
+    "canonical": "Ethiopia",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Federated States of Micronesia": {
+    "canonical": "Federated States of Micronesia",
+    "defunct": false,
+    "last_year": 2019
+  },
+  "Fiji": {
+    "canonical": "Fiji",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Finland": {
+    "canonical": "Finland",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "France": {
+    "canonical": "France",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Gabon": {
+    "canonical": "Gabon",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Gambia": {
+    "canonical": "Gambia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Georgia": {
+    "canonical": "Georgia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "German Federal Republic": {
+    "canonical": "German Federal Republic",
+    "defunct": false,
+    "last_year": 2017
+  },
+  "Germany": {
+    "canonical": "Germany",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Ghana": {
+    "canonical": "Ghana",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Greece": {
+    "canonical": "Greece",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Grenada": {
+    "canonical": "Grenada",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Guatemala": {
+    "canonical": "Guatemala",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Guinea": {
+    "canonical": "Guinea",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Guinea-Bissau": {
+    "canonical": "Guinea-Bissau",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Guyana": {
+    "canonical": "Guyana",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Haiti": {
+    "canonical": "Haiti",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Honduras": {
+    "canonical": "Honduras",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Hong Kong": {
+    "canonical": "Hong Kong",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Hungary": {
+    "canonical": "Hungary",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Iceland": {
+    "canonical": "Iceland",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "India": {
+    "canonical": "India",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Indonesia": {
+    "canonical": "Indonesia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Iran": {
+    "canonical": "Iran",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Iraq": {
+    "canonical": "Iraq",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Ireland": {
+    "canonical": "Ireland",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Israel": {
+    "canonical": "Israel",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Italy": {
+    "canonical": "Italy",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Ivory Coast": {
+    "canonical": "Ivory Coast",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Jamaica": {
+    "canonical": "Jamaica",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Japan": {
+    "canonical": "Japan",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Jordan": {
+    "canonical": "Jordan",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Kazakhstan": {
+    "canonical": "Kazakhstan",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Kenya": {
+    "canonical": "Kenya",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Kiribati": {
+    "canonical": "Kiribati",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Kosovo": {
+    "canonical": "Kosovo",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Kuwait": {
+    "canonical": "Kuwait",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Kyrgyzstan": {
+    "canonical": "Kyrgyzstan",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Laos": {
+    "canonical": "Laos",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Latvia": {
+    "canonical": "Latvia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Lebanon": {
+    "canonical": "Lebanon",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Lesotho": {
+    "canonical": "Lesotho",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Liberia": {
+    "canonical": "Liberia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Libya": {
+    "canonical": "Libya",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Liechtenstein": {
+    "canonical": "Liechtenstein",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Lithuania": {
+    "canonical": "Lithuania",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Luxembourg": {
+    "canonical": "Luxembourg",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Macau": {
+    "canonical": "Macau",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Madagascar": {
+    "canonical": "Madagascar",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Malawi": {
+    "canonical": "Malawi",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Malaysia": {
+    "canonical": "Malaysia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Maldives": {
+    "canonical": "Maldives",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Mali": {
+    "canonical": "Mali",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Malta": {
+    "canonical": "Malta",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Marshall Islands": {
+    "canonical": "Marshall Islands",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Mauritania": {
+    "canonical": "Mauritania",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Mauritius": {
+    "canonical": "Mauritius",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Mexico": {
+    "canonical": "Mexico",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Micronesia": {
+    "canonical": "Micronesia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Moldova": {
+    "canonical": "Moldova",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Monaco": {
+    "canonical": "Monaco",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Mongolia": {
+    "canonical": "Mongolia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Montenegro": {
+    "canonical": "Montenegro",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Morocco": {
+    "canonical": "Morocco",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Mozambique": {
+    "canonical": "Mozambique",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Myanmar": {
+    "canonical": "Myanmar",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Namibia": {
+    "canonical": "Namibia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Nauru": {
+    "canonical": "Nauru",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Nepal": {
+    "canonical": "Nepal",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Netherlands": {
+    "canonical": "Netherlands",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "New Zealand": {
+    "canonical": "New Zealand",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Nicaragua": {
+    "canonical": "Nicaragua",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Niger": {
+    "canonical": "Niger",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Nigeria": {
+    "canonical": "Nigeria",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "North Korea": {
+    "canonical": "North Korea",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "North Macedonia": {
+    "canonical": "North Macedonia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Norway": {
+    "canonical": "Norway",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Oman": {
+    "canonical": "Oman",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Pakistan": {
+    "canonical": "Pakistan",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Palau": {
+    "canonical": "Palau",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Palestine": {
+    "canonical": "Palestine",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Panama": {
+    "canonical": "Panama",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Papua New Guinea": {
+    "canonical": "Papua New Guinea",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Paraguay": {
+    "canonical": "Paraguay",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Peru": {
+    "canonical": "Peru",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Philippines": {
+    "canonical": "Philippines",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Poland": {
+    "canonical": "Poland",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Portugal": {
+    "canonical": "Portugal",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Puerto Rico": {
+    "canonical": "Puerto Rico",
+    "defunct": true,
+    "last_year": 2014
+  },
+  "Qatar": {
+    "canonical": "Qatar",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Republic of Vietnam": {
+    "canonical": "Republic of Vietnam",
+    "defunct": true,
+    "last_year": 1973
+  },
+  "Romania": {
+    "canonical": "Romania",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Russia": {
+    "canonical": "Russia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Russia (Soviet Union)": {
+    "canonical": "Russia (Soviet Union)",
+    "defunct": false,
+    "last_year": 2018
+  },
+  "Rwanda": {
+    "canonical": "Rwanda",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Samoa": {
+    "canonical": "Samoa",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "San Marino": {
+    "canonical": "San Marino",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Sao Tome and Principe": {
+    "canonical": "Sao Tome and Principe",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Saudi Arabia": {
+    "canonical": "Saudi Arabia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Senegal": {
+    "canonical": "Senegal",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Serbia": {
+    "canonical": "Serbia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Seychelles": {
+    "canonical": "Seychelles",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Sierra Leone": {
+    "canonical": "Sierra Leone",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Singapore": {
+    "canonical": "Singapore",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Slovakia": {
+    "canonical": "Slovakia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Slovenia": {
+    "canonical": "Slovenia",
+    "defunct": false,
+    "last_year": 2025
+  },
+  "Solomon Islands": {
+    "canonical": "Solomon Islands",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Somalia": {
+    "canonical": "Somalia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "South Africa": {
+    "canonical": "South Africa",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "South Korea": {
+    "canonical": "South Korea",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "South Ossetia": {
+    "canonical": "South Ossetia",
+    "defunct": false,
+    "last_year": 2019
+  },
+  "South Sudan": {
+    "canonical": "South Sudan",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "South Yemen": {
+    "canonical": "South Yemen",
+    "defunct": true,
+    "last_year": 1986
+  },
+  "Spain": {
+    "canonical": "Spain",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Sri Lanka": {
+    "canonical": "Sri Lanka",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "St. Kitts and Nevis": {
+    "canonical": "St. Kitts and Nevis",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "St. Lucia": {
+    "canonical": "St. Lucia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "St. Vincent": {
+    "canonical": "St. Vincent",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "St. Vincent and the Grenadines": {
+    "canonical": "St. Vincent and the Grenadines",
+    "defunct": false,
+    "last_year": 2025
+  },
+  "Sudan": {
+    "canonical": "Sudan",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Suriname": {
+    "canonical": "Suriname",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Sweden": {
+    "canonical": "Sweden",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Switzerland": {
+    "canonical": "Switzerland",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Syria": {
+    "canonical": "Syria",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Taiwan": {
+    "canonical": "Taiwan",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Tajikistan": {
+    "canonical": "Tajikistan",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Tanzania": {
+    "canonical": "Tanzania",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Thailand": {
+    "canonical": "Thailand",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Timor-Leste": {
+    "canonical": "Timor-Leste",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Togo": {
+    "canonical": "Togo",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Tonga": {
+    "canonical": "Tonga",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Trinidad and Tobago": {
+    "canonical": "Trinidad and Tobago",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Tunisia": {
+    "canonical": "Tunisia",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "Turkey": {
+    "canonical": "Turkey",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Turkmenistan": {
+    "canonical": "Turkmenistan",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Tuvalu": {
+    "canonical": "Tuvalu",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "UAE": {
+    "canonical": "UAE",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Uganda": {
+    "canonical": "Uganda",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "UK": {
+    "canonical": "UK",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Ukraine": {
+    "canonical": "Ukraine",
+    "defunct": false,
+    "last_year": 2031
+  },
+  "United States": {
+    "canonical": "United States",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Uruguay": {
+    "canonical": "Uruguay",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Uzbekistan": {
+    "canonical": "Uzbekistan",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Vanuatu": {
+    "canonical": "Vanuatu",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Vatican": {
+    "canonical": "Vatican",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Venezuela": {
+    "canonical": "Venezuela",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Vietnam": {
+    "canonical": "Vietnam",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Yemen": {
+    "canonical": "Yemen",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Yugoslavia": {
+    "canonical": "Yugoslavia",
+    "defunct": true,
+    "last_year": 2000
+  },
+  "Zambia": {
+    "canonical": "Zambia",
+    "defunct": false,
+    "last_year": 2026
+  },
+  "Zimbabwe": {
+    "canonical": "Zimbabwe",
+    "defunct": false,
+    "last_year": 2031
+  }
+}

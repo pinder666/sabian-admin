@@ -2,6 +2,37 @@
 // FIXED: getLatestScores reads historical_convergence_scores (214 countries)
 //        with honest data_age_years freshness flag.
 
+// __CANONICAL_LOADED__ canonical country name resolver
+let __CANON = null;
+let __CANON_REVERSE = null;
+function __loadCanon() {
+  if (__CANON) return;
+  try {
+    __CANON = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, 'country_canonical.json'), 'utf8'));
+  } catch (e) { __CANON = {}; }
+  // reverse: canonical -> [all raw spellings]
+  __CANON_REVERSE = {};
+  for (const [raw, info] of Object.entries(__CANON)) {
+    const c = (info && info.canonical) || raw;
+    if (!__CANON_REVERSE[c]) __CANON_REVERSE[c] = [];
+    __CANON_REVERSE[c].push(raw);
+  }
+}
+function resolveCanonical(name) {
+  __loadCanon();
+  const info = __CANON[name];
+  return (info && info.canonical) || name;
+}
+function isDefunct(name) {
+  __loadCanon();
+  const info = __CANON[name];
+  return !!(info && info.defunct);
+}
+function rawSpellings(canonical) {
+  __loadCanon();
+  return (__CANON_REVERSE && __CANON_REVERSE[canonical]) || [canonical];
+}
+
 require('dotenv').config({ path: './.env' });
 const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
@@ -188,8 +219,8 @@ async function getHistory(country, days) {
 
     const { data: annual, error } = await supabase
       .from('historical_convergence_scores')
-      .select('year, score, breakdown')
-      .eq('country', country)
+      .select('year, score, breakdown, country')
+      .in('country', rawSpellings(resolveCanonical(country))) // __HIST_CANON__
       .gte('year', sinceYear)
       .lte('year', currentYear)
       .order('year', { ascending: true });
