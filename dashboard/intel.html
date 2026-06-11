@@ -1001,14 +1001,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.add('active');
     const vid = 'view-' + btn.dataset.view;
     document.getElementById(vid).classList.add('active');
-    // Extraction view requires buyer key
-    if (btn.dataset.view === 'extraction') {
-      const hasKey = localStorage.getItem('sabian_buyer_key') === 'cc77ec38601f82587e06dc4158df6e28ae22a84146f82b7279af5932bec9fd3f';
-      document.getElementById('extraction-locked').style.display = hasKey ? 'none' : 'block';
-      document.getElementById('extraction-content').style.display = hasKey ? 'block' : 'none';
-      if (hasKey) loadExtractionEvents();
-      return;
-    }
+    // extraction-live tab handled below
     if (btn.dataset.view === 'sparklines' && !sparkloaded) loadSparklines();
     if (btn.dataset.view === 'ledger' && !ledgerLoaded) loadLedger();
     if (btn.dataset.view === 'freshness' && !freshnessLoaded) loadFreshness();
