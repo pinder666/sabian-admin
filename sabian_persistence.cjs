@@ -1,7 +1,6 @@
 // sabian_persistence.cjs
-// Sabian Supabase persistence layer
-// FIXED: getLatestScores now reads from historical_convergence_scores (214 countries)
-//        instead of convergence_scores (153 countries, old live scan table)
+// FIXED: getLatestScores reads historical_convergence_scores (214 countries)
+//        with honest data_age_years freshness flag.
 
 require('dotenv').config({ path: './.env' });
 const crypto = require('crypto');
@@ -180,34 +179,61 @@ async function saveGlobalScan(scanDate, summary, results, patterns, elapsed) {
 async function getHistory(country, days) {
   try {
     const supabase = getClient();
-    const since = new Date();
-    since.setDate(since.getDate() - (days || 90));
-    const sinceStr = since.toISOString().slice(0, 10);
+
+    // Pull from historical_convergence_scores (the 214-country table).
+    // 'days' is reinterpreted as 'years' here since this table is annual,
+    // but we expose it as a synthetic daily scan_date for the dashboard.
+    const yearsBack = Math.max(1, Math.ceil((days || 90) / 365));
+    const currentYear = new Date().getFullYear();
+    const sinceYear = currentYear - Math.max(yearsBack, 5);
 
     const { data, error } = await supabase
-      .from('convergence_scores')
-      .select('scan_date, convergence_score, risk_level, signals_available, top_3_signals')
+      .from('historical_convergence_scores')
+      .select('year, score, breakdown')
       .eq('country', country)
-      .gte('scan_date', sinceStr)
-      .order('scan_date', { ascending: true });
+      .gte('year', sinceYear)
+      .lte('year', currentYear)
+      .order('year', { ascending: true });
 
     if (error) throw error;
-    return { country, days, history: data || [] };
+
+    // Map to dashboard shape
+    const history = (data || []).map(row => {
+      const score = row.score || 0;
+      let risk_level = 'STABLE';
+      if (score >= 81)      risk_level = 'CRITICAL';
+      else if (score >= 66) risk_level = 'WARNING';
+      else if (score >= 41) risk_level = 'ELEVATED';
+      const bd = row.breakdown || {};
+      return {
+        scan_date: `${row.year}-12-31`,
+        year: row.year,
+        convergence_score: score,
+        risk_level,
+        signals_available: Object.keys(bd).length,
+        top_3_signals: Object.entries(bd)
+          .filter(([, v]) => v && typeof v === 'object' && v.stress_z != null)
+          .map(([name, v]) => ({ name, score: Math.round(Math.abs(+v.stress_z) * 30), stress_z: +v.stress_z }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 3)
+      };
+    });
+
+    return { country, days, history };
   } catch (err) {
     return { country, days, history: [], error: err.message };
   }
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// FIXED: reads from historical_convergence_scores (214 countries)
+// FIXED: 214 countries, honest scan_date, data_age_years flag.
 // ═══════════════════════════════════════════════════════════════════
 async function getLatestScores() {
   try {
     const supabase = getClient();
     const currentYear = new Date().getFullYear();
 
-    // Pull latest year per country from the 214-country historical table.
-    // Paginate to avoid Supabase default 1000-row cap.
+    // Paginate to avoid Supabase 1000-row cap
     const all = [];
     const PAGE = 1000;
     let from = 0;
@@ -226,7 +252,7 @@ async function getLatestScores() {
       from += PAGE;
     }
 
-    // Reduce to latest year per country
+    // Latest row per country
     const latestByCountry = {};
     for (const row of all) {
       if (!latestByCountry[row.country] || row.year > latestByCountry[row.country].year) {
@@ -234,7 +260,6 @@ async function getLatestScores() {
       }
     }
 
-    // Map to the shape the dashboard expects
     const results = Object.values(latestByCountry).map(row => {
       const score = row.score || 0;
       let risk_level = 'STABLE';
@@ -242,7 +267,6 @@ async function getLatestScores() {
       else if (score >= 66) risk_level = 'WARNING';
       else if (score >= 41) risk_level = 'ELEVATED';
 
-      // Build top_3_signals from breakdown (each entry: { stress_z, ... })
       const bd = row.breakdown || {};
       const top_3_signals = Object.entries(bd)
         .filter(([, v]) => v && typeof v === 'object' && v.stress_z != null)
@@ -250,19 +274,26 @@ async function getLatestScores() {
         .sort((a, b) => b.score - a.score)
         .slice(0, 3);
 
+      const dataAge = currentYear - row.year;
+      let freshness = 'CURRENT';
+      if (dataAge >= 11)     freshness = 'ANCIENT';
+      else if (dataAge >= 6) freshness = 'STALE';
+      else if (dataAge >= 2) freshness = 'AGING';
+
       return {
         country: row.country,
         scan_date: `${row.year}-12-31`,
+        year: row.year,
+        data_age_years: dataAge,
+        freshness,
         convergence_score: score,
         risk_level,
         theater: null,
         top_3_signals,
         signals_available: Object.keys(bd).length,
-        year: row.year,
       };
     });
 
-    // Sort by score descending
     return results.sort((a, b) => (b.convergence_score || 0) - (a.convergence_score || 0));
   } catch (err) {
     console.error('[getLatestScores]', err.message);
