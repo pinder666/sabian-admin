@@ -21,54 +21,23 @@ const { createObservation } = require('./observation_ledger.cjs');
 const { checkAndAlert } = require('./sabian_alert.cjs');
 const runBriefing = require('./government_briefing.cjs');
 
-// All monitored countries — active conflicts first, then threshold watch, then global watch
-// 90-day autonomous run begins 2026-05-21. By 2026-08-21 Sabian will have seen every pattern.
-const ACTIVE_CONFLICTS = [
-  // High-intensity active conflict
-  'Sudan', 'Myanmar', 'Yemen', 'Syria', 'DRC', 'Somalia', 'Afghanistan',
-  'South Sudan', 'CAR', 'Mali', 'Burkina Faso', 'Niger', 'Ethiopia',
-  'Nigeria', 'Mozambique', 'Chad', 'Libya', 'Haiti', 'Venezuela',
-  'Israel', 'Palestine', 'Ukraine', 'Lebanon', 'Iraq', 'Pakistan',
-  'Colombia', 'Cameroon', 'Armenia', 'Georgia', 'Russia', 'Myanmar',
-  'Philippines', 'Indonesia', 'Mexico'
-];
+// All monitored countries — loaded from countries_canonical table at runtime.
+// Includes sovereign, territory, disputed, microstate. Excludes historical.
+let ALL_COUNTRIES = [];
 
-const THRESHOLD_WATCH = [
-  // Elevated risk — watching for crossing
-  'Iran', 'Zimbabwe', 'Bangladesh', 'Sri Lanka', 'Kenya', 'Uganda',
-  'Tanzania', 'Zambia', 'Senegal', 'Guinea', 'Ecuador', 'Bolivia',
-  'Eritrea', 'Djibouti', 'Kosovo', 'Bosnia', 'Taiwan', 'North Korea',
-  'Belarus', 'Moldova', 'Serbia', 'Azerbaijan', 'Kyrgyzstan', 'Tajikistan',
-  'Turkmenistan', 'Uzbekistan', 'Kazakhstan', 'Peru', 'Brazil', 'Nicaragua',
-  'Honduras', 'Guatemala', 'El Salvador', 'Cuba', 'Angola', 'Rwanda',
-  'Burundi', 'Malawi', 'Guinea-Bissau', 'Sierra Leone', 'Liberia',
-  'Togo', 'Benin', 'Mauritania', 'Tunisia', 'Algeria', 'Morocco',
-  'Egypt', 'Jordan', 'Saudi Arabia', 'Yemen', 'Oman', 'Kuwait',
-  'Vietnam', 'Cambodia', 'Laos', 'Nepal', 'India', 'Timor-Leste',
-  'Papua New Guinea', 'Solomon Islands', 'Fiji'
-];
-
-const GLOBAL_WATCH = [
-  // Global baseline — all major states, stable now but watched for emergence
-  'Turkey', 'Greece', 'Bulgaria', 'Romania', 'Hungary', 'Poland',
-  'Slovakia', 'Croatia', 'North Macedonia', 'Montenegro', 'Albania',
-  'China', 'South Korea', 'Japan', 'Mongolia', 'Thailand', 'Malaysia',
-  'Singapore', 'Vietnam', 'Australia', 'New Zealand', 'India',
-  'South Africa', 'Ghana', 'Ivory Coast', 'Gabon', 'Congo',
-  'Equatorial Guinea', 'Namibia', 'Botswana', 'Uganda',
-  'Argentina', 'Chile', 'Paraguay', 'Uruguay', 'Guyana',
-  'Suriname', 'Trinidad and Tobago', 'Panama', 'Costa Rica',
-  'Dominican Republic', 'Jamaica', 'Belize',
-  'UAE', 'Qatar', 'Bahrain', 'Israel',
-  'Ukraine', 'UK', 'France', 'Germany', 'Spain', 'Italy',
-  'Portugal', 'Sweden', 'Finland', 'Norway', 'Denmark',
-  'Netherlands', 'Belgium', 'Austria', 'Switzerland', 'Cyprus',
-  'United States'
-];
-
-const ALL_COUNTRIES = [
-  ...new Set([...ACTIVE_CONFLICTS, ...THRESHOLD_WATCH, ...GLOBAL_WATCH])
-];
+async function loadCountryList() {
+  const { createClient } = require('@supabase/supabase-js');
+  const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+  const { data, error } = await sb
+    .from('countries_canonical')
+    .select('canonical_name, scan_category')
+    .in('status', ['sovereign', 'territory', 'disputed', 'microstate'])
+    .order('canonical_name');
+  if (error) throw new Error(`Failed to load country list: ${error.message}`);
+  ALL_COUNTRIES = data.map(r => ({ name: r.canonical_name, category: r.scan_category || 'GLOBAL_WATCH' }));
+  console.log(`  Loaded ${ALL_COUNTRIES.length} countries from countries_canonical`);
+  return ALL_COUNTRIES;
+}
 
 const RISK_COLORS = {
   CRITICAL: '\x1b[31m',  // red
@@ -85,6 +54,9 @@ const BATCH_DELAY_MS = 2000;
 async function runGlobalScan(date, options = {}) {
   const scanDate = date || new Date().toISOString().slice(0, 10);
   const startTime = Date.now();
+
+  // Load country list from database
+  await loadCountryList();
 
   console.log(`\n${'='.repeat(70)}`);
   console.log(`  SABIAN GLOBAL INTELLIGENCE SCAN`);
@@ -113,15 +85,16 @@ async function runGlobalScan(date, options = {}) {
     const batchNum = Math.floor(i / BATCH_SIZE) + 1;
     const totalBatches = Math.ceil(ALL_COUNTRIES.length / BATCH_SIZE);
 
-    process.stdout.write(`  Scanning batch ${batchNum}/${totalBatches}: ${batch.join(', ')}...\n`);
+    process.stdout.write(`  Scanning batch ${batchNum}/${totalBatches}: ${batch.map(c => c.name).join(', ')}...\n`);
 
     const batchResults = await Promise.allSettled(
-      batch.map(country => runConvergence(country, date))
+      batch.map(c => runConvergence(c.name, date))
     );
 
     const persistBatch = [];
     for (let j = 0; j < batch.length; j++) {
-      const country = batch[j];
+      const countryObj = batch[j];
+      const country = countryObj.name;
       const result = batchResults[j];
       const theater = getTheater(country);
 
@@ -144,7 +117,7 @@ async function runGlobalScan(date, options = {}) {
           ...result.value,
           theater,
           trajectory,
-          category: ACTIVE_CONFLICTS.includes(country) ? 'ACTIVE_CONFLICT' : 'THRESHOLD_WATCH'
+          category: countryObj.category
         };
         results.push(enriched);
 

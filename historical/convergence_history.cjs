@@ -512,9 +512,9 @@ async function main() {
   const globalBl = buildGlobalBaselines(baselines);
   console.log(`  ${Object.keys(globalBl).length} signals with global baselines.\n`);
 
-  console.log('  Deriving per-signal stress thresholds from data (p75 of each signal z-distribution)...');
+  console.log('  Deriving per-signal stress thresholds from data (p60 of each signal z-distribution)...');
   const { ts: tsForTau, tsSrc: tsSrcForTau } = await loadAllReadings();
-  const tau = deriveSignalThresholds(tsForTau, globalBl, 0.75);
+  const tau = deriveSignalThresholds(tsForTau, globalBl, 0.60);
   console.log(`  ${Object.keys(tau).length} signal thresholds derived from data.\n`);
 
   console.log('  Loading source-specific baselines...');

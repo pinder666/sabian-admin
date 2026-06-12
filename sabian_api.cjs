@@ -291,15 +291,23 @@ app.get('/api/observations/stats', requireTier('buyer'), async (req, res) => {
 
 app.get('/public-api/threats', async (req, res) => {
   try {
-    const scores = await getLatestScores();
+    const result = await getLatestScores();
+    const scores = result.countries;
+    const meta   = result.meta || {};
     if (!Array.isArray(scores)) return res.status(503).json({ error: 'Database unavailable' });
     const level   = req.query.level;
     const theater = req.query.theater;
-    const limit   = parseInt(req.query.limit || '200');
+    const limit   = parseInt(req.query.limit || '500');
     let filtered  = scores;
     if (level)   filtered = filtered.filter(s => s.risk_level === level.toUpperCase());
     if (theater) filtered = filtered.filter(s => s.theater   === theater.toUpperCase());
-    res.json({ count: filtered.slice(0, limit).length, scan_date: filtered[0]?.scan_date || null, countries: filtered.slice(0, limit) });
+    res.json({
+      count: filtered.slice(0, limit).length,
+      total_countries: meta.total_countries || null,
+      scanned_today: meta.scanned_today || 0,
+      last_scan_timestamp: meta.last_scan_timestamp || null,
+      countries: filtered.slice(0, limit)
+    });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 

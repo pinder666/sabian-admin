@@ -585,7 +585,7 @@
       <div class="stat-cell">
         <div class="stat-label">COUNTRIES</div>
         <div class="stat-value" id="stat-total">—</div>
-        <div class="stat-sub">monitored</div>
+        <div class="stat-sub" id="stat-total-sub">monitored</div>
       </div>
       <div class="stat-cell">
         <div class="stat-label">CRITICAL</div>
@@ -617,6 +617,11 @@
         <div class="stat-value" id="stat-date" style="font-size:1rem">—</div>
         <div class="stat-sub">UTC</div>
       </div>
+      <div class="stat-cell">
+        <div class="stat-label">COVERAGE</div>
+        <div class="stat-value" id="stat-coverage">—</div>
+        <div class="stat-sub" id="stat-coverage-sub">scanned today</div>
+      </div>
     </div>
 
     <!-- Controls -->
@@ -633,10 +638,10 @@
         <option value="">ALL THEATERS</option>
       </select>
       <select class="ctrl-select" id="sort-col" onchange="sortThreats()">
-        <option value="score_desc">Score ↓</option>
-        <option value="score_asc">Score ↑</option>
-        <option value="country_asc">Country A–Z</option>
-        <option value="country_desc">Country Z–A</option>
+        <option value="score_desc">SCORE ↓</option>
+        <option value="score_asc">SCORE ↑</option>
+        <option value="country_asc">COUNTRY A–Z</option>
+        <option value="country_desc">COUNTRY Z–A</option>
       </select>
     </div>
 
@@ -893,6 +898,9 @@
 // ── CONFIG ─────────────────────────────────────────────────────────────────
 const BASE = '';  // same origin
 
+// ── SCORE BANDS (aligned with legend) ──────────────────────────────────────
+const BANDS = { CRITICAL: 81, WARNING: 66, ELEVATED: 41 };
+
 // ── SIGNAL DISPLAY LAYER ───────────────────────────────────────────────────
 // Buyer-facing names and descriptions. Never expose source names.
 // Keys match the 'name' field returned by the API.
@@ -970,17 +978,17 @@ function riskColor(level) {
 }
 
 function scoreColor(score) {
-  if (score >= 75) return 'var(--critical)';
-  if (score >= 50) return 'var(--warning)';
-  if (score >= 25) return 'var(--elevated)';
+  if (score >= BANDS.CRITICAL) return 'var(--critical)';
+  if (score >= BANDS.WARNING)  return 'var(--warning)';
+  if (score >= BANDS.ELEVATED) return 'var(--elevated)';
   return 'var(--stable)';
 }
 
 function hmColor(score) {
   if (score == null) return 'rgba(21,32,64,0.3)';
-  if (score >= 75) return `rgba(255,${Math.round(60 - score*0.3)},60,${0.3 + score/200})`;
-  if (score >= 50) return `rgba(255,${Math.round(170 - (score-50)*2)},0,${0.2 + score/250})`;
-  if (score >= 25) return `rgba(0,${Math.round(200 - score)},238,${0.1 + score/300})`;
+  if (score >= BANDS.CRITICAL) return `rgba(255,${Math.round(60 - score*0.3)},60,${0.3 + score/200})`;
+  if (score >= BANDS.WARNING)  return `rgba(255,${Math.round(170 - (score-BANDS.WARNING)*2)},0,${0.2 + score/250})`;
+  if (score >= BANDS.ELEVATED) return `rgba(0,${Math.round(200 - score)},238,${0.1 + score/300})`;
   return `rgba(0,204,136,${0.08 + score/400})`;
 }
 
@@ -1117,22 +1125,40 @@ async function loadThreats() {
   try {
     const data = await apiFetch('/public-api/threats');
     allCountries = (data.countries || []).map(c => ({ ...c, risk_level: (c.risk_level || "STABLE").toUpperCase() }));
+    const totalCountries = data.total_countries || allCountries.length;
+    const scannedToday = data.scanned_today || 0;
+    const lastScanTs = data.last_scan_timestamp || null;
 
     // Update status bar
     const scores = allCountries.map(c => c.convergence_score || 0);
     const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
     const counts = { CRITICAL:0, WARNING:0, ELEVATED:0, STABLE:0 };
-    allCountries.forEach(c => { const rl = (c.risk_level||"STABLE").toUpperCase(); counts[rl] = (counts[rl]||0)+1; });
+    allCountries.forEach(c => {
+      const rl = (c.risk_level || "STABLE").toUpperCase();
+      const ac = c.acute_score || 0;
+      if (rl === 'CRITICAL' || ac >= 80) counts.CRITICAL++;
+      else if (rl === 'WARNING' || ac >= 60) counts.WARNING++;
+      else if (rl === 'ELEVATED' || ac >= 40) counts.ELEVATED++;
+      else counts.STABLE++;
+    });
 
     document.getElementById('stat-total').textContent    = allCountries.length;
+    document.getElementById('stat-total-sub').textContent = `of ${totalCountries} monitored`;
     document.getElementById('stat-critical').textContent = counts.CRITICAL || 0;
     document.getElementById('stat-warning').textContent  = counts.WARNING  || 0;
     document.getElementById('stat-elevated').textContent = counts.ELEVATED || 0;
     document.getElementById('stat-stable').textContent   = counts.STABLE   || 0;
     document.getElementById('stat-avg').textContent      = avg;
-    const scanDate = allCountries[0]?.scan_date || '—';
-    document.getElementById('stat-date').textContent = scanDate || '—';
-    document.getElementById('scan-date-nav').textContent = scanDate || '—';
+    // Format last scan as YYYY-MM-DD HH:MM UTC
+    const scanDateFmt = lastScanTs ? lastScanTs.replace('T', ' ').slice(0, 16) + ' UTC' : '—';
+    document.getElementById('stat-date').textContent = scanDateFmt;
+    document.getElementById('scan-date-nav').textContent = lastScanTs ? lastScanTs.slice(0, 10) : '—';
+    // Coverage: scanned_today / total_countries
+    const coveragePct = totalCountries > 0 ? Math.round((scannedToday / totalCountries) * 100) : 0;
+    const covEl = document.getElementById('stat-coverage');
+    covEl.textContent = coveragePct + '%';
+    covEl.style.color = coveragePct >= 90 ? 'var(--stable)' : coveragePct >= 80 ? 'var(--warning)' : 'var(--critical)';
+    document.getElementById('stat-coverage-sub').textContent = `${scannedToday}/${totalCountries} today`;
     document.getElementById('tab-threats-count').textContent = `(${allCountries.length})`;
     document.getElementById('tab-spark-count').textContent   = `(${allCountries.length})`;
     document.getElementById('tab-fresh-count').textContent   = `(${allCountries.length})`;
@@ -1169,8 +1195,23 @@ function filterThreats() {
   const lev  = document.getElementById('filter-level').value;
   const thr  = document.getElementById('filter-theater').value;
   let rows   = allCountries;
-  if (q)   rows = rows.filter(c => c.country.toLowerCase().includes(q));
-  if (lev) rows = rows.filter(c => (c.risk_level||"").toUpperCase() === lev.toUpperCase());
+  // Search matches country name OR aliases
+  if (q) rows = rows.filter(c =>
+    c.country.toLowerCase().includes(q) ||
+    (c.aliases || []).some(a => a.toLowerCase().includes(q))
+  );
+  // Level filter: risk_level match OR acute_score threshold
+  if (lev) {
+    const levUp = lev.toUpperCase();
+    rows = rows.filter(c => {
+      const rl = (c.risk_level || '').toUpperCase();
+      const ac = c.acute_score || 0;
+      if (levUp === 'CRITICAL') return rl === 'CRITICAL' || ac >= 80;
+      if (levUp === 'WARNING')  return rl === 'WARNING'  || ac >= 60;
+      if (levUp === 'ELEVATED') return rl === 'ELEVATED' || ac >= 40;
+      return rl === levUp;
+    });
+  }
   if (thr) rows = rows.filter(c => c.theater === thr);
   renderThreatsTable(rows);
 }
@@ -1190,16 +1231,18 @@ function renderThreatsTable(rows) {
     document.getElementById('threat-table-wrap').innerHTML = '<div class="loading-msg">No results.</div>';
     return;
   }
+  const today = new Date().toISOString().slice(0, 10);
   let html = `<table class="threat-table">
     <thead><tr>
       <th>#</th>
-      <th>Country</th>
-      <th>Theater</th>
-      <th>Score</th>
-      <th>Level</th>
-      <th>Trend (spark)</th>
-      <th>Top Signals</th>
-      <th>Scan Date</th>
+      <th>COUNTRY</th>
+      <th>THEATER</th>
+      <th>SCORE</th>
+      <th>ACUTE</th>
+      <th>LEVEL</th>
+      <th>TREND</th>
+      <th>TOP SIGNALS</th>
+      <th>SCAN DATE</th>
     </tr></thead><tbody>`;
 
   rows.forEach((c, i) => {
@@ -1212,15 +1255,45 @@ function renderThreatsTable(rows) {
     const sparkHtml = (cached && cached.length >= 2)
       ? makeSparkSVG(cached, 100, 28, c.risk_level)
       : `<span class="spark-no-data">…</span>`;
+
+    // Freshness dot: ● green if scan_date=today, ◐ yellow if is_no_change, ○ gray if older, none for historical
+    let freshDot = '';
+    if (c.is_live !== false) {
+      const scanDay = c.scan_date ? c.scan_date.slice(0, 10) : null;
+      if (scanDay === today) {
+        freshDot = c.is_no_change
+          ? '<span title="No change from previous scan" style="color:var(--warning);margin-right:5px">◐</span>'
+          : '<span title="Scanned today" style="color:var(--stable);margin-right:5px">●</span>';
+      } else if (scanDay) {
+        freshDot = '<span title="Older scan" style="color:var(--dim);margin-right:5px">○</span>';
+      }
+    }
+
+    // Status tag for non-sovereign countries
+    let statusTag = '';
+    if (c.status && c.status !== 'sovereign') {
+      const statusLabel = c.status.toUpperCase();
+      const successorTip = c.successor ? ` → ${c.successor}` : '';
+      statusTag = `<span title="${statusLabel}${successorTip}" style="margin-left:6px;font-size:0.55rem;color:var(--dim);border:1px solid var(--border);padding:1px 4px;border-radius:2px;text-transform:uppercase">${statusLabel}</span>`;
+    }
+
+    // Acute score cell
+    const acuteVal = c.acute_score;
+    const acuteHtml = acuteVal != null
+      ? `<span style="font-family:var(--mono);font-size:0.8rem;font-weight:700;color:${scoreColor(acuteVal)}">${acuteVal}</span>
+         <div style="width:40px;height:3px;background:var(--border);border-radius:2px;margin-top:2px"><div style="width:${acuteVal}%;height:100%;background:${scoreColor(acuteVal)};border-radius:2px"></div></div>`
+      : '<span style="color:var(--dim)">—</span>';
+
     html += `<tr onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
       <td style="font-family:var(--mono);font-size:0.7rem;color:var(--dim)">${i+1}</td>
-      <td><span class="country-name">${c.country}</span></td>
+      <td>${freshDot}<span class="country-name">${c.country}</span>${statusTag}</td>
       <td><span class="theater-tag">${c.theater||'—'}</span></td>
       <td><span class="score-num" style="color:${color}">${sc}</span>
         <div class="score-bar-wrap" style="margin-top:3px">
           <div class="score-bar"><div class="score-bar-fill" style="width:${sc}%;background:${color}"></div></div>
         </div>
       </td>
+      <td>${acuteHtml}</td>
       <td>${badge(c.risk_level)}</td>
       <td id="${sparkCellId}">${sparkHtml}</td>
       <td><div class="signal-chips">${chips}</div></td>
@@ -1228,12 +1301,14 @@ function renderThreatsTable(rows) {
         ${(()=>{
           const yr = c.year || (c.scan_date ? c.scan_date.slice(0,4) : null);
           const age = yr ? (new Date().getFullYear() - parseInt(yr)) : null;
-          let badge = '';
+          // Suppress aging badges for historical countries
+          if (c.status === 'historical') return yr || '—';
+          let ageBadge = '';
           if (age === null) return '—';
-          if (age >= 11) badge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--critical);border:1px solid rgba(255,60,60,0.3);padding:1px 4px;border-radius:2px">ANCIENT</span>';
-          else if (age >= 6) badge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--warning);border:1px solid rgba(255,170,0,0.3);padding:1px 4px;border-radius:2px">STALE</span>';
-          else if (age >= 2) badge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--dim);border:1px solid var(--border);padding:1px 4px;border-radius:2px">AGING</span>';
-          return yr + badge;
+          if (age >= 11) ageBadge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--critical);border:1px solid rgba(255,60,60,0.3);padding:1px 4px;border-radius:2px">ANCIENT</span>';
+          else if (age >= 6) ageBadge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--warning);border:1px solid rgba(255,170,0,0.3);padding:1px 4px;border-radius:2px">STALE</span>';
+          else if (age >= 2) ageBadge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--dim);border:1px solid var(--border);padding:1px 4px;border-radius:2px">AGING</span>';
+          return yr + ageBadge;
         })()}
       </td>
     </tr>`;

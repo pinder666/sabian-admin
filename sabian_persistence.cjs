@@ -74,9 +74,24 @@ async function saveConvergenceScore(country, scanDate, result, theater) {
   try {
     const supabase = getClient();
     const prevHash = await getLastRowHash(supabase, 'convergence_scores');
+
+    // Check previous day's score for is_no_change detection
+    const { data: prevRow } = await supabase
+      .from('convergence_scores')
+      .select('convergence_score')
+      .eq('country', country)
+      .lt('scan_date', scanDate)
+      .order('scan_date', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const prevScore = prevRow?.convergence_score;
+    const currentScore = result.convergence_score;
+    // Tolerance: scores within 1 point are considered unchanged
+    const isNoChange = prevScore != null && Math.abs(currentScore - prevScore) <= 1;
+
     const rowFields = {
       country,
-      convergence_score: result.convergence_score,
+      convergence_score: currentScore,
       freshness_pct:     result.freshness_pct ?? null,
       risk_level:        result.risk_level,
       scan_date:         scanDate,
@@ -90,7 +105,7 @@ async function saveConvergenceScore(country, scanDate, result, theater) {
       .upsert({
         country,
         scan_date: scanDate,
-        convergence_score: result.convergence_score,
+        convergence_score: currentScore,
         risk_level: result.risk_level,
         theater: theater || null,
         signals_available: result.signals_available,
@@ -101,6 +116,7 @@ async function saveConvergenceScore(country, scanDate, result, theater) {
         trajectory: result.trajectory || 'STABLE',
         row_hash: rowHash,
         prev_hash: prevHash,
+        is_no_change: isNoChange,
       }, { onConflict: 'country,scan_date' });
 
     if (error) throw error;
@@ -272,6 +288,7 @@ async function getHistory(country, days) {
 
 // ═══════════════════════════════════════════════════════════════════
 // FIXED: 214 countries, honest scan_date, data_age_years flag.
+// Now enriched with countries_canonical metadata + acute_score.
 // ═══════════════════════════════════════════════════════════════════
 async function getLatestScores() {
   try {
@@ -279,24 +296,44 @@ async function getLatestScores() {
     const currentYear = new Date().getFullYear();
     const today = new Date().toISOString().slice(0, 10);
 
+    // 0. Load countries_canonical for enrichment
+    const { data: canonRows, error: cErr } = await supabase
+      .from('countries_canonical')
+      .select('canonical_name, status, successor, iso2, iso3, aliases, un_member');
+    if (cErr) throw cErr;
+    const canonMap = {};
+    for (const c of (canonRows || [])) {
+      canonMap[c.canonical_name] = c;
+    }
+    const totalCountries = canonRows?.length || 0;
+
     // 1. LIVE: newest daily rows from convergence_scores (the countries scanned today).
     const { data: daily, error: dErr } = await supabase
       .from('convergence_scores')
-      .select('country, scan_date, convergence_score, risk_level, theater, top_3_signals, signals_available')
+      .select('country, scan_date, convergence_score, risk_level, theater, top_3_signals, signals_available, is_no_change')
       .order('scan_date', { ascending: false })
       .limit(5000);
     if (dErr) throw dErr;
 
     const latest = {};
+    let maxScanDate = null;
+    let scannedToday = 0;
     for (const row of (daily || [])) {
+      if (!maxScanDate || row.scan_date > maxScanDate) maxScanDate = row.scan_date;
       if (!latest[row.country]) {
+        if (row.scan_date === today) scannedToday++;
         const dataAge = currentYear - (+String(row.scan_date).slice(0, 4) || currentYear);
+        // Compute acute_score: count of top_3_signals with score >= 80, as percentage
+        const top3 = row.top_3_signals || [];
+        const acuteCount = top3.filter(s => (s.score || 0) >= 80).length;
+        const acute_score = top3.length > 0 ? Math.round((acuteCount / 3) * 100) : null;
         latest[row.country] = {
           ...row,
           year: +String(row.scan_date).slice(0, 4),
           data_age_years: dataAge,
           freshness: 'CURRENT',
-          is_live: true
+          is_live: true,
+          acute_score
         };
       }
     }
@@ -342,6 +379,9 @@ async function getLatestScores() {
         .sort((a, b) => b.score - a.score)
         .slice(0, 3);
 
+      const acuteCount = top_3_signals.filter(s => (s.score || 0) >= 80).length;
+      const acute_score = top_3_signals.length > 0 ? Math.round((acuteCount / 3) * 100) : null;
+
       const dataAge = currentYear - row.year;
       let freshness = 'CURRENT';
       if (dataAge >= 11)     freshness = 'ANCIENT';
@@ -359,11 +399,12 @@ async function getLatestScores() {
         theater: null,
         top_3_signals,
         signals_available: Object.keys(bd).length,
-        is_live: false
+        is_live: false,
+        acute_score
       };
     }
 
-    // 1. CANONICAL COLLAPSE: fold name fragments into one country (Ivory Coast etc.)
+    // 3. CANONICAL COLLAPSE: fold name fragments into one country (Ivory Coast etc.)
     const collapsed = {};
     for (const row of Object.values(latest)) {
       const canon = (typeof resolveCanonical === 'function') ? resolveCanonical(row.country) : row.country;
@@ -376,16 +417,39 @@ async function getLatestScores() {
       if (better) collapsed[canon] = { ...row, country: canon, defunct: def };
     }
 
-    // 2. DEFUNCT DROP: defunct states never appear on the LIVE board (still searchable in archive endpoint)
+    // 4. ENRICH with countries_canonical metadata
+    for (const row of Object.values(collapsed)) {
+      const meta = canonMap[row.country];
+      if (meta) {
+        row.status    = meta.status;
+        row.successor = meta.successor;
+        row.iso2      = meta.iso2;
+        row.iso3      = meta.iso3;
+        row.aliases   = meta.aliases;
+        row.un_member = meta.un_member;
+      }
+    }
+
+    // 5. DEFUNCT DROP: defunct states never appear on the LIVE board (still searchable in archive endpoint)
     const liveBoard = Object.values(collapsed).filter(r => !r.defunct);
 
-    // 3. LIVE-FIRST SORT: today's eyes rank above historical foundation, then by score
-    return liveBoard.sort((a, b) => {
+    // 6. LIVE-FIRST SORT: today's eyes rank above historical foundation, then by score
+    const sorted = liveBoard.sort((a, b) => {
       const aLive = a.is_live ? 1 : 0;
       const bLive = b.is_live ? 1 : 0;
       if (aLive !== bLive) return bLive - aLive;
       return (b.convergence_score || 0) - (a.convergence_score || 0);
     });
+
+    // Return with metadata for /public-api/threats
+    return {
+      countries: sorted,
+      meta: {
+        total_countries: totalCountries,
+        scanned_today: scannedToday,
+        last_scan_timestamp: maxScanDate
+      }
+    };
   } catch (err) {
     console.error('[getLatestScores]', err.message);
     return { error: err.message };
