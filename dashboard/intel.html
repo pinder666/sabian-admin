@@ -553,28 +553,28 @@
       <div class="legend-band">
         <div class="legend-dot" style="background:var(--critical)"></div>
         <div class="legend-band-text">
-          <div class="legend-band-name" style="color:var(--critical)">Critical &nbsp;81–100</div>
+          <div class="legend-band-name" style="color:var(--critical)">CRITICAL &nbsp;81–100</div>
           <div style="color:var(--dim)">Multi-signal systemic convergence. 5+ domains simultaneously elevated. Historically precedes instability events within 30 days.</div>
         </div>
       </div>
       <div class="legend-band">
         <div class="legend-dot" style="background:var(--warning)"></div>
         <div class="legend-band-text">
-          <div class="legend-band-name" style="color:var(--warning)">Warning &nbsp;66–80</div>
+          <div class="legend-band-name" style="color:var(--warning)">WARNING &nbsp;66–80</div>
           <div style="color:var(--dim)">3–4 signals elevated above baseline. Multi-domain stress compounding. 55-day decision window.</div>
         </div>
       </div>
       <div class="legend-band">
         <div class="legend-dot" style="background:var(--elevated)"></div>
         <div class="legend-band-text">
-          <div class="legend-band-name" style="color:var(--elevated)">Elevated &nbsp;41–65</div>
+          <div class="legend-band-name" style="color:var(--elevated)">ELEVATED &nbsp;41–65</div>
           <div style="color:var(--dim)">1–2 signals above normal operating range. Emerging stress. Monitor for convergence. 90-day window.</div>
         </div>
       </div>
       <div class="legend-band">
         <div class="legend-dot" style="background:var(--stable)"></div>
         <div class="legend-band-text">
-          <div class="legend-band-name" style="color:var(--stable)">Stable &nbsp;0–40</div>
+          <div class="legend-band-name" style="color:var(--stable)">STABLE &nbsp;0–40</div>
           <div style="color:var(--dim)">All signals within baseline operating range. No convergence detected. Continued monitoring.</div>
         </div>
       </div>
@@ -623,14 +623,14 @@
     <div class="threat-controls">
       <input class="ctrl-input" id="search-input" type="text" placeholder="Search country…" oninput="filterThreats()">
       <select class="ctrl-select" id="filter-level" onchange="filterThreats()">
-        <option value="">All Levels</option>
+        <option value="">ALL LEVELS</option>
         <option value="CRITICAL">CRITICAL</option>
         <option value="WARNING">WARNING</option>
         <option value="ELEVATED">ELEVATED</option>
         <option value="STABLE">STABLE</option>
       </select>
       <select class="ctrl-select" id="filter-theater" onchange="filterThreats()">
-        <option value="">All Theaters</option>
+        <option value="">ALL THEATERS</option>
       </select>
       <select class="ctrl-select" id="sort-col" onchange="sortThreats()">
         <option value="score_desc">Score ↓</option>
@@ -650,12 +650,12 @@
   <div class="view" id="view-sparklines">
     <div class="section-hdr">
       <span class="section-title">90-DAY SCORE TRAJECTORIES</span>
-      <span class="section-meta" id="spark-meta">Click any card to view detail</span>
+      <span class="section-meta" id="spark-meta">CLICK ANY CARD TO VIEW DETAIL</span>
     </div>
     <div class="threat-controls">
       <input class="ctrl-input" id="spark-search" type="text" placeholder="Search country…" oninput="filterSparklines()">
       <select class="ctrl-select" id="spark-filter-level" onchange="filterSparklines()">
-        <option value="">All Levels</option>
+        <option value="">ALL LEVELS</option>
         <option value="CRITICAL">CRITICAL</option>
         <option value="WARNING">WARNING</option>
         <option value="ELEVATED">ELEVATED</option>
@@ -671,23 +671,23 @@
   <div class="view" id="view-ledger">
     <div class="section-hdr">
       <span class="section-title">OBSERVATION LEDGER </span>
-      <span class="section-meta">Immutable threshold-crossing record</span>
+      <span class="section-meta">IMMUTABLE THRESHOLD-CROSSING RECORD</span>
     </div>
     <div class="ledger-filter-row">
       <select class="ctrl-select" id="ledger-country" onchange="loadLedger()">
-        <option value="">All Countries</option>
+        <option value="">ALL COUNTRIES</option>
       </select>
       <select class="ctrl-select" id="ledger-status" onchange="renderLedger()">
-        <option value="">All Status</option>
+        <option value="">ALL STATUS</option>
         <option value="OPEN">OPEN</option>
-        <option value="HIT">Hit</option>
-        <option value="MISS">Miss</option>
-        <option value="PARTIAL">Partial</option>
+        <option value="HIT">HIT</option>
+        <option value="MISS">MISS</option>
+        <option value="PARTIAL">PARTIAL</option>
       </select>
       <select class="ctrl-select" id="ledger-direction" onchange="renderLedger()">
-        <option value="">All Directions</option>
-        <option value="ASCENDING">Ascending (Worsening)</option>
-        <option value="DESCENDING">Descending (Improving)</option>
+        <option value="">ALL DIRECTIONS</option>
+        <option value="ASCENDING">ASCENDING (WORSENING)</option>
+        <option value="DESCENDING">DESCENDING (IMPROVING)</option>
       </select>
     </div>
     <div class="ledger-stats" id="ledger-stats-bar">
@@ -707,7 +707,7 @@
   <div class="view" id="view-freshness">
     <div class="section-hdr">
       <span class="section-title">SIGNAL FRESHNESS </span>
-      <span class="section-meta">Live signal coverage per country</span>
+      <span class="section-meta">LIVE SIGNAL COVERAGE PER COUNTRY</span>
     </div>
     <p class="freshness-note">
       Signal coverage per country — last scan.
@@ -730,7 +730,7 @@
   <div class="view" id="view-heatmap">
     <div class="section-hdr">
       <span class="section-title">SIGNAL × COUNTRY HEATMAP</span>
-      <span class="section-meta">Top-3 dominant signals per country</span>
+      <span class="section-meta">TOP-3 DOMINANT SIGNALS PER COUNTRY</span>
     </div>
     <p class="heatmap-note">
       Color intensity = signal contribution. Dark cell = signal absent or not top-3.
@@ -738,10 +738,10 @@
     </p>
     <div class="threat-controls">
       <select class="ctrl-select" id="heatmap-theater" onchange="renderHeatmap()">
-        <option value="">All Theaters</option>
+        <option value="">ALL THEATERS</option>
       </select>
       <select class="ctrl-select" id="heatmap-level" onchange="renderHeatmap()">
-        <option value="">All Levels</option>
+        <option value="">ALL LEVELS</option>
         <option value="CRITICAL">CRITICAL</option>
         <option value="WARNING">WARNING</option>
         <option value="ELEVATED">ELEVATED</option>
@@ -774,17 +774,17 @@
   <div class="status-bar" id="patterns-summary-bar">
     <div class="stat-cell"><div class="stat-label">FINDINGS</div><div class="stat-value" id="ps-total">—</div><div class="stat-sub">in this run</div></div>
     <div class="stat-cell"><div class="stat-label">UNKNOWN UNKNOWNS</div><div class="stat-value critical" id="ps-unknown">—</div><div class="stat-sub">r ≥ 0.5, n ≥ 30</div></div>
-    <div class="stat-cell"><div class="stat-label">Going Dark</div><div class="stat-value warning" id="ps-dark">—</div><div class="stat-sub">signal silence events</div></div>
+    <div class="stat-cell"><div class="stat-label">GOING DARK</div><div class="stat-value warning" id="ps-dark">—</div><div class="stat-sub">signal silence events</div></div>
     <div class="stat-cell"><div class="stat-label">LEAD INDICATORS</div><div class="stat-value elevated" id="ps-lead">—</div><div class="stat-sub">precursor correlations</div></div>
     <div class="stat-cell"><div class="stat-label">LATEST RUN</div><div class="stat-value" id="ps-run" style="font-size:0.9rem">—</div><div class="stat-sub">UTC</div></div>
   </div>
-  <div class="section-hdr"><span class="section-title">UNKNOWN UNKNOWNS</span><span class="section-meta">Signal correlations the miner found blind</span></div>
+  <div class="section-hdr"><span class="section-title">UNKNOWN UNKNOWNS</span><span class="section-meta">SIGNAL CORRELATIONS THE MINER FOUND BLIND</span></div>
   <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">Pairs of signals that move together at strength r ≥ 0.5 across n ≥ 30 country-year observations. No analyst told the system to look for these — the miner ran a full lag-0 correlation sweep across all signal pairs and these surfaced above noise.</p>
   <div id="unknown-unknowns-wrap"><div class="loading-msg">Loading unknown unknowns…</div></div>
-  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">GOING DARK EVENTS</span><span class="section-meta">Countries whose signals went silent for 2+ years — silence as a signal</span></div>
+  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">GOING DARK EVENTS</span><span class="section-meta">COUNTRIES WHOSE SIGNALS WENT SILENT for 2+ years — silence as a signal</span></div>
   <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">A country's data stops appearing in normal feeds before something happens. The miner identifies multi-year windows where a signal flatlines, then measures score delta over the dark period. Large negative deltas signal undetected deterioration.</p>
   <div id="going-dark-wrap"><div class="loading-msg">Loading going-dark events…</div></div>
-  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">LEAD INDICATORS</span><span class="section-meta">Signal A at year T predicts Signal B at year T+lag</span></div>
+  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">LEAD INDICATORS</span><span class="section-meta">SIGNAL A AT YEAR T PREDICTS SIGNAL B AT YEAR T+LAG</span></div>
   <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">Lagged correlations across all signal pairs for lags 1–10 years. Where correlation strengthens at lag, signal A is treated as a precursor to signal B. The strongest — health crisis → refugee outflows at 4–8 year lag, r &gt; 0.83 — is a clear precursor chain.</p>
   <div id="lead-indicators-wrap"><div class="loading-msg">Loading lead indicators…</div></div>
   <div style="padding:1rem 1.25rem;background:var(--panel);border:1px solid var(--border);border-radius:6px;margin-top:2rem">
@@ -814,23 +814,23 @@
 
   <!-- Summary bar -->
   <div class="status-bar" id="ext-summary-bar">
-    <div class="stat-cell"><div class="stat-label">Total Signatures</div><div class="stat-value" id="ext-total">—</div><div class="stat-sub">detected</div></div>
-    <div class="stat-cell"><div class="stat-label">Vulture Play</div><div class="stat-value critical" id="ext-vulture">—</div><div class="stat-sub">post-event extraction</div></div>
-    <div class="stat-cell"><div class="stat-label">Insider Exit</div><div class="stat-value warning" id="ext-insider">—</div><div class="stat-sub">pre-event positioning</div></div>
-    <div class="stat-cell"><div class="stat-label">Active Positioning</div><div class="stat-value elevated" id="ext-active">—</div><div class="stat-sub">pre-event accumulation</div></div>
-    <div class="stat-cell"><div class="stat-label">HIGH Confidence</div><div class="stat-value" id="ext-high">—</div><div class="stat-sub">recurring seats + tight lag</div></div>
+    <div class="stat-cell"><div class="stat-label">TOTAL SIGNATURES</div><div class="stat-value" id="ext-total">—</div><div class="stat-sub">detected</div></div>
+    <div class="stat-cell"><div class="stat-label">VULTURE PLAY</div><div class="stat-value critical" id="ext-vulture">—</div><div class="stat-sub">post-event extraction</div></div>
+    <div class="stat-cell"><div class="stat-label">INSIDER EXIT</div><div class="stat-value warning" id="ext-insider">—</div><div class="stat-sub">pre-event positioning</div></div>
+    <div class="stat-cell"><div class="stat-label">ACTIVE POSITIONING</div><div class="stat-value elevated" id="ext-active">—</div><div class="stat-sub">pre-event accumulation</div></div>
+    <div class="stat-cell"><div class="stat-label">HIGH CONFIDENCE</div><div class="stat-value" id="ext-high">—</div><div class="stat-sub">recurring seats + tight lag</div></div>
   </div>
 
   <!-- Filters -->
   <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
     <select id="ext-filter-pattern" style="background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:0.8rem">
-      <option value="">All Patterns</option>
-      <option value="VULTURE_PLAY">Vulture Play</option>
-      <option value="INSIDER_EXIT">Insider Exit</option>
-      <option value="ACTIVE_POSITIONING">Active Positioning</option>
+      <option value="">ALL PATTERNS</option>
+      <option value="VULTURE_PLAY">VULTURE PLAY</option>
+      <option value="INSIDER_EXIT">INSIDER EXIT</option>
+      <option value="ACTIVE_POSITIONING">ACTIVE POSITIONING</option>
     </select>
     <select id="ext-filter-confidence" style="background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:0.8rem">
-      <option value="">All Confidence</option>
+      <option value="">ALL CONFIDENCE</option>
       <option value="HIGH">HIGH</option>
       <option value="MEDIUM">MEDIUM</option>
       <option value="REVIEW">REVIEW</option>
@@ -1116,13 +1116,13 @@ function clearSelectedCountry() {
 async function loadThreats() {
   try {
     const data = await apiFetch('/public-api/threats');
-    allCountries = data.countries || [];
+    allCountries = (data.countries || []).map(c => ({ ...c, risk_level: (c.risk_level || "STABLE").toUpperCase() }));
 
     // Update status bar
     const scores = allCountries.map(c => c.convergence_score || 0);
     const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
     const counts = { CRITICAL:0, WARNING:0, ELEVATED:0, STABLE:0 };
-    allCountries.forEach(c => { counts[c.risk_level] = (counts[c.risk_level]||0)+1; });
+    allCountries.forEach(c => { const rl = (c.risk_level||"STABLE").toUpperCase(); counts[rl] = (counts[rl]||0)+1; });
 
     document.getElementById('stat-total').textContent    = allCountries.length;
     document.getElementById('stat-critical').textContent = counts.CRITICAL || 0;
@@ -1131,8 +1131,8 @@ async function loadThreats() {
     document.getElementById('stat-stable').textContent   = counts.STABLE   || 0;
     document.getElementById('stat-avg').textContent      = avg;
     const scanDate = allCountries[0]?.scan_date || '—';
-    document.getElementById('stat-date').textContent = scanDate ? scanDate.slice(0,4) : '—';
-    document.getElementById('scan-date-nav').textContent = scanDate ? scanDate.slice(0,4) : '—';
+    document.getElementById('stat-date').textContent = scanDate || '—';
+    document.getElementById('scan-date-nav').textContent = scanDate || '—';
     document.getElementById('tab-threats-count').textContent = `(${allCountries.length})`;
     document.getElementById('tab-spark-count').textContent   = `(${allCountries.length})`;
     document.getElementById('tab-fresh-count').textContent   = `(${allCountries.length})`;
@@ -1170,7 +1170,7 @@ function filterThreats() {
   const thr  = document.getElementById('filter-theater').value;
   let rows   = allCountries;
   if (q)   rows = rows.filter(c => c.country.toLowerCase().includes(q));
-  if (lev) rows = rows.filter(c => c.risk_level === lev);
+  if (lev) rows = rows.filter(c => (c.risk_level||"").toUpperCase() === lev.toUpperCase());
   if (thr) rows = rows.filter(c => c.theater === thr);
   renderThreatsTable(rows);
 }
@@ -1305,7 +1305,7 @@ function renderSparkGrid(final) {
   const lev = document.getElementById('spark-filter-level').value;
   let rows  = allCountries;
   if (q)   rows = rows.filter(c => c.country.toLowerCase().includes(q));
-  if (lev) rows = rows.filter(c => c.risk_level === lev);
+  if (lev) rows = rows.filter(c => (c.risk_level||"").toUpperCase() === lev.toUpperCase());
 
   let html = '<div class="spark-grid">';
   rows.forEach(c => {
@@ -1553,7 +1553,7 @@ function renderHeatmap() {
   const level   = document.getElementById('heatmap-level').value;
   let rows = allCountries;
   if (theater) rows = rows.filter(c => c.theater === theater);
-  if (level)   rows = rows.filter(c => c.risk_level === level);
+  if (level)   rows = rows.filter(c => (c.risk_level||"").toUpperCase() === level.toUpperCase());
 
   // Collect all signal names that appear in top_3_signals across filtered rows
   const sigCount = {};
