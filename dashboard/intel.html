@@ -535,13 +535,13 @@
 
 <!-- TAB BAR -->
 <div class="tab-bar">
-  <button class="tab-btn active" data-view="threats">Threats <span class="tab-label-num" id="tab-threats-count"></span></button>
-  <button class="tab-btn" data-view="sparklines">90-Day Trends <span class="tab-label-num" id="tab-spark-count"></span></button>
-  <button class="tab-btn" data-view="ledger">Observation Ledger <span class="tab-label-num" id="tab-ledger-count"></span></button>
-  <button class="tab-btn" data-view="freshness">Signal Freshness <span class="tab-label-num" id="tab-fresh-count"></span></button>
-  <button class="tab-btn" data-view="heatmap">Signal Heatmap</button>
-  <button class="tab-btn" data-view="patterns">Mined Patterns <span class="tab-label-num" id="tab-patterns-count"></span></button>
-    <button class="tab-btn" data-view="extraction-live">Extraction Intelligence <span class="tab-label-num" id="tab-extraction-count"></span></button>
+  <button class="tab-btn active" data-view="threats">THREATS <span class="tab-label-num" id="tab-threats-count"></span></button>
+  <button class="tab-btn" data-view="sparklines">90-DAY TRENDS <span class="tab-label-num" id="tab-spark-count"></span></button>
+  <button class="tab-btn" data-view="ledger">OBSERVATION LEDGER <span class="tab-label-num" id="tab-ledger-count"></span></button>
+  <button class="tab-btn" data-view="freshness">SIGNAL FRESHNESS <span class="tab-label-num" id="tab-fresh-count"></span></button>
+  <button class="tab-btn" data-view="heatmap">SIGNAL HEATMAP</button>
+  <button class="tab-btn" data-view="patterns">MINED PATTERNS <span class="tab-label-num" id="tab-patterns-count"></span></button>
+    <button class="tab-btn" data-view="extraction-live">EXTRACTION INTELLIGENCE <span class="tab-label-num" id="tab-extraction-count"></span></button>
 </div>
 
 <main>
@@ -583,37 +583,37 @@
     <!-- Status bar -->
     <div class="status-bar" id="status-bar">
       <div class="stat-cell">
-        <div class="stat-label">Countries</div>
+        <div class="stat-label">COUNTRIES</div>
         <div class="stat-value" id="stat-total">—</div>
         <div class="stat-sub">monitored</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-label">Critical</div>
+        <div class="stat-label">CRITICAL</div>
         <div class="stat-value critical" id="stat-critical">—</div>
         <div class="stat-sub">81 – 100</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-label">Warning</div>
+        <div class="stat-label">WARNING</div>
         <div class="stat-value warning" id="stat-warning">—</div>
         <div class="stat-sub">66 – 80</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-label">Elevated</div>
+        <div class="stat-label">ELEVATED</div>
         <div class="stat-value elevated" id="stat-elevated">—</div>
         <div class="stat-sub">41 – 65</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-label">Stable</div>
+        <div class="stat-label">STABLE</div>
         <div class="stat-value stable" id="stat-stable">—</div>
         <div class="stat-sub">0 – 40</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-label">Avg Score</div>
+        <div class="stat-label">AVG SCORE</div>
         <div class="stat-value" id="stat-avg">—</div>
         <div class="stat-sub">global</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-label">Last Scan</div>
+        <div class="stat-label">LAST SCAN</div>
         <div class="stat-value" id="stat-date" style="font-size:1rem">—</div>
         <div class="stat-sub">UTC</div>
       </div>
@@ -624,10 +624,10 @@
       <input class="ctrl-input" id="search-input" type="text" placeholder="Search country…" oninput="filterThreats()">
       <select class="ctrl-select" id="filter-level" onchange="filterThreats()">
         <option value="">All Levels</option>
-        <option value="CRITICAL">Critical</option>
-        <option value="WARNING">Warning</option>
-        <option value="ELEVATED">Elevated</option>
-        <option value="STABLE">Stable</option>
+        <option value="CRITICAL">CRITICAL</option>
+        <option value="WARNING">WARNING</option>
+        <option value="ELEVATED">ELEVATED</option>
+        <option value="STABLE">STABLE</option>
       </select>
       <select class="ctrl-select" id="filter-theater" onchange="filterThreats()">
         <option value="">All Theaters</option>
@@ -649,17 +649,17 @@
   <!-- ── SPARKLINES VIEW ───────────────────────────────────────────────────── -->
   <div class="view" id="view-sparklines">
     <div class="section-hdr">
-      <span class="section-title">90-Day Score Trajectories</span>
+      <span class="section-title">90-DAY SCORE TRAJECTORIES</span>
       <span class="section-meta" id="spark-meta">Click any card to view detail</span>
     </div>
     <div class="threat-controls">
       <input class="ctrl-input" id="spark-search" type="text" placeholder="Search country…" oninput="filterSparklines()">
       <select class="ctrl-select" id="spark-filter-level" onchange="filterSparklines()">
         <option value="">All Levels</option>
-        <option value="CRITICAL">Critical</option>
-        <option value="WARNING">Warning</option>
-        <option value="ELEVATED">Elevated</option>
-        <option value="STABLE">Stable</option>
+        <option value="CRITICAL">CRITICAL</option>
+        <option value="WARNING">WARNING</option>
+        <option value="ELEVATED">ELEVATED</option>
+        <option value="STABLE">STABLE</option>
       </select>
     </div>
     <div id="spark-grid-wrap">
@@ -670,7 +670,7 @@
   <!-- ── LEDGER VIEW ───────────────────────────────────────────────────────── -->
   <div class="view" id="view-ledger">
     <div class="section-hdr">
-      <span class="section-title">Observation Ledger</span>
+      <span class="section-title">OBSERVATION LEDGER </span>
       <span class="section-meta">Immutable threshold-crossing record</span>
     </div>
     <div class="ledger-filter-row">
@@ -679,7 +679,7 @@
       </select>
       <select class="ctrl-select" id="ledger-status" onchange="renderLedger()">
         <option value="">All Status</option>
-        <option value="OPEN">Open</option>
+        <option value="OPEN">OPEN</option>
         <option value="HIT">Hit</option>
         <option value="MISS">Miss</option>
         <option value="PARTIAL">Partial</option>
@@ -691,22 +691,22 @@
       </select>
     </div>
     <div class="ledger-stats" id="ledger-stats-bar">
-      <div class="ledger-stat"><div class="ledger-stat-label">Total</div><div class="ledger-stat-val" id="ls-total">—</div></div>
-      <div class="ledger-stat"><div class="ledger-stat-label">Open</div><div class="ledger-stat-val" id="ls-open" style="color:var(--accent)">—</div></div>
-      <div class="ledger-stat"><div class="ledger-stat-label">Graded</div><div class="ledger-stat-val" id="ls-graded">—</div></div>
-      <div class="ledger-stat"><div class="ledger-stat-label">Hits</div><div class="ledger-stat-val" id="ls-hits" style="color:var(--stable)">—</div></div>
-      <div class="ledger-stat"><div class="ledger-stat-label">Misses</div><div class="ledger-stat-val" id="ls-misses" style="color:var(--critical)">—</div></div>
-      <div class="ledger-stat"><div class="ledger-stat-label">Hit Rate</div><div class="ledger-stat-val" id="ls-rate">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">TOTAL</div><div class="ledger-stat-val" id="ls-total">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">OPEN</div><div class="ledger-stat-val" id="ls-open" style="color:var(--accent)">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">GRADED</div><div class="ledger-stat-val" id="ls-graded">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">HITS</div><div class="ledger-stat-val" id="ls-hits" style="color:var(--stable)">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">MISSES</div><div class="ledger-stat-val" id="ls-misses" style="color:var(--critical)">—</div></div>
+      <div class="ledger-stat"><div class="ledger-stat-label">HIT RATE</div><div class="ledger-stat-val" id="ls-rate">—</div></div>
     </div>
     <div id="ledger-table-wrap">
-      <div class="loading-msg">Select a country or load all observations…</div>
+      <div class="loading-msg">Loading observations…</div>
     </div>
   </div>
 
   <!-- ── FRESHNESS VIEW ───────────────────────────────────────────────────── -->
   <div class="view" id="view-freshness">
     <div class="section-hdr">
-      <span class="section-title">Signal Freshness</span>
+      <span class="section-title">SIGNAL FRESHNESS </span>
       <span class="section-meta">Live signal coverage per country</span>
     </div>
     <p class="freshness-note">
@@ -729,7 +729,7 @@
   <!-- ── HEATMAP VIEW ──────────────────────────────────────────────────────── -->
   <div class="view" id="view-heatmap">
     <div class="section-hdr">
-      <span class="section-title">Signal × Country Heatmap</span>
+      <span class="section-title">SIGNAL × COUNTRY HEATMAP</span>
       <span class="section-meta">Top-3 dominant signals per country</span>
     </div>
     <p class="heatmap-note">
@@ -742,10 +742,10 @@
       </select>
       <select class="ctrl-select" id="heatmap-level" onchange="renderHeatmap()">
         <option value="">All Levels</option>
-        <option value="CRITICAL">Critical</option>
-        <option value="WARNING">Warning</option>
-        <option value="ELEVATED">Elevated</option>
-        <option value="STABLE">Stable</option>
+        <option value="CRITICAL">CRITICAL</option>
+        <option value="WARNING">WARNING</option>
+        <option value="ELEVATED">ELEVATED</option>
+        <option value="STABLE">STABLE</option>
       </select>
     </div>
     <div class="heatmap-wrap" id="heatmap-wrap">
@@ -766,25 +766,25 @@
   <div class="view" id="view-patterns">
   <div id="proof-seal-bar" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:6px;margin-bottom:1.5rem;font-family:var(--mono);font-size:0.72rem">
     <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--dim)" id="proof-seal-dot"></span>
-    <span style="color:var(--dim);letter-spacing:0.08em;text-transform:uppercase">Proof Chain</span>
+    <span style="color:var(--dim);letter-spacing:0.08em;text-transform:uppercase">PROOF CHAIN</span>
     <span id="proof-seal-status" style="color:var(--text)">checking…</span>
     <span style="flex:1"></span>
     <span id="proof-seal-meta" style="color:var(--dim);font-size:0.65rem"></span>
   </div>
   <div class="status-bar" id="patterns-summary-bar">
-    <div class="stat-cell"><div class="stat-label">Findings</div><div class="stat-value" id="ps-total">—</div><div class="stat-sub">in this run</div></div>
-    <div class="stat-cell"><div class="stat-label">Unknown Unknowns</div><div class="stat-value critical" id="ps-unknown">—</div><div class="stat-sub">r ≥ 0.5, n ≥ 30</div></div>
+    <div class="stat-cell"><div class="stat-label">FINDINGS</div><div class="stat-value" id="ps-total">—</div><div class="stat-sub">in this run</div></div>
+    <div class="stat-cell"><div class="stat-label">UNKNOWN UNKNOWNS</div><div class="stat-value critical" id="ps-unknown">—</div><div class="stat-sub">r ≥ 0.5, n ≥ 30</div></div>
     <div class="stat-cell"><div class="stat-label">Going Dark</div><div class="stat-value warning" id="ps-dark">—</div><div class="stat-sub">signal silence events</div></div>
-    <div class="stat-cell"><div class="stat-label">Lead Indicators</div><div class="stat-value elevated" id="ps-lead">—</div><div class="stat-sub">precursor correlations</div></div>
-    <div class="stat-cell"><div class="stat-label">Latest Run</div><div class="stat-value" id="ps-run" style="font-size:0.9rem">—</div><div class="stat-sub">UTC</div></div>
+    <div class="stat-cell"><div class="stat-label">LEAD INDICATORS</div><div class="stat-value elevated" id="ps-lead">—</div><div class="stat-sub">precursor correlations</div></div>
+    <div class="stat-cell"><div class="stat-label">LATEST RUN</div><div class="stat-value" id="ps-run" style="font-size:0.9rem">—</div><div class="stat-sub">UTC</div></div>
   </div>
-  <div class="section-hdr"><span class="section-title">Unknown Unknowns</span><span class="section-meta">Signal correlations the miner found blind</span></div>
+  <div class="section-hdr"><span class="section-title">UNKNOWN UNKNOWNS</span><span class="section-meta">Signal correlations the miner found blind</span></div>
   <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">Pairs of signals that move together at strength r ≥ 0.5 across n ≥ 30 country-year observations. No analyst told the system to look for these — the miner ran a full lag-0 correlation sweep across all signal pairs and these surfaced above noise.</p>
   <div id="unknown-unknowns-wrap"><div class="loading-msg">Loading unknown unknowns…</div></div>
-  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">Going Dark Events</span><span class="section-meta">Countries whose signals went silent for 2+ years — silence as a signal</span></div>
+  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">GOING DARK EVENTS</span><span class="section-meta">Countries whose signals went silent for 2+ years — silence as a signal</span></div>
   <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">A country's data stops appearing in normal feeds before something happens. The miner identifies multi-year windows where a signal flatlines, then measures score delta over the dark period. Large negative deltas signal undetected deterioration.</p>
   <div id="going-dark-wrap"><div class="loading-msg">Loading going-dark events…</div></div>
-  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">Lead Indicators</span><span class="section-meta">Signal A at year T predicts Signal B at year T+lag</span></div>
+  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">LEAD INDICATORS</span><span class="section-meta">Signal A at year T predicts Signal B at year T+lag</span></div>
   <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">Lagged correlations across all signal pairs for lags 1–10 years. Where correlation strengthens at lag, signal A is treated as a precursor to signal B. The strongest — health crisis → refugee outflows at 4–8 year lag, r &gt; 0.83 — is a clear precursor chain.</p>
   <div id="lead-indicators-wrap"><div class="loading-msg">Loading lead indicators…</div></div>
   <div style="padding:1rem 1.25rem;background:var(--panel);border:1px solid var(--border);border-radius:6px;margin-top:2rem">
@@ -804,7 +804,7 @@
 
   <!-- Header -->
   <div style="margin-bottom:1.5rem">
-    <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-bottom:0.4rem">Extraction Intelligence</div>
+    <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-bottom:0.4rem">EXTRACTION INTELLIGENCE </div>
     <div style="font-size:0.82rem;color:var(--dim);max-width:760px;line-height:1.6">
       Structural patterns detected across 214 countries where actor filing clusters correlate with convergence band crossings.
       Actor identities are redacted — structure visible, names restricted to counsel review.
@@ -1019,7 +1019,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
           }
         }
       }
-      if (!ledgerLoaded) loadLedger(); else renderLedger();
+      loadLedger();
     }
     if (btn.dataset.view === 'freshness') {
       if (selectedCountry) {
@@ -1335,7 +1335,7 @@ function filterSparklines() { renderSparkGrid(true); }
 
 // ── LEDGER VIEW ────────────────────────────────────────────────────────────
 async function loadLedger() {
-  ledgerLoaded = true;
+  ledgerLoaded = true; // resets on each tab click now
   const country = document.getElementById('ledger-country').value;
   const wrap    = document.getElementById('ledger-table-wrap');
   wrap.innerHTML = '<div class="loading-msg">Loading ledger…</div>';
