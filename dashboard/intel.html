@@ -588,7 +588,7 @@
         <div class="stat-value" id="stat-total">—</div>
         <div class="stat-sub" id="stat-total-sub">monitored</div>
       </div>
-      <div class="stat-cell">
+      <!-- <div class="stat-cell">
         <div class="stat-label">CRITICAL</div>
         <div class="stat-value critical" id="stat-critical">—</div>
         <div class="stat-sub"></div>
@@ -607,7 +607,7 @@
         <div class="stat-label">STABLE</div>
         <div class="stat-value stable" id="stat-stable">—</div>
         <div class="stat-sub"></div>
-      </div>
+      </div> -->
       <!-- <div class="stat-cell">
         <div class="stat-label">AVG SCORE</div>
         <div class="stat-value" id="stat-avg">—</div>
@@ -1143,10 +1143,10 @@ async function loadThreats() {
 
     document.getElementById('stat-total').textContent    = allCountries.length;
     document.getElementById('stat-total-sub').textContent = `of ${totalCountries} monitored`;
-    document.getElementById('stat-critical').textContent = counts.CRITICAL || 0;
-    document.getElementById('stat-warning').textContent  = counts.WARNING  || 0;
-    document.getElementById('stat-elevated').textContent = counts.ELEVATED || 0;
-    document.getElementById('stat-stable').textContent   = counts.STABLE   || 0;
+    // document.getElementById('stat-critical').textContent = counts.CRITICAL || 0;
+    // document.getElementById('stat-warning').textContent  = counts.WARNING  || 0;
+    // document.getElementById('stat-elevated').textContent = counts.ELEVATED || 0;
+    // document.getElementById('stat-stable').textContent   = counts.STABLE   || 0;
     // document.getElementById('stat-avg').textContent      = avg;
     // Format last scan as YYYY-MM-DD HH:MM UTC
     const scanDateFmt = lastScanTs ? lastScanTs.replace('T', ' ').slice(0, 16) + ' UTC' : '—';
@@ -1236,11 +1236,8 @@ function renderThreatsTable(rows) {
       <th>#</th>
       <th>COUNTRY</th>
       <th>THEATER</th>
-      <th>SCORE</th>
-      <th>ACUTE</th>
-      <th>LEVEL</th>
       <th>TREND</th>
-      <th>TOP SIGNALS</th>
+      <th>TOP PRESSURES</th>
       <th>SCAN DATE</th>
     </tr></thead><tbody>`;
 
@@ -1276,24 +1273,12 @@ function renderThreatsTable(rows) {
       statusTag = `<span title="${statusLabel}${successorTip}" style="margin-left:6px;font-size:0.55rem;color:var(--dim);border:1px solid var(--border);padding:1px 4px;border-radius:2px;text-transform:uppercase">${statusLabel}</span>`;
     }
 
-    // Acute score cell
-    const acuteVal = c.acute_score;
-    const acuteHtml = acuteVal != null
-      ? `<span style="font-family:var(--mono);font-size:0.8rem;font-weight:700;color:${scoreColor(acuteVal)}">${acuteVal}</span>
-         <div style="width:40px;height:3px;background:var(--border);border-radius:2px;margin-top:2px"><div style="width:${acuteVal}%;height:100%;background:${scoreColor(acuteVal)};border-radius:2px"></div></div>`
-      : '<span style="color:var(--dim)">—</span>';
+    // Acute score cell - removed for V1
 
     html += `<tr onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
       <td style="font-family:var(--mono);font-size:0.7rem;color:var(--dim)">${i+1}</td>
       <td>${freshDot}<span class="country-name">${c.country}</span>${statusTag}</td>
       <td><span class="theater-tag">${c.theater||'—'}</span></td>
-      <td><span class="score-num" style="color:${color}">${sc}</span>
-        <div class="score-bar-wrap" style="margin-top:3px">
-          <div class="score-bar"><div class="score-bar-fill" style="width:${sc}%;background:${color}"></div></div>
-        </div>
-      </td>
-      <td>${acuteHtml}</td>
-      <td>${badge(c.risk_level)}</td>
       <td id="${sparkCellId}">${sparkHtml}</td>
       <td><div class="signal-chips">${chips}</div></td>
       <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">
