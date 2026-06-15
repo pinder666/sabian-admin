@@ -68,10 +68,35 @@ const fakeSupabaseClient = {
 // Override the Supabase module
 const Module = require('module');
 const originalRequire = Module.prototype.require;
+
+// Real Supabase client for shepherd_status writes (created lazily after dotenv loads)
+let _realSupabaseClient = null;
+function getRealSupabase() {
+  if (_realSupabaseClient) return _realSupabaseClient;
+  const { createClient } = originalRequire.call(module, '@supabase/supabase-js');
+  _realSupabaseClient = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    { auth: { persistSession: false } }
+  );
+  return _realSupabaseClient;
+}
+
+// Fake client with bypass: shepherd_status uses real Supabase, everything else is stubbed
+const fakeSupabaseClientWithBypass = {
+  from: (table) => {
+    if (table === 'shepherd_status') {
+      return getRealSupabase().from(table);
+    }
+    return fakeSupabaseClient.from(table);
+  },
+  rpc: fakeSupabaseClient.rpc,
+};
+
 Module.prototype.require = function(id) {
   if (id === '@supabase/supabase-js') {
     return {
-      createClient: () => fakeSupabaseClient,
+      createClient: () => fakeSupabaseClientWithBypass,
     };
   }
   return originalRequire.apply(this, arguments);
@@ -88,12 +113,21 @@ const zlib = require('zlib');
 
 // ─── CONFIGURATION ─────────────────────────────────────────────────────────────
 
-const FETCHERS_DIR = pathModule.join(__dirname, 'historical', 'fetchers');
+const FETCHER_SOURCES = [
+  { dir: pathModule.join(__dirname, 'historical', 'fetchers'), pattern: '_historical.cjs' },
+  { dir: __dirname, pattern: '_feed.cjs' },
+];
+// Add actor_scan if it exists
+const actorScanDir = pathModule.join(__dirname, 'actor_scan');
+if (fs.existsSync(actorScanDir)) {
+  FETCHER_SOURCES.push({ dir: actorScanDir, pattern: '.cjs' });
+}
 const LOG_DIR = pathModule.join(__dirname, 'shepherd_logs');
 const LATEST_LOG = pathModule.join(LOG_DIR, 'shepherd_latest.json');
 const HISTORY_LOG = pathModule.join(LOG_DIR, 'shepherd_history.log');
 const TIMEOUT_MS = 120000;
 const RATE_LIMIT_MS = 1000;
+const RETRY_BACKOFFS = [5000, 30000, 120000]; // 5s, 30s, 120s
 
 // Test matrix: 3 countries x 3 years
 const TEST_COUNTRIES = [
@@ -444,6 +478,142 @@ function loadFetcher(filePath) {
   }
 }
 
+// ─── RETRY HELPER ──────────────────────────────────────────────────────────────
+
+function shouldRetry(testResult, calls) {
+  // Retry if: error thrown, OR no API calls made, OR all calls failed validation
+  if (testResult.error) return true;
+  if (calls.length === 0) return true;
+  const anyValid = calls.some(c => c.response && c.response.status >= 200 && c.response.status < 300 && hasRealData(c.response.bodyRaw).valid);
+  return !anyValid;
+}
+
+async function runSingleTest(loader, country, year) {
+  clearInterceptedCalls();
+  clearBlockedDbOps();
+  enableIntercept();
+
+  const testResult = {
+    country: country?.name || 'ALL',
+    country_type: country?.type || 'global_pull',
+    year: year || 'ALL',
+    invoked_at: timestamp(),
+    intercepted_calls: [],
+    db_writes_blocked: [],
+    fetch_result: null,
+    error: null,
+    attempts: 1,
+  };
+
+  try {
+    const result = await Promise.race([
+      country ? loader.fn(country.name) : loader.fn(),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('TIMEOUT')), TIMEOUT_MS))
+    ]);
+
+    testResult.fetch_result = {
+      row_count: Array.isArray(result) ? result.length : (result ? 1 : 0),
+      sample: Array.isArray(result) ? result.slice(0, 2) : result,
+    };
+  } catch (err) {
+    testResult.error = err.message;
+  }
+
+  disableIntercept();
+  await new Promise(r => setTimeout(r, 200));
+
+  const calls = getInterceptedCalls();
+  for (const call of calls) {
+    const callResult = {
+      url: call.url,
+      headers_sent: call.headers_sent,
+      method: call.method,
+      source: call.source,
+      timestamp: call.timestamp,
+      http_status: null,
+      body_length: 0,
+      data_validation: null,
+      body_raw: null,
+    };
+
+    if (call.response) {
+      callResult.http_status = call.response.status;
+      callResult.body_length = call.response.bodyLength;
+      callResult.body_raw = call.response.bodyRaw;
+      callResult.data_validation = hasRealData(call.response.bodyRaw);
+    }
+
+    testResult.intercepted_calls.push(callResult);
+  }
+
+  testResult.db_writes_blocked = getBlockedDbOps();
+  testResult.status = classifyTestStatus(testResult, calls);
+
+  return { testResult, calls };
+}
+
+async function runWithRetry(loader, country, year) {
+  let lastResult = null;
+  let lastCalls = [];
+  let attempts = 0;
+
+  for (let attempt = 0; attempt <= RETRY_BACKOFFS.length; attempt++) {
+    attempts++;
+    const { testResult, calls } = await runSingleTest(loader, country, year);
+    lastResult = testResult;
+    lastCalls = calls;
+    lastResult.attempts = attempts;
+
+    if (!shouldRetry(testResult, calls)) {
+      // Success — no retry needed
+      return { testResult: lastResult, calls: lastCalls };
+    }
+
+    // If we have retries left, wait and try again
+    if (attempt < RETRY_BACKOFFS.length) {
+      const backoff = RETRY_BACKOFFS[attempt];
+      console.log(`│    ↻ Retry ${attempt + 1}/${RETRY_BACKOFFS.length} in ${backoff / 1000}s...`);
+      await new Promise(r => setTimeout(r, backoff));
+    }
+  }
+
+  // All retries exhausted
+  return { testResult: lastResult, calls: lastCalls };
+}
+
+function classifyTestStatus(testResult, calls) {
+  const rowCount = testResult.fetch_result?.row_count || 0;
+
+  // No API calls made
+  if (calls.length === 0) {
+    if (rowCount > 0) {
+      // Returned data without making any HTTP call — hardcoded
+      return 'hardcoded';
+    } else {
+      return 'no_api_call';
+    }
+  }
+
+  // Check for auth/rate limit errors first
+  const hasAuthError = calls.some(c => c.response && (c.response.status === 401 || c.response.status === 403));
+  if (hasAuthError) return 'key_missing';
+
+  const hasRateLimit = calls.some(c => c.response && c.response.status === 429);
+  if (hasRateLimit) return 'rate_limited';
+
+  // Check if any call returned valid data
+  const anyValid = calls.some(c =>
+    c.response &&
+    c.response.status >= 200 &&
+    c.response.status < 300 &&
+    hasRealData(c.response.bodyRaw).valid
+  );
+  if (anyValid) return 'live';
+
+  // All calls failed validation
+  return 'broken';
+}
+
 // ─── VERIFY FETCHER ────────────────────────────────────────────────────────────
 
 async function verifyFetcher(filePath) {
@@ -471,92 +641,42 @@ async function verifyFetcher(filePath) {
 
   log.meta.resolved++;
 
-  // Global-pull fetchers: run ONCE, not per country/year
+  // Global-pull fetchers: run ONCE, not per country/year (with retry)
   if (loader.isGlobalPull) {
     console.log(`│  Function: ${loader.fnName}() — GLOBAL PULL (runs once, ignores country arg)`);
     console.log(`│  Testing: single invocation`);
 
-    clearInterceptedCalls();
-    clearBlockedDbOps();
-    enableIntercept();
+    const { testResult, calls } = await runWithRetry(loader, null, null);
 
-    const testResult = {
-      country: 'ALL',
-      country_type: 'global_pull',
-      year: 'ALL',
-      invoked_at: timestamp(),
-      intercepted_calls: [],
-      db_writes_blocked: [],
-      fetch_result: null,
-      error: null,
-    };
-
-    try {
-      const result = await Promise.race([
-        loader.fn(),
-        new Promise((_, rej) => setTimeout(() => rej(new Error('TIMEOUT')), TIMEOUT_MS))
-      ]);
-
-      testResult.fetch_result = {
-        row_count: Array.isArray(result) ? result.length : (result ? 1 : 0),
-        sample: Array.isArray(result) ? result.slice(0, 2) : result,
-      };
-    } catch (err) {
-      testResult.error = err.message;
-      console.log(`│    Error: ${err.message.slice(0, 80)}`);
-    }
-
-    disableIntercept();
-    await new Promise(r => setTimeout(r, 200));
-
-    const calls = getInterceptedCalls();
     log.meta.total_api_calls += calls.length;
 
-    for (const call of calls) {
-      const callResult = {
-        url: call.url,
-        headers_sent: call.headers_sent,
-        method: call.method,
-        source: call.source,
-        timestamp: call.timestamp,
-        http_status: null,
-        body_length: 0,
-        data_validation: null,
-        body_raw: null,
-      };
-
-      if (call.response) {
-        callResult.http_status = call.response.status;
-        callResult.body_length = call.response.bodyLength;
-        callResult.body_raw = call.response.bodyRaw;
-
-        const validation = hasRealData(call.response.bodyRaw);
-        callResult.data_validation = validation;
-
-        if (call.response.status >= 200 && call.response.status < 300) {
-          if (validation.valid) {
+    // Log results
+    if (testResult.error) {
+      console.log(`│    Error: ${testResult.error.slice(0, 80)}`);
+    }
+    for (const callResult of testResult.intercepted_calls) {
+      if (callResult.http_status) {
+        const validation = callResult.data_validation;
+        if (callResult.http_status >= 200 && callResult.http_status < 300) {
+          if (validation?.valid) {
             log.meta.data_success++;
-            console.log(`│    ✓ ${call.response.status} [${call.source}] — ${validation.reason} — ${call.url.slice(0, 60)}...`);
+            console.log(`│    ✓ ${callResult.http_status} [${callResult.source}] — ${validation.reason} — ${callResult.url.slice(0, 60)}...`);
           } else {
             log.meta.data_failure++;
-            console.log(`│    ✗ ${call.response.status} [${call.source}] — ${validation.reason} — ${call.url.slice(0, 60)}...`);
+            console.log(`│    ✗ ${callResult.http_status} [${callResult.source}] — ${validation?.reason || 'no_data'} — ${callResult.url.slice(0, 60)}...`);
           }
         } else {
           log.meta.http_failure++;
-          console.log(`│    ✗ HTTP ${call.response.status} [${call.source}] — ${call.url.slice(0, 60)}...`);
+          console.log(`│    ✗ HTTP ${callResult.http_status} [${callResult.source}] — ${callResult.url.slice(0, 60)}...`);
         }
       } else {
-        console.log(`│    ? Pending [${call.source}] — ${call.url.slice(0, 60)}...`);
+        console.log(`│    ? Pending [${callResult.source}] — ${callResult.url.slice(0, 60)}...`);
       }
-
-      testResult.intercepted_calls.push(callResult);
     }
 
-    const dbOps = getBlockedDbOps();
-    if (dbOps.length > 0) {
-      testResult.db_writes_blocked = dbOps;
-      log.meta.db_writes_blocked += dbOps.length;
-      for (const op of dbOps) {
+    if (testResult.db_writes_blocked.length > 0) {
+      log.meta.db_writes_blocked += testResult.db_writes_blocked.length;
+      for (const op of testResult.db_writes_blocked) {
         console.log(`│    🛑 DB BLOCKED: ${op.op} on ${op.table} (${op.rows || 1} rows)`);
       }
     }
@@ -566,99 +686,51 @@ async function verifyFetcher(filePath) {
       testResult.note = 'no_calls_intercepted';
     }
 
+    if (testResult.attempts > 1) {
+      console.log(`│    ⚠ Required ${testResult.attempts} attempts`);
+    }
+
     fetcherLog.tests.push(testResult);
 
   } else {
-    // Per-country fetchers: test matrix
+    // Per-country fetchers: test matrix (no retry — too many combinations)
     console.log(`│  Function: ${loader.fnName}(country)`);
 
     for (const country of ACTIVE_COUNTRIES) {
       for (const year of ACTIVE_YEARS) {
         console.log(`│  Testing: ${country.name}/${year} (${country.type})`);
 
-        clearInterceptedCalls();
-        clearBlockedDbOps();
-        enableIntercept();
+        const { testResult, calls } = await runSingleTest(loader, country, year);
 
-        const testResult = {
-          country: country.name,
-          country_type: country.type,
-          year: year,
-          invoked_at: timestamp(),
-          intercepted_calls: [],
-          db_writes_blocked: [],
-          fetch_result: null,
-          error: null,
-        };
-
-        try {
-          const result = await Promise.race([
-            loader.fn(country.name),
-            new Promise((_, rej) => setTimeout(() => rej(new Error('TIMEOUT')), TIMEOUT_MS))
-          ]);
-
-          testResult.fetch_result = {
-            row_count: Array.isArray(result) ? result.length : (result ? 1 : 0),
-            sample: Array.isArray(result) ? result.slice(0, 2) : result,
-          };
-        } catch (err) {
-          testResult.error = err.message;
-          console.log(`│    Error: ${err.message.slice(0, 80)}`);
-        }
-
-        disableIntercept();
-        await new Promise(r => setTimeout(r, 200));
-
-        // Capture API calls
-        const calls = getInterceptedCalls();
         log.meta.total_api_calls += calls.length;
 
-        for (const call of calls) {
-          const callResult = {
-            url: call.url,
-            headers_sent: call.headers_sent,
-            method: call.method,
-            source: call.source,
-            timestamp: call.timestamp,
-            http_status: null,
-            body_length: 0,
-            data_validation: null,
-            body_raw: null,
-          };
-
-          if (call.response) {
-            callResult.http_status = call.response.status;
-            callResult.body_length = call.response.bodyLength;
-            callResult.body_raw = call.response.bodyRaw;
-
-            const validation = hasRealData(call.response.bodyRaw);
-            callResult.data_validation = validation;
-
-            if (call.response.status >= 200 && call.response.status < 300) {
-              if (validation.valid) {
+        // Log results
+        if (testResult.error) {
+          console.log(`│    Error: ${testResult.error.slice(0, 80)}`);
+        }
+        for (const callResult of testResult.intercepted_calls) {
+          if (callResult.http_status) {
+            const validation = callResult.data_validation;
+            if (callResult.http_status >= 200 && callResult.http_status < 300) {
+              if (validation?.valid) {
                 log.meta.data_success++;
-                console.log(`│    ✓ ${call.response.status} [${call.source}] — ${validation.reason} — ${call.url.slice(0, 60)}...`);
+                console.log(`│    ✓ ${callResult.http_status} [${callResult.source}] — ${validation.reason} — ${callResult.url.slice(0, 60)}...`);
               } else {
                 log.meta.data_failure++;
-                console.log(`│    ✗ ${call.response.status} [${call.source}] — ${validation.reason} — ${call.url.slice(0, 60)}...`);
+                console.log(`│    ✗ ${callResult.http_status} [${callResult.source}] — ${validation?.reason || 'no_data'} — ${callResult.url.slice(0, 60)}...`);
               }
             } else {
               log.meta.http_failure++;
-              console.log(`│    ✗ HTTP ${call.response.status} [${call.source}] — ${call.url.slice(0, 60)}...`);
+              console.log(`│    ✗ HTTP ${callResult.http_status} [${callResult.source}] — ${callResult.url.slice(0, 60)}...`);
             }
           } else {
-            console.log(`│    ? Pending [${call.source}] — ${call.url.slice(0, 60)}...`);
+            console.log(`│    ? Pending [${callResult.source}] — ${callResult.url.slice(0, 60)}...`);
           }
-
-          testResult.intercepted_calls.push(callResult);
         }
 
-        // Capture blocked DB writes
-        const dbOps = getBlockedDbOps();
-        if (dbOps.length > 0) {
-          testResult.db_writes_blocked = dbOps;
-          log.meta.db_writes_blocked += dbOps.length;
-          for (const op of dbOps) {
+        if (testResult.db_writes_blocked.length > 0) {
+          log.meta.db_writes_blocked += testResult.db_writes_blocked.length;
+          for (const op of testResult.db_writes_blocked) {
             console.log(`│    🛑 DB BLOCKED: ${op.op} on ${op.table} (${op.rows || 1} rows)`);
           }
         }
@@ -681,6 +753,157 @@ async function verifyFetcher(filePath) {
   log.fetchers.push(fetcherLog);
 }
 
+// ─── PERSIST TO SHEPHERD_STATUS ────────────────────────────────────────────────
+
+async function writeShepherdStatus(fetcherLog) {
+  const sb = getRealSupabase();
+
+  // Determine worst status across all tests for this fetcher
+  const statusPriority = { live: 0, hardcoded: 1, no_api_call: 2, rate_limited: 3, key_missing: 4, broken: 5, unresolved: 6 };
+  let worstStatus = 'live';
+  let failureReason = null;
+
+  if (!fetcherLog.load.resolved) {
+    worstStatus = 'unresolved';
+    failureReason = fetcherLog.load.error || fetcherLog.load.reason;
+  } else {
+    for (const test of fetcherLog.tests) {
+      const s = test.status || 'broken';
+      if ((statusPriority[s] || 0) > (statusPriority[worstStatus] || 0)) {
+        worstStatus = s;
+        if (test.error) failureReason = test.error;
+      }
+    }
+  }
+
+  // Aggregate counts
+  let apiCallsMade = 0;
+  let apiCallsSucceeded = 0;
+  let dataValidationPassed = false;
+  let totalAttempts = 0;
+
+  for (const test of fetcherLog.tests) {
+    apiCallsMade += test.intercepted_calls?.length || 0;
+    totalAttempts += test.attempts || 1;
+    for (const call of (test.intercepted_calls || [])) {
+      if (call.http_status >= 200 && call.http_status < 300) {
+        apiCallsSucceeded++;
+        if (call.data_validation?.valid) dataValidationPassed = true;
+      }
+    }
+  }
+
+  const row = {
+    fetcher_file: fetcherLog.file,
+    signal_key: fetcherLog.signal_key,
+    function_name: fetcherLog.load.function_name,
+    status: worstStatus,
+    api_calls_made: apiCallsMade,
+    api_calls_succeeded: apiCallsSucceeded,
+    data_validation_passed: dataValidationPassed,
+    failure_reason: failureReason,
+    last_success_at: worstStatus === 'live' ? new Date().toISOString() : null,
+    attempts: totalAttempts,
+    raw_log: fetcherLog.tests,
+  };
+
+  const { error } = await sb.from('shepherd_status').insert(row);
+  if (error) {
+    console.log(`│  ⚠ Failed to write shepherd_status: ${error.message}`);
+  } else {
+    console.log(`│  ✓ Wrote to shepherd_status: ${worstStatus}`);
+  }
+
+  return { status: worstStatus, failureReason };
+}
+
+function writeDailySummary(results) {
+  const now = new Date().toISOString().slice(0, 19).replace('T', ' ') + ' UTC';
+
+  // Group by status
+  const live = results.filter(r => r.status === 'live').sort((a, b) => a.signal_key.localeCompare(b.signal_key));
+  const problems = results.filter(r => r.status !== 'live');
+
+  // Sort problems by severity
+  const statusOrder = ['hardcoded', 'no_api_call', 'rate_limited', 'key_missing', 'broken', 'unresolved'];
+  problems.sort((a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status));
+
+  // Totals (shared)
+  const counts = {};
+  for (const r of results) {
+    counts[r.status] = (counts[r.status] || 0) + 1;
+  }
+
+  // ── shepherd_daily.txt — problems + totals only ──
+  const daily = [];
+  daily.push(`SHEPHERD DAILY SUMMARY — ${now}`);
+  daily.push('='.repeat(60));
+  daily.push('');
+
+  if (problems.length > 0) {
+    daily.push('PROBLEMS');
+    daily.push('-'.repeat(40));
+    for (const r of problems) {
+      const reason = r.failureReason ? ` — ${r.failureReason.slice(0, 50)}` : '';
+      daily.push(`  ${r.status.padEnd(12)} — ${r.signal_key}${reason}`);
+    }
+    daily.push('');
+  } else {
+    daily.push('No problems detected.');
+    daily.push('');
+  }
+
+  daily.push('TOTALS');
+  daily.push('-'.repeat(40));
+  for (const [status, count] of Object.entries(counts).sort((a, b) => b[1] - a[1])) {
+    daily.push(`  ${status}: ${count}`);
+  }
+  daily.push('');
+  daily.push(`Total fetchers: ${results.length}`);
+
+  const dailyPath = pathModule.join(__dirname, 'shepherd_daily.txt');
+  fs.writeFileSync(dailyPath, daily.join('\n'));
+
+  // ── shepherd_full.txt — live + problems + totals ──
+  const full = [];
+  full.push(`SHEPHERD FULL REPORT — ${now}`);
+  full.push('='.repeat(60));
+  full.push('');
+
+  if (live.length > 0) {
+    full.push('LIVE');
+    full.push('-'.repeat(40));
+    for (const r of live) {
+      full.push(`  live        — ${r.signal_key}`);
+    }
+    full.push('');
+  }
+
+  if (problems.length > 0) {
+    full.push('PROBLEMS');
+    full.push('-'.repeat(40));
+    for (const r of problems) {
+      const reason = r.failureReason ? ` — ${r.failureReason.slice(0, 50)}` : '';
+      full.push(`  ${r.status.padEnd(12)} — ${r.signal_key}${reason}`);
+    }
+    full.push('');
+  }
+
+  full.push('TOTALS');
+  full.push('-'.repeat(40));
+  for (const [status, count] of Object.entries(counts).sort((a, b) => b[1] - a[1])) {
+    full.push(`  ${status}: ${count}`);
+  }
+  full.push('');
+  full.push(`Total fetchers: ${results.length}`);
+
+  const fullPath = pathModule.join(__dirname, 'shepherd_full.txt');
+  fs.writeFileSync(fullPath, full.join('\n'));
+
+  console.log(`\nDaily summary: ${dailyPath}`);
+  console.log(`Full report:   ${fullPath}`);
+}
+
 // ─── MAIN ──────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -700,18 +923,24 @@ async function main() {
   // Ensure log dir exists
   if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true });
 
-  let allFiles;
-  try {
-    allFiles = fs.readdirSync(FETCHERS_DIR);
-  } catch (err) {
-    console.error(`Cannot read fetchers directory: ${FETCHERS_DIR}`);
+  let fetcherFiles = [];
+  for (const source of FETCHER_SOURCES) {
+    try {
+      const files = fs.readdirSync(source.dir)
+        .filter(f => f.endsWith(source.pattern))
+        .map(f => pathModule.join(source.dir, f));
+      fetcherFiles.push(...files);
+      console.log(`  ${source.dir}: ${files.length} files matching *${source.pattern}`);
+    } catch (err) {
+      console.log(`  ${source.dir}: not found or unreadable`);
+    }
+  }
+  fetcherFiles = fetcherFiles.sort();
+
+  if (fetcherFiles.length === 0) {
+    console.error('No fetcher files found in any source directory');
     process.exit(1);
   }
-
-  const fetcherFiles = allFiles
-    .filter(f => f.endsWith('_historical.cjs'))
-    .map(f => pathModule.join(FETCHERS_DIR, f))
-    .sort();
 
   const fetcherArg = process.argv.find(a => a.startsWith('--fetcher='));
   let targetFiles = fetcherFiles;
@@ -725,16 +954,24 @@ async function main() {
   }
 
   log.meta.fetchers_scanned = targetFiles.length;
-  console.log(`Scanning ${targetFiles.length} fetcher files from: ${FETCHERS_DIR}\n`);
+  console.log(`Scanning ${targetFiles.length} fetcher files from ${FETCHER_SOURCES.length} sources\n`);
 
+  const statusResults = [];
   for (const file of targetFiles) {
     await verifyFetcher(file);
+    // Write status to DB for the fetcher we just tested
+    const fetcherLog = log.fetchers[log.fetchers.length - 1];
+    const result = await writeShepherdStatus(fetcherLog);
+    statusResults.push({ signal_key: fetcherLog.signal_key, ...result });
   }
 
   log.meta.finished = timestamp();
 
   // Write latest log (overwrite)
   fs.writeFileSync(LATEST_LOG, JSON.stringify(log, null, 2));
+
+  // Write daily summary
+  writeDailySummary(statusResults);
 
   // Append to history
   const historyLine = `${log.meta.finished} | fetchers=${log.meta.fetchers_scanned} resolved=${log.meta.resolved} unresolved=${log.meta.unresolved} api_calls=${log.meta.total_api_calls} data_success=${log.meta.data_success} data_failure=${log.meta.data_failure} http_failure=${log.meta.http_failure} db_blocked=${log.meta.db_writes_blocked}\n`;

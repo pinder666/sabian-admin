@@ -10,6 +10,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 // ISO2 codes for Tor Metrics API
 const TOR_COUNTRY_CODES = {
@@ -94,7 +95,7 @@ function parseTorCsv(csv) {
 
 async function fetchTorCensorshipData(country) {
   try {
-    const cc = TOR_COUNTRY_CODES[country];
+    const { value: cc } = await resolveTableKey(country, TOR_COUNTRY_CODES);
     if (!cc) return { score: null, reason: 'no_country_code' };
 
     const endDate   = new Date().toISOString().slice(0, 10);

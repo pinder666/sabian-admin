@@ -10,6 +10,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 const EIA_API_KEY = process.env.EIA_API_KEY;
 
@@ -72,7 +73,7 @@ const GRID_BASELINE = {
 
 async function fetchPowerGridData(country) {
   try {
-    const baseline = GRID_BASELINE[country];
+    const { value: baseline } = await resolveTableKey(country, GRID_BASELINE);
     if (baseline === undefined) return { score: null, reason: 'no_grid_data' };
 
     // Try EIA electricity production data to detect recent generation drops

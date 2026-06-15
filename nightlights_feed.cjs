@@ -10,6 +10,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 // ISO2 map — World Bank uses ISO2 codes
 const COUNTRY_ISO2 = {
@@ -70,7 +71,7 @@ function fetchWorldBankElectricity(iso2) {
 
 async function fetchNightLightsData(country) {
   try {
-    const iso2 = COUNTRY_ISO2[country];
+    const { value: iso2 } = await resolveTableKey(country, COUNTRY_ISO2);
     if (!iso2) return { score: null, reason: 'no_iso2_mapping' };
 
     const data = await fetchWorldBankElectricity(iso2);

@@ -9,6 +9,7 @@ require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
@@ -252,7 +253,7 @@ function fetchWorldBankIndicator(iso2) {
 }
 
 async function fetchCapitalFlowsData(country) {
-  const iso2 = ISO_MAP[country];
+  const { value: iso2 } = await resolveTableKey(country, ISO_MAP);
   if (!iso2) {
     return { score: null, reason: 'no_iso_mapping' };
   }

@@ -8,6 +8,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 const FRED_API_KEY = process.env.FRED_API_KEY;
 
@@ -121,7 +122,7 @@ function cdsToScore(bps) {
 
 async function fetchSovereignCdsData(country) {
   try {
-    const staticBps = CDS_SPREADS_BPS[country];
+    const { value: staticBps } = await resolveTableKey(country, CDS_SPREADS_BPS);
     if (staticBps === undefined) {
       return { score: null, reason: 'no_cds_data' };
     }

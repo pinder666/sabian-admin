@@ -551,6 +551,23 @@ async function main() {
   const scoreRef = deriveScoreRef(rawStressValues, 0.97);
   console.log(`  Score reference ceiling (p97 of raw stress): ${scoreRef.toFixed(4)}\n`);
 
+  // Persist tau + scoreRef to live_score_thresholds for live_zscore.cjs
+  console.log('  Persisting thresholds to live_score_thresholds...');
+  const thresholdRows = Object.entries(tau).map(([signal_key, tauVal]) => ({
+    signal_key,
+    tau: tauVal,
+    score_ref: scoreRef,
+    computed_at: new Date().toISOString(),
+  }));
+  const { error: threshErr } = await sb
+    .from('live_score_thresholds')
+    .upsert(thresholdRows, { onConflict: 'signal_key' });
+  if (threshErr) {
+    console.error('  ⚠️  Failed to persist thresholds:', threshErr.message);
+  } else {
+    console.log(`  ✅ ${thresholdRows.length} thresholds persisted (score_ref=${scoreRef.toFixed(4)})\n`);
+  }
+
   // Pass 2 — score using the data-derived reference
   console.log('  Pass 2: scoring all country-years against self-derived reference...');
   for (const { country, year } of pairs) {

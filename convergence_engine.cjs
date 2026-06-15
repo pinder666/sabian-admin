@@ -9,6 +9,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveCountry } = require('./country_resolver.cjs');
 const fetchGovernance = require('./worldbank_governance.cjs');
 const fetchDisplacement = require('./unhcr_displacement_feed.cjs');
 const fetchImportData = require('./comtrade_import_feed.cjs');
@@ -434,8 +435,7 @@ async function scoreGovernance(country, date) {
 }
 
 // Open-Meteo climate — drought stress + heat stress → 0-100 risk
-async function scoreClimateStress(country, date) {
-  const coords = COUNTRY_COORDS[country];
+async function scoreClimateStress(coords, date) {
   if (!coords) {
     return { name: 'Climate Stress', score: null, label: 'No coordinates for country', trend: 'unknown', source: 'Open-Meteo' };
   }
@@ -587,8 +587,7 @@ async function scoreTradeCollapse(country, date) {
 }
 
 // World Bank GDP growth + CPI inflation → 0-100 economic stress score
-async function scoreEconomicStress(country, date) {
-  const iso = COUNTRY_ISO[country] || country;
+async function scoreEconomicStress(iso, date) {
   const mrv = 3;
 
   try {
@@ -735,8 +734,7 @@ async function scoreImfFiscal(country, date) {
 
 // GPS Jamming — gpsjam.org daily hexgrid, H3 resolution 4
 // Requires h3-js (npm install h3-js) — returns null if not installed, weight redistributes
-async function scoreGpsJamming(country, date) {
-  const coords = COUNTRY_COORDS[country];
+async function scoreGpsJamming(coords, date) {
   if (!coords) {
     return { name: 'GPS Jamming', score: null, label: 'No coordinates for country', trend: 'unknown', source: 'GPSJam' };
   }
@@ -1244,8 +1242,7 @@ async function scoreStructuralPressure(country) {
   }
 }
 
-async function scoreFoodSecurity(country) {
-  const iso = COUNTRY_ISO[country] || country;
+async function scoreFoodSecurity(iso) {
   try {
     const result = await fetchFoodSecurity(iso);
     if (!result || result.worst_phase === undefined || result.worst_phase === 0) {
@@ -1375,6 +1372,10 @@ async function runConvergence(country, date) {
   const targetDate = date || new Date().toISOString().slice(0, 10);
 
   try {
+    const resolved = await resolveCountry(country);
+    const iso = resolved.iso2;
+    const coords = (resolved.lat != null && resolved.lon != null) ? { lat: resolved.lat, lon: resolved.lon } : null;
+
     const [
       conflictResult, structuralResult, govResult, dispResult, fireResult, climateResult,
       tradeResult, econResult, resourceResult, seismicResult, ooniResult,
@@ -1394,15 +1395,15 @@ async function runConvergence(country, date) {
       timedCall(scoreGovernance,          country, date),
       timedCall(scoreDisplacement,        country, date),
       timedCall(scoreFireHotspot,         country, date),
-      timedCall(scoreClimateStress,       country, date),
+      timedCall(scoreClimateStress,       coords, date),
       timedCall(scoreTradeCollapse,       country, date),
-      timedCall(scoreEconomicStress,      country, date),
+      timedCall(scoreEconomicStress,      iso, date),
       timedCall(scoreResourceConflict,    country, date),
       timedCall(scoreSeismicRisk,         country, date),
       timedCall(scoreOoniInternet,        country, date),
       timedCall(scoreImfFiscal,           country, date),
       timedCall(scoreMaritimeTrade,       country, date),
-      timedCall(scoreGpsJamming,          country, date),
+      timedCall(scoreGpsJamming,          coords, date),
       timedCall(scoreSocialUnrest,        country, date),
       timedCall(scoreSanctionsPressure,   country),
       timedCall(scoreCurrencyCollapse,    country),
@@ -1432,7 +1433,7 @@ async function runConvergence(country, date) {
       timedCall(scoreVdemGovernance,      country),
       timedCall(scoreUnhcrOdp,            country),
       timedCall(scoreOccrp,               country),
-      timedCall(scoreFoodSecurity,        country),
+      timedCall(scoreFoodSecurity,        iso),
       timedCall(scoreUsdaFood,            country),
       timedCall(scoreIomDisplacement,     country),
       timedCall(scoreSocialVolume,        country),
@@ -1529,9 +1530,12 @@ async function runConvergence(country, date) {
     let convergenceScore = 0;
     let freshness_pct    = 0;
     if (scoredSignals.length) {
-      convergenceScore = Math.round(
-        scoredSignals.reduce((s, sig) => s + (sig.score * sig.weight), 0) / liveWeight
-      );
+      const weightedAvg = scoredSignals.reduce((s, sig) => s + (sig.score * sig.weight), 0) / liveWeight;
+      const topScores = [...scoredSignals].sort((a,b) => b.score - a.score).slice(0,3);
+      const peak = topScores.reduce((s,x) => s + x.score, 0) / topScores.length;
+      const elevatedCount = scoredSignals.filter(s => s.score >= 60).length;
+      const breadthBoost = Math.min(15, elevatedCount * 2);
+      convergenceScore = Math.round(Math.min(100, peak * 0.5 + weightedAvg * 0.35 + breadthBoost));
       freshness_pct = Math.round((liveWeight / totalWeight) * 100);
     }
 

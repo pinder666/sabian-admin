@@ -11,13 +11,14 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 // World Bank API indicator codes for UNCTAD maritime data
 const LSCI_INDICATOR = 'IS.SHP.GCNW.XQ';   // Liner Shipping Connectivity Index
 const TEU_INDICATOR  = 'IS.SHP.GOOD.TU';    // Container port traffic (TEU)
 
 async function fetchMaritimeScore(country, date) {
-  const iso = getIso2(country);
+  const iso = await getIso2(country);
   if (!iso) {
     return { source: 'UNCTAD_Maritime', country, conflict_score: null, warning: `No ISO code for ${country}` };
   }
@@ -172,7 +173,7 @@ function fetchJson(hostname, path) {
 }
 
 // ISO 2-letter codes for World Bank API
-function getIso2(country) {
+async function getIso2(country) {
   const codes = {
     'Afghanistan': 'AF', 'Albania': 'AL', 'Algeria': 'DZ', 'Angola': 'AO',
     'Argentina': 'AR', 'Armenia': 'AM', 'Australia': 'AU', 'Azerbaijan': 'AZ',
@@ -212,7 +213,8 @@ function getIso2(country) {
     'Burkina Faso': 'BF', 'CAR': 'CF', 'Chad': 'TD', 'Ethiopia': 'ET',
     'Kosovo': 'XK', 'Niger': 'NE', 'Rwanda': 'RW', 'South Sudan': 'SS'
   };
-  return codes[country] || null;
+  const { value } = await resolveTableKey(country, codes);
+  return value;
 }
 
 module.exports = fetchMaritimeScore;

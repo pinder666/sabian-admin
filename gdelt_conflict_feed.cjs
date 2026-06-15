@@ -8,6 +8,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 // Conflict query terms per country -- tailored to what GDELT news coverage picks up
 // General: "Country conflict attack violence" covers most cases
@@ -66,7 +67,7 @@ const COUNTRY_QUERY = {
 const LOOKBACK_DAYS = 90;
 
 async function fetchConflictCoverage(country, dateFrom, dateTo) {
-  const query = COUNTRY_QUERY[country];
+  const { value: query } = await resolveTableKey(country, COUNTRY_QUERY);
   if (!query) {
     return { source: 'GDELT', country, error: `No GDELT query configured for ${country}` };
   }

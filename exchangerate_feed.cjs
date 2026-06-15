@@ -6,6 +6,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 const API_KEY = process.env.ALPHA_VANTAGE_API_KEY || '';
 
@@ -58,7 +59,7 @@ function fetchFX(fromCurrency) {
 }
 
 async function fetchCurrencyCollapseData(country) {
-  const currency = COUNTRY_CURRENCY[country];
+  const { value: currency } = await resolveTableKey(country, COUNTRY_CURRENCY);
   if (!currency) return { score: null, reason: 'no_currency_mapping' };
   if (currency === 'USD') return { score: 0, reason: 'usd_pegged', currency };
   if (!API_KEY) return { score: null, reason: 'no_api_key' };

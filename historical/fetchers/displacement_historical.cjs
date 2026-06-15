@@ -21,6 +21,23 @@ const { sb, upsertReadings } = require('../db.cjs');
 
 const COMPONENTS = ['displacement_flow', 'displacement_stock'];
 
+// Persist the per-component global mean/std the composite is built from,
+// so the live displacement path can reproduce the same z-score.
+async function persistComponentStats(signalKey, stats) {
+  const rows = Object.entries(stats).map(([component, s]) => ({
+    signal_key: signalKey,
+    component,
+    mean: +s.mean.toFixed(8),
+    std: +s.std.toFixed(8),
+    computed_at: new Date().toISOString()
+  }));
+  const { error } = await sb
+    .from('signal_component_stats')
+    .upsert(rows, { onConflict: 'signal_key,component' });
+  if (error) console.error('  Component-stats write error:', error.message);
+  else console.log(`  Persisted ${rows.length} component stats for ${signalKey}.`);
+}
+
 function globalStats(values) {
   if (!values || values.length === 0) return { mean: 0, std: 1 };
   const n = values.length;
@@ -124,6 +141,7 @@ async function main() {
     stats[s] = globalStats(Object.values(data[s]));
     console.log(`  ${s.padEnd(24)}: mean=${stats[s].mean.toFixed(3)}  std=${stats[s].std.toFixed(3)}`);
   }
+  await persistComponentStats('displacement', stats);
 
   // Build composite — all country-years with ≥1 component
   console.log('\nBuilding displacement composite...');

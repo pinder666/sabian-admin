@@ -7,6 +7,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 // WRI Aqueduct 3.0 country-level baseline water stress scores (0–5 scale → normalized 0–100)
 // Source: wri.org/aqueduct — overall water risk combining quantity, quality, and regulatory dimensions
@@ -84,7 +85,7 @@ function fetchCopernicusDrought(iso2) {
 
 async function fetchWaterStressData(country) {
   try {
-    const baseline = AQUEDUCT_SCORES[country];
+    const { value: baseline } = await resolveTableKey(country, AQUEDUCT_SCORES);
     if (baseline === undefined) {
       return { score: null, reason: 'no_aqueduct_data' };
     }
@@ -101,7 +102,7 @@ async function fetchWaterStressData(country) {
     };
 
     let droughtBonus = 0;
-    const iso2 = isoMap[country];
+    const { value: iso2 } = await resolveTableKey(country, isoMap);
     if (iso2) {
       const gdo = await fetchCopernicusDrought(iso2);
       if (gdo && Array.isArray(gdo) && gdo.length > 0) {

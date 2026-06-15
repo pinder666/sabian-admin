@@ -65,7 +65,7 @@ async function fetchIomDtmHistorical(country) {
       return results;
     }
 
-    const rows = Array.isArray(data) ? data : (data.value || data.results || data.data || []);
+    const rows = Array.isArray(data) ? data : (data.result || data.value || data.results || data.data || []);
     if (rows.length === 0) {
       results.push({
         signal_key: 'displacement_idp', signal_name: 'IDPs (Internal Displacement)',
@@ -80,7 +80,7 @@ async function fetchIomDtmHistorical(country) {
     for (const row of rows) {
       const reportDate = row.reportingDate || row.ReportingDate || row.date || row.Date
         || new Date().toISOString().split('T')[0];
-      const idpCount = row.individuallyDisplacedPersons || row.IndividuallyDisplacedPersons
+      const idpCount = row.numPresentIdpInd || row.individuallyDisplacedPersons || row.IndividuallyDisplacedPersons
         || row.idpCount || row.IDPCount || row.individuals || row.Individuals || 0;
 
       results.push({

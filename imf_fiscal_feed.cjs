@@ -9,6 +9,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 // IMF WEO country codes (ISO numeric)
 const IMF_INDICATORS = {
@@ -19,7 +20,7 @@ const IMF_INDICATORS = {
 };
 
 async function fetchImfScore(country, date) {
-  const imfCode = getImfCode(country);
+  const imfCode = await getImfCode(country);
   if (!imfCode) {
     return { source: 'IMF', country, conflict_score: null, warning: `No IMF code for ${country}` };
   }
@@ -131,7 +132,7 @@ async function fetchImfScore(country, date) {
 }
 
 // IMF WEO uses ISO 2-letter codes
-function getImfCode(country) {
+async function getImfCode(country) {
   const codes = {
     'Afghanistan': 'AFG', 'Albania': 'ALB', 'Algeria': 'DZA', 'Angola': 'AGO',
     'Argentina': 'ARG', 'Armenia': 'ARM', 'Australia': 'AUS', 'Austria': 'AUT',
@@ -172,7 +173,8 @@ function getImfCode(country) {
     'Uzbekistan': 'UZB', 'Venezuela': 'VEN', 'Vietnam': 'VNM',
     'Yemen': 'YEM', 'Zambia': 'ZMB', 'Zimbabwe': 'ZWE'
   };
-  return codes[country] || null;
+  const { value } = await resolveTableKey(country, codes);
+  return value;
 }
 
 function fetchJson(hostname, path) {

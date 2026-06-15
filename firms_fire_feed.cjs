@@ -9,6 +9,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 // Country bounding boxes [W,S,E,N] -- FIRMS expects comma-separated, no spaces
 const COUNTRY_BBOX = {
@@ -84,7 +85,7 @@ async function fetchFireHotspots(country, dateFrom, dateTo) {
     };
   }
 
-  const bbox = COUNTRY_BBOX[country];
+  const { value: bbox } = await resolveTableKey(country, COUNTRY_BBOX);
   if (!bbox) {
     return { source: 'FIRMS', country, error: `No bounding box defined for ${country}` };
   }
@@ -100,13 +101,13 @@ async function fetchFireHotspots(country, dateFrom, dateTo) {
 
   try {
     const rows = await fetchFirmsChunked(apiKey, product, bbox, startDate, endDate);
-    return scoreFireData(country, rows, startDate, endDate);
+    return await scoreFireData(country, rows, startDate, endDate);
   } catch (err) {
     // Retry with standard processing if NRT failed
     if (useNRT) {
       try {
         const rows = await fetchFirmsChunked(apiKey, 'VIIRS_SNPP_SP', bbox, startDate, endDate);
-        return scoreFireData(country, rows, startDate, endDate);
+        return await scoreFireData(country, rows, startDate, endDate);
       } catch (_) { /* fall through to error below */ }
     }
 
@@ -141,7 +142,7 @@ async function fetchFirmsChunked(apiKey, product, bbox, startDate, endDate) {
   return allRows;
 }
 
-function scoreFireData(country, rows, startDate, endDate) {
+async function scoreFireData(country, rows, startDate, endDate) {
   const period = `${startDate} to ${endDate}`;
 
   if (!rows.length) {
@@ -177,7 +178,8 @@ function scoreFireData(country, rows, startDate, endDate) {
 
   // Agricultural burn season context -- dampen score if it's dry/burn season and fires are low intensity
   const queryMonth = new Date(startDate).getMonth() + 1;
-  const agMonths = AG_BURN_MONTHS[country] || [];
+  const { value: agMonthsRaw } = await resolveTableKey(country, AG_BURN_MONTHS);
+  const agMonths = agMonthsRaw || [];
   const isAgSeason = agMonths.includes(queryMonth);
   const agDampen = isAgSeason && mean_frp < 30 ? 0.75 : 1.0;
 

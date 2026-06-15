@@ -8,6 +8,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 // World Bank uses ISO2 codes -- same mapping as before
 const COUNTRY_ISO2 = {
@@ -28,7 +29,7 @@ const COUNTRY_ISO2 = {
 };
 
 async function fetchTradeData(country) {
-  const iso2 = COUNTRY_ISO2[country];
+  const { value: iso2 } = await resolveTableKey(country, COUNTRY_ISO2);
   if (iso2 === undefined) {
     return { source: 'WorldBank_Imports', country, error: `No ISO2 code mapped for ${country}` };
   }

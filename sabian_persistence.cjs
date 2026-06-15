@@ -323,10 +323,10 @@ async function getLatestScores() {
       if (!latest[row.country]) {
         if (row.scan_date === today) scannedToday++;
         const dataAge = currentYear - (+String(row.scan_date).slice(0, 4) || currentYear);
-        // Compute acute_score: count of top_3_signals with score >= 80, as percentage
+        // Compute acute_score: mean of top-3 signal scores
         const top3 = row.top_3_signals || [];
-        const acuteCount = top3.filter(s => (s.score || 0) >= 80).length;
-        const acute_score = top3.length > 0 ? Math.round((acuteCount / 3) * 100) : null;
+        const acuteScores = top3.map(s => s.score || 0);
+        const acute_score = acuteScores.length > 0 ? Math.round(acuteScores.reduce((a,b)=>a+b,0) / acuteScores.length) : null;
         latest[row.country] = {
           ...row,
           year: +String(row.scan_date).slice(0, 4),
@@ -379,8 +379,8 @@ async function getLatestScores() {
         .sort((a, b) => b.score - a.score)
         .slice(0, 3);
 
-      const acuteCount = top_3_signals.filter(s => (s.score || 0) >= 80).length;
-      const acute_score = top_3_signals.length > 0 ? Math.round((acuteCount / 3) * 100) : null;
+      const acuteScores = top_3_signals.map(s => s.score || 0);
+      const acute_score = acuteScores.length > 0 ? Math.round(acuteScores.reduce((a,b)=>a+b,0) / acuteScores.length) : null;
 
       const dataAge = currentYear - row.year;
       let freshness = 'CURRENT';

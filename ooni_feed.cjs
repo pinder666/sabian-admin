@@ -11,9 +11,10 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 async function fetchOoniScore(country, date) {
-  const countryCode = getCountryCode(country);
+  const countryCode = await getCountryCode(country);
   if (!countryCode) {
     return { source: 'OONI', country, conflict_score: null, warning: `No country code for ${country}` };
   }
@@ -124,7 +125,7 @@ function getAnomalyRate(results) {
 }
 
 // ISO 3166-1 alpha-2 country codes
-function getCountryCode(country) {
+async function getCountryCode(country) {
   const codes = {
     'Afghanistan': 'AF', 'Albania': 'AL', 'Algeria': 'DZ', 'Angola': 'AO',
     'Argentina': 'AR', 'Armenia': 'AM', 'Australia': 'AU', 'Austria': 'AT',
@@ -165,7 +166,8 @@ function getCountryCode(country) {
     'Ukraine': 'UA', 'Uruguay': 'UY', 'Uzbekistan': 'UZ', 'Vanuatu': 'VU',
     'Venezuela': 'VE', 'Vietnam': 'VN', 'Yemen': 'YE', 'Zambia': 'ZM', 'Zimbabwe': 'ZW'
   };
-  return codes[country] || null;
+  const { value } = await resolveTableKey(country, codes);
+  return value;
 }
 
 function fetchJson(hostname, path) {

@@ -11,6 +11,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 const CF_TOKEN = process.env.CLOUDFLARE_RADAR_TOKEN;
 
@@ -148,7 +149,7 @@ async function fetchCableWatchData(country) {
       return { score: null, reason: 'no_cloudflare_token' };
     }
 
-    const cfCode = COUNTRY_CF_CODE[country];
+    const { value: cfCode } = await resolveTableKey(country, COUNTRY_CF_CODE);
     if (!cfCode) return { score: null, reason: 'no_cf_code' };
 
     const [timeseries, outages] = await Promise.all([

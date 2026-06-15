@@ -6,6 +6,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 // UN Comtrade numeric country codes (M49)
 const COUNTRY_M49 = {
@@ -27,7 +28,7 @@ const COUNTRY_M49 = {
 };
 
 async function fetchImportData(country, year) {
-  const reporterCode = COUNTRY_M49[country] || country;
+  const { value: reporterCode } = await resolveTableKey(country, COUNTRY_M49);
   // Comtrade annual data lags ~2 years; default to currentYear - 3
   const targetYear = year ? parseInt(year.slice(0, 4)) : new Date().getFullYear() - 3;
   const prevYear = targetYear - 1;

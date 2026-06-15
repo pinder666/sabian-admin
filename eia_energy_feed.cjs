@@ -8,6 +8,7 @@
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
+const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 const EIA_KEY = process.env.EIA_API || '';
 
@@ -61,11 +62,12 @@ function fetchEIASeries(seriesId) {
 
 async function fetchEnergyStressData(country) {
   // Use baseline for countries without EIA data
-  if (ENERGY_BASELINE[country] !== undefined) {
-    return { score: ENERGY_BASELINE[country], source: 'baseline' };
+  const { value: baselineScore } = await resolveTableKey(country, ENERGY_BASELINE);
+  if (baselineScore !== undefined) {
+    return { score: baselineScore, source: 'baseline' };
   }
 
-  const eiaCode = COUNTRY_EIA[country];
+  const { value: eiaCode } = await resolveTableKey(country, COUNTRY_EIA);
   if (!eiaCode || !EIA_KEY) {
     return { score: null, reason: !EIA_KEY ? 'no_api_key' : 'no_country_code' };
   }
