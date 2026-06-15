@@ -1159,8 +1159,8 @@ async function loadThreats() {
     covEl.style.color = coveragePct >= 90 ? 'var(--stable)' : coveragePct >= 80 ? 'var(--warning)' : 'var(--critical)';
     document.getElementById('stat-coverage-sub').textContent = `${scannedToday}/${totalCountries} today`;
     document.getElementById('tab-threats-count').textContent = `(${allCountries.length})`;
-    document.getElementById('tab-spark-count').textContent   = `(${allCountries.length})`;
-    document.getElementById('tab-fresh-count').textContent   = `(${allCountries.length})`;
+    // document.getElementById('tab-spark-count').textContent   = `(${allCountries.length})`;
+    // document.getElementById('tab-fresh-count').textContent   = `(${allCountries.length})`;
 
     // Populate theater filter
     const theaters = [...new Set(allCountries.map(c=>c.theater).filter(Boolean))].sort();
@@ -1433,7 +1433,7 @@ async function loadLedger() {
         } catch(_) {}
       }));
       ledgerAllObs = obs.sort((a,b) => new Date(b.scan_date) - new Date(a.scan_date));
-      document.getElementById('tab-ledger-count').textContent = `(${ledgerAllObs.length})`;
+      // document.getElementById('tab-ledger-count').textContent = `(${ledgerAllObs.length})`;
       renderLedger();
       return;
     }
