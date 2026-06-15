@@ -536,10 +536,10 @@
 <!-- TAB BAR -->
 <div class="tab-bar">
   <button class="tab-btn active" data-view="threats">THREATS <span class="tab-label-num" id="tab-threats-count"></span></button>
-  <button class="tab-btn" data-view="sparklines">90-DAY TRENDS <span class="tab-label-num" id="tab-spark-count"></span></button>
-  <button class="tab-btn" data-view="ledger">OBSERVATION LEDGER <span class="tab-label-num" id="tab-ledger-count"></span></button>
-  <button class="tab-btn" data-view="freshness">SIGNAL FRESHNESS <span class="tab-label-num" id="tab-fresh-count"></span></button>
-  <button class="tab-btn" data-view="heatmap">SIGNAL HEATMAP</button>
+  <!-- <button class="tab-btn" data-view="sparklines">90-DAY TRENDS <span class="tab-label-num" id="tab-spark-count"></span></button> -->
+  <!-- <button class="tab-btn" data-view="ledger">OBSERVATION LEDGER <span class="tab-label-num" id="tab-ledger-count"></span></button> -->
+  <!-- <button class="tab-btn" data-view="freshness">SIGNAL FRESHNESS <span class="tab-label-num" id="tab-fresh-count"></span></button> -->
+  <button class="tab-btn" data-view="heatmap">HEATMAP</button>
   <button class="tab-btn" data-view="patterns">MINED PATTERNS <span class="tab-label-num" id="tab-patterns-count"></span></button>
     <button class="tab-btn" data-view="extraction-live">EXTRACTION INTELLIGENCE <span class="tab-label-num" id="tab-extraction-count"></span></button>
 </div>
@@ -548,7 +548,7 @@
 
   <!-- ── THREATS VIEW ─────────────────────────────────────────────────────── -->
   <div class="view active" id="view-threats">
-    <!-- Score legend -->
+    <!-- Score legend - commented out for V1
     <div class="score-legend">
       <div class="legend-band">
         <div class="legend-dot" style="background:var(--critical)"></div>
@@ -579,6 +579,7 @@
         </div>
       </div>
     </div>
+    -->
 
     <!-- Status bar -->
     <div class="status-bar" id="status-bar">
@@ -590,28 +591,28 @@
       <div class="stat-cell">
         <div class="stat-label">CRITICAL</div>
         <div class="stat-value critical" id="stat-critical">—</div>
-        <div class="stat-sub">81 – 100</div>
+        <div class="stat-sub"></div>
       </div>
       <div class="stat-cell">
         <div class="stat-label">WARNING</div>
         <div class="stat-value warning" id="stat-warning">—</div>
-        <div class="stat-sub">66 – 80</div>
+        <div class="stat-sub"></div>
       </div>
       <div class="stat-cell">
         <div class="stat-label">ELEVATED</div>
         <div class="stat-value elevated" id="stat-elevated">—</div>
-        <div class="stat-sub">41 – 65</div>
+        <div class="stat-sub"></div>
       </div>
       <div class="stat-cell">
         <div class="stat-label">STABLE</div>
         <div class="stat-value stable" id="stat-stable">—</div>
-        <div class="stat-sub">0 – 40</div>
+        <div class="stat-sub"></div>
       </div>
-      <div class="stat-cell">
+      <!-- <div class="stat-cell">
         <div class="stat-label">AVG SCORE</div>
         <div class="stat-value" id="stat-avg">—</div>
         <div class="stat-sub">global</div>
-      </div>
+      </div> -->
       <div class="stat-cell">
         <div class="stat-label">LAST SCAN</div>
         <div class="stat-value" id="stat-date" style="font-size:1rem">—</div>
@@ -638,8 +639,6 @@
         <option value="">ALL THEATERS</option>
       </select>
       <select class="ctrl-select" id="sort-col" onchange="sortThreats()">
-        <option value="score_desc">SCORE ↓</option>
-        <option value="score_asc">SCORE ↑</option>
         <option value="country_asc">COUNTRY A–Z</option>
         <option value="country_desc">COUNTRY Z–A</option>
       </select>
@@ -1148,7 +1147,7 @@ async function loadThreats() {
     document.getElementById('stat-warning').textContent  = counts.WARNING  || 0;
     document.getElementById('stat-elevated').textContent = counts.ELEVATED || 0;
     document.getElementById('stat-stable').textContent   = counts.STABLE   || 0;
-    document.getElementById('stat-avg').textContent      = avg;
+    // document.getElementById('stat-avg').textContent      = avg;
     // Format last scan as YYYY-MM-DD HH:MM UTC
     const scanDateFmt = lastScanTs ? lastScanTs.replace('T', ' ').slice(0, 16) + ' UTC' : '—';
     document.getElementById('stat-date').textContent = scanDateFmt;
