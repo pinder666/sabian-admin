@@ -12,17 +12,15 @@ const { resolveTableKey } = require('./resolve_table_key.cjs');
 
 const FRED_API_KEY = process.env.FRED_API_KEY;
 
-// Damodaran January 2026 sovereign CDS spreads (basis points)
-// Source: pages.stern.nyu.edu/~adamodar — Country Default Spreads and Risk Premiums
-// bps = basis points (100 bps = 1%). 0 = investment grade, no CDS or AAA-tier
+// CDS_SPREADS_BPS: DISABLED — hardcoded data removed, awaiting live feed
+// To restore: uncomment the table and helper functions below
+/*
 const CDS_SPREADS_BPS = {
-  // Distressed / near-default
   'Venezuela':    3200, 'Zimbabwe':     1800, 'Sudan':        1600,
   'South Sudan':  1400, 'Somalia':      1500, 'Eritrea':      1200,
   'Haiti':        1100, 'Libya':         900, 'Syria':        1800,
   'Yemen':        1600, 'Afghanistan':  1400, 'North Korea':  2000,
   'Myanmar':       800,
-  // High distress
   'Ethiopia':      850, 'Angola':        750, 'Ghana':         700,
   'Pakistan':      820, 'Egypt':         700, 'Tunisia':       800,
   'Zambia':        900, 'Mozambique':    650, 'Kenya':         550,
@@ -34,7 +32,6 @@ const CDS_SPREADS_BPS = {
   'Guinea':        600, 'Ivory Coast':   400, 'Rwanda':        420,
   'Burundi':       700, 'Uganda':        450, 'Tanzania':      400,
   'Mauritania':    550,
-  // Elevated risk
   'Ecuador':       450, 'Bolivia':       420, 'Nicaragua':     480,
   'El Salvador':   390, 'Honduras':      370, 'Guatemala':     320,
   'Jamaica':       380, 'Cuba':          900, 'Venezuela':    3200,
@@ -76,7 +73,6 @@ const CDS_SPREADS_BPS = {
   'United States':   20
 };
 
-// FRED series for EM bond spread (EMBI) — where available
 const FRED_EMBI_SERIES = {
   'Brazil':       'BAMLEMRECRPICOAST',
   'Mexico':       'BAMLEMRECRPICOAST',
@@ -106,12 +102,6 @@ function fetchFredSeries(seriesId) {
   });
 }
 
-// Convert CDS spread (bps) to 0–100 risk score
-// 0–50 bps (AAA/AA) → 0–8
-// 51–150 bps (A/BBB) → 9–25
-// 151–350 bps (BB) → 26–50
-// 351–750 bps (B/CCC) → 51–80
-// 750+ bps (CC/C/D) → 81–100
 function cdsToScore(bps) {
   if (bps <= 50)   return Math.round(bps * 0.16);
   if (bps <= 150)  return Math.round(8 + (bps - 50) * 0.17);
@@ -119,28 +109,10 @@ function cdsToScore(bps) {
   if (bps <= 750)  return Math.round(50 + (bps - 350) * 0.075);
   return Math.min(100, Math.round(80 + (bps - 750) * 0.02));
 }
+*/
 
 async function fetchSovereignCdsData(country) {
-  try {
-    const { value: staticBps } = await resolveTableKey(country, CDS_SPREADS_BPS);
-    if (staticBps === undefined) {
-      return { score: null, reason: 'no_cds_data' };
-    }
-
-    const score = cdsToScore(staticBps);
-
-    return {
-      score,
-      cds_spread_bps:  staticBps,
-      data_source:     'Damodaran_Jan2026',
-      rating_proxy:    staticBps <= 50 ? 'AAA-AA' : staticBps <= 150 ? 'A-BBB' : staticBps <= 350 ? 'BB' : staticBps <= 750 ? 'B-CCC' : 'CC-D',
-      trend:           score >= 70 ? 'distressed' : score >= 40 ? 'elevated' : score >= 20 ? 'watch' : 'stable'
-    };
-
-  } catch (err) {
-    logToHive({ source: 'sovereign_cds_feed', level: 'warn', event: 'fetch_error', data: { country, error: err.message } });
-    return { score: null, reason: 'fetch_error', error: err.message };
-  }
+  return { score: null, reason: 'no_live_feed', coverage: false };
 }
 
 module.exports = { fetchSovereignCdsData };

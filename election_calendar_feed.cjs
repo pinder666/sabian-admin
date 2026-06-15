@@ -10,13 +10,10 @@
 require('dotenv').config({ path: './.env' });
 const { logToHive } = require('./logger.cjs');
 
-// ELECTION_CALENDAR: upcoming and recent elections per country
-// date: ISO date of election day (or most recent election)
-// type: general | presidential | legislative | referendum | regional
-// status: scheduled | held | suspended | military_rule | no_elections
-// risk: baseline risk modifier (some elections are higher-stakes)
+// ELECTION_CALENDAR: DISABLED — hardcoded data removed, awaiting live feed
+// To restore: uncomment the table and function body below
+/*
 const ELECTION_CALENDAR = {
-  // Under military rule — no elections, permanent suppression risk
   'Mali':          { status: 'military_rule',  score_base: 70 },
   'Burkina Faso':  { status: 'military_rule',  score_base: 70 },
   'Niger':         { status: 'military_rule',  score_base: 65 },
@@ -25,15 +22,11 @@ const ELECTION_CALENDAR = {
   'Chad':          { status: 'military_rule',  score_base: 55 },
   'Myanmar':       { status: 'military_rule',  score_base: 75 },
   'Sudan':         { status: 'military_rule',  score_base: 75 },
-
-  // Active conflict — elections suspended/impossible
   'Yemen':         { status: 'suspended',      score_base: 65 },
   'Syria':         { status: 'suspended',      score_base: 65 },
   'Libya':         { status: 'suspended',      score_base: 60 },
   'South Sudan':   { status: 'suspended',      score_base: 60 },
   'Somalia':       { status: 'suspended',      score_base: 55 },
-
-  // 2026 elections — scheduled or recently held
   'Philippines':   { date: '2026-05-12', type: 'midterm',     status: 'held',      risk: 1.0 },
   'Czech Republic':{ date: '2026-10-09', type: 'legislative', status: 'scheduled', risk: 0.7 },
   'Australia':     { date: '2026-05-03', type: 'general',     status: 'held',      risk: 0.6 },
@@ -91,63 +84,10 @@ const ELECTION_CALENDAR = {
   'Eritrea':       { status: 'no_elections',  score_base: 60 },
   'Turkmenistan':  { status: 'no_elections',  score_base: 50 }
 };
+*/
 
 async function fetchElectionCalendarData(country) {
-  try {
-    const entry = ELECTION_CALENDAR[country];
-
-    // Country not in calendar — return low base score
-    if (!entry) return { score: 10, reason: 'no_election_data', trend: 'stable' };
-
-    // Military rule, no elections, or suspended — static elevated score
-    if (['military_rule', 'no_elections', 'suspended'].includes(entry.status)) {
-      return {
-        score: entry.score_base,
-        status: entry.status,
-        trend: entry.status === 'military_rule' ? 'suppressed' : 'suspended',
-        label: entry.status.replace('_', ' ')
-      };
-    }
-
-    // Calculate days from election
-    const electionDate = new Date(entry.date);
-    const today = new Date();
-    const daysFromElection = Math.round((today - electionDate) / (1000 * 60 * 60 * 24));
-    const riskMult = entry.risk || 1.0;
-
-    let score;
-    let window;
-
-    if (daysFromElection < 0) {
-      // Future election — within 90 days: escalating risk
-      const daysUntil = Math.abs(daysFromElection);
-      if (daysUntil <= 30)       score = Math.round(75 * riskMult);
-      else if (daysUntil <= 60)  score = Math.round(55 * riskMult);
-      else if (daysUntil <= 90)  score = Math.round(40 * riskMult);
-      else                       score = Math.round(15 * riskMult);
-      window = `${daysUntil} days until ${entry.type}`;
-    } else {
-      // Past election — 30-day post-election window (results disputes, violence)
-      if (daysFromElection <= 14)       score = Math.round(65 * riskMult);
-      else if (daysFromElection <= 30)  score = Math.round(45 * riskMult);
-      else if (daysFromElection <= 90)  score = Math.round(20 * riskMult);
-      else                              score = Math.round(8 * riskMult);
-      window = `${daysFromElection} days since ${entry.type}`;
-    }
-
-    return {
-      score: Math.min(100, score),
-      election_date: entry.date,
-      election_type: entry.type,
-      days_from_election: daysFromElection,
-      window,
-      trend: score >= 60 ? 'critical_window' : score >= 35 ? 'elevated_window' : 'stable'
-    };
-
-  } catch (err) {
-    logToHive({ source: 'election_calendar_feed', level: 'warn', event: 'fetch_error', data: { country, error: err.message } });
-    return { score: null, reason: 'fetch_error', error: err.message };
-  }
+  return { score: null, reason: 'no_live_feed', coverage: false };
 }
 
 module.exports = { fetchElectionCalendarData };

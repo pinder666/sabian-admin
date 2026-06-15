@@ -10,13 +10,10 @@
 require('dotenv').config({ path: './.env' });
 const { logToHive } = require('./logger.cjs');
 
-// Pipeline strategic risk index per country
-// Based on: Global Energy Monitor Gas Infrastructure Tracker + Oil Pipeline Tracker
-// pipeline_km: approximate km of operational oil/gas pipelines
-// strategic_score: how critical the pipeline is to global/regional supply (0-100)
-// transit: country is a transit route for other nations' energy (amplifies risk)
+// PIPELINE_DATA: DISABLED — hardcoded data removed, awaiting live feed
+// To restore: uncomment the table and function body below
+/*
 const PIPELINE_DATA = {
-  // Major pipeline transit/origin countries
   'Russia':       { pipeline_km: 250000, strategic_score: 95, transit: true,  type: 'gas+oil' },
   'Ukraine':      { pipeline_km: 38000,  strategic_score: 88, transit: true,  type: 'gas'     },
   'Kazakhstan':   { pipeline_km: 22000,  strategic_score: 72, transit: true,  type: 'oil+gas' },
@@ -81,33 +78,10 @@ const PIPELINE_DATA = {
   'Kenya':        { pipeline_km: 900,    strategic_score: 42, transit: false, type: 'oil'     },
   'Uganda':       { pipeline_km: 300,    strategic_score: 38, transit: false, type: 'oil'     }
 };
+*/
 
 async function fetchPipelineRiskData(country) {
-  try {
-    const data = PIPELINE_DATA[country];
-
-    if (!data) return { score: 0, reason: 'no_pipeline_data' };
-
-    let score = Math.round(data.strategic_score * 0.6);  // base from strategic importance
-    if (data.transit) score = Math.min(100, score + 15); // transit countries amplify global risk
-
-    // Normalize pipeline_km contribution (capped)
-    const kmBonus = Math.min(20, Math.round(Math.log10(data.pipeline_km + 1) * 5));
-    score = Math.min(100, score + kmBonus);
-
-    return {
-      score,
-      pipeline_km:      data.pipeline_km,
-      strategic_score:  data.strategic_score,
-      transit_country:  data.transit,
-      pipeline_type:    data.type,
-      trend:            score >= 70 ? 'critical_infrastructure' : score >= 45 ? 'significant' : 'monitored'
-    };
-
-  } catch (err) {
-    logToHive({ source: 'pipeline_risk_feed', level: 'warn', event: 'error', data: { country, error: err.message } });
-    return { score: null, reason: 'error', error: err.message };
-  }
+  return { score: null, reason: 'no_live_feed', coverage: false };
 }
 
 module.exports = { fetchPipelineRiskData };

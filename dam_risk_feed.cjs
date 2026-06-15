@@ -11,12 +11,10 @@
 require('dotenv').config({ path: './.env' });
 const { logToHive } = require('./logger.cjs');
 
-// Major strategic dams per country
-// risk_score: 0-100 based on: dam size, downstream population, geopolitical tension, fill levels
-// dispute: active upstream/downstream dispute amplifies score
-// attack_risk: country has active conflict near dam infrastructure
+// DAM_RISK_DATA: DISABLED — hardcoded data removed, awaiting live feed
+// To restore: uncomment the table and function body below
+/*
 const DAM_RISK_DATA = {
-  // High-risk dam situations
   'Ethiopia':     { score: 85, dams: ['Grand Ethiopian Renaissance Dam (GERD)'],
                     dispute: true,  attack_risk: true,
                     note: 'GERD is center of Egypt-Ethiopia-Sudan water war. Filling cycle ongoing.' },
@@ -114,29 +112,10 @@ const DAM_RISK_DATA = {
                     dispute: false, attack_risk: false,
                     note: 'Minimal dam infrastructure. Desalination-dependent.' }
 };
+*/
 
 async function fetchDamRiskData(country) {
-  try {
-    const data = DAM_RISK_DATA[country];
-    if (!data) return { score: 5, reason: 'no_dam_data', trend: 'stable' };
-
-    let score = data.score;
-    if (data.dispute)      score = Math.min(100, score + 8);
-    if (data.attack_risk)  score = Math.min(100, score + 10);
-
-    return {
-      score,
-      dams:        data.dams || [],
-      dispute:     data.dispute,
-      attack_risk: data.attack_risk,
-      note:        data.note,
-      trend:       score >= 70 ? 'critical' : score >= 45 ? 'elevated' : 'monitored'
-    };
-
-  } catch (err) {
-    logToHive({ source: 'dam_risk_feed', level: 'warn', event: 'error', data: { country, error: err.message } });
-    return { score: null, reason: 'error', error: err.message };
-  }
+  return { score: null, reason: 'no_live_feed', coverage: false };
 }
 
 module.exports = { fetchDamRiskData };
