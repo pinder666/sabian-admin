@@ -877,14 +877,14 @@
     <div class="insight-box" id="dp-insight">Generating…</div>
   </div>
   <div class="detail-section">
-    <div class="detail-section-title">90-Day Score History</div>
+    <div class="detail-section-title">History</div>
     <div class="detail-chart-wrap">
       <svg class="detail-sparkline" id="dp-sparkline" viewBox="0 0 380 80" preserveAspectRatio="none"></svg>
     </div>
     <div id="dp-spark-labels" style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.6rem; color:var(--dim); margin-top:4px;"></div>
   </div>
   <div class="detail-section">
-    <div class="detail-section-title">Current Signals</div>
+    <div class="detail-section-title">Current Pressures</div>
     <div id="dp-signals"></div>
   </div>
   <div class="detail-section">
@@ -955,7 +955,7 @@ function sigDisplay(rawName) {
   return SIGNAL_META[rawName]?.label || rawName;
 }
 function sigDesc(rawName) {
-  return SIGNAL_META[rawName]?.desc || 'Proprietary Sabian intelligence signal.';
+  return SIGNAL_META[rawName]?.desc || '';
 }
 
 // ── STATE ──────────────────────────────────────────────────────────────────
@@ -1678,40 +1678,38 @@ function generateInsight(country, current, history, openObsList) {
     const latest = history[history.length - 1]?.convergence_score || score;
     const prior  = history[Math.max(0, history.length - 4)]?.convergence_score || score;
     const delta  = latest - prior;
-    if (delta > 5)       trendText = `Score has risen ${delta} points over the last ${Math.min(history.length, 3)} readings — worsening.`;
-    else if (delta < -5) trendText = `Score has fallen ${Math.abs(delta)} points over the last ${Math.min(history.length, 3)} readings — improving.`;
-    else                 trendText = `Score is holding steady over the last ${Math.min(history.length, 3)} readings.`;
+    if (delta > 5)       trendText = 'Conditions have worsened over recent readings.';
+    else if (delta < -5) trendText = 'Conditions have eased over recent readings.';
+    else                 trendText = 'Conditions have held steady.';
   }
 
   // Level description
   const levelDesc = {
-    CRITICAL: `is in systemic risk convergence. Multiple domains are simultaneously elevated — this is the highest category in the Sabian framework and indicates structural instability across interconnected signals`,
-    WARNING:  `is under multi-domain stress. Three or more signals are elevated above baseline, indicating compounding pressure that requires active monitoring`,
-    ELEVATED: `shows emerging stress. One or two signals are above normal operating range. No convergence yet, but conditions warrant watching`,
-    STABLE:   `is within baseline operating range. Signals are below threshold. No convergence detected at this time`
-  }[level] || 'has an indeterminate risk reading';
+    CRITICAL: 'Severe disruption. Multiple pressure points active and sustained.',
+    WARNING:  'Elevated disruption. Key areas showing strain.',
+    ELEVATED: 'Moderate disruption. Some areas under pressure.',
+    STABLE:   'Operating normally. No major disruptions detected.'
+  }[level] || '';
 
   // Signal sentence
   let sigSentence = '';
   if (sigNames.length === 3) {
-    sigSentence = ` The three highest-scoring signals driving this reading are ${sigNames[0]}, ${sigNames[1]}, and ${sigNames[2]}.`;
+    sigSentence = ` Main pressures: ${sigNames[0]}, ${sigNames[1]}, and ${sigNames[2]}.`;
   } else if (sigNames.length > 0) {
-    sigSentence = ` Primary signal${sigNames.length > 1 ? 's' : ''}: ${sigNames.join(', ')}.`;
+    sigSentence = ` Main pressure${sigNames.length > 1 ? 's' : ''}: ${sigNames.join(', ')}.`;
   }
 
   // Observation sentence
   let obsSentence = '';
   if (openObsList && openObsList.length > 0) {
     const o = openObsList[0];
-    const dir = o.direction === 'ASCENDING' ? 'worsen' : 'improve';
+    const dir = o.direction === 'ASCENDING' ? 'deteriorating' : 'improving';
     const closeDate = o.window_closes_at ? o.window_closes_at.slice(0, 10) : '—';
-    obsSentence = ` Sabian recorded an observation on ${o.scan_date || '—'} that conditions were ${dir === 'worsen' ? 'deteriorating' : 'improving'}. That observation window closes ${closeDate} and will be publicly graded against what the data shows.`;
-  } else if (openObsList) {
-    obsSentence = ' No open observation windows — this country has not crossed a risk band threshold recently.';
+    obsSentence = ` Conditions were ${dir} as of ${o.scan_date || '—'}. Review window closes ${closeDate}.`;
   }
 
   const lines = [
-    `<strong>${country}</strong> scores <strong>${score}</strong> (${level}) and ${levelDesc}.`,
+    `<strong>${country}</strong>: ${levelDesc}`,
     sigSentence,
     trendText ? ' ' + trendText : '',
     obsSentence
@@ -1759,10 +1757,8 @@ async function openDetail(encodedCountry) {
 
   // Update meta
   if (current) {
-    const color = riskColor(current.risk_level);
     document.getElementById('dp-meta').innerHTML =
-      `<span style="color:${color};font-weight:700">${current.convergence_score}</span> &nbsp;` +
-      badge(current.risk_level) + `&nbsp; ${current.theater||''} &nbsp;·&nbsp; ${current.scan_date||''}`;
+      `${current.theater||''} &nbsp;·&nbsp; ${current.scan_date||''}`;
   }
 
   // Draw sparkline
@@ -1790,17 +1786,14 @@ async function openDetail(encodedCountry) {
       const desc = sigDesc(s.name);
       const lbl  = s.label || '';
       sigHtml += `<div style="padding:7px 0;border-bottom:1px solid rgba(21,32,64,0.5)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
-          <span style="font-size:0.78rem;font-weight:600;color:var(--bright)">${disp}</span>
-          <span style="font-family:var(--mono);font-size:0.85rem;font-weight:700;color:${c2}">${sc}<span style="font-size:0.65rem;color:var(--dim)">/100</span></span>
-        </div>
+        <div style="font-size:0.78rem;font-weight:600;color:var(--bright);margin-bottom:3px">${disp}</div>
         ${lbl ? `<div style="font-size:0.72rem;color:var(--warning);margin-bottom:2px">${lbl}</div>` : ''}
         <div style="font-size:0.7rem;color:var(--dim);line-height:1.5">${desc}</div>
       </div>`;
     });
-    document.getElementById('dp-signals').innerHTML = sigHtml || '<span style="font-size:0.75rem;color:var(--dim)">No signal data</span>';
+    document.getElementById('dp-signals').innerHTML = sigHtml || '<span style="font-size:0.75rem;color:var(--dim)">No data</span>';
   } else {
-    document.getElementById('dp-signals').innerHTML = '<span style="font-size:0.75rem;color:var(--dim)">No signal data available</span>';
+    document.getElementById('dp-signals').innerHTML = '<span style="font-size:0.75rem;color:var(--dim)">No data available</span>';
   }
 
   // Observations
