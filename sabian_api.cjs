@@ -321,6 +321,37 @@ app.get('/public-api/country/:name', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// Fetch the 5 live signal labels from signal_readings for a country
+app.get('/public-api/live-signals/:country', async (req, res) => {
+  const country = decodeURIComponent(req.params.country);
+  const LIVE_SIGNALS = ['Displacement', 'Economic Stress', 'Food Security', 'Satellite Fire', 'Climate Stress'];
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+    const { data, error } = await supabase
+      .from('signal_readings')
+      .select('signal_name, label, scan_date')
+      .eq('country', country)
+      .in('signal_name', LIVE_SIGNALS)
+      .order('scan_date', { ascending: false });
+
+    if (error) return res.status(500).json({ error: error.message });
+
+    // Take most recent per signal
+    const latest = {};
+    for (const row of (data || [])) {
+      if (!latest[row.signal_name]) {
+        latest[row.signal_name] = row;
+      }
+    }
+
+    res.json({ country, signals: Object.values(latest) });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/public-api/summary', async (req, res) => {
   try {
     const scores = await getLatestScores();

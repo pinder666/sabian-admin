@@ -1662,60 +1662,17 @@ function renderHeatmap() {
 }
 
 // ── INSIGHT TEXT GENERATOR ─────────────────────────────────────────────────
-// Deterministic — no AI. Reads score, signals, trend, observations and writes
-// plain English that a buyer can read in 10 seconds.
-function generateInsight(country, current, history, openObsList) {
-  if (!current) return 'No current scan data available for this country.';
+// Restates only the 5 live signal labels — source data verbatim, no adjectives.
+function generateInsight(country, liveSignals) {
+  const labels = (liveSignals || [])
+    .map(s => s.label)
+    .filter(Boolean);
 
-  const score  = current.convergence_score;
-  const level  = current.risk_level;
-  const top3   = current.top_3_signals || [];
-  const sigNames = top3.map(s => (s.name || '').replace(/_/g, ' ')).filter(Boolean);
-
-  // Trend: compare last vs 3 readings ago
-  let trendText = '';
-  if (history.length >= 3) {
-    const latest = history[history.length - 1]?.convergence_score || score;
-    const prior  = history[Math.max(0, history.length - 4)]?.convergence_score || score;
-    const delta  = latest - prior;
-    if (delta > 5)       trendText = 'Conditions have worsened over recent readings.';
-    else if (delta < -5) trendText = 'Conditions have eased over recent readings.';
-    else                 trendText = 'Conditions have held steady.';
+  if (labels.length === 0) {
+    return `<strong>${country}</strong>: No live data available.`;
   }
 
-  // Level description
-  const levelDesc = {
-    CRITICAL: 'Severe disruption. Multiple pressure points active and sustained.',
-    WARNING:  'Elevated disruption. Key areas showing strain.',
-    ELEVATED: 'Moderate disruption. Some areas under pressure.',
-    STABLE:   'Operating normally. No major disruptions detected.'
-  }[level] || '';
-
-  // Signal sentence
-  let sigSentence = '';
-  if (sigNames.length === 3) {
-    sigSentence = ` Main pressures: ${sigNames[0]}, ${sigNames[1]}, and ${sigNames[2]}.`;
-  } else if (sigNames.length > 0) {
-    sigSentence = ` Main pressure${sigNames.length > 1 ? 's' : ''}: ${sigNames.join(', ')}.`;
-  }
-
-  // Observation sentence
-  let obsSentence = '';
-  if (openObsList && openObsList.length > 0) {
-    const o = openObsList[0];
-    const dir = o.direction === 'ASCENDING' ? 'deteriorating' : 'improving';
-    const closeDate = o.window_closes_at ? o.window_closes_at.slice(0, 10) : '—';
-    obsSentence = ` Conditions were ${dir} as of ${o.scan_date || '—'}. Review window closes ${closeDate}.`;
-  }
-
-  const lines = [
-    `<strong>${country}</strong>: ${levelDesc}`,
-    sigSentence,
-    trendText ? ' ' + trendText : '',
-    obsSentence
-  ];
-
-  return lines.join('').replace(/\s{2,}/g, ' ').trim();
+  return `<strong>${country}</strong>: ${labels.join('. ')}.`;
 }
 
 // ── COUNTRY DETAIL PANEL ───────────────────────────────────────────────────
@@ -1775,57 +1732,27 @@ async function openDetail(encodedCountry) {
     svgEl.innerHTML = `<text x="190" y="44" font-family="monospace" font-size="10" fill="rgba(136,160,192,0.5)" text-anchor="middle">Insufficient history</text>`;
   }
 
-  // Signals
-  const top3 = current?.top_3_signals || [];
-  if (top3.length) {
-    let sigHtml = '';
-    top3.forEach(s => {
-      const sc   = s.score || 0;
-      const c2   = scoreColor(sc);
-      const disp = sigDisplay(s.name);
-      const desc = sigDesc(s.name);
-      const lbl  = s.label || '';
+  // Signals — fetch 5 live signals from signal_readings
+  const liveRes = await apiFetch(`/public-api/live-signals/${encodeURIComponent(country)}`);
+  const liveSignals = liveRes?.signals || [];
+  let sigHtml = '';
+  liveSignals.forEach(s => {
+    const disp = sigDisplay(s.signal_name);
+    const lbl = s.label || '';
+    if (lbl) {
       sigHtml += `<div style="padding:7px 0;border-bottom:1px solid rgba(21,32,64,0.5)">
         <div style="font-size:0.78rem;font-weight:600;color:var(--bright);margin-bottom:3px">${disp}</div>
-        ${lbl ? `<div style="font-size:0.72rem;color:var(--warning);margin-bottom:2px">${lbl}</div>` : ''}
-        <div style="font-size:0.7rem;color:var(--dim);line-height:1.5">${desc}</div>
+        <div style="font-size:0.72rem;color:var(--warning)">${lbl}</div>
       </div>`;
-    });
-    document.getElementById('dp-signals').innerHTML = sigHtml || '<span style="font-size:0.75rem;color:var(--dim)">No data</span>';
-  } else {
-    document.getElementById('dp-signals').innerHTML = '<span style="font-size:0.75rem;color:var(--dim)">No data available</span>';
-  }
+    }
+  });
+  document.getElementById('dp-signals').innerHTML = sigHtml || '<span style="font-size:0.75rem;color:var(--dim)">No live data</span>';
 
-  // Observations
-  const obsData = obsRes.status === 'fulfilled' ? obsRes.value : null;
-  const openObs = obsData ? (obsData.observations || []).filter(o => !o.grade) : [];
-  if (openObs.length) {
-    let obsHtml = '';
-    openObs.forEach(o => {
-      const dirColor = o.direction === 'ASCENDING' ? 'var(--critical)' : 'var(--stable)';
-      const closeDate = o.window_closes_at ? o.window_closes_at.slice(0,10) : '—';
-      obsHtml += `<div class="obs-row">
-        <div class="obs-row-top">
-          ${badge(o.risk_level)}
-          <span class="obs-dir ${o.direction}">${o.direction}</span>
-          <span class="badge badge-OPEN">OPEN</span>
-        </div>
-        <div class="obs-window">Window closes: ${closeDate} (${o.window_days}d)</div>
-        ${o.grade_notes ? `<div class="obs-note">${o.grade_notes}</div>` : ''}
-      </div>`;
-    });
-    document.getElementById('dp-observations').innerHTML = obsHtml;
-  } else {
-    const allObs = obsData ? (obsData.observations || []) : [];
-    document.getElementById('dp-observations').innerHTML =
-      allObs.length
-        ? `<span style="font-size:0.75rem;color:var(--dim)">${allObs.length} graded observation(s) — no open windows</span>`
-        : '<span style="font-size:0.75rem;color:var(--dim)">No observations recorded</span>';
-  }
+  // Observations — cut for V1
+  document.getElementById('dp-observations').innerHTML = '';
 
-  // Generate and inject insight text
-  const openObsList = obsData ? (obsData.observations || []).filter(o => !o.grade) : [];
-  document.getElementById('dp-insight').innerHTML = generateInsight(country, current, history, openObsList);
+  // Generate and inject insight text (after live signals fetched)
+  document.getElementById('dp-insight').innerHTML = generateInsight(country, liveSignals);
 }
 
 function closeDetail() {
