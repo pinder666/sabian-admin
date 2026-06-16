@@ -642,6 +642,8 @@
         <option value="country_asc">COUNTRY A–Z</option>
         <option value="country_desc">COUNTRY Z–A</option>
       </select>
+      <button class="ctrl-select" id="filter-starred" onclick="toggleStarredFilter()" style="cursor:pointer">☆ MY COVERAGE</button>
+      <button class="ctrl-select" id="filter-changed" onclick="toggleChangedFilter()" style="cursor:pointer">CHANGED</button>
     </div>
 
     <!-- Table -->
@@ -900,6 +902,37 @@ const BASE = '';  // same origin
 // ── SCORE BANDS (aligned with legend) ──────────────────────────────────────
 const BANDS = { CRITICAL: 81, WARNING: 66, ELEVATED: 41 };
 
+function bandOf(score) {
+  if (score >= BANDS.CRITICAL) return 'CRITICAL';
+  if (score >= BANDS.WARNING) return 'WARNING';
+  if (score >= BANDS.ELEVATED) return 'ELEVATED';
+  return 'STABLE';
+}
+
+function getStarred() {
+  try { return JSON.parse(localStorage.getItem('sabian_starred') || '[]'); }
+  catch { return []; }
+}
+
+function toggleStar(country, e) {
+  e.stopPropagation();
+  let starred = getStarred();
+  if (starred.includes(country)) starred = starred.filter(c => c !== country);
+  else starred.push(country);
+  localStorage.setItem('sabian_starred', JSON.stringify(starred));
+  filterThreats();
+}
+
+let starredFilterActive = false;
+let changedFilterActive = false;
+
+function toggleStarredFilter() { starredFilterActive = !starredFilterActive; updateFilterButtons(); filterThreats(); }
+function toggleChangedFilter() { changedFilterActive = !changedFilterActive; updateFilterButtons(); filterThreats(); }
+function updateFilterButtons() {
+  document.getElementById('filter-starred').style.borderColor = starredFilterActive ? 'var(--accent)' : '';
+  document.getElementById('filter-changed').style.borderColor = changedFilterActive ? 'var(--accent)' : '';
+}
+
 // ── SIGNAL DISPLAY LAYER ───────────────────────────────────────────────────
 // Buyer-facing names and descriptions. Never expose source names.
 // Keys match the 'name' field returned by the API.
@@ -978,6 +1011,7 @@ let sparkloaded    = false;
 let ledgerLoaded   = false;
 let freshnessLoaded= false;
 let heatmapLoaded  = false;
+let allHistoriesLoaded = false;
 
 // ── UTIL ───────────────────────────────────────────────────────────────────
 function riskColor(level) {
@@ -1192,16 +1226,41 @@ async function loadThreats() {
     });
 
     renderThreatsTable(allCountries);
+    ensureAllHistories();
   } catch (err) {
     document.getElementById('threat-table-wrap').innerHTML =
       `<div class="error-msg">Failed to load threat data: ${err.message}</div>`;
   }
 }
 
+async function ensureAllHistories() {
+  if (allHistoriesLoaded) return;
+  const CONCURRENCY = 6;
+  const queue = allCountries.map(c => c.country);
+  let idx = 0;
+  async function worker() {
+    while (idx < queue.length) {
+      const country = queue[idx++];
+      if (historyCache[country] && historyCache[country].length >= 2) continue;
+      try {
+        const r = await fetch('/public-api/country/' + encodeURIComponent(country) + '?days=90');
+        const d = await r.json();
+        historyCache[country] = d.history || [];
+      } catch (e) {
+        historyCache[country] = [];
+      }
+    }
+  }
+  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  allHistoriesLoaded = true;
+  if (changedFilterActive) filterThreats();
+}
+
 function filterThreats() {
   const q    = document.getElementById('search-input').value.toLowerCase();
   const lev  = document.getElementById('filter-level').value;
   const thr  = document.getElementById('filter-theater').value;
+  const starred = getStarred();
   let rows   = allCountries;
   // Search matches country name OR aliases
   if (q) rows = rows.filter(c =>
@@ -1221,6 +1280,27 @@ function filterThreats() {
     });
   }
   if (thr) rows = rows.filter(c => c.theater === thr);
+  // MY COVERAGE filter
+  if (starredFilterActive) {
+    rows = rows.filter(c => starred.includes(c.country));
+  }
+  // CHANGED filter — band flipped in last ~7 days
+  if (changedFilterActive) {
+    rows = rows.filter(c => {
+      const hist = historyCache[c.country];
+      if (!hist || hist.length < 2) return false;
+      const latest = hist[hist.length - 1];
+      const latestDate = new Date(latest.scan_date);
+      const target = latestDate.getTime() - 7 * 24 * 60 * 60 * 1000;
+      let prior = hist[0];
+      for (let i = hist.length - 2; i >= 0; i--) {
+        const d = new Date(hist[i].scan_date).getTime();
+        if (d <= target) { prior = hist[i]; break; }
+        prior = hist[i];
+      }
+      return bandOf(latest.convergence_score || 0) !== bandOf(prior.convergence_score || 0);
+    });
+  }
   renderThreatsTable(rows);
 }
 
@@ -1236,10 +1316,11 @@ function sortThreats() {
 
 function renderThreatsTable(rows) {
   if (!rows.length) {
-    document.getElementById('threat-table-wrap').innerHTML = '<div class="loading-msg">No results.</div>';
+    document.getElementById('threat-table-wrap').innerHTML = '<div class="loading-msg">No countries match current filters.</div>';
     return;
   }
   const today = new Date().toISOString().slice(0, 10);
+  const starred = getStarred();
   let html = `<table class="threat-table">
     <thead><tr>
       <th>#</th>
@@ -1283,9 +1364,13 @@ function renderThreatsTable(rows) {
 
     // Acute score cell - removed for V1
 
+    const isStarred = starred.includes(c.country);
+    const starIcon = isStarred
+      ? `<span onclick="toggleStar('${c.country.replace(/'/g, "\\'")}', event)" style="cursor:pointer;color:var(--warning);margin-right:5px" title="Remove from My Coverage">★</span>`
+      : `<span onclick="toggleStar('${c.country.replace(/'/g, "\\'")}', event)" style="cursor:pointer;color:var(--dim);margin-right:5px" title="Add to My Coverage">☆</span>`;
     html += `<tr onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
       <td style="font-family:var(--mono);font-size:0.7rem;color:var(--dim)">${i+1}</td>
-      <td>${freshDot}<span class="country-name">${c.country}</span>${statusTag}</td>
+      <td>${starIcon}${freshDot}<span class="country-name">${c.country}</span>${statusTag}</td>
       <td><span class="theater-tag">${c.theater||'—'}</span></td>
       <td id="${sparkCellId}">${sparkHtml}</td>
       <td><div class="signal-chips">${chips}</div></td>
