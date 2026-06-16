@@ -951,6 +951,15 @@ const SIGNAL_META = {
   'USDA Food':            { label: 'Food Supply Balance',       desc: 'Grain production vs consumption balance, strategic reserve levels.' },
 };
 
+function cleanLabel(label) {
+  if (!label) return '';
+  return label
+    .replace(/\s*\((sustained|escalating|declining)\)/gi, '')
+    .replace(/\s*—\s*ag season dampened/gi, '')
+    .replace(/,\s*0 affected/gi, '')
+    .trim();
+}
+
 function sigDisplay(rawName) {
   return SIGNAL_META[rawName]?.label || rawName;
 }
@@ -1665,7 +1674,7 @@ function renderHeatmap() {
 // Restates only the 5 live signal labels — source data verbatim, no adjectives.
 function generateInsight(country, liveSignals) {
   const labels = (liveSignals || [])
-    .map(s => s.label)
+    .map(s => cleanLabel(s.label))
     .filter(Boolean);
 
   if (labels.length === 0) {
@@ -1738,7 +1747,7 @@ async function openDetail(encodedCountry) {
   let sigHtml = '';
   liveSignals.forEach(s => {
     const disp = sigDisplay(s.signal_name);
-    const lbl = s.label || '';
+    const lbl = cleanLabel(s.label);
     if (lbl) {
       sigHtml += `<div style="padding:7px 0;border-bottom:1px solid rgba(21,32,64,0.5)">
         <div style="font-size:0.78rem;font-weight:600;color:var(--bright);margin-bottom:3px">${disp}</div>
