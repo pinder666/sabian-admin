@@ -1247,7 +1247,6 @@ function renderThreatsTable(rows) {
       <th>THEATER</th>
       <th>TREND</th>
       <th>TOP PRESSURES</th>
-      <th>SCAN DATE</th>
     </tr></thead><tbody>`;
 
   rows.forEach((c, i) => {
@@ -1290,20 +1289,6 @@ function renderThreatsTable(rows) {
       <td><span class="theater-tag">${c.theater||'—'}</span></td>
       <td id="${sparkCellId}">${sparkHtml}</td>
       <td><div class="signal-chips">${chips}</div></td>
-      <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">
-        ${(()=>{
-          const yr = c.year || (c.scan_date ? c.scan_date.slice(0,4) : null);
-          const age = yr ? (new Date().getFullYear() - parseInt(yr)) : null;
-          // Suppress aging badges for historical countries
-          if (c.status === 'historical') return yr || '—';
-          let ageBadge = '';
-          if (age === null) return '—';
-          if (age >= 11) ageBadge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--critical);border:1px solid rgba(255,60,60,0.3);padding:1px 4px;border-radius:2px">ANCIENT</span>';
-          else if (age >= 6) ageBadge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--warning);border:1px solid rgba(255,170,0,0.3);padding:1px 4px;border-radius:2px">STALE</span>';
-          else if (age >= 2) ageBadge = '<span style="margin-left:4px;font-size:0.6rem;color:var(--dim);border:1px solid var(--border);padding:1px 4px;border-radius:2px">AGING</span>';
-          return yr + ageBadge;
-        })()}
-      </td>
     </tr>`;
   });
 
