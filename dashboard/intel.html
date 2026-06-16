@@ -954,7 +954,7 @@ const SIGNAL_META = {
 function cleanLabel(label) {
   if (!label) return '';
   return label
-    .replace(/\s*\((sustained|escalating|declining)\)/gi, '')
+    .replace(/\s*\((sustained|escalating|decreasing)\)/gi, '')
     .replace(/\s*—\s*ag season dampened/gi, '')
     .replace(/,\s*0 affected/gi, '')
     .trim();
