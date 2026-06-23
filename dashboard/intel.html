@@ -618,11 +618,6 @@
         <div class="stat-value" id="stat-date" style="font-size:1rem">—</div>
         <div class="stat-sub">UTC</div>
       </div>
-      <div class="stat-cell">
-        <div class="stat-label">COVERAGE</div>
-        <div class="stat-value" id="stat-coverage">—</div>
-        <div class="stat-sub" id="stat-coverage-sub">scanned today</div>
-      </div>
     </div>
 
     <!-- Controls -->
@@ -1176,12 +1171,6 @@ async function loadThreats() {
     const scanDateFmt = lastScanTs ? lastScanTs.replace('T', ' ').slice(0, 16) + ' UTC' : '—';
     document.getElementById('stat-date').textContent = scanDateFmt;
     document.getElementById('scan-date-nav').textContent = lastScanTs ? lastScanTs.slice(0, 10) : '—';
-    // Coverage: scanned_today / total_countries
-    const coveragePct = totalCountries > 0 ? Math.round((scannedToday / totalCountries) * 100) : 0;
-    const covEl = document.getElementById('stat-coverage');
-    covEl.textContent = coveragePct + '%';
-    covEl.style.color = coveragePct >= 90 ? 'var(--stable)' : coveragePct >= 80 ? 'var(--warning)' : 'var(--critical)';
-    document.getElementById('stat-coverage-sub').textContent = `${scannedToday}/${totalCountries} today`;
     document.getElementById('tab-threats-count').textContent = `(${allCountries.length})`;
     // document.getElementById('tab-spark-count').textContent   = `(${allCountries.length})`;
     // document.getElementById('tab-fresh-count').textContent   = `(${allCountries.length})`;
