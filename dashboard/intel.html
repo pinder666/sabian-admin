@@ -1781,7 +1781,7 @@ async function openDetail(encodedCountry, mode) {
 
     try {
       const data = await apiFetch(`/public-api/famine-why/${encodeURIComponent(country)}`);
-      document.getElementById('dp-meta').textContent = `FEWS NET · ${data.reporting_date || '—'}`;
+      document.getElementById('dp-meta').textContent = `IPC CLASSIFICATION · ${data.reporting_date || '—'}`;
 
       const regions = data.worst_regions || [];
       if (regions.length === 0) {
