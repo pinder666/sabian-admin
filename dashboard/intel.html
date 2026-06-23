@@ -723,13 +723,7 @@
   <div class="view" id="view-heatmap">
     <div class="section-hdr">
       <span class="section-title">FAMINE RISK</span>
-      <span class="section-meta">IPC PHASE CLASSIFICATION — UN FOOD SECURITY SCALE</span>
     </div>
-    <p class="heatmap-note" style="max-width:760px">
-      Countries ranked by IPC phase (worst first). Phase classification is the UN's published scale —
-      Phase 5 is Famine, Phase 1 is Minimal. Colors follow the official IPC palette.
-      Click any row for country detail.
-    </p>
     <div id="famine-wrap">
       <div class="loading-msg">Loading famine risk data…</div>
     </div>
@@ -1165,13 +1159,10 @@ async function loadThreats() {
     // Populate theater filter
     const theaters = [...new Set(allCountries.map(c=>c.theater).filter(Boolean))].sort();
     const tsel = document.getElementById('filter-theater');
-    const tsel2 = document.getElementById('heatmap-theater');
     theaters.forEach(t => {
-      [tsel, tsel2].forEach(sel => {
-        const opt = document.createElement('option');
-        opt.value = t; opt.textContent = t;
-        sel.appendChild(opt);
-      });
+      const opt = document.createElement('option');
+      opt.value = t; opt.textContent = t;
+      tsel.appendChild(opt);
     });
 
     // Populate ledger country dropdown
