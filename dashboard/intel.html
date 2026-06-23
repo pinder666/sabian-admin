@@ -539,7 +539,7 @@
   <!-- <button class="tab-btn" data-view="sparklines">90-DAY TRENDS <span class="tab-label-num" id="tab-spark-count"></span></button> -->
   <!-- <button class="tab-btn" data-view="ledger">OBSERVATION LEDGER <span class="tab-label-num" id="tab-ledger-count"></span></button> -->
   <!-- <button class="tab-btn" data-view="freshness">SIGNAL FRESHNESS <span class="tab-label-num" id="tab-fresh-count"></span></button> -->
-  <button class="tab-btn" data-view="heatmap">HEATMAP</button>
+  <button class="tab-btn" data-view="heatmap">FAMINE RISK <span class="tab-label-num" id="tab-famine-count"></span></button>
   <button class="tab-btn" data-view="patterns">MINED PATTERNS <span class="tab-label-num" id="tab-patterns-count"></span></button>
     <button class="tab-btn" data-view="extraction-live">EXTRACTION INTELLIGENCE <span class="tab-label-num" id="tab-extraction-count"></span></button>
 </div>
@@ -719,39 +719,26 @@
     </div>
   </div>
 
-  <!-- ── HEATMAP VIEW ──────────────────────────────────────────────────────── -->
+  <!-- ── FAMINE RISK VIEW ──────────────────────────────────────────────────── -->
   <div class="view" id="view-heatmap">
     <div class="section-hdr">
-      <span class="section-title">SIGNAL × COUNTRY HEATMAP</span>
-      <span class="section-meta">TOP-3 DOMINANT SIGNALS PER COUNTRY</span>
+      <span class="section-title">FAMINE RISK</span>
+      <span class="section-meta">IPC PHASE CLASSIFICATION — UN FOOD SECURITY SCALE</span>
     </div>
-    <p class="heatmap-note">
-      Color intensity = signal contribution. Dark cell = signal absent or not top-3.
-      Sorted by convergence score descending. Click any cell for country detail.
+    <p class="heatmap-note" style="max-width:760px">
+      Countries ranked by IPC phase (worst first). Phase classification is the UN's published scale —
+      Phase 5 is Famine, Phase 1 is Minimal. Colors follow the official IPC palette.
+      Click any row for country detail.
     </p>
-    <div class="threat-controls">
-      <select class="ctrl-select" id="heatmap-theater" onchange="renderHeatmap()">
-        <option value="">ALL THEATERS</option>
-      </select>
-      <select class="ctrl-select" id="heatmap-level" onchange="renderHeatmap()">
-        <option value="">ALL LEVELS</option>
-        <option value="CRITICAL">CRITICAL</option>
-        <option value="WARNING">WARNING</option>
-        <option value="ELEVATED">ELEVATED</option>
-        <option value="STABLE">STABLE</option>
-      </select>
+    <div id="famine-wrap">
+      <div class="loading-msg">Loading famine risk data…</div>
     </div>
-    <div class="heatmap-wrap" id="heatmap-wrap">
-      <div class="loading-msg">Loading heatmap…</div>
-    </div>
-    <div class="heatmap-legend">
-      <span class="legend-swatch" style="background:#1a1a4a"></span> 0
-      <span class="legend-swatch" style="background:#0a2a7a; margin-left:4px"></span> Low
-      <span class="legend-swatch" style="background:#0d5099; margin-left:4px"></span> Mid
-      <span class="legend-swatch" style="background:#0070cc; margin-left:4px"></span> High
-      <span class="legend-swatch" style="background:var(--warning); margin-left:4px"></span> Warning
-      <span class="legend-swatch" style="background:var(--critical); margin-left:4px"></span> Critical
-      <span style="margin-left:8px; opacity:0.6">Score range: 0–100</span>
+    <div class="heatmap-legend" style="margin-top:1rem">
+      <span class="legend-swatch" style="background:#640000"></span> Phase 5 Famine
+      <span class="legend-swatch" style="background:#C80000; margin-left:12px"></span> Phase 4 Emergency
+      <span class="legend-swatch" style="background:#E67800; margin-left:12px"></span> Phase 3 Crisis
+      <span class="legend-swatch" style="background:#FAE61E; margin-left:12px"></span> Phase 2 Stressed
+      <span class="legend-swatch" style="background:#C6FECE; margin-left:12px"></span> Phase 1 Minimal
     </div>
   </div>
 
@@ -1055,7 +1042,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
       if (!freshnessLoaded) loadFreshness(); else filterFreshness();
     }
     if (btn.dataset.view === 'heatmap') {
-      if (!heatmapLoaded) loadHeatmap(); else renderHeatmap();
+      if (!heatmapLoaded) loadFamineRisk();
     }
     if (btn.dataset.view === 'patterns' && !patternsLoaded) loadPatterns();
     // Show/update selected country indicator
@@ -1596,64 +1583,59 @@ function renderFreshnessGrid() {
 
 function filterFreshness() { renderFreshnessGrid(); }
 
-// ── HEATMAP VIEW ───────────────────────────────────────────────────────────
-function loadHeatmap() {
+// ── FAMINE RISK VIEW ───────────────────────────────────────────────────────
+const IPC_COLORS = {
+  1: '#C6FECE',
+  2: '#FAE61E',
+  3: '#E67800',
+  4: '#C80000',
+  5: '#640000'
+};
+const IPC_NAMES = {
+  1: 'Minimal',
+  2: 'Stressed',
+  3: 'Crisis',
+  4: 'Emergency',
+  5: 'Famine'
+};
+
+async function loadFamineRisk() {
   heatmapLoaded = true;
-  renderHeatmap();
-}
+  const wrap = document.getElementById('famine-wrap');
+  wrap.innerHTML = '<div class="loading-msg">Loading famine risk data…</div>';
 
-function renderHeatmap() {
-  const theater = document.getElementById('heatmap-theater').value;
-  const level   = document.getElementById('heatmap-level').value;
-  let rows = allCountries;
-  if (theater) rows = rows.filter(c => c.theater === theater);
-  if (level)   rows = rows.filter(c => (c.risk_level||"").toUpperCase() === level.toUpperCase());
+  try {
+    const data = await apiFetch('/public-api/famine-risk');
+    const countries = data.countries || [];
 
-  // Collect all signal names that appear in top_3_signals across filtered rows
-  const sigCount = {};
-  rows.forEach(c => {
-    (c.top_3_signals || []).forEach(s => {
-      const n = s.name || '';
-      sigCount[n] = (sigCount[n]||0) + 1;
+    document.getElementById('tab-famine-count').textContent = `(${countries.length})`;
+
+    if (!countries.length) {
+      wrap.innerHTML = '<div class="loading-msg">No IPC data available.</div>';
+      return;
+    }
+
+    let html = '<table class="threat-table"><thead><tr><th>#</th><th>COUNTRY</th><th>IPC PHASE</th><th>CLASSIFICATION</th><th>SCAN DATE</th></tr></thead><tbody>';
+
+    countries.forEach((c, i) => {
+      const bg = IPC_COLORS[c.phase] || '#333';
+      const name = IPC_NAMES[c.phase] || '';
+      const textColor = c.phase <= 2 ? '#000' : '#fff';
+      const scanDate = c.scan_date ? c.scan_date.slice(0, 10) : '—';
+      html += `<tr onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
+        <td style="font-family:var(--mono);font-size:0.7rem;color:var(--dim)">${i + 1}</td>
+        <td><span class="country-name">${c.country}</span></td>
+        <td style="background:${bg};color:${textColor};font-family:var(--mono);font-weight:700;text-align:center;padding:4px 12px;border-radius:3px">Phase ${c.phase}</td>
+        <td style="font-size:0.82rem;color:var(--text)">${name}</td>
+        <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">${scanDate}</td>
+      </tr>`;
     });
-  });
-  // Top N most frequently appearing signals
-  const sigNames = Object.entries(sigCount)
-    .sort((a,b) => b[1]-a[1])
-    .slice(0, 30)
-    .map(e => e[0]);
 
-  if (!rows.length || !sigNames.length) {
-    document.getElementById('heatmap-wrap').innerHTML = '<div class="loading-msg">No data to display.</div>';
-    return;
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+  } catch (err) {
+    wrap.innerHTML = `<div class="error-msg">Failed to load famine risk data: ${err.message}</div>`;
   }
-
-  let html = `<table class="heatmap-table"><thead><tr>
-    <th class="hm-country">Country</th>`;
-  sigNames.forEach(s => {
-    html += `<th class="hm-sig" title="${s}">${s.replace(/_/g,' ')}</th>`;
-  });
-  html += '</tr></thead><tbody>';
-
-  rows.forEach(c => {
-    const sigMap = {};
-    (c.top_3_signals || []).forEach(s => { sigMap[s.name] = s.score || 0; });
-    const sc = c.convergence_score || 0;
-    html += `<tr>
-      <td class="hm-country-cell" onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
-        <span style="font-size:0.7rem;color:${riskColor(c.risk_level)};margin-right:4px">●</span>${c.country}
-      </td>`;
-    sigNames.forEach(s => {
-      const score = sigMap[s];
-      const bg    = score != null ? hmColor(score) : 'rgba(21,32,64,0.25)';
-      const txt   = score != null ? score : '';
-      html += `<td class="hm-cell${score==null?' null-cell':''}" style="background:${bg}" title="${s}: ${score??'—'}" onclick="openDetail('${encodeURIComponent(c.country)}')">${txt}</td>`;
-    });
-    html += '</tr>';
-  });
-
-  html += '</tbody></table>';
-  document.getElementById('heatmap-wrap').innerHTML = html;
 }
 
 // ── INSIGHT TEXT GENERATOR ─────────────────────────────────────────────────
