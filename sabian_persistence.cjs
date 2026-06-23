@@ -250,7 +250,7 @@ async function getHistory(country, days) {
       else if (score >= 41) risk_level = 'ELEVATED';
       const bd = row.breakdown || {};
       return {
-        scan_date: `${row.year}-12-31`,
+        scan_date: Number(row.year) === currentYear ? new Date().toISOString().slice(0, 10) : `${row.year}-12-31`,
         year: row.year,
         convergence_score: score,
         risk_level,
@@ -390,7 +390,7 @@ async function getLatestScores() {
 
       latest[row.country] = {
         country: row.country,
-        scan_date: `${row.year}-12-31`,
+        scan_date: Number(row.year) === currentYear ? new Date().toISOString().slice(0, 10) : `${row.year}-12-31`,
         year: row.year,
         data_age_years: dataAge,
         freshness,
