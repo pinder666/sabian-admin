@@ -394,6 +394,69 @@ app.get('/public-api/famine-risk', async (req, res) => {
   }
 });
 
+app.get('/public-api/famine-why/:country', async (req, res) => {
+  try {
+    const country = decodeURIComponent(req.params.country);
+    const ISO2_MAP = {
+      'Sudan': 'SD', 'Somalia': 'SO', 'South Sudan': 'SS', 'Afghanistan': 'AF',
+      'Burkina Faso': 'BF', 'DRC': 'CD', 'Ethiopia': 'ET', 'Haiti': 'HT',
+      'Kenya': 'KE', 'Madagascar': 'MG', 'Malawi': 'MW', 'Mali': 'ML',
+      'Nigeria': 'NG', 'Yemen': 'YE', 'Zimbabwe': 'ZW', 'Angola': 'AO',
+      'Burundi': 'BI', 'Cameroon': 'CM', 'Central African Republic': 'CF',
+      'Chad': 'TD', 'Djibouti': 'DJ', 'El Salvador': 'SV', 'Guatemala': 'GT',
+      'Honduras': 'HN', 'Lebanon': 'LB', 'Lesotho': 'LS', 'Mauritania': 'MR',
+      'Mozambique': 'MZ', 'Nicaragua': 'NI', 'Niger': 'NE', 'Syria': 'SY',
+      'Togo': 'TG', 'Uganda': 'UG', 'Zambia': 'ZM', 'Rwanda': 'RW',
+      'Sierra Leone': 'SL', 'Venezuela': 'VE', 'Liberia': 'LR'
+    };
+
+    const iso2 = ISO2_MAP[country];
+    if (!iso2) return res.status(404).json({ error: 'No IPC mapping for ' + country });
+
+    const fdwRes = await fetch(`https://fdw.fews.net/api/ipcphase/?country_code=${iso2}&format=json`);
+    const fdwData = await fdwRes.json();
+
+    if (!Array.isArray(fdwData) || fdwData.length === 0) {
+      return res.json({ country, iso2, reporting_date: null, national_phase: null, worst_regions: [] });
+    }
+
+    const publicRows = fdwData.filter(r => r.data_usage_policy === 'Public');
+    if (publicRows.length === 0) {
+      return res.json({ country, iso2, reporting_date: null, national_phase: null, worst_regions: [] });
+    }
+
+    const latestDate = publicRows.reduce((max, r) => r.reporting_date > max ? r.reporting_date : max, '');
+    const latestRows = publicRows.filter(r => r.reporting_date === latestDate);
+
+    const nationalRow = latestRows.find(r => r.unit_type === 'national');
+    const national_phase = nationalRow ? nationalRow.value : null;
+
+    const worst_regions = latestRows
+      .filter(r => r.unit_type !== 'national')
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 10)
+      .map(r => ({
+        region: r.geographic_unit_name,
+        phase: r.value,
+        classification: r.description
+      }));
+
+    const anyRow = latestRows[0] || {};
+
+    res.json({
+      country,
+      iso2,
+      reporting_date: latestDate,
+      national_phase,
+      worst_regions,
+      source_document: anyRow.source_document || null,
+      source_organization: anyRow.source_organization || null
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/public-api/summary', async (req, res) => {
   try {
     const scores = await getLatestScores();
