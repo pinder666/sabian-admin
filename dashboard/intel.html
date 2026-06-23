@@ -1668,7 +1668,7 @@ function renderFamineMap() {
     svg += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#0a1428" stroke-width="0.5"/>`;
   }
 
-  const sorted = [...countries].sort((a, b) => a.phase - b.phase);
+  const sorted = [...countries].sort((a, b) => b.phase - a.phase);
 
   sorted.forEach((c, i) => {
     const coords = COUNTRY_COORDS[c.country];
