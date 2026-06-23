@@ -283,6 +283,25 @@
     }
     .insight-box strong { color: var(--bright); }
 
+    /* ── FAMINE PANEL ────────────────────────────────────────────────────── */
+    .famine-region-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid rgba(21,32,64,0.5);
+    }
+    .famine-region-row:last-child { border-bottom: none; }
+    .famine-region-bar {
+      width: 6px; height: 28px; border-radius: 2px; flex-shrink: 0;
+    }
+    .famine-region-name {
+      flex: 1; font-size: 0.82rem; font-weight: 600; color: var(--bright);
+    }
+    .famine-region-phase {
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 700; min-width: 60px;
+    }
+    .famine-region-class {
+      font-size: 0.72rem; color: var(--dim); min-width: 80px; text-align: right;
+    }
+
     /* ── SCORE LEGEND ────────────────────────────────────────────────────── */
     .score-legend {
       display: flex; flex-wrap: wrap; gap: 1px;
@@ -849,24 +868,38 @@
     </div>
     <button class="detail-close" onclick="closeDetail()">✕</button>
   </div>
-  <div class="detail-section" id="dp-insight-section">
-    <div class="detail-section-title">Intelligence Read</div>
-    <div class="insight-box" id="dp-insight">Generating…</div>
-  </div>
-  <div class="detail-section">
-    <div class="detail-section-title">History</div>
-    <div class="detail-chart-wrap">
-      <svg class="detail-sparkline" id="dp-sparkline" viewBox="0 0 380 80" preserveAspectRatio="none"></svg>
+  <!-- FAMINE MODE CONTENT -->
+  <div id="dp-famine-content" style="display:none">
+    <div class="detail-section">
+      <div class="detail-section-title">Worst Regions</div>
+      <div id="dp-famine-regions"></div>
     </div>
-    <div id="dp-spark-labels" style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.6rem; color:var(--dim); margin-top:4px;"></div>
+    <div class="detail-section">
+      <div class="detail-section-title">Source</div>
+      <div id="dp-famine-source" style="font-size:0.78rem;color:var(--dim);line-height:1.6"></div>
+    </div>
   </div>
-  <div class="detail-section">
-    <div class="detail-section-title">Current Pressures</div>
-    <div id="dp-signals"></div>
-  </div>
-  <div class="detail-section">
-    <div class="detail-section-title">Open Observations</div>
-    <div id="dp-observations"></div>
+  <!-- FULL MODE CONTENT -->
+  <div id="dp-full-content">
+    <div class="detail-section" id="dp-insight-section">
+      <div class="detail-section-title">Intelligence Read</div>
+      <div class="insight-box" id="dp-insight">Generating…</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">History</div>
+      <div class="detail-chart-wrap">
+        <svg class="detail-sparkline" id="dp-sparkline" viewBox="0 0 380 80" preserveAspectRatio="none"></svg>
+      </div>
+      <div id="dp-spark-labels" style="display:flex; justify-content:space-between; font-family:var(--mono); font-size:0.6rem; color:var(--dim); margin-top:4px;"></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Current Pressures</div>
+      <div id="dp-signals"></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Open Observations</div>
+      <div id="dp-observations"></div>
+    </div>
   </div>
 </div>
 
@@ -1679,7 +1712,7 @@ function renderFamineMap() {
     const filter = c.phase >= 4 ? `filter="url(#glow${c.phase})"` : '';
     const rank = i + 1;
 
-    svg += `<g class="famine-dot" onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
+    svg += `<g class="famine-dot" onclick="openDetail('${encodeURIComponent(c.country)}','famine')" style="cursor:pointer">
       <circle cx="${x}" cy="${y}" r="${r + 4}" fill="transparent"/>
       <circle cx="${x}" cy="${y}" r="${r}" fill="${color}" ${filter} opacity="0.9">
         <animate attributeName="opacity" values="0.9;0.6;0.9" dur="${2 + Math.random()}s" repeatCount="indefinite"/>
@@ -1696,7 +1729,7 @@ function renderFamineMap() {
     const color = IPC_COLORS[c.phase];
     const yPos = 46 + i * 16;
     svg += `<circle cx="${listX + 4}" cy="${yPos - 3}" r="4" fill="${color}"/>`;
-    svg += `<text x="${listX + 14}" y="${yPos}" fill="#c8d8f0" font-family="var(--mono)" font-size="10" onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">${i + 1}. ${c.country}</text>`;
+    svg += `<text x="${listX + 14}" y="${yPos}" fill="#c8d8f0" font-family="var(--mono)" font-size="10" onclick="openDetail('${encodeURIComponent(c.country)}','famine')" style="cursor:pointer">${i + 1}. ${c.country}</text>`;
   });
 
   svg += '</svg>';
@@ -1729,18 +1762,60 @@ function setSelectedCountry(country) {
   }
 }
 
-async function openDetail(encodedCountry) {
+async function openDetail(encodedCountry, mode) {
   const country = decodeURIComponent(encodedCountry);
+  mode = mode || 'full';
+
+  document.getElementById('dp-famine-content').style.display = mode === 'famine' ? 'block' : 'none';
+  document.getElementById('dp-full-content').style.display = mode === 'full' ? 'block' : 'none';
+
   document.getElementById('dp-country').textContent = country;
   document.getElementById('dp-meta').textContent = 'Loading…';
+
+  document.getElementById('detail-panel').classList.add('open');
+  document.getElementById('backdrop').classList.add('visible');
+
+  if (mode === 'famine') {
+    document.getElementById('dp-famine-regions').innerHTML = '<span style="font-size:0.75rem;color:var(--dim)">Loading…</span>';
+    document.getElementById('dp-famine-source').innerHTML = '';
+
+    try {
+      const data = await apiFetch(`/public-api/famine-why/${encodeURIComponent(country)}`);
+      document.getElementById('dp-meta').textContent = `FEWS NET · ${data.reporting_date || '—'}`;
+
+      const regions = data.worst_regions || [];
+      if (regions.length === 0) {
+        document.getElementById('dp-famine-regions').innerHTML = '<span style="font-size:0.78rem;color:var(--dim)">No regional IPC breakdown published.</span>';
+      } else {
+        let html = '';
+        regions.forEach(r => {
+          const color = IPC_COLORS[r.phase] || '#666';
+          html += `<div class="famine-region-row">
+            <div class="famine-region-bar" style="background:${color}"></div>
+            <div class="famine-region-name">${r.region}</div>
+            <div class="famine-region-phase" style="color:${color}">Phase ${r.phase}</div>
+            <div class="famine-region-class">${r.classification || ''}</div>
+          </div>`;
+        });
+        document.getElementById('dp-famine-regions').innerHTML = html;
+      }
+
+      let sourceHtml = '';
+      if (data.source_document) sourceHtml += data.source_document;
+      if (data.source_organization) sourceHtml += `<br>${data.source_organization}`;
+      document.getElementById('dp-famine-source').innerHTML = sourceHtml || '—';
+    } catch (err) {
+      document.getElementById('dp-famine-regions').innerHTML = `<span style="color:var(--critical)">${err.message}</span>`;
+    }
+    return;
+  }
+
+  // FULL MODE
   document.getElementById('dp-insight').innerHTML = '<span style="color:var(--dim)">Loading…</span>';
   document.getElementById('dp-sparkline').innerHTML = '';
   document.getElementById('dp-spark-labels').innerHTML = '';
   document.getElementById('dp-signals').innerHTML = '<span style="font-size:0.75rem;color:var(--dim)">Loading…</span>';
   document.getElementById('dp-observations').innerHTML = '<span style="font-size:0.75rem;color:var(--dim)">Loading…</span>';
-
-  document.getElementById('detail-panel').classList.add('open');
-  document.getElementById('backdrop').classList.add('visible');
 
   // Fetch history + observations in parallel
   const [histRes, obsRes] = await Promise.allSettled([
