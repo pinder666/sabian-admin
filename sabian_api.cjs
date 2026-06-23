@@ -352,6 +352,48 @@ app.get('/public-api/live-signals/:country', async (req, res) => {
   }
 });
 
+// ── FAMINE RISK: IPC phase map (public, no auth) ───────────────────────────
+app.get('/public-api/famine-risk', async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+    const { data, error } = await supabase
+      .from('signal_readings')
+      .select('country, label, scan_date')
+      .eq('signal_name', 'Food Security')
+      .order('scan_date', { ascending: false });
+
+    if (error) return res.status(500).json({ error: error.message });
+
+    // Dedupe to latest per country, parse IPC phase from label
+    const latest = {};
+    for (const row of (data || [])) {
+      if (latest[row.country]) continue;
+      const match = (row.label || '').match(/phase\s+(\d)/i);
+      if (!match) continue; // No parseable phase — skip
+      const phase = parseInt(match[1], 10);
+      if (phase < 1 || phase > 5) continue; // Invalid phase
+      latest[row.country] = {
+        country: row.country,
+        phase,
+        label: row.label,
+        scan_date: row.scan_date
+      };
+    }
+
+    // Sort by phase descending (worst first), then country name
+    const sorted = Object.values(latest).sort((a, b) => {
+      if (b.phase !== a.phase) return b.phase - a.phase;
+      return a.country.localeCompare(b.country);
+    });
+
+    res.json({ total: sorted.length, countries: sorted });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/public-api/summary', async (req, res) => {
   try {
     const scores = await getLatestScores();
