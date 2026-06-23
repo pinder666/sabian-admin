@@ -417,22 +417,27 @@ app.get('/public-api/famine-why/:country', async (req, res) => {
     const fdwData = await fdwRes.json();
 
     if (!Array.isArray(fdwData) || fdwData.length === 0) {
-      return res.json({ country, iso2, reporting_date: null, national_phase: null, worst_regions: [] });
+      return res.json({ country, iso2, reporting_date: null, worst_regions: [] });
     }
 
     const publicRows = fdwData.filter(r => r.data_usage_policy === 'Public');
     if (publicRows.length === 0) {
-      return res.json({ country, iso2, reporting_date: null, national_phase: null, worst_regions: [] });
+      return res.json({ country, iso2, reporting_date: null, worst_regions: [] });
     }
 
     const latestDate = publicRows.reduce((max, r) => r.reporting_date > max ? r.reporting_date : max, '');
     const latestRows = publicRows.filter(r => r.reporting_date === latestDate);
 
-    const nationalRow = latestRows.find(r => r.unit_type === 'national');
-    const national_phase = nationalRow ? nationalRow.value : null;
+    // Dedupe by region, keep highest phase
+    const regionMap = {};
+    for (const r of latestRows.filter(r => r.unit_type !== 'national')) {
+      const key = r.geographic_unit_name;
+      if (!regionMap[key] || r.value > regionMap[key].value) {
+        regionMap[key] = r;
+      }
+    }
 
-    const worst_regions = latestRows
-      .filter(r => r.unit_type !== 'national')
+    const worst_regions = Object.values(regionMap)
       .sort((a, b) => b.value - a.value)
       .slice(0, 10)
       .map(r => ({
@@ -447,7 +452,6 @@ app.get('/public-api/famine-why/:country', async (req, res) => {
       country,
       iso2,
       reporting_date: latestDate,
-      national_phase,
       worst_regions,
       source_document: anyRow.source_document || null,
       source_organization: anyRow.source_organization || null
