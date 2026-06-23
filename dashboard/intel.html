@@ -721,14 +721,22 @@
 
   <!-- ── FAMINE RISK VIEW ──────────────────────────────────────────────────── -->
   <div class="view" id="view-heatmap">
-    <div class="heatmap-legend" style="margin-bottom:1rem">
-      <span class="legend-swatch" style="background:#640000"></span> Phase 5 Famine
-      <span class="legend-swatch" style="background:#C80000; margin-left:12px"></span> Phase 4 Emergency
-      <span class="legend-swatch" style="background:#E67800; margin-left:12px"></span> Phase 3 Crisis
-      <span class="legend-swatch" style="background:#FAE61E; margin-left:12px"></span> Phase 2 Stressed
-      <span class="legend-swatch" style="background:#C6FECE; margin-left:12px"></span> Phase 1 Minimal
+    <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1rem">
+      <div class="heatmap-legend" style="display:flex;align-items:center;gap:12px">
+        <span class="legend-swatch" style="background:#640000"></span> Phase 5
+        <span class="legend-swatch" style="background:#C80000"></span> Phase 4
+        <span class="legend-swatch" style="background:#E67800"></span> Phase 3
+        <span class="legend-swatch" style="background:#FAE61E"></span> Phase 2
+        <span class="legend-swatch" style="background:#C6FECE"></span> Phase 1
+      </div>
+      <select id="famine-phase-filter" class="ctrl-select" style="width:auto" onchange="filterFamineMap()">
+        <option value="">ALL PHASES</option>
+        <option value="5">PHASE 5 ONLY</option>
+        <option value="4">PHASE 4+</option>
+        <option value="3">PHASE 3+</option>
+      </select>
     </div>
-    <div id="famine-wrap">
+    <div id="famine-wrap" style="position:relative;width:100%;height:calc(100vh - 200px);min-height:400px;background:#030810;border:1px solid var(--border);border-radius:6px;overflow:hidden">
       <div class="loading-msg">Loading famine risk data…</div>
     </div>
   </div>
@@ -1587,6 +1595,24 @@ const IPC_NAMES = {
   5: 'Famine'
 };
 
+const COUNTRY_COORDS = {
+  'Somalia': [46, 6], 'South Sudan': [30, 7], 'Sudan': [30, 16], 'Afghanistan': [67, 34],
+  'Burkina Faso': [-2, 12], 'DRC': [24, -3], 'Ethiopia': [39, 9], 'Haiti': [-72, 19],
+  'Kenya': [38, 1], 'Madagascar': [47, -19], 'Malawi': [34, -13], 'Mali': [-4, 17],
+  'Nigeria': [8, 10], 'Yemen': [48, 15], 'Zimbabwe': [30, -19], 'Angola': [18, -12],
+  'Burundi': [30, -3], 'Cameroon': [12, 6], 'Central African Republic': [21, 7],
+  'Chad': [19, 15], 'Comoros': [43, -12], 'Congo': [15, -1], 'Djibouti': [43, 11],
+  'Eswatini': [31, -26], 'Gambia': [-16, 13], 'Guatemala': [-91, 15], 'Guinea': [-10, 11],
+  'Guinea-Bissau': [-15, 12], 'Honduras': [-87, 15], 'Iraq': [44, 33], 'Lebanon': [36, 34],
+  'Lesotho': [29, -29], 'Liberia': [-10, 6], 'Libya': [17, 27], 'Mauritania': [-10, 20],
+  'Mozambique': [35, -18], 'Myanmar': [96, 20], 'Namibia': [17, -22], 'Nicaragua': [-85, 13],
+  'Niger': [8, 16], 'Pakistan': [69, 30], 'Papua New Guinea': [145, -6],
+  'Rwanda': [30, -2], 'Senegal': [-14, 14], 'Sierra Leone': [-12, 9], 'Syria': [38, 35],
+  'Tanzania': [35, -6], 'Togo': [1, 8], 'Uganda': [32, 1], 'Zambia': [28, -15]
+};
+
+let famineData = [];
+
 async function loadFamineRisk() {
   heatmapLoaded = true;
   const wrap = document.getElementById('famine-wrap');
@@ -1594,36 +1620,89 @@ async function loadFamineRisk() {
 
   try {
     const data = await apiFetch('/public-api/famine-risk');
-    const countries = data.countries || [];
-
-    document.getElementById('tab-famine-count').textContent = `(${countries.length})`;
-
-    if (!countries.length) {
-      wrap.innerHTML = '<div class="loading-msg">No IPC data available.</div>';
-      return;
-    }
-
-    let html = '<table class="threat-table"><thead><tr><th>#</th><th>COUNTRY</th><th>IPC PHASE</th><th>CLASSIFICATION</th><th>SCAN DATE</th></tr></thead><tbody>';
-
-    countries.forEach((c, i) => {
-      const bg = IPC_COLORS[c.phase] || '#333';
-      const name = IPC_NAMES[c.phase] || '';
-      const textColor = c.phase <= 2 ? '#000' : '#fff';
-      const scanDate = c.scan_date ? c.scan_date.slice(0, 10) : '—';
-      html += `<tr onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
-        <td style="font-family:var(--mono);font-size:0.7rem;color:var(--dim)">${i + 1}</td>
-        <td><span class="country-name">${c.country}</span></td>
-        <td style="background:${bg};color:${textColor};font-family:var(--mono);font-weight:700;text-align:center;padding:4px 12px;border-radius:3px">Phase ${c.phase}</td>
-        <td style="font-size:0.82rem;color:var(--text)">${name}</td>
-        <td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">${scanDate}</td>
-      </tr>`;
-    });
-
-    html += '</tbody></table>';
-    wrap.innerHTML = html;
+    famineData = data.countries || [];
+    document.getElementById('tab-famine-count').textContent = `(${famineData.length})`;
+    renderFamineMap();
   } catch (err) {
     wrap.innerHTML = `<div class="error-msg">Failed to load famine risk data: ${err.message}</div>`;
   }
+}
+
+function filterFamineMap() {
+  renderFamineMap();
+}
+
+function renderFamineMap() {
+  const wrap = document.getElementById('famine-wrap');
+  const filter = document.getElementById('famine-phase-filter').value;
+
+  let countries = famineData;
+  if (filter === '5') countries = famineData.filter(c => c.phase === 5);
+  else if (filter === '4') countries = famineData.filter(c => c.phase >= 4);
+  else if (filter === '3') countries = famineData.filter(c => c.phase >= 3);
+
+  const W = wrap.clientWidth || 900;
+  const H = wrap.clientHeight || 500;
+
+  function proj(lon, lat) {
+    const x = ((lon + 180) / 360) * W;
+    const y = ((90 - lat) / 180) * H;
+    return [x, y];
+  }
+
+  let svg = `<svg width="100%" height="100%" viewBox="0 0 ${W} ${H}" style="background:#030810">`;
+
+  svg += `<defs>
+    <filter id="glow5" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glow4" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glow3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>`;
+
+  svg += `<rect x="0" y="0" width="${W}" height="${H}" fill="#030810"/>`;
+
+  svg += `<line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" stroke="#0a1428" stroke-width="1"/>`;
+  for (let lon = -180; lon <= 180; lon += 30) {
+    const x = ((lon + 180) / 360) * W;
+    svg += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="#0a1428" stroke-width="0.5"/>`;
+  }
+  for (let lat = -60; lat <= 60; lat += 30) {
+    const y = ((90 - lat) / 180) * H;
+    svg += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#0a1428" stroke-width="0.5"/>`;
+  }
+
+  const sorted = [...countries].sort((a, b) => a.phase - b.phase);
+
+  sorted.forEach((c, i) => {
+    const coords = COUNTRY_COORDS[c.country];
+    if (!coords) return;
+    const [x, y] = proj(coords[0], coords[1]);
+    const color = IPC_COLORS[c.phase] || '#666';
+    const r = c.phase === 5 ? 10 : c.phase === 4 ? 8 : 6;
+    const filter = c.phase >= 4 ? `filter="url(#glow${c.phase})"` : '';
+    const rank = i + 1;
+
+    svg += `<g class="famine-dot" onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">
+      <circle cx="${x}" cy="${y}" r="${r + 4}" fill="transparent"/>
+      <circle cx="${x}" cy="${y}" r="${r}" fill="${color}" ${filter} opacity="0.9">
+        <animate attributeName="opacity" values="0.9;0.6;0.9" dur="${2 + Math.random()}s" repeatCount="indefinite"/>
+      </circle>
+      <text x="${x}" y="${y - r - 4}" text-anchor="middle" fill="${color}" font-family="var(--mono)" font-size="9" font-weight="600">${c.country.toUpperCase()}</text>
+      <text x="${x + r + 3}" y="${y + 3}" fill="#8aa0c0" font-family="var(--mono)" font-size="8">#${rank}</text>
+    </g>`;
+  });
+
+  const listX = W - 160;
+  svg += `<rect x="${listX - 10}" y="10" width="160" height="${Math.min(sorted.length * 16 + 30, H - 20)}" fill="rgba(5,12,26,0.85)" rx="4"/>`;
+  svg += `<text x="${listX}" y="28" fill="#8aa0c0" font-family="var(--mono)" font-size="9" font-weight="600">SEVERITY RANK</text>`;
+  sorted.slice(0, Math.floor((H - 60) / 16)).forEach((c, i) => {
+    const color = IPC_COLORS[c.phase];
+    const yPos = 46 + i * 16;
+    svg += `<circle cx="${listX + 4}" cy="${yPos - 3}" r="4" fill="${color}"/>`;
+    svg += `<text x="${listX + 14}" y="${yPos}" fill="#c8d8f0" font-family="var(--mono)" font-size="10" onclick="openDetail('${encodeURIComponent(c.country)}')" style="cursor:pointer">${i + 1}. ${c.country}</text>`;
+  });
+
+  svg += '</svg>';
+  wrap.innerHTML = svg;
 }
 
 // ── INSIGHT TEXT GENERATOR ─────────────────────────────────────────────────
