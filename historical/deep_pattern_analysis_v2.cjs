@@ -354,6 +354,9 @@ function testGoingDark(matrix) {
     }
     if (everPresent.size < 5) continue; // Not enough coverage to detect meaningful silence
 
+    const latestScore = rows[rows.length - 1].score;
+    if (latestScore < 40) continue; // Stable countries — silence is not intelligence
+
     for (const sig of ALL_SIGNALS) {
       if (GOING_DARK_EXCLUSIONS.has(sig)) continue;
       // Find where signal was present then disappeared for 2+ years
