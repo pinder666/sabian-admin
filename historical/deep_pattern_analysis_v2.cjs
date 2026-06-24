@@ -347,6 +347,13 @@ function testGoingDark(matrix) {
   for (const [country, rows] of byCountry) {
     if (rows.length < 5) continue;
 
+    // Compute coverage universe — signals this country EVER reported
+    const everPresent = new Set();
+    for (const row of rows) {
+      for (const sig of Object.keys(row.signals)) everPresent.add(sig);
+    }
+    if (everPresent.size < 5) continue; // Not enough coverage to detect meaningful silence
+
     for (const sig of ALL_SIGNALS) {
       if (GOING_DARK_EXCLUSIONS.has(sig)) continue;
       // Find where signal was present then disappeared for 2+ years
