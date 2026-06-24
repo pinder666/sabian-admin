@@ -36,28 +36,33 @@ const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_R
 const OUT_MD   = path.join(__dirname, 'DEEP_PATTERN_FINDINGS_V2.md');
 const OUT_JSON = path.join(__dirname, 'deep_pattern_findings_v2.json');
 
-// ── 33 signals confirmed in convergence breakdown ─────────────────────────────
+// ── Signals derived at runtime from actual data ───────────────────────────────
+// No hardcoded list — miner discovers whatever signals exist in breakdown column
 
-const ALL_SIGNALS = [
-  // Physical
-  'dam_risk','chokepoint','flood_risk','power_grid','fire_hotspot','night_lights',
-  'seismic_risk','water_stress','pipeline_risk','rail_corridor','cable_disruption',
-  'dark_vessel','gps_jamming',
-  // Economic
-  'capital_flows','sovereign_cds','maritime_trade','trade_collapse','corruption_risk',
-  'economic_stress','fao_food','port_congestion','currency_collapse','sanctions_pressure',
-  'structural_pressure','usda_food','imf_fiscal','defense_spending','diaspora_remittance',
-  'energy_stress','climate_stress',
-  // Humanitarian
-  'health_crisis','unhcr_odp','iom_displacement','displacement','food_security',
-  'social_unrest',
-  // Governance
-  'governance','vdem_governance','election_calendar','ooni_internet','tor_censorship',
-  'cyber_threat','occrp',
-  // Security/Behavioral
-  'resource_conflict','conflict','military_proximity','social_volume','prediction_market',
-  'flight_movement','gdelt_conflict','gdelt_tone'
-];
+let ALL_SIGNALS = []; // populated by deriveSignalsFromData()
+
+async function deriveSignalsFromData() {
+  process.stdout.write('  Deriving signal list from data...');
+  const signalSet = new Set();
+  let page = 0;
+  while (true) {
+    const { data, error } = await sb.from('historical_convergence_scores')
+      .select('breakdown')
+      .range(page * 1000, (page + 1) * 1000 - 1);
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+    for (const row of data) {
+      if (row.breakdown && typeof row.breakdown === 'object') {
+        for (const key of Object.keys(row.breakdown)) signalSet.add(key);
+      }
+    }
+    page++;
+    if (data.length < 1000) break;
+  }
+  ALL_SIGNALS = [...signalSet].sort();
+  console.log(` ${ALL_SIGNALS.length} signals found.`);
+  return ALL_SIGNALS;
+}
 
 const CORE_SIGNALS = [
   'economic_stress','governance','trade_collapse','capital_flows','structural_pressure',
@@ -322,6 +327,11 @@ function testSignalToScore(matrix) {
 // ── Test D: Going-dark detection ─────────────────────────────────────────────
 // Silence is the signal. When a signal goes dark, what happens to the score?
 
+// Signals excluded from going-dark analysis (absence is not meaningful)
+const GOING_DARK_EXCLUSIONS = new Set([
+  'election_calendar', // no scheduled election != silence
+]);
+
 function testGoingDark(matrix) {
   process.stdout.write('  Test D: Going-dark detection...');
 
@@ -338,6 +348,7 @@ function testGoingDark(matrix) {
     if (rows.length < 5) continue;
 
     for (const sig of ALL_SIGNALS) {
+      if (GOING_DARK_EXCLUSIONS.has(sig)) continue;
       // Find where signal was present then disappeared for 2+ years
       let wasPresent = false;
       let darkStart = null;
@@ -894,32 +905,51 @@ const DOMAIN_MAP = {
   // Economic
   'economic_stress': 'economic', 'trade_collapse': 'economic', 'capital_flows': 'economic',
   'currency_collapse': 'economic', 'sovereign_cds': 'economic', 'fao_food_import': 'economic',
-  'sanctions_pressure': 'economic', 'imf_fiscal': 'economic',
+  'fao_food': 'economic', 'sanctions_pressure': 'economic', 'imf_fiscal': 'economic',
+  'defense_spending': 'economic', 'diaspora_remittance': 'economic', 'usda_food': 'economic',
+  'usda_food_supply': 'economic', 'energy_stress': 'economic', 'climate_stress': 'economic',
+  'structural_pressure': 'economic',
   // Governance
   'governance': 'governance', 'vdem_governance': 'governance', 'corruption_risk': 'governance',
-  'election_calendar': 'governance', 'internet_freedom': 'governance',
+  'election_calendar': 'governance', 'internet_freedom': 'governance', 'ooni_internet': 'governance',
+  'tor_censorship': 'governance', 'cyber_threat': 'governance', 'occrp': 'governance',
   // Physical
   'power_grid': 'physical', 'dam_risk': 'physical', 'flood_risk': 'physical',
   'seismic_risk': 'physical', 'pipeline_risk': 'physical', 'rail_corridor': 'physical',
   'chokepoint': 'physical', 'maritime_trade': 'physical', 'port_congestion': 'physical',
-  'water_stress': 'physical',
+  'water_stress': 'physical', 'cable_disruption': 'physical', 'dark_vessel': 'physical',
+  'gps_jamming': 'physical',
   // Behavioral
   'night_lights': 'behavioral', 'fire_hotspot': 'behavioral', 'social_volume': 'behavioral',
-  'prediction_market': 'behavioral',
+  'prediction_market': 'behavioral', 'flight_movement': 'behavioral', 'gdelt_conflict': 'behavioral',
+  'gdelt_tone': 'behavioral', 'social_unrest': 'behavioral',
   // Security
-  'resource_conflict': 'security', 'military_proximity': 'security',
+  'resource_conflict': 'security', 'military_proximity': 'security', 'conflict': 'security',
+  'conflict_events': 'security',
   // Humanitarian
   'food_security': 'humanitarian', 'health_crisis': 'humanitarian', 'unhcr_refugees': 'humanitarian',
-  'iom_displacement': 'humanitarian', 'usda_food_supply': 'humanitarian',
+  'iom_displacement': 'humanitarian', 'unhcr_odp': 'humanitarian', 'displacement': 'humanitarian',
+  'food_stress': 'humanitarian',
 };
+
+const unmappedSignals = new Set();
+
+function getDomain(sig) {
+  if (DOMAIN_MAP[sig]) return DOMAIN_MAP[sig];
+  if (!unmappedSignals.has(sig)) {
+    unmappedSignals.add(sig);
+    console.warn(`  [WARN] Signal "${sig}" has no domain mapping — logged for review.`);
+  }
+  return 'unknown';
+}
 
 function testUnknownUnknowns(allPairs) {
   process.stdout.write('  Test O: Unknown-unknown cross-domain screen...');
 
   const crossDomain = allPairs.filter(p => {
-    const domA = DOMAIN_MAP[p.sigA];
-    const domB = DOMAIN_MAP[p.sigB];
-    return domA && domB && domA !== domB && Math.abs(p.r) >= 0.5 && p.n >= 30;
+    const domA = getDomain(p.sigA);
+    const domB = getDomain(p.sigB);
+    return domA !== 'unknown' && domB !== 'unknown' && domA !== domB && Math.abs(p.r) >= 0.5 && p.n >= 30;
   });
 
   crossDomain.sort((a, b) => Math.abs(b.r) - Math.abs(a.r));
@@ -1024,6 +1054,7 @@ function testGoingDarkSequences(matrix) {
     // Track which signals go dark per country
     const darkOrder = [];
     for (const sig of ALL_SIGNALS) {
+      if (GOING_DARK_EXCLUSIONS.has(sig)) continue;
       let lastPresent = null;
       for (const row of rows) {
         if (row.signals[sig] !== undefined) lastPresent = row.year;
@@ -1250,8 +1281,8 @@ function generateReport(findings) {
   lines.push('Signal pairs from DIFFERENT domains with unexpected correlation:');
   lines.push('');
   for (const p of unknownUnknowns.slice(0, 20)) {
-    const domA = DOMAIN_MAP[p.sigA] || '?';
-    const domB = DOMAIN_MAP[p.sigB] || '?';
+    const domA = getDomain(p.sigA);
+    const domB = getDomain(p.sigB);
     lines.push(`[${domA}] ${p.sigA} ↔ [${domB}] ${p.sigB}: r=${p.r}, n=${p.n}`);
   }
   lines.push('');
@@ -1303,6 +1334,10 @@ async function main() {
   console.log('\n  SABIAN DEEP PATTERN ANALYSIS V2');
   console.log('  ================================');
   console.log('  5,000+ tests | Going-dark as first-class signal | No data manipulation\n');
+
+  // Derive signal list from actual data — no hardcoded array
+  await deriveSignalsFromData();
+  if (ALL_SIGNALS.length === 0) throw new Error('No signals found in data — cannot proceed');
 
   const rows = await loadAllScores();
   const matrix = buildSignalMatrix(rows);
