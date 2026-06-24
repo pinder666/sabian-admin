@@ -218,6 +218,28 @@
       text-transform: uppercase; letter-spacing: 0.04em;
     }
 
+    /* Mined Patterns cards */
+    .patterns-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .pattern-card {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+      padding: 12px 14px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .pattern-card:hover { border-color: var(--accent); }
+    .pattern-country { font-size: 1rem; font-weight: 700; color: var(--bright); }
+    .pattern-domains { display: flex; align-items: center; }
+    .domain-chip {
+      font-family: var(--mono); font-size: 0.68rem; padding: 2px 8px;
+      border-radius: 3px; background: rgba(26,111,255,0.12);
+      color: var(--text); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .pattern-desc { font-size: 0.82rem; color: var(--text); line-height: 1.4; }
+    .pattern-dark-info { font-size: 0.82rem; color: var(--dim); line-height: 1.5; }
+    .pattern-window { font-family: var(--mono); font-size: 0.75rem; color: var(--dim); }
+    .pattern-impact { font-size: 0.8rem; font-weight: 600; }
+    .pattern-ts { font-family: var(--mono); font-size: 0.65rem; color: var(--dim); margin-top: 4px; }
+    .tier-btn { transition: background 0.15s, color 0.15s; }
+    .tier-btn:hover { background: var(--panel2) !important; }
+
     /* sparkline SVG */
     .sparkline { display: block; }
     .spark-no-data { font-size: 0.65rem; color: var(--dim); font-family: var(--mono); }
@@ -764,38 +786,42 @@
 
   <!-- ── EXTRACTION INTELLIGENCE VIEW ─────────────────────────────────────── -->
   <div class="view" id="view-patterns">
-  <div id="proof-seal-bar" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:6px;margin-bottom:1.5rem;font-family:var(--mono);font-size:0.72rem">
-    <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--dim)" id="proof-seal-dot"></span>
-    <span style="color:var(--dim);letter-spacing:0.08em;text-transform:uppercase">PROOF CHAIN</span>
-    <span id="proof-seal-status" style="color:var(--text)">checking…</span>
+  <!-- Tier toggle: WORLD vs MY PORTFOLIO -->
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:1.5rem">
+    <div style="display:flex;background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+      <button id="patterns-tier-world" class="tier-btn active" onclick="setPatternsTier('world')" style="padding:8px 18px;background:var(--accent);color:#fff;border:none;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;cursor:pointer">WORLD</button>
+      <button id="patterns-tier-portfolio" class="tier-btn" onclick="setPatternsTier('portfolio')" style="padding:8px 18px;background:transparent;color:var(--dim);border:none;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;cursor:pointer">MY PORTFOLIO</button>
+    </div>
+    <span id="patterns-tier-label" style="font-size:0.78rem;color:var(--dim)">214 countries</span>
     <span style="flex:1"></span>
-    <span id="proof-seal-meta" style="color:var(--dim);font-size:0.65rem"></span>
+    <div id="proof-seal-inline" style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.68rem">
+      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim)" id="proof-seal-dot"></span>
+      <span id="proof-seal-status" style="color:var(--dim)">checking…</span>
+    </div>
   </div>
+
+  <!-- Summary bar -->
   <div class="status-bar" id="patterns-summary-bar">
-    <div class="stat-cell"><div class="stat-label">FINDINGS</div><div class="stat-value" id="ps-total">—</div><div class="stat-sub">in this run</div></div>
-    <div class="stat-cell"><div class="stat-label">UNKNOWN UNKNOWNS</div><div class="stat-value critical" id="ps-unknown">—</div><div class="stat-sub">r ≥ 0.5, n ≥ 30</div></div>
-    <div class="stat-cell"><div class="stat-label">GOING DARK</div><div class="stat-value warning" id="ps-dark">—</div><div class="stat-sub">signal silence events</div></div>
-    <div class="stat-cell"><div class="stat-label">LEAD INDICATORS</div><div class="stat-value elevated" id="ps-lead">—</div><div class="stat-sub">precursor correlations</div></div>
+    <div class="stat-cell"><div class="stat-label">FINDINGS</div><div class="stat-value" id="ps-total">—</div><div class="stat-sub">mined patterns</div></div>
+    <div class="stat-cell"><div class="stat-label">GOING DARK</div><div class="stat-value warning" id="ps-dark">—</div><div class="stat-sub">data silence events</div></div>
+    <div class="stat-cell"><div class="stat-label">LINKED PATTERNS</div><div class="stat-value elevated" id="ps-unknown">—</div><div class="stat-sub">move together</div></div>
     <div class="stat-cell"><div class="stat-label">LATEST RUN</div><div class="stat-value" id="ps-run" style="font-size:0.9rem">—</div><div class="stat-sub">UTC</div></div>
   </div>
-  <div class="section-hdr"><span class="section-title">UNKNOWN UNKNOWNS</span><span class="section-meta">SIGNAL CORRELATIONS THE MINER FOUND BLIND</span></div>
-  <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">Pairs of signals that move together at strength r ≥ 0.5 across n ≥ 30 country-year observations. No analyst told the system to look for these — the miner ran a full lag-0 correlation sweep across all signal pairs and these surfaced above noise.</p>
-  <div id="unknown-unknowns-wrap"><div class="loading-msg">Loading unknown unknowns…</div></div>
-  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">GOING DARK EVENTS</span><span class="section-meta">COUNTRIES WHOSE SIGNALS WENT SILENT for 2+ years — silence as a signal</span></div>
-  <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">A country's data stops appearing in normal feeds before something happens. The miner identifies multi-year windows where a signal flatlines, then measures score delta over the dark period. Large negative deltas signal undetected deterioration.</p>
-  <div id="going-dark-wrap"><div class="loading-msg">Loading going-dark events…</div></div>
-  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">LEAD INDICATORS</span><span class="section-meta">SIGNAL A AT YEAR T PREDICTS SIGNAL B AT YEAR T+LAG</span></div>
-  <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">Lagged correlations across all signal pairs for lags 1–10 years. Where correlation strengthens at lag, signal A is treated as a precursor to signal B. The strongest — health crisis → refugee outflows at 4–8 year lag, r &gt; 0.83 — is a clear precursor chain.</p>
-  <div id="lead-indicators-wrap"><div class="loading-msg">Loading lead indicators…</div></div>
+
+  <!-- GOING DARK — lead section -->
+  <div class="section-hdr"><span class="section-title">GOING DARK</span><span class="section-meta">DATA STOPPED ARRIVING — SILENCE AS INTELLIGENCE</span></div>
+  <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">Countries where data feeds went silent. When reporting stops, something changed. Each card shows what stopped, when, and what happened to the country's score during the blackout.</p>
+  <div id="going-dark-wrap"><div class="loading-msg">Loading…</div></div>
+
+  <!-- LINKED PATTERNS — demoted below going-dark -->
+  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">LINKED PATTERNS</span><span class="section-meta">THESE MOVE TOGETHER ACROSS COUNTRIES</span></div>
+  <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">The miner found these categories changing together across many countries. No analyst asked for these patterns — they surfaced from raw data.</p>
+  <div id="unknown-unknowns-wrap"><div class="loading-msg">Loading…</div></div>
+
+  <!-- Methodology footer -->
   <div style="padding:1rem 1.25rem;background:var(--panel);border:1px solid var(--border);border-radius:6px;margin-top:2rem">
-    <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:0.5rem">Methodology</div>
-    <ul style="font-size:0.8rem;color:var(--dim);line-height:1.8;padding-left:1.2rem">
-      <li>Findings persist to a hash-chained miner_findings table. Every row is timestamped and sealed weekly into a Bitcoin OpenTimestamps proof anchor.</li>
-      <li>Correlations are Spearman rank, computed across all country-year pairs where both signals have data. Minimum n = 30 to surface.</li>
-      <li>Going-dark windows are 2+ consecutive years where a signal value held flat at baseline, with score delta measured dark-start vs dark-end.</li>
-      <li>Lead indicators sweep lags 1–10 years. Where correlation strengthens at lag, signal A is treated as a precursor.</li>
-      <li>The miner runs nightly. Every claim is provable from a row ID against a sealed anchor.</li>
-    </ul>
+    <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:0.5rem">Sealed record</div>
+    <p style="font-size:0.78rem;color:var(--dim);line-height:1.7;margin:0">Every finding traces to a timestamped row in the miner_findings table. The miner runs nightly. Records are sealed weekly into a Bitcoin OpenTimestamps proof anchor. Each card shows the exact date the pattern was detected.</p>
   </div>
 </div>
 
@@ -1929,124 +1955,167 @@ async function loadExtractionEvents() {
 
 // ═══ MINED PATTERNS LOADER ════════════════════════════════════════════════
 let patternsLoaded = false;
+let patternsData = { goingDark: [], unknownUnknowns: [] };
+let patternsTier = 'world';
+
+const DOMAIN_MAP = {
+  'economic_stress': 'economic', 'trade_collapse': 'economic', 'capital_flows': 'economic',
+  'currency_collapse': 'economic', 'sovereign_cds': 'economic', 'fao_food_import': 'economic',
+  'fao_food': 'economic', 'sanctions_pressure': 'economic', 'imf_fiscal': 'economic',
+  'defense_spending': 'economic', 'diaspora_remittance': 'economic', 'usda_food': 'economic',
+  'usda_food_supply': 'economic', 'energy_stress': 'economic', 'climate_stress': 'economic',
+  'structural_pressure': 'economic',
+  'governance': 'governance', 'vdem_governance': 'governance', 'corruption_risk': 'governance',
+  'election_calendar': 'governance', 'internet_freedom': 'governance', 'ooni_internet': 'governance',
+  'tor_censorship': 'governance', 'cyber_threat': 'governance', 'occrp': 'governance',
+  'power_grid': 'physical', 'dam_risk': 'physical', 'flood_risk': 'physical',
+  'seismic_risk': 'physical', 'pipeline_risk': 'physical', 'rail_corridor': 'physical',
+  'chokepoint': 'physical', 'maritime_trade': 'physical', 'port_congestion': 'physical',
+  'water_stress': 'physical', 'cable_disruption': 'physical', 'dark_vessel': 'physical',
+  'gps_jamming': 'physical',
+  'night_lights': 'behavioral', 'fire_hotspot': 'behavioral', 'social_volume': 'behavioral',
+  'prediction_market': 'behavioral', 'flight_movement': 'behavioral', 'gdelt_conflict': 'behavioral',
+  'gdelt_tone': 'behavioral', 'social_unrest': 'behavioral',
+  'resource_conflict': 'security', 'military_proximity': 'security', 'conflict': 'security',
+  'conflict_events': 'security',
+  'food_security': 'humanitarian', 'health_crisis': 'humanitarian', 'unhcr_refugees': 'humanitarian',
+  'iom_displacement': 'humanitarian', 'unhcr_odp': 'humanitarian', 'displacement': 'humanitarian',
+  'food_stress': 'humanitarian',
+};
+
+function getDomain(sig) {
+  return DOMAIN_MAP[sig] || 'other';
+}
+
+function getStarredCountries() {
+  try {
+    return JSON.parse(localStorage.getItem('sabian_starred') || '[]');
+  } catch { return []; }
+}
+
+function setPatternsTier(tier) {
+  patternsTier = tier;
+  document.getElementById('patterns-tier-world').className = tier === 'world' ? 'tier-btn active' : 'tier-btn';
+  document.getElementById('patterns-tier-world').style.background = tier === 'world' ? 'var(--accent)' : 'transparent';
+  document.getElementById('patterns-tier-world').style.color = tier === 'world' ? '#fff' : 'var(--dim)';
+  document.getElementById('patterns-tier-portfolio').className = tier === 'portfolio' ? 'tier-btn active' : 'tier-btn';
+  document.getElementById('patterns-tier-portfolio').style.background = tier === 'portfolio' ? 'var(--accent)' : 'transparent';
+  document.getElementById('patterns-tier-portfolio').style.color = tier === 'portfolio' ? '#fff' : 'var(--dim)';
+  const starred = getStarredCountries();
+  document.getElementById('patterns-tier-label').textContent = tier === 'world' ? '214 countries' : starred.length + ' starred';
+  renderPatternsForTier();
+}
+
+function renderPatternsForTier() {
+  const starred = getStarredCountries();
+  const isPortfolio = patternsTier === 'portfolio';
+
+  let gd = patternsData.goingDark;
+  let uu = patternsData.unknownUnknowns;
+
+  if (isPortfolio && starred.length > 0) {
+    gd = gd.filter(f => starred.includes(f.payload?.country));
+  }
+
+  renderGoingDark(gd);
+  renderUnknownUnknowns(uu);
+
+  const gdCount = gd.filter(f => f.payload && (f.payload.darkYears || 0) >= 2).length;
+  document.getElementById('ps-dark').textContent = gdCount;
+  document.getElementById('ps-unknown').textContent = uu.length;
+  document.getElementById('ps-total').textContent = gdCount + uu.length;
+}
 
 async function loadPatterns() {
   patternsLoaded = true;
-  const [sealRes, summaryRes, uuRes, gdRes, leadRes] = await Promise.allSettled([
+  const [sealRes, summaryRes, uuRes, gdRes] = await Promise.allSettled([
     apiFetch('/public-api/proof-seal'),
     apiFetch('/public-api/patterns/summary'),
     apiFetch('/public-api/patterns/unknown-unknowns'),
-    apiFetch('/public-api/patterns/going-dark'),
-    apiFetch('/public-api/patterns/lead-indicators')
+    apiFetch('/public-api/patterns/going-dark')
   ]);
 
   if (sealRes.status === 'fulfilled' && sealRes.value.sealed) {
     const s = sealRes.value;
     const color = s.status === 'GREEN' ? 'var(--stable)' : s.status === 'YELLOW' ? 'var(--warning)' : 'var(--critical)';
     document.getElementById('proof-seal-dot').style.background = color;
-    document.getElementById('proof-seal-dot').style.boxShadow = '0 0 8px ' + color;
-    document.getElementById('proof-seal-status').textContent = 'SEALED ' + s.anchor_date + ' · anchor #' + s.anchor_id + ' · ' + s.age_days + 'd ago';
+    document.getElementById('proof-seal-status').textContent = 'SEALED ' + s.anchor_date;
     document.getElementById('proof-seal-status').style.color = color;
-    document.getElementById('proof-seal-meta').textContent = 'OTS ' + (s.ots_status || 'pending') + ' · RFC3161 ' + (s.rfc3161_status || 'pending');
   } else {
-    document.getElementById('proof-seal-dot').style.background = 'var(--critical)';
-    document.getElementById('proof-seal-status').textContent = 'NO ANCHOR — chain may have died';
-    document.getElementById('proof-seal-status').style.color = 'var(--critical)';
+    document.getElementById('proof-seal-dot').style.background = 'var(--dim)';
+    document.getElementById('proof-seal-status').textContent = 'checking anchor…';
   }
 
   if (summaryRes.status === 'fulfilled') {
     const s = summaryRes.value;
-    const c = s.by_category || {};
-    document.getElementById('ps-total').textContent = s.total != null ? s.total : '—';
-    document.getElementById('ps-unknown').textContent = (c.unknown_unknown || 0) + (c.signal_correlation || 0);
-    document.getElementById('ps-dark').textContent = (c.going_dark_event || 0) + (c.going_dark_by_signal || 0) + (c.going_dark_sequence || 0) + (c.darkest_country || 0);
-    document.getElementById('ps-lead').textContent = (c.lead_indicator || 0) + (c.signal_to_score || 0) + (c.compound_amplification || 0) + (c.first_mover || 0);
     document.getElementById('ps-run').textContent = s.latest_run ? s.latest_run.slice(0, 16).replace('T', ' ') : '—';
-    document.getElementById('tab-patterns-count').textContent = '(' + (s.total || 0) + ')';
+    const el = document.getElementById('tab-patterns-count');
+    if (el) el.textContent = '(' + (s.total || 0) + ')';
   }
 
-  if (uuRes.status === 'fulfilled' && uuRes.value.findings) renderUnknownUnknowns(uuRes.value.findings);
-  else document.getElementById('unknown-unknowns-wrap').innerHTML = '<div class="error-msg">Failed to load.</div>';
+  patternsData.goingDark = (gdRes.status === 'fulfilled' && gdRes.value.findings) ? gdRes.value.findings : [];
+  patternsData.unknownUnknowns = (uuRes.status === 'fulfilled' && uuRes.value.findings) ? uuRes.value.findings : [];
 
-  if (gdRes.status === 'fulfilled' && gdRes.value.findings) renderGoingDark(gdRes.value.findings);
-  else document.getElementById('going-dark-wrap').innerHTML = '<div class="error-msg">Failed to load.</div>';
-
-  if (leadRes.status === 'fulfilled' && leadRes.value.findings) renderLeadIndicators(leadRes.value.findings);
-  else document.getElementById('lead-indicators-wrap').innerHTML = '<div class="error-msg">Failed to load.</div>';
+  renderPatternsForTier();
 }
 
 function renderUnknownUnknowns(findings) {
-  if (!findings.length) { document.getElementById('unknown-unknowns-wrap').innerHTML = '<div class="loading-msg">None at current threshold.</div>'; return; }
-  let html = '<table class="threat-table"><thead><tr><th>#</th><th>Signal A</th><th>Signal B</th><th>r</th><th>n</th><th>Lag</th></tr></thead><tbody>';
-  findings.forEach((f, i) => {
+  const wrap = document.getElementById('unknown-unknowns-wrap');
+  if (!findings.length) { wrap.innerHTML = '<div class="loading-msg">No linked patterns at current threshold.</div>'; return; }
+
+  let html = '<div class="patterns-grid">';
+  findings.slice(0, 30).forEach(f => {
     const p = f.payload || {};
     const r = p.r != null ? p.r : (p.spearman_r != null ? p.spearman_r : 0);
     const absR = Math.abs(r);
+    const domA = getDomain(p.sigA || p.signal_a || '');
+    const domB = getDomain(p.sigB || p.signal_b || '');
+    const strength = absR >= 0.8 ? 'very strong' : absR >= 0.65 ? 'strong' : 'moderate';
+    const direction = r > 0 ? 'rise together' : 'move opposite';
+    const ts = f.created_at ? f.created_at.slice(0, 10) : '—';
     const color = absR >= 0.8 ? 'var(--critical)' : absR >= 0.65 ? 'var(--warning)' : 'var(--elevated)';
-    const sigA = (p.sigA || p.signal_a || '').replace(/_/g, ' ');
-    const sigB = (p.sigB || p.signal_b || '').replace(/_/g, ' ');
-    html += '<tr><td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">' + (i+1) + '</td>'
-         + '<td><span class="country-name">' + sigA + '</span></td>'
-         + '<td><span class="country-name">' + sigB + '</span></td>'
-         + '<td><span class="score-num" style="color:' + color + '">' + r.toFixed(3) + '</span><div class="score-bar-wrap" style="margin-top:3px"><div class="score-bar"><div class="score-bar-fill" style="width:' + (absR*100) + '%;background:' + color + '"></div></div></div></td>'
-         + '<td style="font-family:var(--mono);font-size:0.82rem">' + (p.n || '—') + '</td>'
-         + '<td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">' + (p.lag === 0 ? 'same-year' : (p.lag || 0) + 'y') + '</td></tr>';
+
+    html += '<div class="pattern-card" style="border-left:3px solid ' + color + '">'
+         + '<div class="pattern-domains"><span class="domain-chip">' + domA + '</span><span style="color:var(--dim);margin:0 6px">↔</span><span class="domain-chip">' + domB + '</span></div>'
+         + '<div class="pattern-desc">' + strength + ' link — these ' + direction + '</div>'
+         + '<div class="pattern-ts">Detected ' + ts + ' · finding #' + f.id + '</div>'
+         + '</div>';
   });
-  html += '</tbody></table>';
-  document.getElementById('unknown-unknowns-wrap').innerHTML = html;
+  html += '</div>';
+  wrap.innerHTML = html;
 }
 
 function renderGoingDark(findings) {
-  if (!findings.length) { document.getElementById('going-dark-wrap').innerHTML = '<div class="loading-msg">None surfaced.</div>'; return; }
-  const filtered = findings.filter(f => f.payload && (f.payload.darkYears || 0) >= 2).sort((a,b) => (a.payload.scoreDelta||0)-(b.payload.scoreDelta||0)).slice(0, 60);
-  let html = '<table class="threat-table"><thead><tr><th>#</th><th>Country</th><th>Signal</th><th>Dark Window</th><th>Years</th><th>Score Δ</th><th>Score at Return</th></tr></thead><tbody>';
-  filtered.forEach((f, i) => {
+  const wrap = document.getElementById('going-dark-wrap');
+  if (!findings.length) { wrap.innerHTML = '<div class="loading-msg">No countries with data silence detected.</div>'; return; }
+
+  const filtered = findings.filter(f => f.payload && (f.payload.darkYears || 0) >= 2)
+    .sort((a,b) => (a.payload.scoreDelta||0) - (b.payload.scoreDelta||0))
+    .slice(0, 40);
+
+  if (!filtered.length) { wrap.innerHTML = '<div class="loading-msg">No significant dark periods detected.</div>'; return; }
+
+  let html = '<div class="patterns-grid">';
+  filtered.forEach(f => {
     const p = f.payload || {};
     const delta = p.scoreDelta || 0;
+    const domain = getDomain(p.signal || '');
     const dc = delta < -20 ? 'var(--critical)' : delta < -5 ? 'var(--warning)' : delta > 5 ? 'var(--stable)' : 'var(--dim)';
-    const sig = (p.signal || '').replace(/_/g, ' ');
-    html += '<tr><td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">' + (i+1) + '</td>'
-         + '<td><span class="country-name">' + (p.country || '—') + '</span></td>'
-         + '<td><span class="signal-chip">' + sig + '</span></td>'
-         + '<td style="font-family:var(--mono);font-size:0.78rem">' + p.darkStart + '—' + p.darkEnd + '</td>'
-         + '<td style="font-family:var(--mono);font-size:0.82rem;font-weight:700">' + p.darkYears + 'y</td>'
-         + '<td><span class="score-num" style="color:' + dc + '">' + (delta > 0 ? '+' : '') + delta.toFixed(1) + '</span></td>'
-         + '<td style="font-family:var(--mono);font-size:0.78rem">' + (p.scoreAtReturn || 0).toFixed(1) + '</td></tr>';
-  });
-  html += '</tbody></table>';
-  document.getElementById('going-dark-wrap').innerHTML = html;
-}
+    const ts = f.created_at ? f.created_at.slice(0, 10) : '—';
+    const impact = delta < -20 ? 'major deterioration' : delta < -5 ? 'notable decline' : delta > 5 ? 'improvement' : 'stable';
 
-function renderLeadIndicators(findings) {
-  if (!findings.length) { document.getElementById('lead-indicators-wrap').innerHTML = '<div class="loading-msg">None surfaced.</div>'; return; }
-  const byPair = {};
-  findings.forEach(f => {
-    const p = f.payload || {};
-    const sigA = p.sigA || p.signal_a || p.signal;
-    const sigB = p.sigB || p.signal_b;
-    if (!sigA) return;
-    const key = sigB ? sigA + '|' + sigB : sigA;
-    const absR = Math.abs(p.r || 0);
-    if (!byPair[key] || absR > Math.abs(byPair[key].payload.r || 0)) byPair[key] = f;
+    html += '<div class="pattern-card dark-card" style="border-left:3px solid ' + dc + '">'
+         + '<div class="pattern-country">' + (p.country || '—') + '</div>'
+         + '<div class="pattern-dark-info">'
+         + '<span class="domain-chip">' + domain + '</span> data silent for <strong>' + p.darkYears + ' years</strong>'
+         + '</div>'
+         + '<div class="pattern-window">' + p.darkStart + ' — ' + p.darkEnd + '</div>'
+         + '<div class="pattern-impact" style="color:' + dc + '">' + impact + ' (' + (delta > 0 ? '+' : '') + delta.toFixed(1) + ' score change)</div>'
+         + '<div class="pattern-ts">Detected ' + ts + ' · finding #' + f.id + '</div>'
+         + '</div>';
   });
-  const pairs = Object.values(byPair).filter(f => Math.abs(f.payload.r || 0) >= 0.4).sort((a,b) => Math.abs(b.payload.r||0)-Math.abs(a.payload.r||0)).slice(0, 40);
-  let html = '<table class="threat-table"><thead><tr><th>#</th><th>Predictor (Signal A)</th><th>Outcome (Signal B)</th><th>Best Lag</th><th>r</th><th>n</th></tr></thead><tbody>';
-  pairs.forEach((f, i) => {
-    const p = f.payload || {};
-    const r = p.r || 0;
-    const absR = Math.abs(r);
-    const color = absR >= 0.7 ? 'var(--critical)' : absR >= 0.5 ? 'var(--warning)' : 'var(--elevated)';
-    const sigA = (p.sigA || p.signal_a || p.signal || '').replace(/_/g, ' ');
-    const sigB = (p.sigB || p.signal_b || 'convergence score').replace(/_/g, ' ');
-    html += '<tr><td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">' + (i+1) + '</td>'
-         + '<td><span class="country-name">' + sigA + '</span></td>'
-         + '<td><span class="country-name">' + sigB + '</span></td>'
-         + '<td style="font-family:var(--mono);font-size:0.82rem;font-weight:700">' + (p.lag === 0 ? 'same-year' : (p.lag || 0) + 'y') + '</td>'
-         + '<td><span class="score-num" style="color:' + color + '">' + r.toFixed(3) + '</span><div class="score-bar-wrap" style="margin-top:3px"><div class="score-bar"><div class="score-bar-fill" style="width:' + (absR*100) + '%;background:' + color + '"></div></div></div></td>'
-         + '<td style="font-family:var(--mono);font-size:0.82rem">' + (p.n || '—') + '</td></tr>';
-  });
-  html += '</tbody></table>';
-  document.getElementById('lead-indicators-wrap').innerHTML = html;
+  html += '</div>';
+  wrap.innerHTML = html;
 }
 // ═══ END MINED PATTERNS LOADER ═══════════════════════════════════════════════
 
