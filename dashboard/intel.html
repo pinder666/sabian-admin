@@ -784,45 +784,49 @@
     </div>
   </div>
 
-  <!-- ── EXTRACTION INTELLIGENCE VIEW ─────────────────────────────────────── -->
+  <!-- ── MINED PATTERNS VIEW ─────────────────────────────────────── -->
   <div class="view" id="view-patterns">
-  <!-- Tier toggle: WORLD vs MY PORTFOLIO -->
+  <!-- Tier toggle: MY PORTFOLIO (primary) vs WORLD -->
   <div style="display:flex;align-items:center;gap:16px;margin-bottom:1.5rem">
     <div style="display:flex;background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
-      <button id="patterns-tier-world" class="tier-btn active" onclick="setPatternsTier('world')" style="padding:8px 18px;background:var(--accent);color:#fff;border:none;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;cursor:pointer">WORLD</button>
-      <button id="patterns-tier-portfolio" class="tier-btn" onclick="setPatternsTier('portfolio')" style="padding:8px 18px;background:transparent;color:var(--dim);border:none;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;cursor:pointer">MY PORTFOLIO</button>
+      <button id="patterns-tier-portfolio" class="tier-btn active" onclick="setPatternsTier('portfolio')" style="padding:8px 18px;background:var(--accent);color:#fff;border:none;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;cursor:pointer">MY PORTFOLIO</button>
+      <button id="patterns-tier-world" class="tier-btn" onclick="setPatternsTier('world')" style="padding:8px 18px;background:transparent;color:var(--dim);border:none;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;cursor:pointer">WORLD</button>
     </div>
-    <span id="patterns-tier-label" style="font-size:0.78rem;color:var(--dim)">214 countries</span>
-    <span style="flex:1"></span>
-    <div id="proof-seal-inline" style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.68rem">
-      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim)" id="proof-seal-dot"></span>
-      <span id="proof-seal-status" style="color:var(--dim)">checking…</span>
+    <span id="patterns-tier-label" style="font-size:0.78rem;color:var(--dim)"></span>
+  </div>
+
+  <!-- Portfolio Mine View -->
+  <div id="portfolio-mine-view">
+    <div id="portfolio-empty-state" style="text-align:center;padding:4rem 2rem">
+      <div style="font-size:1.1rem;color:var(--text);margin-bottom:0.5rem" id="portfolio-mine-status"></div>
+      <div style="font-size:0.85rem;color:var(--dim);margin-bottom:1.5rem" id="portfolio-mine-sub"></div>
+      <button id="mine-btn" onclick="startPortfolioMine()" style="padding:12px 32px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-family:var(--mono);font-size:0.85rem;letter-spacing:0.08em;cursor:pointer">MINE</button>
+    </div>
+
+    <div id="portfolio-mining-progress" style="display:none;padding:2rem">
+      <div style="font-family:var(--mono);font-size:0.75rem;color:var(--dim);margin-bottom:1rem">MINING IN PROGRESS</div>
+      <div id="mine-progress-log" style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:1rem;font-family:var(--mono);font-size:0.72rem;max-height:300px;overflow-y:auto"></div>
+    </div>
+
+    <div id="portfolio-findings-view" style="display:none">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem">
+        <span id="portfolio-findings-count" style="font-family:var(--mono);font-size:0.85rem;color:var(--text)"></span>
+        <span id="portfolio-mine-time" style="font-size:0.75rem;color:var(--dim)"></span>
+        <span style="flex:1"></span>
+        <button onclick="startPortfolioMine()" style="padding:6px 14px;background:var(--panel);color:var(--dim);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:0.7rem;cursor:pointer">RE-MINE</button>
+      </div>
+      <div id="portfolio-findings-feed"></div>
     </div>
   </div>
 
-  <!-- Summary bar -->
-  <div class="status-bar" id="patterns-summary-bar">
-    <div class="stat-cell"><div class="stat-label">FINDINGS</div><div class="stat-value" id="ps-total">—</div><div class="stat-sub">mined patterns</div></div>
-    <div class="stat-cell"><div class="stat-label">GOING DARK</div><div class="stat-value warning" id="ps-dark">—</div><div class="stat-sub">data silence events</div></div>
-    <div class="stat-cell"><div class="stat-label">LINKED PATTERNS</div><div class="stat-value elevated" id="ps-unknown">—</div><div class="stat-sub">move together</div></div>
-    <div class="stat-cell"><div class="stat-label">LATEST RUN</div><div class="stat-value" id="ps-run" style="font-size:0.9rem">—</div><div class="stat-sub">UTC</div></div>
+  <!-- World View (pre-computed, nightly) -->
+  <div id="world-patterns-view" style="display:none">
+    <div style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem">
+      Global patterns from latest nightly analysis. <span id="world-updated-at"></span>
+    </div>
+    <div id="world-findings-feed"></div>
   </div>
 
-  <!-- GOING DARK — lead section -->
-  <div class="section-hdr"><span class="section-title">GOING DARK</span><span class="section-meta">DATA STOPPED ARRIVING — SILENCE AS INTELLIGENCE</span></div>
-  <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">Countries where data feeds went silent. When reporting stops, something changed. Each card shows what stopped, when, and what happened to the country's score during the blackout.</p>
-  <div id="going-dark-wrap"><div class="loading-msg">Loading…</div></div>
-
-  <!-- LINKED PATTERNS — demoted below going-dark -->
-  <div class="section-hdr" style="margin-top:2rem"><span class="section-title">LINKED PATTERNS</span><span class="section-meta">THESE MOVE TOGETHER ACROSS COUNTRIES</span></div>
-  <p style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem;line-height:1.6;max-width:760px">The miner found these categories changing together across many countries. No analyst asked for these patterns — they surfaced from raw data.</p>
-  <div id="unknown-unknowns-wrap"><div class="loading-msg">Loading…</div></div>
-
-  <!-- Methodology footer -->
-  <div style="padding:1rem 1.25rem;background:var(--panel);border:1px solid var(--border);border-radius:6px;margin-top:2rem">
-    <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:0.5rem">Sealed record</div>
-    <p style="font-size:0.78rem;color:var(--dim);line-height:1.7;margin:0">Every finding traces to a timestamped row in the miner_findings table. The miner runs nightly. Records are sealed weekly into a Bitcoin OpenTimestamps proof anchor. Each card shows the exact date the pattern was detected.</p>
-  </div>
 </div>
 
 
@@ -1955,43 +1959,240 @@ async function loadExtractionEvents() {
 
 // ═══ MINED PATTERNS LOADER ════════════════════════════════════════════════
 let patternsLoaded = false;
-let patternsData = { goingDark: [], unknownUnknowns: [] };
-let patternsTier = 'world';
-
-const DOMAIN_MAP = {
-  'economic_stress': 'economic', 'trade_collapse': 'economic', 'capital_flows': 'economic',
-  'currency_collapse': 'economic', 'sovereign_cds': 'economic', 'fao_food_import': 'economic',
-  'fao_food': 'economic', 'sanctions_pressure': 'economic', 'imf_fiscal': 'economic',
-  'defense_spending': 'economic', 'diaspora_remittance': 'economic', 'usda_food': 'economic',
-  'usda_food_supply': 'economic', 'energy_stress': 'economic', 'climate_stress': 'economic',
-  'structural_pressure': 'economic',
-  'governance': 'governance', 'vdem_governance': 'governance', 'corruption_risk': 'governance',
-  'election_calendar': 'governance', 'internet_freedom': 'governance', 'ooni_internet': 'governance',
-  'tor_censorship': 'governance', 'cyber_threat': 'governance', 'occrp': 'governance',
-  'power_grid': 'physical', 'dam_risk': 'physical', 'flood_risk': 'physical',
-  'seismic_risk': 'physical', 'pipeline_risk': 'physical', 'rail_corridor': 'physical',
-  'chokepoint': 'physical', 'maritime_trade': 'physical', 'port_congestion': 'physical',
-  'water_stress': 'physical', 'cable_disruption': 'physical', 'dark_vessel': 'physical',
-  'gps_jamming': 'physical',
-  'night_lights': 'behavioral', 'fire_hotspot': 'behavioral', 'social_volume': 'behavioral',
-  'prediction_market': 'behavioral', 'flight_movement': 'behavioral', 'gdelt_conflict': 'behavioral',
-  'gdelt_tone': 'behavioral', 'social_unrest': 'behavioral',
-  'resource_conflict': 'security', 'military_proximity': 'security', 'conflict': 'security',
-  'conflict_events': 'security',
-  'food_security': 'humanitarian', 'health_crisis': 'humanitarian', 'unhcr_refugees': 'humanitarian',
-  'iom_displacement': 'humanitarian', 'unhcr_odp': 'humanitarian', 'displacement': 'humanitarian',
-  'food_stress': 'humanitarian',
-};
-
-function getDomain(sig) {
-  return DOMAIN_MAP[sig] || 'other';
-}
+let patternsTier = 'portfolio';
 
 function getStarredCountries() {
   try {
     return JSON.parse(localStorage.getItem('sabian_starred') || '[]');
   } catch { return []; }
 }
+
+// ── Readable Summary (from payload fields only, domain comes from miner) ──────
+function summarizeFinding(category, payload) {
+  const domain = payload.domain || 'data';
+  switch (category) {
+    case 'going_dark_event': {
+      const years = payload.darkYears || 0;
+      const delta = payload.scoreDelta || 0;
+      const direction = delta > 0 ? 'rose' : delta < 0 ? 'dropped' : 'held steady';
+      return `${domain} data stopped arriving for ${years} years. Score ${direction} ${Math.abs(delta).toFixed(0)} points.`;
+    }
+    case 'first_mover': {
+      const lag = payload.lag || payload.avgLag || 0;
+      if (lag > 0) return `${domain} changes typically appear ${lag} year${lag > 1 ? 's' : ''} before score movements.`;
+      return `${domain} shifts tend to lead other changes.`;
+    }
+    case 'conditional_probability': {
+      const prob = payload.probability || payload.prob || 0;
+      const pct = (prob * 100).toFixed(0);
+      return `When ${domain} indicators are elevated, there is a ${pct}% historical chance of score movement.`;
+    }
+    case 'recovery_curve': {
+      const avgYears = payload.avgRecoveryYears || 0;
+      return `${domain} recovers in ${avgYears.toFixed(1)} years on average after deterioration.`;
+    }
+    case 'darkest_country': {
+      const darkSigs = payload.darkSignals || 0;
+      return `${darkSigs} data categories currently silent in this country.`;
+    }
+    case 'going_dark_sequence': {
+      return `${domain} tends to go silent first before other categories.`;
+    }
+    default:
+      return 'Pattern detected.';
+  }
+}
+
+// ── Portfolio Mine ────────────────────────────────────────────────────────────
+
+async function checkPortfolioMineStatus() {
+  const starred = getStarredCountries();
+  const statusEl = document.getElementById('portfolio-mine-status');
+  const subEl = document.getElementById('portfolio-mine-sub');
+  const btnEl = document.getElementById('mine-btn');
+
+  if (starred.length === 0) {
+    statusEl.textContent = 'No countries in your portfolio';
+    subEl.textContent = 'Add countries to your watchlist to mine for patterns';
+    btnEl.style.display = 'none';
+    return;
+  }
+
+  statusEl.textContent = `${starred.length} countries in your portfolio`;
+
+  try {
+    const res = await apiFetch('/api/mine/portfolio/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ countries: starred })
+    });
+
+    if (res.needsMine) {
+      subEl.textContent = res.reason === 'no_previous_mine'
+        ? 'No patterns mined yet. Hit Mine to discover.'
+        : res.reason === 'new_data_available'
+        ? 'New data available since last mine.'
+        : 'Portfolio changed. Re-mine to update.';
+      btnEl.textContent = 'MINE';
+      btnEl.style.display = 'inline-block';
+    } else {
+      // Show cached results
+      const cached = await apiFetch(`/api/mine/portfolio/${res.lastMineId}`);
+      showCachedMineResults(cached, res.minedAt);
+    }
+  } catch (err) {
+    subEl.textContent = 'Mine to discover patterns';
+    btnEl.style.display = 'inline-block';
+  }
+}
+
+function showCachedMineResults(result, minedAt) {
+  document.getElementById('portfolio-empty-state').style.display = 'none';
+  document.getElementById('portfolio-mining-progress').style.display = 'none';
+  document.getElementById('portfolio-findings-view').style.display = 'block';
+
+  const date = new Date(minedAt);
+  const ago = formatTimeAgo(date);
+  document.getElementById('portfolio-mine-time').textContent = `No change since ${ago}`;
+
+  renderPortfolioFindings(result.findings || []);
+}
+
+async function startPortfolioMine() {
+  const starred = getStarredCountries();
+  if (starred.length === 0) return;
+
+  document.getElementById('portfolio-empty-state').style.display = 'none';
+  document.getElementById('portfolio-findings-view').style.display = 'none';
+  document.getElementById('portfolio-mining-progress').style.display = 'block';
+
+  const logEl = document.getElementById('mine-progress-log');
+  logEl.innerHTML = '';
+
+  const addLog = (msg, type = 'info') => {
+    const color = type === 'finding' ? 'var(--accent)' : type === 'error' ? 'var(--critical)' : 'var(--dim)';
+    logEl.innerHTML += `<div style="color:${color};margin-bottom:4px">${msg}</div>`;
+    logEl.scrollTop = logEl.scrollHeight;
+  };
+
+  addLog(`Starting mine for ${starred.length} countries...`);
+
+  try {
+    const response = await fetch('/api/mine/portfolio', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer test_key'
+      },
+      body: JSON.stringify({ countries: starred })
+    });
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let allFindings = [];
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const event = JSON.parse(line.slice(6));
+
+          if (event.type === 'status') {
+            addLog(event.msg);
+          } else if (event.type === 'finding') {
+            addLog(`Pattern found: ${event.country} — ${event.category}`, 'finding');
+          } else if (event.type === 'complete') {
+            allFindings = event.findings || [];
+            addLog(`Mining complete. ${allFindings.length} patterns found.`);
+          } else if (event.type === 'done') {
+            setTimeout(() => {
+              document.getElementById('portfolio-mining-progress').style.display = 'none';
+              document.getElementById('portfolio-findings-view').style.display = 'block';
+              document.getElementById('portfolio-mine-time').textContent = 'Mined just now';
+              renderPortfolioFindings(allFindings);
+            }, 500);
+          } else if (event.type === 'error') {
+            addLog(event.msg, 'error');
+          }
+        } catch {}
+      }
+    }
+  } catch (err) {
+    addLog(`Error: ${err.message}`, 'error');
+  }
+}
+
+function renderPortfolioFindings(findings) {
+  const countEl = document.getElementById('portfolio-findings-count');
+  const feedEl = document.getElementById('portfolio-findings-feed');
+
+  countEl.textContent = findings.length === 0
+    ? 'No patterns found'
+    : `${findings.length} pattern${findings.length > 1 ? 's' : ''} found`;
+
+  if (findings.length === 0) {
+    feedEl.innerHTML = '<div style="color:var(--dim);font-size:0.85rem;padding:2rem 0">Sabian analyzed your portfolio and found no anomalies. This is a valid result — monitoring continues.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const f of findings) {
+    const summary = summarizeFinding(f.category, f.payload);
+    const country = f.payload.country || 'Global';
+    const findingId = 'finding-' + Math.random().toString(36).slice(2, 9);
+    html += `<div class="finding-row" style="padding:12px 0;border-bottom:1px solid var(--border)" id="${findingId}">
+      <div style="font-weight:600;color:var(--bright);margin-bottom:4px">${country}</div>
+      <div style="font-size:0.85rem;color:var(--text);line-height:1.5">${summary}</div>
+      <div style="margin-top:8px"><button onclick="expandFinding('${findingId}', ${JSON.stringify(f).replace(/"/g, '&quot;')})" style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);background:none;border:none;cursor:pointer;padding:0">▸ Expand</button></div>
+      <div class="finding-detail" style="display:none;margin-top:12px;padding:12px;background:var(--panel);border-radius:4px;font-size:0.85rem;color:var(--text);line-height:1.6"></div>
+    </div>`;
+  }
+  feedEl.innerHTML = html;
+}
+
+async function expandFinding(findingId, finding) {
+  const row = document.getElementById(findingId);
+  const btn = row.querySelector('button');
+  const detailEl = row.querySelector('.finding-detail');
+
+  if (detailEl.style.display === 'none') {
+    detailEl.style.display = 'block';
+    btn.textContent = '▾ Collapse';
+    detailEl.innerHTML = '<span style="color:var(--dim)">Analyzing pattern...</span>';
+
+    try {
+      const res = await apiFetch('/api/mine/explain', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ finding })
+      });
+      detailEl.innerHTML = res.explanation || 'Pattern detected.';
+    } catch (err) {
+      detailEl.innerHTML = '<span style="color:var(--critical)">Failed to analyze pattern.</span>';
+    }
+  } else {
+    detailEl.style.display = 'none';
+    btn.textContent = '▸ Expand';
+  }
+}
+
+function formatTimeAgo(date) {
+  const seconds = Math.floor((new Date() - date) / 1000);
+  if (seconds < 60) return 'just now';
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+  return `${Math.floor(seconds / 86400)} days ago`;
+}
+
+// ── Tier switching ────────────────────────────────────────────────────────────
 
 function setPatternsTier(tier) {
   patternsTier = tier;
@@ -2001,121 +2202,61 @@ function setPatternsTier(tier) {
   document.getElementById('patterns-tier-portfolio').className = tier === 'portfolio' ? 'tier-btn active' : 'tier-btn';
   document.getElementById('patterns-tier-portfolio').style.background = tier === 'portfolio' ? 'var(--accent)' : 'transparent';
   document.getElementById('patterns-tier-portfolio').style.color = tier === 'portfolio' ? '#fff' : 'var(--dim)';
-  const starred = getStarredCountries();
-  document.getElementById('patterns-tier-label').textContent = tier === 'world' ? '214 countries' : starred.length + ' starred';
-  renderPatternsForTier();
+
+  document.getElementById('portfolio-mine-view').style.display = tier === 'portfolio' ? 'block' : 'none';
+  document.getElementById('world-patterns-view').style.display = tier === 'world' ? 'block' : 'none';
+
+  if (tier === 'portfolio') {
+    checkPortfolioMineStatus();
+  } else {
+    loadWorldPatterns();
+  }
 }
 
-function renderPatternsForTier() {
-  const starred = getStarredCountries();
-  const isPortfolio = patternsTier === 'portfolio';
+async function loadWorldPatterns() {
+  const feedEl = document.getElementById('world-findings-feed');
+  feedEl.innerHTML = '<div class="loading-msg">Loading global patterns...</div>';
 
-  let gd = patternsData.goingDark;
-  let uu = patternsData.unknownUnknowns;
+  const [gdRes, uuRes] = await Promise.allSettled([
+    apiFetch('/public-api/patterns/going-dark'),
+    apiFetch('/public-api/patterns/unknown-unknowns')
+  ]);
 
-  if (isPortfolio && starred.length > 0) {
-    gd = gd.filter(f => starred.includes(f.payload?.country));
+  const findings = [];
+  if (gdRes.status === 'fulfilled' && gdRes.value.findings) {
+    findings.push(...gdRes.value.findings.slice(0, 25).map(f => ({ ...f, category: f.category || 'going_dark_event' })));
   }
 
-  renderGoingDark(gd);
-  renderUnknownUnknowns(uu);
+  document.getElementById('world-updated-at').textContent = findings[0]?.created_at
+    ? `Updated ${new Date(findings[0].created_at).toLocaleDateString()}`
+    : '';
 
-  const gdCount = gd.filter(f => f.payload && (f.payload.darkYears || 0) >= 2).length;
-  document.getElementById('ps-dark').textContent = gdCount;
-  document.getElementById('ps-unknown').textContent = uu.length;
-  document.getElementById('ps-total').textContent = gdCount + uu.length;
+  if (findings.length === 0) {
+    feedEl.innerHTML = '<div style="color:var(--dim)">No global patterns at current threshold.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const f of findings) {
+    const p = f.payload || {};
+    const country = p.country || 'Global';
+    const domain = p.domain || 'data';
+    const years = p.darkYears || 0;
+    const delta = p.scoreDelta || 0;
+    const direction = delta > 0 ? 'rose' : delta < 0 ? 'dropped' : 'held steady';
+    const summary = `${domain} data stopped arriving for ${years} years. Score ${direction} ${Math.abs(delta).toFixed(0)} points.`;
+
+    html += `<div class="finding-row" style="padding:12px 0;border-bottom:1px solid var(--border)">
+      <div style="font-weight:600;color:var(--bright);margin-bottom:4px">${country}</div>
+      <div style="font-size:0.85rem;color:var(--text);line-height:1.5">${summary}</div>
+    </div>`;
+  }
+  feedEl.innerHTML = html;
 }
 
 async function loadPatterns() {
   patternsLoaded = true;
-  const [sealRes, summaryRes, uuRes, gdRes] = await Promise.allSettled([
-    apiFetch('/public-api/proof-seal'),
-    apiFetch('/public-api/patterns/summary'),
-    apiFetch('/public-api/patterns/unknown-unknowns'),
-    apiFetch('/public-api/patterns/going-dark')
-  ]);
-
-  if (sealRes.status === 'fulfilled' && sealRes.value.sealed) {
-    const s = sealRes.value;
-    const color = s.status === 'GREEN' ? 'var(--stable)' : s.status === 'YELLOW' ? 'var(--warning)' : 'var(--critical)';
-    document.getElementById('proof-seal-dot').style.background = color;
-    document.getElementById('proof-seal-status').textContent = 'SEALED ' + s.anchor_date;
-    document.getElementById('proof-seal-status').style.color = color;
-  } else {
-    document.getElementById('proof-seal-dot').style.background = 'var(--dim)';
-    document.getElementById('proof-seal-status').textContent = 'checking anchor…';
-  }
-
-  if (summaryRes.status === 'fulfilled') {
-    const s = summaryRes.value;
-    document.getElementById('ps-run').textContent = s.latest_run ? s.latest_run.slice(0, 16).replace('T', ' ') : '—';
-    const el = document.getElementById('tab-patterns-count');
-    if (el) el.textContent = '(' + (s.total || 0) + ')';
-  }
-
-  patternsData.goingDark = (gdRes.status === 'fulfilled' && gdRes.value.findings) ? gdRes.value.findings : [];
-  patternsData.unknownUnknowns = (uuRes.status === 'fulfilled' && uuRes.value.findings) ? uuRes.value.findings : [];
-
-  renderPatternsForTier();
-}
-
-function renderUnknownUnknowns(findings) {
-  const wrap = document.getElementById('unknown-unknowns-wrap');
-  if (!findings.length) { wrap.innerHTML = '<div class="loading-msg">No linked patterns at current threshold.</div>'; return; }
-
-  let html = '<div class="patterns-grid">';
-  findings.slice(0, 30).forEach(f => {
-    const p = f.payload || {};
-    const r = p.r != null ? p.r : (p.spearman_r != null ? p.spearman_r : 0);
-    const absR = Math.abs(r);
-    const domA = getDomain(p.sigA || p.signal_a || '');
-    const domB = getDomain(p.sigB || p.signal_b || '');
-    const strength = absR >= 0.8 ? 'very strong' : absR >= 0.65 ? 'strong' : 'moderate';
-    const direction = r > 0 ? 'rise together' : 'move opposite';
-    const ts = f.created_at ? f.created_at.slice(0, 10) : '—';
-    const color = absR >= 0.8 ? 'var(--critical)' : absR >= 0.65 ? 'var(--warning)' : 'var(--elevated)';
-
-    html += '<div class="pattern-card" style="border-left:3px solid ' + color + '">'
-         + '<div class="pattern-domains"><span class="domain-chip">' + domA + '</span><span style="color:var(--dim);margin:0 6px">↔</span><span class="domain-chip">' + domB + '</span></div>'
-         + '<div class="pattern-desc">' + strength + ' link — these ' + direction + '</div>'
-         + '<div class="pattern-ts">Detected ' + ts + ' · finding #' + f.id + '</div>'
-         + '</div>';
-  });
-  html += '</div>';
-  wrap.innerHTML = html;
-}
-
-function renderGoingDark(findings) {
-  const wrap = document.getElementById('going-dark-wrap');
-  if (!findings.length) { wrap.innerHTML = '<div class="loading-msg">No countries with data silence detected.</div>'; return; }
-
-  const filtered = findings.filter(f => f.payload && (f.payload.darkYears || 0) >= 2)
-    .sort((a,b) => (a.payload.scoreDelta||0) - (b.payload.scoreDelta||0))
-    .slice(0, 40);
-
-  if (!filtered.length) { wrap.innerHTML = '<div class="loading-msg">No significant dark periods detected.</div>'; return; }
-
-  let html = '<div class="patterns-grid">';
-  filtered.forEach(f => {
-    const p = f.payload || {};
-    const delta = p.scoreDelta || 0;
-    const domain = getDomain(p.signal || '');
-    const dc = delta < -20 ? 'var(--critical)' : delta < -5 ? 'var(--warning)' : delta > 5 ? 'var(--stable)' : 'var(--dim)';
-    const ts = f.created_at ? f.created_at.slice(0, 10) : '—';
-    const impact = delta < -20 ? 'major deterioration' : delta < -5 ? 'notable decline' : delta > 5 ? 'improvement' : 'stable';
-
-    html += '<div class="pattern-card dark-card" style="border-left:3px solid ' + dc + '">'
-         + '<div class="pattern-country">' + (p.country || '—') + '</div>'
-         + '<div class="pattern-dark-info">'
-         + '<span class="domain-chip">' + domain + '</span> data silent for <strong>' + p.darkYears + ' years</strong>'
-         + '</div>'
-         + '<div class="pattern-window">' + p.darkStart + ' — ' + p.darkEnd + '</div>'
-         + '<div class="pattern-impact" style="color:' + dc + '">' + impact + ' (' + (delta > 0 ? '+' : '') + delta.toFixed(1) + ' score change)</div>'
-         + '<div class="pattern-ts">Detected ' + ts + ' · finding #' + f.id + '</div>'
-         + '</div>';
-  });
-  html += '</div>';
-  wrap.innerHTML = html;
+  setPatternsTier('portfolio');
 }
 // ═══ END MINED PATTERNS LOADER ═══════════════════════════════════════════════
 

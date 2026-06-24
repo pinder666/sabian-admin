@@ -25,11 +25,24 @@
 //
 // Output: historical/DEEP_PATTERN_FINDINGS_V2.md + .json
 // Usage:  node historical/deep_pattern_analysis_v2.cjs
+//         node historical/deep_pattern_analysis_v2.cjs --countries=Nigeria,Sudan --stream
 
 require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 const fs   = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
+
+// ── CLI flags ─────────────────────────────────────────────────────────────────
+const args = process.argv.slice(2);
+const countriesArg = args.find(a => a.startsWith('--countries='));
+const SCOPED_COUNTRIES = countriesArg
+  ? countriesArg.replace('--countries=', '').split(',').map(c => c.trim())
+  : null;
+const STREAM_MODE = args.includes('--stream');
+
+function emit(type, data) {
+  if (STREAM_MODE) console.log(JSON.stringify({ type, ...data, ts: Date.now() }));
+}
 
 const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
@@ -43,11 +56,15 @@ let ALL_SIGNALS = []; // populated by deriveSignalsFromData()
 
 async function deriveSignalsFromData() {
   process.stdout.write('  Deriving signal list from data...');
+  emit('status', { msg: 'Deriving signal list from data...' });
   const signalSet = new Set();
   let page = 0;
   while (true) {
-    const { data, error } = await sb.from('historical_convergence_scores')
-      .select('breakdown')
+    let query = sb.from('historical_convergence_scores').select('breakdown');
+    if (SCOPED_COUNTRIES && SCOPED_COUNTRIES.length > 0) {
+      query = query.in('country', SCOPED_COUNTRIES);
+    }
+    const { data, error } = await query
       .range(page * 1000, (page + 1) * 1000 - 1);
     if (error) throw error;
     if (!data || data.length === 0) break;
@@ -184,25 +201,34 @@ function bootstrapCI(pairs, iterations = 500) {
 // ── Load all convergence scores ───────────────────────────────────────────────
 
 async function loadAllScores() {
-  process.stdout.write('  Loading convergence scores...');
+  const scopeLabel = SCOPED_COUNTRIES ? `${SCOPED_COUNTRIES.length} countries` : 'all countries';
+  process.stdout.write(`  Loading convergence scores (${scopeLabel})...`);
+  emit('status', { msg: `Loading convergence scores for ${scopeLabel}...` });
   const all = [];
   let page = 0;
   while (true) {
-    const { data, error } = await sb.from('historical_convergence_scores')
+    let query = sb.from('historical_convergence_scores')
       .select('country, year, score, breakdown, signals_used')
       .lte('year', 2026)
-      .range(page * 1000, (page + 1) * 1000 - 1)
       .order('year');
+    if (SCOPED_COUNTRIES && SCOPED_COUNTRIES.length > 0) {
+      query = query.in('country', SCOPED_COUNTRIES);
+    }
+    const { data, error } = await query.range(page * 1000, (page + 1) * 1000 - 1);
     if (error) throw error;
     if (!data || data.length === 0) break;
     for (const row of data) {
       if (!row.breakdown || typeof row.breakdown !== 'object') continue;
       all.push(row);
     }
+    if (SCOPED_COUNTRIES) {
+      emit('status', { msg: `Loaded ${all.length} records...` });
+    }
     page++;
     if (data.length < 1000) break;
   }
   console.log(` ${all.length.toLocaleString()} rows loaded.`);
+  emit('status', { msg: `${all.length.toLocaleString()} country-year records loaded` });
   return all;
 }
 
@@ -334,6 +360,7 @@ const GOING_DARK_EXCLUSIONS = new Set([
 
 function testGoingDark(matrix) {
   process.stdout.write('  Test D: Going-dark detection...');
+  emit('status', { msg: 'Testing for data silence patterns...' });
 
   const byCountry = new Map();
   for (const row of matrix.values()) {
@@ -381,6 +408,7 @@ function testGoingDark(matrix) {
             darkEvents.push({
               country,
               signal: sig,
+              domain: getDomain(sig),
               darkStart,
               darkEnd: rows[k].year,
               darkYears,
@@ -388,6 +416,7 @@ function testGoingDark(matrix) {
               scoreAtReturn,
               scoreDelta: +scoreDelta.toFixed(1)
             });
+            emit('finding', { country, category: 'going_dark_event', darkYears });
           }
           darkStart = null;
           scoreAtDark = null;
@@ -416,6 +445,7 @@ function testGoingDark(matrix) {
   })).sort((a, b) => Math.abs(b.avgScoreChangeDuringDarkness) - Math.abs(a.avgScoreChangeDuringDarkness));
 
   console.log(` ${darkEvents.length} going-dark events found across ${Object.keys(bySignal).length} signals.`);
+  emit('status', { msg: `Found ${darkEvents.length} silence patterns` });
   return { events: darkEvents, bySignal: signalSummary };
 }
 
@@ -1345,6 +1375,12 @@ async function main() {
   console.log('  ================================');
   console.log('  5,000+ tests | Going-dark as first-class signal | No data manipulation\n');
 
+  if (SCOPED_COUNTRIES) {
+    console.log(`  SCOPED MODE: ${SCOPED_COUNTRIES.length} countries`);
+    console.log(`  Countries: ${SCOPED_COUNTRIES.join(', ')}\n`);
+    emit('start', { countries: SCOPED_COUNTRIES, count: SCOPED_COUNTRIES.length });
+  }
+
   // Derive signal list from actual data — no hardcoded array
   await deriveSignalsFromData();
   if (ALL_SIGNALS.length === 0) throw new Error('No signals found in data — cannot proceed');
@@ -1386,13 +1422,50 @@ async function main() {
     meta: { totalTests, generatedAt: new Date().toISOString(), matrixSize: matrix.size }
   };
 
-  const md = generateReport({ ...findings, rawMatrix: matrix });
-  fs.writeFileSync(OUT_MD, md, 'utf8');
-  fs.writeFileSync(OUT_JSON, JSON.stringify(findings, null, 2), 'utf8');
+  if (STREAM_MODE) {
+    // In stream mode, emit findings directly, don't write files
+    const allFindings = [];
 
-  console.log(`  Report: ${OUT_MD}`);
-  console.log(`  JSON:   ${OUT_JSON}`);
-  console.log('');
+    // going_dark_event
+    for (const e of (findings.goingDark?.events || [])) {
+      allFindings.push({ category: 'going_dark_event', payload: { ...e, domain: getDomain(e.signal) } });
+    }
+
+    // first_mover
+    for (const m of (findings.firstMover?.firstMovers || [])) {
+      allFindings.push({ category: 'first_mover', payload: { ...m, domain: getDomain(m.signal) } });
+    }
+
+    // conditional_probability
+    for (const p of (findings.conditionalProb || [])) {
+      allFindings.push({ category: 'conditional_probability', payload: { ...p, domain: getDomain(p.signal) } });
+    }
+
+    // recovery_curve
+    for (const [sig, data] of Object.entries(findings.recoveryCurves || {})) {
+      allFindings.push({ category: 'recovery_curve', payload: { signal: sig, domain: getDomain(sig), ...data } });
+    }
+
+    // darkest_country
+    for (const d of (findings.darkestCountries || [])) {
+      allFindings.push({ category: 'darkest_country', payload: d });
+    }
+
+    // going_dark_sequence
+    for (const s of (findings.goingDarkSequences || [])) {
+      allFindings.push({ category: 'going_dark_sequence', payload: { ...s, domain: getDomain(s.signal) } });
+    }
+
+    emit('complete', { findings: allFindings, count: allFindings.length });
+  } else {
+    const md = generateReport({ ...findings, rawMatrix: matrix });
+    fs.writeFileSync(OUT_MD, md, 'utf8');
+    fs.writeFileSync(OUT_JSON, JSON.stringify(findings, null, 2), 'utf8');
+
+    console.log(`  Report: ${OUT_MD}`);
+    console.log(`  JSON:   ${OUT_JSON}`);
+    console.log('');
+  }
 }
 
 main().catch(err => { console.error('Fatal:', err.message); process.exit(1); });

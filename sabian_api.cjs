@@ -1744,6 +1744,189 @@ app.get('/public-api/proof-seal', async (req, res) => {
 // ═══ END MINED PATTERNS ENDPOINTS ════════════════════════════════════════════
 
 
+// ═══ PORTFOLIO MINE ENDPOINTS ════════════════════════════════════════════════
+
+// Check if re-mine needed
+app.post('/api/mine/portfolio/check', requireTier('buyer'), async (req, res) => {
+  try {
+    const { countries } = req.body;
+    if (!countries || !Array.isArray(countries) || countries.length === 0) {
+      return res.status(400).json({ error: 'countries array required' });
+    }
+
+    const countriesKey = countries.slice().sort().join(',');
+    const buyerId = req.headers['x-buyer-id'] || 'default';
+
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+    // Get last mine for this buyer
+    const { data: lastMine } = await sb
+      .from('portfolio_mine_results')
+      .select('id, countries, mined_at')
+      .eq('buyer_id', buyerId)
+      .order('mined_at', { ascending: false })
+      .limit(1);
+
+    if (!lastMine || lastMine.length === 0) {
+      return res.json({ needsMine: true, reason: 'no_previous_mine' });
+    }
+
+    const last = lastMine[0];
+    const lastCountriesKey = (last.countries || []).slice().sort().join(',');
+
+    // Check if countries changed
+    if (lastCountriesKey !== countriesKey) {
+      return res.json({ needsMine: true, reason: 'countries_changed' });
+    }
+
+    // Check if underlying data changed since last mine
+    const { data: latestData } = await sb
+      .from('historical_convergence_scores')
+      .select('computed_at')
+      .in('country', countries)
+      .order('computed_at', { ascending: false })
+      .limit(1);
+
+    const latestDataTime = latestData?.[0]?.computed_at;
+    if (latestDataTime && new Date(latestDataTime) > new Date(last.mined_at)) {
+      return res.json({ needsMine: true, reason: 'new_data_available' });
+    }
+
+    // No change — return cached
+    res.json({
+      needsMine: false,
+      lastMineId: last.id,
+      minedAt: last.mined_at,
+      reason: 'no_change'
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get cached mine results
+app.get('/api/mine/portfolio/:id', requireTier('buyer'), async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+    const { data, error } = await sb
+      .from('portfolio_mine_results')
+      .select('*')
+      .eq('id', req.params.id)
+      .single();
+
+    if (error) return res.status(404).json({ error: 'Mine result not found' });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Run live portfolio mine with SSE streaming
+app.post('/api/mine/portfolio', requireTier('buyer'), async (req, res) => {
+  const { countries } = req.body;
+  if (!countries || !Array.isArray(countries) || countries.length === 0) {
+    return res.status(400).json({ error: 'countries array required' });
+  }
+
+  const buyerId = req.headers['x-buyer-id'] || 'default';
+
+  // Set up SSE
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
+
+  const sendEvent = (data) => {
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  };
+
+  // Spawn scoped miner
+  const { spawn } = require('child_process');
+  const minerPath = require('path').join(__dirname, 'historical', 'deep_pattern_analysis_v2.cjs');
+  const miner = spawn('node', [minerPath, `--countries=${countries.join(',')}`, '--stream'], {
+    cwd: __dirname,
+    env: process.env
+  });
+
+  let allFindings = [];
+
+  miner.stdout.on('data', (data) => {
+    const lines = data.toString().split('\n').filter(l => l.trim());
+    for (const line of lines) {
+      try {
+        const event = JSON.parse(line);
+        sendEvent(event);
+        if (event.type === 'complete') {
+          allFindings = event.findings || [];
+        }
+      } catch {}
+    }
+  });
+
+  miner.stderr.on('data', (data) => {
+    sendEvent({ type: 'error', msg: data.toString() });
+  });
+
+  miner.on('close', async (code) => {
+    // Persist findings
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+    const { data: inserted } = await sb.from('portfolio_mine_results').insert({
+      buyer_id: buyerId,
+      countries,
+      findings: allFindings,
+      finding_count: allFindings.length,
+      mined_at: new Date().toISOString()
+    }).select('id').single();
+
+    sendEvent({ type: 'saved', mineId: inserted?.id });
+    sendEvent({ type: 'done', code });
+    res.end();
+  });
+
+  req.on('close', () => {
+    miner.kill();
+  });
+});
+
+// Explain a finding using Claude
+app.post('/api/mine/explain', requireTier('buyer'), async (req, res) => {
+  const { finding } = req.body;
+  if (!finding || !finding.category || !finding.payload) {
+    return res.status(400).json({ error: 'finding with category and payload required' });
+  }
+
+  try {
+    const Anthropic = require('@anthropic-ai/sdk');
+    const client = new Anthropic();
+
+    const prompt = `You are Sabian, a sovereign risk intelligence system. A pattern miner found the following pattern. Explain what it means in 2-3 sentences of plain English. Do not use jargon. Do not mention signal names, statistical notation, or technical terms. Only describe what changed, when, and why it matters to someone monitoring country risk.
+
+Category: ${finding.category}
+Payload: ${JSON.stringify(finding.payload)}
+
+Write only the explanation, nothing else.`;
+
+    const message = await client.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 256,
+      messages: [{ role: 'user', content: prompt }]
+    });
+
+    const explanation = message.content[0]?.text || 'Pattern detected.';
+    res.json({ explanation });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ═══ END PORTFOLIO MINE ENDPOINTS ═════════════════════════════════════════════
+
+
 // ═══ EXTRACTION SIGNATURES ENDPOINT ════════════════════════════════════════
 app.get('/public-api/extraction/signatures', async (req, res) => {
   try {
