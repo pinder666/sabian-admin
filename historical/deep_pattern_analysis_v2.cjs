@@ -1735,7 +1735,7 @@ async function main() {
   const goingDarkSeqs   = testGoingDarkSequences(matrix);
   const darkestCountries = findDarkestCountries(matrix);
   const scoreShifts     = detectScoreShifts(matrix);
-  const collapsePatterns = excavateCollapsePatterns(matrix);
+  const collapsePatterns = excavateCollapsePatterns(matrix, scoreShifts);
   const silenceVsScore  = testSilenceVsScore(matrix);
   const threeSigClusters = testThreeSignalClusters(matrix);
   const monteCarlo      = {}; // Test G disabled: synthetic-score construction does not mirror real scoring formula, produced impossible values
