@@ -1120,6 +1120,86 @@ function testGoingDarkSequences(matrix) {
   return ranked;
 }
 
+// ── Score Shift Detector — real events showing up in the data ─────────────────
+
+function detectScoreShifts(matrix) {
+  process.stdout.write('  Detecting score shifts...');
+
+  const THRESHOLD = 20;
+  const WINDOW = 3;
+
+  const byCountry = new Map();
+  for (const row of matrix.values()) {
+    if (!byCountry.has(row.country)) byCountry.set(row.country, []);
+    byCountry.get(row.country).push(row);
+  }
+  for (const [, rows] of byCountry) rows.sort((a, b) => a.year - b.year);
+
+  const shifts = [];
+
+  for (const [country, rows] of byCountry) {
+    if (rows.length < 3) continue;
+
+    for (let i = 0; i < rows.length; i++) {
+      for (let j = i + 1; j <= Math.min(i + WINDOW, rows.length - 1); j++) {
+        const startYear = rows[i].year;
+        const endYear = rows[j].year;
+        const startScore = rows[i].score;
+        const endScore = rows[j].score;
+
+        if (startScore === null || endScore === null) continue;
+
+        const delta = endScore - startScore;
+        const windowYears = endYear - startYear;
+
+        if (Math.abs(delta) >= THRESHOLD && windowYears <= WINDOW) {
+          const startSignals = rows[i].signals || {};
+          const endSignals = rows[j].signals || {};
+          const signalDeltas = [];
+
+          for (const sig of Object.keys(endSignals)) {
+            const startZ = startSignals[sig] ?? 0;
+            const endZ = endSignals[sig] ?? 0;
+            const sigDelta = endZ - startZ;
+            if (Math.abs(sigDelta) > 0.5) {
+              signalDeltas.push({ signal: sig, domain: getDomain(sig), delta: +sigDelta.toFixed(2) });
+            }
+          }
+          signalDeltas.sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+
+          shifts.push({
+            country,
+            year: endYear,
+            startYear,
+            startScore: +startScore.toFixed(1),
+            endScore: +endScore.toFixed(1),
+            delta: +delta.toFixed(1),
+            direction: delta > 0 ? 'up' : 'down',
+            windowYears,
+            leadingSignals: signalDeltas.slice(0, 5)
+          });
+        }
+      }
+    }
+  }
+
+  shifts.sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+
+  const deduped = [];
+  const seen = new Set();
+  for (const s of shifts) {
+    const windowKey = `${s.country}|${Math.floor(s.year / 5)}`;
+    if (!seen.has(windowKey)) {
+      seen.add(windowKey);
+      deduped.push(s);
+    }
+  }
+
+  console.log(` ${deduped.length} significant score shifts found.`);
+  totalTests += shifts.length;
+  return deduped;
+}
+
 // ── Highest-darkness countries ────────────────────────────────────────────────
 
 function findDarkestCountries(matrix) {
@@ -1400,6 +1480,7 @@ async function main() {
   const goingDark       = testGoingDark(matrix);
   const goingDarkSeqs   = testGoingDarkSequences(matrix);
   const darkestCountries = findDarkestCountries(matrix);
+  const scoreShifts     = detectScoreShifts(matrix);
   const silenceVsScore  = testSilenceVsScore(matrix);
   const threeSigClusters = testThreeSignalClusters(matrix);
   const monteCarlo      = {}; // Test G disabled: synthetic-score construction does not mirror real scoring formula, produced impossible values
@@ -1421,7 +1502,7 @@ async function main() {
     allPairs, extendedLags, signalToScore, goingDark, silenceVsScore,
     threeSigClusters, monteCarlo, conditionalProb, coActivation, recoveryCurves,
     firstMover, regionalDivergence: regionalDiv, compoundAmplification: compoundAmp,
-    bandTransitions, unknownUnknowns, asymmetry, absenceAsSignal, bootstrap,
+    bandTransitions, unknownUnknowns, asymmetry, absenceAsSignal, bootstrap, scoreShifts,
     goingDarkSequences: goingDarkSeqs, darkestCountries,
     meta: { totalTests, generatedAt: new Date().toISOString(), matrixSize: matrix.size }
   };
@@ -1429,6 +1510,11 @@ async function main() {
   if (STREAM_MODE) {
     // In stream mode, emit findings directly, don't write files
     const allFindings = [];
+
+    // score_shift (LEAD with real events)
+    for (const s of (findings.scoreShifts || [])) {
+      allFindings.push({ category: 'score_shift', payload: s });
+    }
 
     // going_dark_event
     for (const e of (findings.goingDark?.events || [])) {

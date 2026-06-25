@@ -822,6 +822,7 @@
   <div style="display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap">
     <select id="patterns-filter-category" onchange="applyPatternFilters()" style="background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:0.8rem">
       <option value="">ALL CATEGORIES</option>
+      <option value="score_shift">SCORE SHIFT</option>
       <option value="going_dark_event">GOING DARK</option>
       <option value="darkest_country">DARKEST COUNTRIES</option>
       <option value="first_mover">FIRST MOVER</option>
@@ -2224,6 +2225,7 @@ function renderPatternLibrary() {
 
 function formatCategoryLabel(category) {
   const labels = {
+    'score_shift': 'SHIFT',
     'going_dark_event': 'GOING DARK',
     'darkest_country': 'DARKEST',
     'first_mover': 'FIRST MOVER',
@@ -2241,6 +2243,14 @@ function summarizeLibraryFinding(f) {
   const domain = f.domain || 'data';
 
   switch (f.category) {
+    case 'score_shift': {
+      const dir = p.direction === 'up' ? 'rose' : 'fell';
+      const domains = (p.leadingSignals || []).slice(0, 3).map(s => s.domain).filter(Boolean);
+      const uniqueDomains = [...new Set(domains)];
+      const domainStr = uniqueDomains.length > 0 ? uniqueDomains.join(', ').toUpperCase() : 'multiple domains';
+      return `Sharp shift in ${p.year}: score ${dir} ${Math.abs(p.delta)} points over ${p.windowYears} year${p.windowYears > 1 ? 's' : ''}. ${domainStr} moved first.`;
+    }
+
     case 'going_dark_event':
       return `${domain.toUpperCase()} data stopped arriving for ${p.darkYears || 0} years. Score ${p.scoreDelta > 0 ? 'rose' : 'dropped'} ${Math.abs(p.scoreDelta || 0).toFixed(0)} points during silence.`;
 

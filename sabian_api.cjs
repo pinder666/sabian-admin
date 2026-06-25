@@ -156,8 +156,17 @@ app.get('/api/patterns/library', requireTier('buyer'), (req, res) => {
     const raw = JSON.parse(fs.readFileSync(findingsPath, 'utf8'));
 
     const findings = [];
+
+    // LEAD with score shifts — real events
+    for (const s of (raw.scoreShifts || [])) {
+      findings.push({ category: 'score_shift', payload: s, hasCountry: true });
+    }
+
+    // Going dark events — filter out noise (darkYears > 50)
     for (const e of (raw.goingDark?.events || [])) {
-      findings.push({ category: 'going_dark_event', payload: e, hasCountry: true });
+      if ((e.darkYears || 0) <= 50) {
+        findings.push({ category: 'going_dark_event', payload: e, hasCountry: true });
+      }
     }
     for (const d of (raw.darkestCountries || [])) {
       findings.push({ category: 'darkest_country', payload: d, hasCountry: true });
