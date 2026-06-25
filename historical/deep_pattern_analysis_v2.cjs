@@ -1202,64 +1202,89 @@ function detectScoreShifts(matrix) {
 
 // ── Collapse Pattern Excavation — anchored on validated score shifts ──────────
 // Takes the real events (scoreShifts) as anchors.
-// For each shift, builds the chronicle of what happened in the years before.
+// Pulls RAW signal readings from historical_signal_readings (966K rows).
 // Finds patterns that recur across 3+ distinct countries.
 
-function excavateCollapsePatterns(matrix, scoreShifts) {
+async function excavateCollapsePatterns(matrix, scoreShifts) {
   process.stdout.write('  Excavating collapse patterns from score shifts...');
 
   const MIN_COUNTRIES = 3;
   const ELEVATION_THRESHOLD = 0.5;
   const LOOKBACK_YEARS = 10;
 
-  // Build country timelines from matrix
-  const byCountry = new Map();
-  for (const row of matrix.values()) {
-    if (!byCountry.has(row.country)) byCountry.set(row.country, []);
-    byCountry.get(row.country).push(row);
-  }
-  for (const [, rows] of byCountry) rows.sort((a, b) => a.year - b.year);
+  // Step 0: Load ALL raw signal readings from historical_signal_readings
+  // This is the 966K source — the real data.
+  process.stdout.write('\n    Loading raw signal readings...');
+  const rawReadings = new Map(); // key: "country|year|signal" -> z_score
+  const countrySignalYears = new Map(); // key: "country" -> Map<signal, Set<year>>
 
-  // Step 1: Build chronicles for each score shift
+  let page = 0;
+  let totalLoaded = 0;
+  while (true) {
+    const { data, error } = await sb.from('historical_signal_readings')
+      .select('country, year, signal_type, z_score')
+      .range(page * 1000, (page + 1) * 1000 - 1);
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+
+    for (const row of data) {
+      const key = `${row.country}|${row.year}|${row.signal_type}`;
+      rawReadings.set(key, row.z_score);
+
+      if (!countrySignalYears.has(row.country)) {
+        countrySignalYears.set(row.country, new Map());
+      }
+      const signalMap = countrySignalYears.get(row.country);
+      if (!signalMap.has(row.signal_type)) {
+        signalMap.set(row.signal_type, new Set());
+      }
+      signalMap.get(row.signal_type).add(row.year);
+    }
+
+    totalLoaded += data.length;
+    page++;
+    if (data.length < 1000) break;
+  }
+  process.stdout.write(` ${totalLoaded.toLocaleString()} readings loaded.\n`);
+
+  // Step 1: Build chronicles for each score shift using RAW readings
   const chronicles = [];
 
   for (const shift of scoreShifts) {
     const { country, year, startYear, startScore, endScore, delta, direction } = shift;
-    const countryRows = byCountry.get(country);
-    if (!countryRows) continue;
 
-    // Find rows in the lookback window before the shift
-    const lookbackRows = countryRows.filter(r => r.year < year && r.year >= year - LOOKBACK_YEARS);
-    if (lookbackRows.length === 0) continue;
+    const signalMap = countrySignalYears.get(country);
+    if (!signalMap) continue;
 
     // Track when each signal FIRST elevated (z > threshold)
     const signalFirstElevated = new Map();
-    // Track when each signal went DARK (present then absent)
+    // Track when each signal went DARK
     const signalWentDark = new Map();
-
-    // Sort lookback rows chronologically
-    lookbackRows.sort((a, b) => a.year - b.year);
-
-    // Track signal presence across lookback
+    // Track last year each signal was seen
     const signalLastSeen = new Map();
 
-    for (const row of lookbackRows) {
-      for (const [sig, z] of Object.entries(row.signals)) {
+    // Check each signal's readings in the lookback window
+    for (const [signal, years] of signalMap) {
+      const lookbackYears = [...years].filter(y => y < year && y >= year - LOOKBACK_YEARS).sort((a,b) => a - b);
+
+      for (const y of lookbackYears) {
+        const key = `${country}|${y}|${signal}`;
+        const z = rawReadings.get(key);
+        if (z === undefined || z === null) continue;
+
         // Track elevation
-        if (z > ELEVATION_THRESHOLD && !signalFirstElevated.has(sig)) {
-          signalFirstElevated.set(sig, { year: row.year, z: +z.toFixed(2) });
+        if (z > ELEVATION_THRESHOLD && !signalFirstElevated.has(signal)) {
+          signalFirstElevated.set(signal, { year: y, z: +z.toFixed(2) });
         }
-        signalLastSeen.set(sig, row.year);
+        signalLastSeen.set(signal, y);
       }
     }
 
-    // Detect going dark: signal was present earlier but absent in later years
-    const lastLookbackYear = lookbackRows[lookbackRows.length - 1]?.year;
-    if (lastLookbackYear) {
-      for (const [sig, lastYear] of signalLastSeen) {
-        if (lastYear < lastLookbackYear - 1) {
-          signalWentDark.set(sig, lastYear);
-        }
+    // Detect going dark: signal present earlier but absent later in lookback
+    const maxLookbackYear = year - 1;
+    for (const [sig, lastYear] of signalLastSeen) {
+      if (lastYear < maxLookbackYear - 1) {
+        signalWentDark.set(sig, lastYear);
       }
     }
 
@@ -1735,7 +1760,7 @@ async function main() {
   const goingDarkSeqs   = testGoingDarkSequences(matrix);
   const darkestCountries = findDarkestCountries(matrix);
   const scoreShifts     = detectScoreShifts(matrix);
-  const collapsePatterns = excavateCollapsePatterns(matrix, scoreShifts);
+  const collapsePatterns = await excavateCollapsePatterns(matrix, scoreShifts);
   const silenceVsScore  = testSilenceVsScore(matrix);
   const threeSigClusters = testThreeSignalClusters(matrix);
   const monteCarlo      = {}; // Test G disabled: synthetic-score construction does not mirror real scoring formula, produced impossible values
