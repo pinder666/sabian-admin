@@ -1852,10 +1852,15 @@ app.post('/api/mine/portfolio', requireTier('buyer'), async (req, res) => {
   });
 
   let allFindings = [];
+  let stdoutBuffer = '';
 
   miner.stdout.on('data', (data) => {
-    const lines = data.toString().split('\n').filter(l => l.trim());
+    stdoutBuffer += data.toString();
+    const lines = stdoutBuffer.split('\n');
+    stdoutBuffer = lines.pop() || '';
+
     for (const line of lines) {
+      if (!line.trim()) continue;
       try {
         const event = JSON.parse(line);
         sendEvent(event);
