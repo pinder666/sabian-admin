@@ -1215,30 +1215,33 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
   // Step 0: Load ALL raw signal readings from historical_signal_readings
   // This is the 966K source — the real data.
   process.stdout.write('\n    Loading raw signal readings...');
-  const rawReadings = new Map(); // key: "country|year|signal" -> z_score
+  const rawReadings = new Map(); // key: "country|year|signal" -> raw_value
   const countrySignalYears = new Map(); // key: "country" -> Map<signal, Set<year>>
 
   let page = 0;
   let totalLoaded = 0;
   while (true) {
     const { data, error } = await sb.from('historical_signal_readings')
-      .select('country, year, signal_type, z_score')
+      .select('country, date, signal_key, raw_value, gap')
+      .eq('gap', false)
       .range(page * 1000, (page + 1) * 1000 - 1);
     if (error) throw error;
     if (!data || data.length === 0) break;
 
     for (const row of data) {
-      const key = `${row.country}|${row.year}|${row.signal_type}`;
-      rawReadings.set(key, row.z_score);
+      if (row.raw_value === null) continue;
+      const year = parseInt(row.date.slice(0, 4));
+      const key = `${row.country}|${year}|${row.signal_key}`;
+      rawReadings.set(key, parseFloat(row.raw_value));
 
       if (!countrySignalYears.has(row.country)) {
         countrySignalYears.set(row.country, new Map());
       }
       const signalMap = countrySignalYears.get(row.country);
-      if (!signalMap.has(row.signal_type)) {
-        signalMap.set(row.signal_type, new Set());
+      if (!signalMap.has(row.signal_key)) {
+        signalMap.set(row.signal_key, new Set());
       }
-      signalMap.get(row.signal_type).add(row.year);
+      signalMap.get(row.signal_key).add(year);
     }
 
     totalLoaded += data.length;
@@ -1246,6 +1249,32 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
     if (data.length < 1000) break;
   }
   process.stdout.write(` ${totalLoaded.toLocaleString()} readings loaded.\n`);
+
+  // Compute per-signal global stats for z-score normalization
+  const signalStats = new Map(); // signal -> { mean, std }
+  const signalValues = new Map(); // signal -> [values]
+  for (const [key, val] of rawReadings) {
+    const signal = key.split('|')[2];
+    if (!signalValues.has(signal)) signalValues.set(signal, []);
+    signalValues.get(signal).push(val);
+  }
+  for (const [signal, values] of signalValues) {
+    const n = values.length;
+    const mean = values.reduce((a, b) => a + b, 0) / n;
+    const variance = values.reduce((a, b) => a + (b - mean) ** 2, 0) / n;
+    const std = Math.sqrt(variance) || 1;
+    signalStats.set(signal, { mean, std });
+  }
+
+  // Helper to get z-score from raw value
+  function getZScore(country, year, signal) {
+    const key = `${country}|${year}|${signal}`;
+    const raw = rawReadings.get(key);
+    if (raw === undefined) return null;
+    const stats = signalStats.get(signal);
+    if (!stats) return null;
+    return (raw - stats.mean) / stats.std;
+  }
 
   // Step 1: Build chronicles for each score shift using RAW readings
   const chronicles = [];
@@ -1268,9 +1297,8 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
       const lookbackYears = [...years].filter(y => y < year && y >= year - LOOKBACK_YEARS).sort((a,b) => a - b);
 
       for (const y of lookbackYears) {
-        const key = `${country}|${y}|${signal}`;
-        const z = rawReadings.get(key);
-        if (z === undefined || z === null) continue;
+        const z = getZScore(country, y, signal);
+        if (z === null) continue;
 
         // Track elevation
         if (z > ELEVATION_THRESHOLD && !signalFirstElevated.has(signal)) {
