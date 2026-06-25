@@ -1277,9 +1277,11 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
   }
 
   // Step 1: Build chronicles for each score shift using RAW readings
+  // Filter to collapse-only (direction=up = stress rising) and exclude 2026 (incomplete data)
+  const collapseShifts = scoreShifts.filter(s => s.direction === 'up' && s.year < 2026);
   const chronicles = [];
 
-  for (const shift of scoreShifts) {
+  for (const shift of collapseShifts) {
     const { country, year, startYear, startScore, endScore, delta, direction } = shift;
 
     const signalMap = countrySignalYears.get(country);
@@ -1462,6 +1464,171 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
   }
   signalPairs.sort((a, b) => b.countryCount - a.countryCount);
 
+  // ── HIT-RATE COMPUTATION ──────────────────────────────────────────────────────
+  // For each signal pair: count ALL country-years where both signals elevated,
+  // then count how many were followed by an up-shift within 3 years.
+
+  // Build shift lookup: country -> Set of years with collapse (up-shift)
+  const collapseYears = new Map();
+  for (const shift of collapseShifts) {
+    if (!collapseYears.has(shift.country)) collapseYears.set(shift.country, new Set());
+    collapseYears.get(shift.country).add(shift.year);
+  }
+
+  // For each top signal pair, compute hit rate and lead-time distribution
+  for (const pair of signalPairs.slice(0, 20)) {
+    const [sigA, sigB] = pair.signalPair;
+    let totalOccurrences = 0;
+    let followedByCollapse = 0;
+
+    // Check every country-year for this pair
+    for (const [country, signalMap] of countrySignalYears) {
+      const yearsA = signalMap.get(sigA);
+      const yearsB = signalMap.get(sigB);
+      if (!yearsA || !yearsB) continue;
+
+      // Find years where BOTH signals were elevated
+      for (const year of yearsA) {
+        if (year >= 2026) continue; // Exclude 2026
+        if (!yearsB.has(year)) continue;
+        const zA = getZScore(country, year, sigA);
+        const zB = getZScore(country, year, sigB);
+        if (zA === null || zB === null) continue;
+        if (zA > ELEVATION_THRESHOLD && zB > ELEVATION_THRESHOLD) {
+          totalOccurrences++;
+          // Check if collapse followed within 3 years
+          const countryCollapses = collapseYears.get(country);
+          if (countryCollapses) {
+            for (let y = year + 1; y <= year + 3; y++) {
+              if (countryCollapses.has(y)) {
+                followedByCollapse++;
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    pair.hitRate = {
+      totalOccurrences,
+      followedByCollapse,
+      rate: totalOccurrences > 0 ? +(followedByCollapse / totalOccurrences).toFixed(3) : null
+    };
+
+    // Lead-time distribution: yearsBefore for all instances
+    const yearsBeforeDistribution = [];
+    for (const inst of pair.instances) {
+      const chronicle = chronicles.find(c => c.country === inst.country && c.shiftYear === inst.shiftYear);
+      if (chronicle) {
+        for (const event of chronicle.chronicle) {
+          if (event.event === 'elevated' && event.yearsBefore !== undefined) {
+            yearsBeforeDistribution.push(event.yearsBefore);
+          }
+        }
+      }
+    }
+    yearsBeforeDistribution.sort((a, b) => a - b);
+
+    // Bucket the distribution
+    const buckets = { '0-1': 0, '2-3': 0, '4-5': 0, '6-7': 0, '8-10': 0 };
+    for (const y of yearsBeforeDistribution) {
+      if (y <= 1) buckets['0-1']++;
+      else if (y <= 3) buckets['2-3']++;
+      else if (y <= 5) buckets['4-5']++;
+      else if (y <= 7) buckets['6-7']++;
+      else buckets['8-10']++;
+    }
+
+    pair.leadTimeDistribution = {
+      raw: yearsBeforeDistribution,
+      buckets,
+      median: yearsBeforeDistribution.length > 0
+        ? yearsBeforeDistribution[Math.floor(yearsBeforeDistribution.length / 2)]
+        : null
+    };
+  }
+
+  // ── MATCH DATE PER COUNTRY ────────────────────────────────────────────────────
+  // For each country, find the first year it entered each signal pair pattern
+
+  const countryMatchDates = new Map(); // country -> { pairFingerprint -> firstMatchYear }
+
+  for (const pair of signalPairs.slice(0, 20)) {
+    const [sigA, sigB] = pair.signalPair;
+
+    for (const [country, signalMap] of countrySignalYears) {
+      const yearsA = signalMap.get(sigA);
+      const yearsB = signalMap.get(sigB);
+      if (!yearsA || !yearsB) continue;
+
+      // Find earliest year where BOTH signals were elevated
+      const allYears = [...yearsA].filter(y => yearsB.has(y)).sort((a, b) => a - b);
+      for (const year of allYears) {
+        const zA = getZScore(country, year, sigA);
+        const zB = getZScore(country, year, sigB);
+        if (zA !== null && zB !== null && zA > ELEVATION_THRESHOLD && zB > ELEVATION_THRESHOLD) {
+          if (!countryMatchDates.has(country)) countryMatchDates.set(country, {});
+          const matches = countryMatchDates.get(country);
+          if (!matches[pair.fingerprint] || year < matches[pair.fingerprint]) {
+            matches[pair.fingerprint] = year;
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  // Convert to array format
+  const matchDatesByCountry = [];
+  for (const [country, matches] of countryMatchDates) {
+    matchDatesByCountry.push({ country, matches });
+  }
+  matchDatesByCountry.sort((a, b) => a.country.localeCompare(b.country));
+
+  // ── EXTRACTIVE ACTOR WATCHLIST ────────────────────────────────────────────────
+  // Countries where corruption_risk or occrp is elevated in the latest available year
+
+  const extractiveWatchlist = [];
+  const latestYearByCountry = new Map(); // country -> latest year with data
+
+  for (const [country, signalMap] of countrySignalYears) {
+    let maxYear = 0;
+    for (const [, years] of signalMap) {
+      for (const y of years) {
+        if (y > maxYear && y < 2026) maxYear = y;
+      }
+    }
+    if (maxYear > 0) latestYearByCountry.set(country, maxYear);
+  }
+
+  for (const [country, signalMap] of countrySignalYears) {
+    const year = latestYearByCountry.get(country);
+    if (!year) continue;
+
+    const corruptionZ = getZScore(country, year, 'corruption_risk');
+    const occrpZ = getZScore(country, year, 'occrp');
+
+    const elevated = [];
+    if (corruptionZ !== null && corruptionZ > ELEVATION_THRESHOLD) {
+      elevated.push({ signal: 'corruption_risk', z: +corruptionZ.toFixed(2) });
+    }
+    if (occrpZ !== null && occrpZ > ELEVATION_THRESHOLD) {
+      elevated.push({ signal: 'occrp', z: +occrpZ.toFixed(2) });
+    }
+
+    if (elevated.length > 0) {
+      extractiveWatchlist.push({
+        country,
+        latestYear: year,
+        elevatedSignals: elevated,
+        maxZ: Math.max(...elevated.map(e => e.z))
+      });
+    }
+  }
+
+  extractiveWatchlist.sort((a, b) => b.maxZ - a.maxZ);
+
   // GRAIN 4: Lead signal — which signal moved first before the shift
   const leadSignals = groupAndFilter(
     c => c.leadSignal,
@@ -1487,16 +1654,19 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
     }
   );
 
-  console.log(` ${scoreShifts.length} shifts analyzed, ${chronicles.length} with data. Patterns: ${orderedSequences.length} sequences, ${signalSets.length} sets, ${signalPairs.length} pairs, ${leadSignals.length} leads, ${timingPatterns.length} timing.`);
+  console.log(` ${collapseShifts.length} collapse shifts analyzed (excl. 2026), ${chronicles.length} with data. Patterns: ${orderedSequences.length} sequences, ${signalSets.length} sets, ${signalPairs.length} pairs, ${leadSignals.length} leads. Extractive watchlist: ${extractiveWatchlist.length} countries.`);
 
   return {
-    totalShiftsAnalyzed: scoreShifts.length,
+    totalShiftsAnalyzed: collapseShifts.length,
     shiftsWithData: chronicles.length,
+    filters: { directionFilter: 'up', yearExcluded: 2026 },
     orderedSequences,
     signalSets,
     signalPairs,
     leadSignals,
     timingPatterns,
+    matchDatesByCountry,
+    extractiveWatchlist,
     chronicles: chronicles.map(c => ({
       country: c.country,
       shiftYear: c.shiftYear,

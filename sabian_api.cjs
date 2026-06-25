@@ -1988,6 +1988,220 @@ Write only the explanation, nothing else.`;
 // ═══ END PORTFOLIO MINE ENDPOINTS ═════════════════════════════════════════════
 
 
+// ═══ COLLAPSE INTELLIGENCE ANALYZER ═════════════════════════════════════════════
+// The V1 deliverable: buyer submits country, receives full intelligence package
+
+app.post('/api/collapse/analyze', requireTier('buyer'), async (req, res) => {
+  const { country } = req.body;
+  if (!country) {
+    return res.status(400).json({ error: 'country required' });
+  }
+
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const findingsPath = path.join(__dirname, 'historical/deep_pattern_findings_v2.json');
+
+    if (!fs.existsSync(findingsPath)) {
+      return res.status(500).json({ error: 'Collapse patterns not computed. Run miner first.' });
+    }
+
+    const findings = JSON.parse(fs.readFileSync(findingsPath, 'utf8'));
+    const cp = findings.collapsePatterns;
+    if (!cp) {
+      return res.status(500).json({ error: 'Collapse patterns not computed. Run miner first.' });
+    }
+
+    // Build payload for this country
+    const payload = {
+      country,
+      generatedAt: new Date().toISOString(),
+      filters: cp.filters || null,
+      patternMatches: [],
+      historicalAnalogues: [],
+      extractiveActors: null,
+      tripwires: [],
+      chronicle: null,
+      matchDates: null
+    };
+
+    // Find pattern matches for this country
+    for (const pair of cp.signalPairs || []) {
+      if (pair.countries && pair.countries.includes(country)) {
+        const countryInstances = pair.instances.filter(i => i.country === country);
+        payload.patternMatches.push({
+          fingerprint: pair.fingerprint,
+          signalPair: pair.signalPair,
+          domainPair: pair.domainPair,
+          hitRate: pair.hitRate || null,
+          leadTimeDistribution: pair.leadTimeDistribution || null,
+          countryInstances
+        });
+
+        // Historical analogues = other countries with same pattern
+        const analogues = pair.instances
+          .filter(i => i.country !== country)
+          .map(i => ({ country: i.country, shiftYear: i.shiftYear, delta: i.delta }));
+        payload.historicalAnalogues.push({
+          pattern: pair.fingerprint,
+          analogues: analogues.slice(0, 10)
+        });
+      }
+    }
+
+    // Match dates for this country
+    const matchDates = (cp.matchDatesByCountry || []).find(m => m.country === country);
+    if (matchDates) {
+      payload.matchDates = matchDates.matches;
+    }
+
+    // Extractive actors for this country
+    const extractive = (cp.extractiveWatchlist || []).find(e => e.country === country);
+    if (extractive) {
+      payload.extractiveActors = extractive;
+    }
+
+    // Chronicle for this country (most recent shift)
+    const countryChronicles = (cp.chronicles || [])
+      .filter(c => c.country === country)
+      .sort((a, b) => b.shiftYear - a.shiftYear);
+    if (countryChronicles.length > 0) {
+      payload.chronicle = countryChronicles[0];
+    }
+
+    // Tripwires: signals that went dark just before shift in historical cases
+    for (const chron of cp.chronicles || []) {
+      const darkEvents = (chron.chronicle || []).filter(e => e.event === 'dark' && e.yearsBefore <= 2);
+      for (const dark of darkEvents) {
+        payload.tripwires.push({
+          signal: dark.signal,
+          domain: dark.domain,
+          country: chron.country,
+          shiftYear: chron.shiftYear,
+          yearsBefore: dark.yearsBefore
+        });
+      }
+    }
+    // Aggregate tripwires by signal
+    const tripwireCounts = {};
+    for (const tw of payload.tripwires) {
+      const key = tw.signal;
+      if (!tripwireCounts[key]) tripwireCounts[key] = { signal: tw.signal, domain: tw.domain, count: 0, cases: [] };
+      tripwireCounts[key].count++;
+      tripwireCounts[key].cases.push({ country: tw.country, shiftYear: tw.shiftYear });
+    }
+    payload.tripwireSummary = Object.values(tripwireCounts).sort((a, b) => b.count - a.count).slice(0, 5);
+
+    // Now call Claude to generate the intelligence read
+    const Anthropic = require('@anthropic-ai/sdk');
+    const client = new Anthropic();
+
+    const analyzerPrompt = `You are Sabian, a sovereign risk intelligence system. You have received computed data for ${country}. Write a complete intelligence read that answers every question a buyer would ask, BEFORE they ask it.
+
+COMPUTED PAYLOAD:
+${JSON.stringify(payload, null, 2)}
+
+YOUR TASK:
+Write a complete intelligence briefing for ${country}. Cover ONLY what the payload contains — never invent facts, numbers, cases, or dates not in the data.
+
+STRUCTURE YOUR RESPONSE:
+1. PATTERN MATCH — What pattern does this country match? Describe in plain terms (e.g., "institutional integrity combined with population displacement pressures") NOT signal names.
+2. HISTORICAL PRECEDENT — Which prior cases matched this pattern? What happened to them? Use the actual countries and years from historicalAnalogues.
+3. CONFIDENCE — The computed hit rate. State as "In X of Y prior occurrences, this pattern preceded a major score shift within 3 years." ONLY if hitRate is present in payload. If not present, say data is insufficient.
+4. TIMING — The lead-time distribution. Describe BOTH the structural horizon (8-10 year signals) AND tactical window (2-3 year signals) if both are present in the buckets. Use actual numbers from leadTimeDistribution.
+5. ENTRY DATE — When did ${country} first match this pattern? Use matchDates if present.
+6. EXTRACTIVE INDICATORS — Are corruption or investigative journalism signals elevated? Use extractiveActors if present.
+7. TRIPWIRE — What signal historically moved last before collapse? Which signals should the buyer watch? Use tripwireSummary.
+
+RULES:
+- Never expose signal names (corruption_risk, occrp, etc.) — translate to plain language
+- Never tell the buyer what to do (buy, sell, hedge) — present the picture, decision is theirs
+- If a field is empty or null, say so honestly: "Data not available for this dimension"
+- Every claim must trace to the payload — no padding, no illustrative examples
+- Write in direct, professional intelligence language — no marketing, no hedging
+
+Write the briefing now.`;
+
+    const message = await client.messages.create({
+      model: 'claude-sonnet-4-5',
+      max_tokens: 1500,
+      messages: [{ role: 'user', content: analyzerPrompt }]
+    });
+
+    const briefing = message.content[0]?.text || 'Unable to generate briefing.';
+
+    res.json({
+      country,
+      payload,
+      briefing
+    });
+
+  } catch (err) {
+    console.error('Collapse analyze error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Portfolio batch analysis
+app.post('/api/collapse/analyze-portfolio', requireTier('buyer'), async (req, res) => {
+  const { countries } = req.body;
+  if (!countries || !Array.isArray(countries) || countries.length === 0) {
+    return res.status(400).json({ error: 'countries array required' });
+  }
+
+  // Limit to 10 countries per request
+  const toAnalyze = countries.slice(0, 10);
+  const results = [];
+
+  for (const country of toAnalyze) {
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const findingsPath = path.join(__dirname, 'historical/deep_pattern_findings_v2.json');
+
+      if (!fs.existsSync(findingsPath)) {
+        results.push({ country, error: 'Collapse patterns not computed' });
+        continue;
+      }
+
+      const findings = JSON.parse(fs.readFileSync(findingsPath, 'utf8'));
+      const cp = findings.collapsePatterns;
+
+      // Build minimal payload for batch
+      const payload = {
+        country,
+        patternMatches: [],
+        extractiveActors: null,
+        matchDates: null
+      };
+
+      for (const pair of cp.signalPairs || []) {
+        if (pair.countries && pair.countries.includes(country)) {
+          payload.patternMatches.push({
+            fingerprint: pair.fingerprint,
+            hitRate: pair.hitRate || null
+          });
+        }
+      }
+
+      const matchDates = (cp.matchDatesByCountry || []).find(m => m.country === country);
+      if (matchDates) payload.matchDates = matchDates.matches;
+
+      const extractive = (cp.extractiveWatchlist || []).find(e => e.country === country);
+      if (extractive) payload.extractiveActors = extractive;
+
+      results.push(payload);
+    } catch (err) {
+      results.push({ country, error: err.message });
+    }
+  }
+
+  res.json({ analyzed: results.length, results });
+});
+
+// ═══ END COLLAPSE INTELLIGENCE ANALYZER ═════════════════════════════════════════
+
+
 // ═══ EXTRACTION SIGNATURES ENDPOINT ════════════════════════════════════════
 app.get('/public-api/extraction/signatures', async (req, res) => {
   try {
