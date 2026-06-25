@@ -1689,11 +1689,27 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
     }
   );
 
-  // Sort signal pairs by lift (highest first)
-  signalPairs.sort((a, b) => (b.lift?.lift || 0) - (a.lift?.lift || 0));
+  // Compute strength score: lift × sqrt(pre-collapse count)
+  // Requires pre >= 3 to be considered evidence
+  const MIN_PRE_COLLAPSE = 3;
+  for (const pair of signalPairs) {
+    if (pair.lift && pair.lift.lift && pair.lift.pairInPreCollapse >= MIN_PRE_COLLAPSE) {
+      pair.lift.strength = +(pair.lift.lift * Math.sqrt(pair.lift.pairInPreCollapse)).toFixed(2);
+    } else {
+      pair.lift.strength = null;
+    }
+  }
 
-  const pairsWithLift = signalPairs.filter(p => p.lift?.lift && p.lift.lift > 1);
-  console.log(` ${collapseShifts.length} collapse shifts analyzed, ${chronicles.length} with data. Patterns: ${orderedSequences.length} sequences, ${signalSets.length} sets, ${signalPairs.length} pairs (${pairsWithLift.length} with lift>1), ${leadSignals.length} leads. Extractive watchlist: ${extractiveWatchlist.length} countries.`);
+  // Sort by strength (highest first), then by lift for ties
+  signalPairs.sort((a, b) => {
+    const aStrength = a.lift?.strength || 0;
+    const bStrength = b.lift?.strength || 0;
+    if (bStrength !== aStrength) return bStrength - aStrength;
+    return (b.lift?.lift || 0) - (a.lift?.lift || 0);
+  });
+
+  const pairsWithEvidence = signalPairs.filter(p => p.lift?.strength && p.lift.strength > 0);
+  console.log(` ${collapseShifts.length} collapse shifts analyzed, ${chronicles.length} with data. Patterns: ${orderedSequences.length} sequences, ${signalSets.length} sets, ${signalPairs.length} pairs (${pairsWithEvidence.length} with evidence pre>=${MIN_PRE_COLLAPSE}), ${leadSignals.length} leads. Extractive watchlist: ${extractiveWatchlist.length} countries.`);
 
   return {
     totalShiftsAnalyzed: collapseShifts.length,
