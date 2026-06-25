@@ -1964,7 +1964,7 @@ Payload: ${JSON.stringify(finding.payload)}
 Write only the explanation, nothing else.`;
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-6-20250514',
       max_tokens: 256,
       messages: [{ role: 'user', content: prompt }]
     });
