@@ -18,10 +18,11 @@ const app = express();
 const PORT             = process.env.PORT || process.env.API_PORT || 5000;
 const INTERNAL_API_KEY = process.env.SMART_SABIAN_API_KEY || 'sabian_key';
 const BUYER_API_KEY    = process.env.BUYER_API_KEY || 'test_key';
+const USER_API_KEY     = process.env.USER_API_KEY || 'sabian_user_2026';
 
 // ── Access tier system ────────────────────────────────────────────────────────
 // public   — no auth. Scores and risk bands only.
-// buyer    — BUYER_API_KEY. Full signal breakdown, history, ledger, briefings.
+// buyer    — BUYER_API_KEY or USER_API_KEY. Full signal breakdown, history, ledger, briefings.
 // internal — SMART_SABIAN_API_KEY. Everything: hive, admin, scan triggers.
 const TIER_RANK = { public: 0, buyer: 1, internal: 2 };
 
@@ -30,6 +31,7 @@ function resolveTier(req, res, next) {
   const token  = header.startsWith('Bearer ') ? header.slice(7) : '';
   if (token === INTERNAL_API_KEY)                           req.tier = 'internal';
   else if (BUYER_API_KEY && token === BUYER_API_KEY)        req.tier = 'buyer';
+  else if (USER_API_KEY && token === USER_API_KEY)          req.tier = 'buyer';
   else                                                      req.tier = 'public';
   next();
 }
