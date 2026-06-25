@@ -1637,6 +1637,7 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
     if (maxYear > 0) latestYearByCountry.set(country, maxYear);
   }
 
+  const WATCHLIST_THRESHOLD = 0.5; // Lower threshold for watchlist only
   for (const [country, signalMap] of countrySignalYears) {
     const year = latestYearByCountry.get(country);
     if (!year) continue;
@@ -1645,10 +1646,10 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
     const occrpZ = getZScore(country, year, 'occrp');
 
     const elevated = [];
-    if (corruptionZ !== null && corruptionZ > ELEVATION_THRESHOLD) {
+    if (corruptionZ !== null && corruptionZ > WATCHLIST_THRESHOLD) {
       elevated.push({ signal: 'corruption_risk', z: +corruptionZ.toFixed(2) });
     }
-    if (occrpZ !== null && occrpZ > ELEVATION_THRESHOLD) {
+    if (occrpZ !== null && occrpZ > WATCHLIST_THRESHOLD) {
       elevated.push({ signal: 'occrp', z: +occrpZ.toFixed(2) });
     }
 
