@@ -1106,8 +1106,9 @@ function badge(level) {
   return `<span class="badge badge-${level}">${level}</span>`;
 }
 
-async function apiFetch(path) {
-  const res = await fetch(BASE + path);
+async function apiFetch(path, options = {}) {
+  const headers = { 'Authorization': 'Bearer sabian_user_2026', ...(options.headers || {}) };
+  const res = await fetch(BASE + path, { ...options, headers });
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
   return res.json();
 }
