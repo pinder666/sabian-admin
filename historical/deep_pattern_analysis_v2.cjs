@@ -1691,9 +1691,11 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
 
   // Compute strength score: lift × sqrt(pre-collapse count)
   // Requires pre >= 3 to be considered evidence
+  // Only set on pairs that have lift computed (top 30 from earlier loop)
   const MIN_PRE_COLLAPSE = 3;
   for (const pair of signalPairs) {
-    if (pair.lift && pair.lift.lift && pair.lift.pairInPreCollapse >= MIN_PRE_COLLAPSE) {
+    if (!pair.lift) continue;
+    if (pair.lift.lift && pair.lift.pairInPreCollapse >= MIN_PRE_COLLAPSE) {
       pair.lift.strength = +(pair.lift.lift * Math.sqrt(pair.lift.pairInPreCollapse)).toFixed(2);
     } else {
       pair.lift.strength = null;
