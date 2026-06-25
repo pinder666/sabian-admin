@@ -784,50 +784,91 @@
     </div>
   </div>
 
-  <!-- ── MINED PATTERNS VIEW ─────────────────────────────────────── -->
+  <!-- ── PATTERN LIBRARY VIEW ─────────────────────────────────────── -->
   <div class="view" id="view-patterns">
-  <!-- Tier toggle: MY PORTFOLIO (primary) vs WORLD -->
-  <div style="display:flex;align-items:center;gap:16px;margin-bottom:1.5rem">
+
+  <!-- Header -->
+  <div style="margin-bottom:1.5rem">
+    <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-bottom:0.4rem">PATTERN LIBRARY</div>
+    <div style="font-size:0.82rem;color:var(--dim);max-width:760px;line-height:1.6">
+      Statistical patterns discovered across 214 countries and 40 years of data. Filter by region, category, or country.
+    </div>
+  </div>
+
+  <!-- Summary bar -->
+  <div class="status-bar" id="patterns-summary-bar">
+    <div class="stat-cell"><div class="stat-label">TOTAL PATTERNS</div><div class="stat-value" id="patterns-total">—</div><div class="stat-sub">discovered</div></div>
+    <div class="stat-cell"><div class="stat-label">COUNTRIES</div><div class="stat-value" id="patterns-countries">—</div><div class="stat-sub">with findings</div></div>
+    <div class="stat-cell"><div class="stat-label">SHOWING</div><div class="stat-value" id="patterns-showing">—</div><div class="stat-sub">after filters</div></div>
+    <div class="stat-cell"><div class="stat-label">UPDATED</div><div class="stat-value" id="patterns-updated">—</div><div class="stat-sub" id="patterns-updated-sub"></div></div>
+  </div>
+
+  <!-- Tab toggle -->
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:1rem">
     <div style="display:flex;background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden">
-      <button id="patterns-tier-portfolio" class="tier-btn active" onclick="setPatternsTier('portfolio')" style="padding:8px 18px;background:var(--accent);color:#fff;border:none;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;cursor:pointer">MY PORTFOLIO</button>
-      <button id="patterns-tier-world" class="tier-btn" onclick="setPatternsTier('world')" style="padding:8px 18px;background:transparent;color:var(--dim);border:none;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;cursor:pointer">WORLD</button>
+      <button id="patterns-tab-world" class="tier-btn active" onclick="setPatternsTab('world')" style="padding:8px 18px;background:var(--accent);color:#fff;border:none;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;cursor:pointer">WORLD</button>
+      <button id="patterns-tab-portfolio" class="tier-btn" onclick="setPatternsTab('portfolio')" style="padding:8px 18px;background:transparent;color:var(--dim);border:none;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.1em;cursor:pointer">MY PORTFOLIO</button>
     </div>
-    <span id="patterns-tier-label" style="font-size:0.78rem;color:var(--dim)"></span>
+    <span id="patterns-tab-label" style="font-size:0.78rem;color:var(--dim)">All patterns worldwide</span>
   </div>
 
-  <!-- Portfolio Mine View -->
-  <div id="portfolio-mine-view">
-    <div id="portfolio-empty-state" style="text-align:center;padding:4rem 2rem">
-      <div style="font-size:1.1rem;color:var(--text);margin-bottom:0.5rem" id="portfolio-mine-status"></div>
-      <div style="font-size:0.85rem;color:var(--dim);margin-bottom:1.5rem" id="portfolio-mine-sub"></div>
-      <button id="mine-btn" onclick="startPortfolioMine()" style="padding:12px 32px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-family:var(--mono);font-size:0.85rem;letter-spacing:0.08em;cursor:pointer">MINE</button>
-    </div>
-
-    <div id="portfolio-mining-progress" style="display:none;padding:2rem">
-      <div style="font-family:var(--mono);font-size:0.75rem;color:var(--dim);margin-bottom:1rem">MINING IN PROGRESS</div>
-      <div id="mine-progress-log" style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:1rem;font-family:var(--mono);font-size:0.72rem;max-height:300px;overflow-y:auto"></div>
-    </div>
-
-    <div id="portfolio-findings-view" style="display:none">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem">
-        <span id="portfolio-findings-count" style="font-family:var(--mono);font-size:0.85rem;color:var(--text)"></span>
-        <span id="portfolio-mine-time" style="font-size:0.75rem;color:var(--dim)"></span>
-        <span style="flex:1"></span>
-        <button onclick="startPortfolioMine()" style="padding:6px 14px;background:var(--panel);color:var(--dim);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:0.7rem;cursor:pointer">RE-MINE</button>
-      </div>
-      <div id="portfolio-findings-feed"></div>
+  <!-- Filters -->
+  <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+    <!-- Region chips -->
+    <div id="region-chips" style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="region-chip active" data-region="all" onclick="toggleRegion('all')">ALL</button>
+      <button class="region-chip" data-region="africa" onclick="toggleRegion('africa')">AFRICA</button>
+      <button class="region-chip" data-region="mena" onclick="toggleRegion('mena')">MENA</button>
+      <button class="region-chip" data-region="asia" onclick="toggleRegion('asia')">ASIA</button>
+      <button class="region-chip" data-region="europe" onclick="toggleRegion('europe')">EUROPE</button>
+      <button class="region-chip" data-region="americas" onclick="toggleRegion('americas')">AMERICAS</button>
+      <button class="region-chip" data-region="oceania" onclick="toggleRegion('oceania')">OCEANIA</button>
+      <button class="region-chip" data-region="global" onclick="toggleRegion('global')">GLOBAL</button>
     </div>
   </div>
+  <div style="display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap">
+    <select id="patterns-filter-category" onchange="applyPatternFilters()" style="background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:0.8rem">
+      <option value="">ALL CATEGORIES</option>
+      <option value="going_dark_event">GOING DARK</option>
+      <option value="darkest_country">DARKEST COUNTRIES</option>
+      <option value="first_mover">FIRST MOVER</option>
+      <option value="recovery_curve">RECOVERY CURVE</option>
+      <option value="conditional_probability">CONDITIONAL PROB</option>
+      <option value="going_dark_sequence">DARK SEQUENCE</option>
+      <option value="regional_divergence">REGIONAL DIVERGENCE</option>
+    </select>
+    <select id="patterns-filter-domain" onchange="applyPatternFilters()" style="background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:0.8rem">
+      <option value="">ALL DOMAINS</option>
+      <option value="governance">GOVERNANCE</option>
+      <option value="economic">ECONOMIC</option>
+      <option value="security">SECURITY</option>
+      <option value="social">SOCIAL</option>
+      <option value="infrastructure">INFRASTRUCTURE</option>
+      <option value="environment">ENVIRONMENT</option>
+    </select>
+    <input id="patterns-filter-country" placeholder="Search country..." oninput="applyPatternFilters()" style="background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:0.8rem;width:160px">
+    <button onclick="clearPatternFilters()" style="background:var(--panel);border:1px solid var(--border);color:var(--dim);padding:6px 14px;border-radius:4px;font-size:0.8rem;cursor:pointer">Clear</button>
+  </div>
 
-  <!-- World View (pre-computed, nightly) -->
-  <div id="world-patterns-view" style="display:none">
-    <div style="font-size:0.8rem;color:var(--dim);margin-bottom:1rem">
-      Global patterns from latest nightly analysis. <span id="world-updated-at"></span>
-    </div>
-    <div id="world-findings-feed"></div>
+  <!-- Findings feed -->
+  <div id="patterns-feed-wrap">
+    <div class="loading-msg">Loading pattern library...</div>
   </div>
 
 </div>
+
+<style>
+.region-chip {
+  padding:6px 12px;background:var(--panel);border:1px solid var(--border);color:var(--dim);
+  border-radius:4px;font-family:var(--mono);font-size:0.68rem;letter-spacing:0.08em;cursor:pointer;
+}
+.region-chip.active {
+  background:var(--accent);color:#fff;border-color:var(--accent);
+}
+.region-chip:hover:not(.active) {
+  border-color:var(--text);color:var(--text);
+}
+</style>
 
 
 <div class="view" id="view-extraction-live">
@@ -1957,9 +1998,7 @@ async function loadExtractionEvents() {
 
 // ── BOOT ───────────────────────────────────────────────────────────────────
 
-// ═══ MINED PATTERNS LOADER ════════════════════════════════════════════════
-let patternsLoaded = false;
-let patternsTier = 'portfolio';
+// ═══ PATTERN LIBRARY ══════════════════════════════════════════════════════════
 
 function getStarredCountries() {
   try {
@@ -1967,198 +2006,277 @@ function getStarredCountries() {
   } catch { return []; }
 }
 
-// ── Readable Summary (from payload fields only, domain comes from miner) ──────
-function summarizeFinding(category, payload) {
-  const domain = payload.domain || 'data';
-  switch (category) {
-    case 'going_dark_event': {
-      const years = payload.darkYears || 0;
-      const delta = payload.scoreDelta || 0;
-      const direction = delta > 0 ? 'rose' : delta < 0 ? 'dropped' : 'held steady';
-      return `${domain} data stopped arriving for ${years} years. Score ${direction} ${Math.abs(delta).toFixed(0)} points.`;
+function formatTimeAgo(date) {
+  const seconds = Math.floor((new Date() - date) / 1000);
+  if (seconds < 60) return 'just now';
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+  return `${Math.floor(seconds / 86400)} days ago`;
+}
+
+// Complete country→region map
+const COUNTRY_TO_REGION = {
+  // Africa
+  'Algeria': 'africa', 'Angola': 'africa', 'Benin': 'africa', 'Botswana': 'africa', 'Burkina Faso': 'africa',
+  'Burundi': 'africa', 'Cameroon': 'africa', 'Cape Verde': 'africa', 'Central African Republic': 'africa',
+  'Chad': 'africa', 'Comoros': 'africa', 'Congo': 'africa', 'Cote d\'Ivoire': 'africa', 'DRC': 'africa',
+  'Djibouti': 'africa', 'Equatorial Guinea': 'africa', 'Eritrea': 'africa', 'Eswatini': 'africa',
+  'Ethiopia': 'africa', 'Gabon': 'africa', 'Gambia': 'africa', 'Ghana': 'africa', 'Guinea': 'africa',
+  'Guinea-Bissau': 'africa', 'Kenya': 'africa', 'Lesotho': 'africa', 'Liberia': 'africa', 'Libya': 'africa',
+  'Madagascar': 'africa', 'Malawi': 'africa', 'Mali': 'africa', 'Mauritania': 'africa', 'Mauritius': 'africa',
+  'Morocco': 'africa', 'Mozambique': 'africa', 'Namibia': 'africa', 'Niger': 'africa', 'Nigeria': 'africa',
+  'Rwanda': 'africa', 'Sao Tome and Principe': 'africa', 'Senegal': 'africa', 'Seychelles': 'africa',
+  'Sierra Leone': 'africa', 'Somalia': 'africa', 'South Africa': 'africa', 'South Sudan': 'africa',
+  'Sudan': 'africa', 'Tanzania': 'africa', 'Togo': 'africa', 'Tunisia': 'africa', 'Uganda': 'africa',
+  'Zambia': 'africa', 'Zimbabwe': 'africa',
+  // MENA
+  'Bahrain': 'mena', 'Egypt': 'mena', 'Iran': 'mena', 'Iraq': 'mena', 'Israel': 'mena', 'Jordan': 'mena',
+  'Kuwait': 'mena', 'Lebanon': 'mena', 'Oman': 'mena', 'Palestine': 'mena', 'Qatar': 'mena',
+  'Saudi Arabia': 'mena', 'Syria': 'mena', 'Turkey': 'mena', 'UAE': 'mena', 'Yemen': 'mena',
+  // Asia
+  'Afghanistan': 'asia', 'Armenia': 'asia', 'Azerbaijan': 'asia', 'Bangladesh': 'asia', 'Bhutan': 'asia',
+  'Brunei': 'asia', 'Cambodia': 'asia', 'China': 'asia', 'Georgia': 'asia', 'India': 'asia',
+  'Indonesia': 'asia', 'Japan': 'asia', 'Kazakhstan': 'asia', 'Kyrgyzstan': 'asia', 'Laos': 'asia',
+  'Malaysia': 'asia', 'Maldives': 'asia', 'Mongolia': 'asia', 'Myanmar': 'asia', 'Nepal': 'asia',
+  'North Korea': 'asia', 'Pakistan': 'asia', 'Philippines': 'asia', 'Singapore': 'asia',
+  'South Korea': 'asia', 'Sri Lanka': 'asia', 'Taiwan': 'asia', 'Tajikistan': 'asia', 'Thailand': 'asia',
+  'Timor-Leste': 'asia', 'Turkmenistan': 'asia', 'Uzbekistan': 'asia', 'Vietnam': 'asia',
+  // Europe
+  'Albania': 'europe', 'Andorra': 'europe', 'Austria': 'europe', 'Belarus': 'europe', 'Belgium': 'europe',
+  'Bosnia and Herzegovina': 'europe', 'Bulgaria': 'europe', 'Croatia': 'europe', 'Cyprus': 'europe',
+  'Czech Republic': 'europe', 'Denmark': 'europe', 'Estonia': 'europe', 'Finland': 'europe',
+  'France': 'europe', 'Germany': 'europe', 'Greece': 'europe', 'Hungary': 'europe', 'Iceland': 'europe',
+  'Ireland': 'europe', 'Italy': 'europe', 'Kosovo': 'europe', 'Latvia': 'europe', 'Liechtenstein': 'europe',
+  'Lithuania': 'europe', 'Luxembourg': 'europe', 'Malta': 'europe', 'Moldova': 'europe', 'Monaco': 'europe',
+  'Montenegro': 'europe', 'Netherlands': 'europe', 'North Macedonia': 'europe', 'Norway': 'europe',
+  'Poland': 'europe', 'Portugal': 'europe', 'Romania': 'europe', 'Russia': 'europe', 'San Marino': 'europe',
+  'Serbia': 'europe', 'Slovakia': 'europe', 'Slovenia': 'europe', 'Spain': 'europe', 'Sweden': 'europe',
+  'Switzerland': 'europe', 'UK': 'europe', 'Ukraine': 'europe', 'Vatican City': 'europe',
+  // Americas
+  'Antigua and Barbuda': 'americas', 'Argentina': 'americas', 'Bahamas': 'americas', 'Barbados': 'americas',
+  'Belize': 'americas', 'Bolivia': 'americas', 'Brazil': 'americas', 'Canada': 'americas', 'Chile': 'americas',
+  'Colombia': 'americas', 'Costa Rica': 'americas', 'Cuba': 'americas', 'Dominica': 'americas',
+  'Dominican Republic': 'americas', 'Ecuador': 'americas', 'El Salvador': 'americas', 'Grenada': 'americas',
+  'Guatemala': 'americas', 'Guyana': 'americas', 'Haiti': 'americas', 'Honduras': 'americas',
+  'Jamaica': 'americas', 'Mexico': 'americas', 'Nicaragua': 'americas', 'Panama': 'americas',
+  'Paraguay': 'americas', 'Peru': 'americas', 'Saint Kitts and Nevis': 'americas', 'Saint Lucia': 'americas',
+  'Saint Vincent and the Grenadines': 'americas', 'Suriname': 'americas', 'Trinidad and Tobago': 'americas',
+  'United States': 'americas', 'Uruguay': 'americas', 'Venezuela': 'americas',
+  // Oceania
+  'Australia': 'oceania', 'Fiji': 'oceania', 'Kiribati': 'oceania', 'Marshall Islands': 'oceania',
+  'Micronesia': 'oceania', 'Nauru': 'oceania', 'New Zealand': 'oceania', 'Palau': 'oceania',
+  'Papua New Guinea': 'oceania', 'Samoa': 'oceania', 'Solomon Islands': 'oceania', 'Tonga': 'oceania',
+  'Tuvalu': 'oceania', 'Vanuatu': 'oceania'
+};
+
+// Signal→domain map
+const SIGNAL_TO_DOMAIN = {
+  'vdem_governance': 'governance', 'governance': 'governance', 'corruption_risk': 'governance',
+  'sanctions_pressure': 'governance', 'election_calendar': 'governance',
+  'economic_stress': 'economic', 'imf_fiscal': 'economic', 'capital_flows': 'economic',
+  'trade_collapse': 'economic', 'sovereign_cds': 'economic', 'remittances': 'economic',
+  'defense_spending': 'security', 'dark_vessel': 'security', 'maritime_trade': 'security',
+  'displacement': 'social', 'unhcr_refugees': 'social', 'unhcr_odp': 'social', 'iom_displacement': 'social',
+  'health_crisis': 'social', 'food_price_stress': 'social', 'fao_food_import': 'social',
+  'usda_food_supply': 'social',
+  'power_grid': 'infrastructure', 'night_lights': 'infrastructure', 'flight_movement': 'infrastructure',
+  'port_congestion': 'infrastructure', 'energy_stress': 'infrastructure',
+  'water_stress': 'environment', 'seismic_risk': 'environment', 'climate_exposure': 'environment'
+};
+
+let patternLibrary = [];
+let filteredPatterns = [];
+let patternsTab = 'world';
+let activeRegion = 'all';
+
+async function loadPatternLibrary() {
+  const wrap = document.getElementById('patterns-feed-wrap');
+  try {
+    const res = await apiFetch('/api/patterns/library');
+    patternLibrary = res.findings || [];
+
+    // Enrich with region and domain
+    for (const f of patternLibrary) {
+      const country = f.payload.country;
+      f.region = country ? (COUNTRY_TO_REGION[country] || 'unknown') : null;
+      const signal = f.payload.signal || f.payload.sigA;
+      f.domain = signal ? (SIGNAL_TO_DOMAIN[signal] || 'other') : null;
     }
-    case 'first_mover': {
-      const lag = payload.lag || payload.avgLag || 0;
-      if (lag > 0) return `${domain} changes typically appear ${lag} year${lag > 1 ? 's' : ''} before score movements.`;
-      return `${domain} shifts tend to lead other changes.`;
+
+    // Update summary
+    const countries = new Set(patternLibrary.filter(f => f.payload.country).map(f => f.payload.country));
+    document.getElementById('patterns-total').textContent = patternLibrary.length;
+    document.getElementById('patterns-countries').textContent = countries.size;
+
+    if (res.generatedAt) {
+      const d = new Date(res.generatedAt);
+      document.getElementById('patterns-updated').textContent = formatTimeAgo(d);
+      document.getElementById('patterns-updated-sub').textContent = d.toLocaleDateString();
     }
-    case 'conditional_probability': {
-      const prob = payload.probability || payload.prob || 0;
-      const pct = (prob * 100).toFixed(0);
-      return `When ${domain} indicators are elevated, there is a ${pct}% historical chance of score movement.`;
+
+    applyPatternFilters();
+  } catch (err) {
+    wrap.innerHTML = `<div style="color:var(--critical);padding:2rem">Failed to load pattern library: ${err.message}</div>`;
+  }
+}
+
+function setPatternsTab(tab) {
+  patternsTab = tab;
+  document.getElementById('patterns-tab-world').className = tab === 'world' ? 'tier-btn active' : 'tier-btn';
+  document.getElementById('patterns-tab-world').style.background = tab === 'world' ? 'var(--accent)' : 'transparent';
+  document.getElementById('patterns-tab-world').style.color = tab === 'world' ? '#fff' : 'var(--dim)';
+  document.getElementById('patterns-tab-portfolio').className = tab === 'portfolio' ? 'tier-btn active' : 'tier-btn';
+  document.getElementById('patterns-tab-portfolio').style.background = tab === 'portfolio' ? 'var(--accent)' : 'transparent';
+  document.getElementById('patterns-tab-portfolio').style.color = tab === 'portfolio' ? '#fff' : 'var(--dim)';
+
+  const starred = getStarredCountries();
+  document.getElementById('patterns-tab-label').textContent = tab === 'portfolio'
+    ? (starred.length > 0 ? `Filtered to ${starred.length} starred countries` : 'Star countries to filter')
+    : 'All patterns worldwide';
+
+  applyPatternFilters();
+}
+
+function toggleRegion(region) {
+  activeRegion = region;
+  document.querySelectorAll('.region-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.region === region);
+  });
+  applyPatternFilters();
+}
+
+function applyPatternFilters() {
+  const category = document.getElementById('patterns-filter-category').value;
+  const domain = document.getElementById('patterns-filter-domain').value;
+  const countrySearch = document.getElementById('patterns-filter-country').value.toLowerCase().trim();
+  const starred = getStarredCountries();
+
+  filteredPatterns = patternLibrary.filter(f => {
+    // Tab filter: portfolio only shows per-country findings for starred countries
+    if (patternsTab === 'portfolio') {
+      if (!f.hasCountry) return false;
+      if (!starred.includes(f.payload.country)) return false;
     }
-    case 'recovery_curve': {
-      const avgYears = payload.avgRecoveryYears || 0;
-      return `${domain} recovers in ${avgYears.toFixed(1)} years on average after deterioration.`;
+
+    // Region filter
+    if (activeRegion !== 'all') {
+      if (activeRegion === 'global') {
+        if (f.hasCountry) return false;
+      } else {
+        if (!f.hasCountry) return false;
+        if (f.region !== activeRegion) return false;
+      }
     }
-    case 'darkest_country': {
-      const darkSigs = payload.darkSignals || 0;
-      return `${darkSigs} data categories currently silent in this country.`;
+
+    // Category filter
+    if (category && f.category !== category) return false;
+
+    // Domain filter
+    if (domain && f.domain !== domain) return false;
+
+    // Country search
+    if (countrySearch) {
+      const country = (f.payload.country || '').toLowerCase();
+      if (!country.includes(countrySearch)) return false;
     }
-    case 'going_dark_sequence': {
-      return `${domain} tends to go silent first before other categories.`;
-    }
+
+    return true;
+  });
+
+  document.getElementById('patterns-showing').textContent = filteredPatterns.length;
+  renderPatternLibrary();
+}
+
+function clearPatternFilters() {
+  document.getElementById('patterns-filter-category').value = '';
+  document.getElementById('patterns-filter-domain').value = '';
+  document.getElementById('patterns-filter-country').value = '';
+  activeRegion = 'all';
+  document.querySelectorAll('.region-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.region === 'all');
+  });
+  applyPatternFilters();
+}
+
+function renderPatternLibrary() {
+  const wrap = document.getElementById('patterns-feed-wrap');
+
+  if (filteredPatterns.length === 0) {
+    wrap.innerHTML = '<div style="color:var(--dim);padding:2rem;text-align:center">No patterns match your filters.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const f of filteredPatterns) {
+    const summary = summarizeLibraryFinding(f);
+    const country = f.payload.country || 'Global';
+    const categoryLabel = formatCategoryLabel(f.category);
+    const domainLabel = f.domain ? f.domain.toUpperCase() : '';
+    const findingId = 'lib-' + Math.random().toString(36).slice(2, 9);
+
+    html += `<div class="finding-row" style="padding:14px 0;border-bottom:1px solid var(--border)" id="${findingId}">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <span style="font-weight:600;color:var(--bright)">${country}</span>
+        <span style="font-family:var(--mono);font-size:0.65rem;padding:2px 6px;background:var(--panel);border:1px solid var(--border);border-radius:3px;color:var(--dim)">${categoryLabel}</span>
+        ${domainLabel ? `<span style="font-family:var(--mono);font-size:0.65rem;padding:2px 6px;background:var(--accent);border-radius:3px;color:#000">${domainLabel}</span>` : ''}
+      </div>
+      <div style="font-size:0.85rem;color:var(--text);line-height:1.5">${summary}</div>
+      <div style="margin-top:8px"><button onclick="expandLibraryFinding('${findingId}', ${JSON.stringify(f).replace(/"/g, '&quot;')})" style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);background:none;border:none;cursor:pointer;padding:0">▸ Expand</button></div>
+      <div class="finding-detail" style="display:none;margin-top:12px;padding:12px;background:var(--panel);border-radius:4px;font-size:0.85rem;color:var(--text);line-height:1.6"></div>
+    </div>`;
+  }
+  wrap.innerHTML = html;
+}
+
+function formatCategoryLabel(category) {
+  const labels = {
+    'going_dark_event': 'GOING DARK',
+    'darkest_country': 'DARKEST',
+    'first_mover': 'FIRST MOVER',
+    'recovery_curve': 'RECOVERY',
+    'conditional_probability': 'CONDITIONAL',
+    'going_dark_sequence': 'DARK SEQUENCE',
+    'regional_divergence': 'REGIONAL'
+  };
+  return labels[category] || category.toUpperCase();
+}
+
+function summarizeLibraryFinding(f) {
+  const p = f.payload;
+  const signal = p.signal || p.sigA || '';
+  const domain = f.domain || 'data';
+
+  switch (f.category) {
+    case 'going_dark_event':
+      return `${domain.toUpperCase()} data stopped arriving for ${p.darkYears || 0} years. Score ${p.scoreDelta > 0 ? 'rose' : 'dropped'} ${Math.abs(p.scoreDelta || 0).toFixed(0)} points during silence.`;
+
+    case 'darkest_country':
+      return `${p.darkSignals || 0} data categories currently silent. Coverage: ${p.presentSignals}/${p.coverageUniverse} signals reporting.`;
+
+    case 'first_mover':
+      return `${signal} tends to move first before score changes. Led ${p.count || 0} crossings (${p.pct || 0}% of all threshold events).`;
+
+    case 'recovery_curve':
+      const avgRec = p.avgRecoveryYears || p.avgRecovery || 0;
+      return `${signal} recovers in ${avgRec.toFixed ? avgRec.toFixed(1) : avgRec} years on average after deterioration.`;
+
+    case 'conditional_probability':
+      const prob = p.P_scoreHigh_given_sigElevated || 0;
+      return `When ${signal} is elevated above ${p.sigThreshold}, ${(prob * 100).toFixed(0)}% chance score exceeds ${p.scoreThreshold}. Lift: ${(p.lift || 0).toFixed(1)}x.`;
+
+    case 'going_dark_sequence':
+      return `${signal} tends to go silent first before other categories. First to dark ${p.timesFirstDark || 0} times.`;
+
+    case 'regional_divergence':
+      const dir = p.direction === 'above_global' ? 'above' : 'below';
+      return `${p.region}: ${signal} runs ${dir} global average by ${Math.abs(p.deviation || 0).toFixed(2)} standard deviations (n=${p.n_region}).`;
+
     default:
       return 'Pattern detected.';
   }
 }
 
-// ── Portfolio Mine ────────────────────────────────────────────────────────────
-
-async function checkPortfolioMineStatus() {
-  const starred = getStarredCountries();
-  const statusEl = document.getElementById('portfolio-mine-status');
-  const subEl = document.getElementById('portfolio-mine-sub');
-  const btnEl = document.getElementById('mine-btn');
-
-  if (starred.length === 0) {
-    statusEl.textContent = 'No countries in your portfolio';
-    subEl.textContent = 'Add countries to your watchlist to mine for patterns';
-    btnEl.style.display = 'none';
-    return;
-  }
-
-  statusEl.textContent = `${starred.length} countries in your portfolio`;
-
-  try {
-    const res = await apiFetch('/api/mine/portfolio/check', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ countries: starred })
-    });
-
-    if (res.needsMine) {
-      subEl.textContent = res.reason === 'no_previous_mine'
-        ? 'No patterns mined yet. Hit Mine to discover.'
-        : res.reason === 'new_data_available'
-        ? 'New data available since last mine.'
-        : 'Portfolio changed. Re-mine to update.';
-      btnEl.textContent = 'MINE';
-      btnEl.style.display = 'inline-block';
-    } else {
-      // Show cached results
-      const cached = await apiFetch(`/api/mine/portfolio/${res.lastMineId}`);
-      showCachedMineResults(cached, res.minedAt);
-    }
-  } catch (err) {
-    subEl.textContent = 'Mine to discover patterns';
-    btnEl.style.display = 'inline-block';
-  }
-}
-
-function showCachedMineResults(result, minedAt) {
-  document.getElementById('portfolio-empty-state').style.display = 'none';
-  document.getElementById('portfolio-mining-progress').style.display = 'none';
-  document.getElementById('portfolio-findings-view').style.display = 'block';
-
-  const date = new Date(minedAt);
-  const ago = formatTimeAgo(date);
-  document.getElementById('portfolio-mine-time').textContent = `No change since ${ago}`;
-
-  renderPortfolioFindings(result.findings || []);
-}
-
-async function startPortfolioMine() {
-  const starred = getStarredCountries();
-  if (starred.length === 0) return;
-
-  document.getElementById('portfolio-empty-state').style.display = 'none';
-  document.getElementById('portfolio-findings-view').style.display = 'none';
-  document.getElementById('portfolio-mining-progress').style.display = 'block';
-
-  const logEl = document.getElementById('mine-progress-log');
-  logEl.innerHTML = '';
-
-  const addLog = (msg, type = 'info') => {
-    const color = type === 'finding' ? 'var(--accent)' : type === 'error' ? 'var(--critical)' : 'var(--dim)';
-    logEl.innerHTML += `<div style="color:${color};margin-bottom:4px">${msg}</div>`;
-    logEl.scrollTop = logEl.scrollHeight;
-  };
-
-  addLog(`Starting mine for ${starred.length} countries...`);
-
-  try {
-    const response = await fetch('/api/mine/portfolio', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer sabian_user_2026'
-      },
-      body: JSON.stringify({ countries: starred })
-    });
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    let allFindings = [];
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n\n');
-      buffer = lines.pop() || '';
-
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        try {
-          const event = JSON.parse(line.slice(6));
-
-          if (event.type === 'status') {
-            addLog(event.msg);
-          } else if (event.type === 'finding') {
-            addLog(`Pattern found: ${event.country} — ${event.category}`, 'finding');
-          } else if (event.type === 'complete') {
-            allFindings = event.findings || [];
-            addLog(`Mining complete. ${allFindings.length} patterns found.`);
-          } else if (event.type === 'done') {
-            setTimeout(() => {
-              document.getElementById('portfolio-mining-progress').style.display = 'none';
-              document.getElementById('portfolio-findings-view').style.display = 'block';
-              document.getElementById('portfolio-mine-time').textContent = 'Mined just now';
-              renderPortfolioFindings(allFindings);
-            }, 500);
-          } else if (event.type === 'error') {
-            addLog(event.msg, 'error');
-          }
-        } catch {}
-      }
-    }
-  } catch (err) {
-    addLog(`Error: ${err.message}`, 'error');
-  }
-}
-
-function renderPortfolioFindings(findings) {
-  const countEl = document.getElementById('portfolio-findings-count');
-  const feedEl = document.getElementById('portfolio-findings-feed');
-
-  countEl.textContent = findings.length === 0
-    ? 'No patterns found'
-    : `${findings.length} pattern${findings.length > 1 ? 's' : ''} found`;
-
-  if (findings.length === 0) {
-    feedEl.innerHTML = '<div style="color:var(--dim);font-size:0.85rem;padding:2rem 0">Sabian analyzed your portfolio and found no anomalies. This is a valid result — monitoring continues.</div>';
-    return;
-  }
-
-  let html = '';
-  for (const f of findings) {
-    const summary = summarizeFinding(f.category, f.payload);
-    const country = f.payload.country || 'Global';
-    const findingId = 'finding-' + Math.random().toString(36).slice(2, 9);
-    html += `<div class="finding-row" style="padding:12px 0;border-bottom:1px solid var(--border)" id="${findingId}">
-      <div style="font-weight:600;color:var(--bright);margin-bottom:4px">${country}</div>
-      <div style="font-size:0.85rem;color:var(--text);line-height:1.5">${summary}</div>
-      <div style="margin-top:8px"><button onclick="expandFinding('${findingId}', ${JSON.stringify(f).replace(/"/g, '&quot;')})" style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);background:none;border:none;cursor:pointer;padding:0">▸ Expand</button></div>
-      <div class="finding-detail" style="display:none;margin-top:12px;padding:12px;background:var(--panel);border-radius:4px;font-size:0.85rem;color:var(--text);line-height:1.6"></div>
-    </div>`;
-  }
-  feedEl.innerHTML = html;
-}
-
-async function expandFinding(findingId, finding) {
+async function expandLibraryFinding(findingId, finding) {
   const row = document.getElementById(findingId);
   const btn = row.querySelector('button');
   const detailEl = row.querySelector('.finding-detail');
@@ -2184,81 +2302,12 @@ async function expandFinding(findingId, finding) {
   }
 }
 
-function formatTimeAgo(date) {
-  const seconds = Math.floor((new Date() - date) / 1000);
-  if (seconds < 60) return 'just now';
-  if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
-  return `${Math.floor(seconds / 86400)} days ago`;
-}
-
-// ── Tier switching ────────────────────────────────────────────────────────────
-
-function setPatternsTier(tier) {
-  patternsTier = tier;
-  document.getElementById('patterns-tier-world').className = tier === 'world' ? 'tier-btn active' : 'tier-btn';
-  document.getElementById('patterns-tier-world').style.background = tier === 'world' ? 'var(--accent)' : 'transparent';
-  document.getElementById('patterns-tier-world').style.color = tier === 'world' ? '#fff' : 'var(--dim)';
-  document.getElementById('patterns-tier-portfolio').className = tier === 'portfolio' ? 'tier-btn active' : 'tier-btn';
-  document.getElementById('patterns-tier-portfolio').style.background = tier === 'portfolio' ? 'var(--accent)' : 'transparent';
-  document.getElementById('patterns-tier-portfolio').style.color = tier === 'portfolio' ? '#fff' : 'var(--dim)';
-
-  document.getElementById('portfolio-mine-view').style.display = tier === 'portfolio' ? 'block' : 'none';
-  document.getElementById('world-patterns-view').style.display = tier === 'world' ? 'block' : 'none';
-
-  if (tier === 'portfolio') {
-    checkPortfolioMineStatus();
-  } else {
-    loadWorldPatterns();
-  }
-}
-
-async function loadWorldPatterns() {
-  const feedEl = document.getElementById('world-findings-feed');
-  feedEl.innerHTML = '<div class="loading-msg">Loading global patterns...</div>';
-
-  const [gdRes, uuRes] = await Promise.allSettled([
-    apiFetch('/public-api/patterns/going-dark'),
-    apiFetch('/public-api/patterns/unknown-unknowns')
-  ]);
-
-  const findings = [];
-  if (gdRes.status === 'fulfilled' && gdRes.value.findings) {
-    findings.push(...gdRes.value.findings.slice(0, 25).map(f => ({ ...f, category: f.category || 'going_dark_event' })));
-  }
-
-  document.getElementById('world-updated-at').textContent = findings[0]?.created_at
-    ? `Updated ${new Date(findings[0].created_at).toLocaleDateString()}`
-    : '';
-
-  if (findings.length === 0) {
-    feedEl.innerHTML = '<div style="color:var(--dim)">No global patterns at current threshold.</div>';
-    return;
-  }
-
-  let html = '';
-  for (const f of findings) {
-    const p = f.payload || {};
-    const country = p.country || 'Global';
-    const domain = p.domain || 'data';
-    const years = p.darkYears || 0;
-    const delta = p.scoreDelta || 0;
-    const direction = delta > 0 ? 'rose' : delta < 0 ? 'dropped' : 'held steady';
-    const summary = `${domain} data stopped arriving for ${years} years. Score ${direction} ${Math.abs(delta).toFixed(0)} points.`;
-
-    html += `<div class="finding-row" style="padding:12px 0;border-bottom:1px solid var(--border)">
-      <div style="font-weight:600;color:var(--bright);margin-bottom:4px">${country}</div>
-      <div style="font-size:0.85rem;color:var(--text);line-height:1.5">${summary}</div>
-    </div>`;
-  }
-  feedEl.innerHTML = html;
-}
-
+let patternsLoaded = false;
 async function loadPatterns() {
   patternsLoaded = true;
-  setPatternsTier('portfolio');
+  await loadPatternLibrary();
 }
-// ═══ END MINED PATTERNS LOADER ═══════════════════════════════════════════════
+// ═══ END PATTERN LIBRARY ══════════════════════════════════════════════════════
 
 
 
