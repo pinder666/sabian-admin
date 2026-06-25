@@ -146,6 +146,50 @@ app.get('/api/score/:name', requireTier('internal'), async (req, res) => {
   }
 });
 
+// ── Pattern library — serves pre-computed findings from miner ──────────────────
+app.get('/api/patterns/library', requireTier('buyer'), (req, res) => {
+  try {
+    const findingsPath = path.join(__dirname, 'historical', 'deep_pattern_findings_v2.json');
+    if (!fs.existsSync(findingsPath)) {
+      return res.status(404).json({ error: 'Pattern library not yet generated' });
+    }
+    const raw = JSON.parse(fs.readFileSync(findingsPath, 'utf8'));
+
+    const findings = [];
+    for (const e of (raw.goingDark?.events || [])) {
+      findings.push({ category: 'going_dark_event', payload: e, hasCountry: true });
+    }
+    for (const d of (raw.darkestCountries || [])) {
+      findings.push({ category: 'darkest_country', payload: d, hasCountry: true });
+    }
+    for (const p of (raw.conditionalProb || [])) {
+      findings.push({ category: 'conditional_probability', payload: p, hasCountry: false });
+    }
+    for (const [signal, data] of Object.entries(raw.recoveryCurves || {})) {
+      findings.push({ category: 'recovery_curve', payload: { signal, ...data }, hasCountry: false });
+    }
+    for (const fm of (raw.firstMover?.firstMovers || [])) {
+      findings.push({ category: 'first_mover', payload: fm, hasCountry: false });
+    }
+    for (const s of (raw.goingDarkSequences || [])) {
+      findings.push({ category: 'going_dark_sequence', payload: s, hasCountry: false });
+    }
+    for (const r of (raw.regionalDivergence || [])) {
+      findings.push({ category: 'regional_divergence', payload: r, hasCountry: false, hasRegion: true });
+    }
+
+    res.json({
+      findings,
+      meta: raw.meta || {},
+      generatedAt: raw.meta?.generatedAt || null,
+      totalFindings: findings.length
+    });
+  } catch (err) {
+    console.error('Pattern library error:', err);
+    res.status(500).json({ error: 'Failed to load pattern library' });
+  }
+});
+
 // ── Signal pattern query — which countries show a specific signal at threshold ──
 app.get('/api/patterns/:signal', requireTier('buyer'), async (req, res) => {
   const signal = decodeURIComponent(req.params.signal);
@@ -1746,66 +1790,6 @@ app.get('/public-api/proof-seal', async (req, res) => {
 });
 // ═══ END MINED PATTERNS ENDPOINTS ════════════════════════════════════════════
 
-
-// ═══ PATTERN LIBRARY ENDPOINT ═════════════════════════════════════════════════
-
-app.get('/api/patterns/library', requireTier('buyer'), (req, res) => {
-  try {
-    const findingsPath = path.join(__dirname, 'historical', 'deep_pattern_findings_v2.json');
-    if (!fs.existsSync(findingsPath)) {
-      return res.status(404).json({ error: 'Pattern library not yet generated' });
-    }
-    const raw = JSON.parse(fs.readFileSync(findingsPath, 'utf8'));
-
-    // Flatten into unified findings array for the frontend
-    const findings = [];
-
-    // Going dark events (per-country)
-    for (const e of (raw.goingDark?.events || [])) {
-      findings.push({ category: 'going_dark_event', payload: e, hasCountry: true });
-    }
-
-    // Darkest countries (per-country)
-    for (const d of (raw.darkestCountries || [])) {
-      findings.push({ category: 'darkest_country', payload: d, hasCountry: true });
-    }
-
-    // Conditional probability (global, signal-level)
-    for (const p of (raw.conditionalProb || [])) {
-      findings.push({ category: 'conditional_probability', payload: p, hasCountry: false });
-    }
-
-    // Recovery curves (global, signal-level)
-    for (const [signal, data] of Object.entries(raw.recoveryCurves || {})) {
-      findings.push({ category: 'recovery_curve', payload: { signal, ...data }, hasCountry: false });
-    }
-
-    // First movers (global, signal-level)
-    for (const fm of (raw.firstMover?.firstMovers || [])) {
-      findings.push({ category: 'first_mover', payload: fm, hasCountry: false });
-    }
-
-    // Going dark sequences (global, signal-level)
-    for (const s of (raw.goingDarkSequences || [])) {
-      findings.push({ category: 'going_dark_sequence', payload: s, hasCountry: false });
-    }
-
-    // Regional divergence (has region, not country)
-    for (const r of (raw.regionalDivergence || [])) {
-      findings.push({ category: 'regional_divergence', payload: r, hasCountry: false, hasRegion: true });
-    }
-
-    res.json({
-      findings,
-      meta: raw.meta || {},
-      generatedAt: raw.meta?.generatedAt || null,
-      totalFindings: findings.length
-    });
-  } catch (err) {
-    console.error('Pattern library error:', err);
-    res.status(500).json({ error: 'Failed to load pattern library' });
-  }
-});
 
 // ═══ PORTFOLIO MINE ENDPOINTS (V2 - currently unused) ═════════════════════════
 
