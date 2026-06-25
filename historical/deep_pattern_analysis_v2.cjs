@@ -1200,30 +1200,19 @@ function detectScoreShifts(matrix) {
   return deduped;
 }
 
-// ── Collapse Pattern Excavation — five grains of recurrence ───────────────────
-// Excavates every pattern that preceded collapse in 3+ distinct countries.
-// Grains: ordered sequence, signal set, signal pairs, lead signal, timing.
-// A pattern is ONLY real if it recurs in 3+ distinct countries.
+// ── Collapse Pattern Excavation — anchored on validated score shifts ──────────
+// Takes the real events (scoreShifts) as anchors.
+// For each shift, builds the chronicle of what happened in the years before.
+// Finds patterns that recur across 3+ distinct countries.
 
-function excavateCollapsePatterns(matrix) {
-  process.stdout.write('  Excavating collapse patterns...');
+function excavateCollapsePatterns(matrix, scoreShifts) {
+  process.stdout.write('  Excavating collapse patterns from score shifts...');
 
-  function scoreToBand(s) {
-    if (s < 45) return 'MINIMAL';
-    if (s < 55) return 'STABLE';
-    if (s < 65) return 'MODERATE';
-    if (s < 75) return 'ELEVATED';
-    if (s < 85) return 'HIGH';
-    return 'CRITICAL';
-  }
-
-  const STABLE_BANDS = new Set(['MINIMAL', 'STABLE', 'MODERATE']);
-  const COLLAPSE_BANDS = new Set(['HIGH', 'CRITICAL']);
-  const LOOKBACK_YEARS = 5;
   const MIN_COUNTRIES = 3;
-  const ELEVATION_THRESHOLD = 1.0;
+  const ELEVATION_THRESHOLD = 0.5;
+  const LOOKBACK_YEARS = 10;
 
-  // Build country timelines
+  // Build country timelines from matrix
   const byCountry = new Map();
   for (const row of matrix.values()) {
     if (!byCountry.has(row.country)) byCountry.set(row.country, []);
@@ -1231,183 +1220,237 @@ function excavateCollapsePatterns(matrix) {
   }
   for (const [, rows] of byCountry) rows.sort((a, b) => a.year - b.year);
 
-  // Step 1: Find all collapses
-  const collapses = [];
-  for (const [country, rows] of byCountry) {
-    for (let i = 1; i < rows.length; i++) {
-      const prevBand = scoreToBand(rows[i - 1].score);
-      const currBand = scoreToBand(rows[i].score);
+  // Step 1: Build chronicles for each score shift
+  const chronicles = [];
 
-      // Collapse = transition from stable band into HIGH or CRITICAL
-      if (STABLE_BANDS.has(prevBand) && COLLAPSE_BANDS.has(currBand)) {
-        collapses.push({ country, year: rows[i].year, fromBand: prevBand, toBand: currBand,
-          fromScore: rows[i - 1].score, toScore: rows[i].score, rowIndex: i });
-      }
-      // Also catch ELEVATED → CRITICAL
-      if (prevBand === 'ELEVATED' && currBand === 'CRITICAL') {
-        collapses.push({ country, year: rows[i].year, fromBand: prevBand, toBand: currBand,
-          fromScore: rows[i - 1].score, toScore: rows[i].score, rowIndex: i });
+  for (const shift of scoreShifts) {
+    const { country, year, startYear, startScore, endScore, delta, direction } = shift;
+    const countryRows = byCountry.get(country);
+    if (!countryRows) continue;
+
+    // Find rows in the lookback window before the shift
+    const lookbackRows = countryRows.filter(r => r.year < year && r.year >= year - LOOKBACK_YEARS);
+    if (lookbackRows.length === 0) continue;
+
+    // Track when each signal FIRST elevated (z > threshold)
+    const signalFirstElevated = new Map();
+    // Track when each signal went DARK (present then absent)
+    const signalWentDark = new Map();
+
+    // Sort lookback rows chronologically
+    lookbackRows.sort((a, b) => a.year - b.year);
+
+    // Track signal presence across lookback
+    const signalLastSeen = new Map();
+
+    for (const row of lookbackRows) {
+      for (const [sig, z] of Object.entries(row.signals)) {
+        // Track elevation
+        if (z > ELEVATION_THRESHOLD && !signalFirstElevated.has(sig)) {
+          signalFirstElevated.set(sig, { year: row.year, z: +z.toFixed(2) });
+        }
+        signalLastSeen.set(sig, row.year);
       }
     }
-  }
 
-  // Step 2: For each collapse, extract signal data from lookback window
-  const collapseData = [];
-  for (const collapse of collapses) {
-    const rows = byCountry.get(collapse.country);
-    const collapseIdx = collapse.rowIndex;
-    const collapseYear = collapse.year;
-
-    const signalFirstElevation = new Map();
-    const elevatedSignals = new Set();
-
-    for (let i = collapseIdx - 1; i >= 0; i--) {
-      const row = rows[i];
-      if (collapseYear - row.year > LOOKBACK_YEARS) break;
-
-      for (const [sig, z] of Object.entries(row.signals)) {
-        if (z > ELEVATION_THRESHOLD) {
-          elevatedSignals.add(sig);
-          if (!signalFirstElevation.has(sig)) {
-            signalFirstElevation.set(sig, row.year);
-          }
+    // Detect going dark: signal was present earlier but absent in later years
+    const lastLookbackYear = lookbackRows[lookbackRows.length - 1]?.year;
+    if (lastLookbackYear) {
+      for (const [sig, lastYear] of signalLastSeen) {
+        if (lastYear < lastLookbackYear - 1) {
+          signalWentDark.set(sig, lastYear);
         }
       }
     }
 
-    if (elevatedSignals.size === 0) continue;
+    // Build the chronicle: ordered list of signal events
+    const chronicleEvents = [];
 
-    // Ordered sequence (by year of first elevation)
-    const orderedSignals = [...signalFirstElevation.entries()]
-      .sort((a, b) => a[1] - b[1])
-      .map(([sig]) => sig);
+    // Add elevation events
+    for (const [sig, data] of signalFirstElevated) {
+      chronicleEvents.push({
+        signal: sig,
+        domain: getDomain(sig),
+        event: 'elevated',
+        year: data.year,
+        yearsBefore: year - data.year,
+        z: data.z
+      });
+    }
 
-    // Lead signal = first to elevate
-    const leadSignal = orderedSignals[0] || null;
-    const leadYear = leadSignal ? signalFirstElevation.get(leadSignal) : null;
-    const yearsBeforeCollapse = leadYear ? (collapseYear - leadYear) : null;
+    // Add going-dark events
+    for (const [sig, darkYear] of signalWentDark) {
+      chronicleEvents.push({
+        signal: sig,
+        domain: getDomain(sig),
+        event: 'dark',
+        year: darkYear,
+        yearsBefore: year - darkYear
+      });
+    }
 
-    collapseData.push({
-      country: collapse.country,
-      year: collapse.year,
-      fromScore: collapse.fromScore,
-      toScore: collapse.toScore,
-      orderedSignals: orderedSignals.slice(0, 5),
-      signalSet: [...elevatedSignals].sort().slice(0, 6),
+    // Sort by year (earliest first)
+    chronicleEvents.sort((a, b) => a.year - b.year);
+
+    if (chronicleEvents.length === 0) continue;
+
+    // Extract key features for pattern matching
+    const elevatedSignals = chronicleEvents.filter(e => e.event === 'elevated').map(e => e.signal);
+    const darkSignals = chronicleEvents.filter(e => e.event === 'dark').map(e => e.signal);
+    const leadSignal = chronicleEvents[0]?.signal || null;
+    const leadEvent = chronicleEvents[0]?.event || null;
+    const leadYearsBefore = chronicleEvents[0]?.yearsBefore || null;
+
+    chronicles.push({
+      country,
+      shiftYear: year,
+      startScore,
+      endScore,
+      delta,
+      direction,
+      chronicle: chronicleEvents,
+      elevatedSignals,
+      darkSignals,
       leadSignal,
-      yearsBeforeCollapse
+      leadEvent,
+      leadYearsBefore
     });
     totalTests++;
   }
 
-  // Helper to group and filter by 3+ distinct countries
-  function groupAndFilter(keyFn) {
+  // Step 2: Find recurring patterns across 3+ distinct countries
+
+  function groupAndFilter(keyFn, enrichFn) {
     const groups = new Map();
-    for (const d of collapseData) {
-      const key = keyFn(d);
+    for (const c of chronicles) {
+      const key = keyFn(c);
       if (!key) continue;
       if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(d);
+      groups.get(key).push(c);
     }
     const results = [];
     for (const [fingerprint, instances] of groups) {
       const distinctCountries = new Set(instances.map(i => i.country));
       if (distinctCountries.size >= MIN_COUNTRIES) {
-        results.push({
+        const result = {
           fingerprint,
           countryCount: distinctCountries.size,
           countries: [...distinctCountries].sort(),
           instances: instances.map(i => ({
-            country: i.country, collapseYear: i.year,
-            fromScore: +i.fromScore.toFixed(1), toScore: +i.toScore.toFixed(1)
+            country: i.country,
+            shiftYear: i.shiftYear,
+            delta: i.delta,
+            direction: i.direction,
+            chronicle: i.chronicle
           }))
-        });
+        };
+        if (enrichFn) enrichFn(result, instances[0]);
+        results.push(result);
       }
     }
     results.sort((a, b) => b.countryCount - a.countryCount);
     return results;
   }
 
-  // GRAIN 1: Ordered sequence (top 3-5 signals in order)
-  const orderedSequences = groupAndFilter(d => {
-    if (d.orderedSignals.length < 2) return null;
-    return d.orderedSignals.slice(0, 4).join(' → ');
-  });
-  for (const p of orderedSequences) {
-    p.signalSequence = p.fingerprint.split(' → ');
-    p.domainSequence = p.signalSequence.map(s => getDomain(s));
-  }
+  // GRAIN 1: Ordered sequence — signals in the order they first elevated
+  const orderedSequences = groupAndFilter(
+    c => {
+      if (c.elevatedSignals.length < 2) return null;
+      return c.elevatedSignals.slice(0, 5).join(' → ');
+    },
+    (result, sample) => {
+      result.signalSequence = sample.elevatedSignals.slice(0, 5);
+      result.domainSequence = result.signalSequence.map(s => getDomain(s));
+    }
+  );
 
-  // GRAIN 2: Signal set (order-independent, top 3-4 signals sorted)
-  const signalSets = groupAndFilter(d => {
-    if (d.signalSet.length < 2) return null;
-    return d.signalSet.slice(0, 4).join(' + ');
-  });
-  for (const p of signalSets) {
-    p.signalSet = p.fingerprint.split(' + ');
-    p.domainSet = [...new Set(p.signalSet.map(s => getDomain(s)))].sort();
-  }
+  // GRAIN 2: Signal set — order-independent combination of elevated signals
+  const signalSets = groupAndFilter(
+    c => {
+      if (c.elevatedSignals.length < 2) return null;
+      return [...c.elevatedSignals].sort().slice(0, 5).join(' + ');
+    },
+    (result, sample) => {
+      result.signalSet = [...sample.elevatedSignals].sort().slice(0, 5);
+      result.domainSet = [...new Set(result.signalSet.map(s => getDomain(s)))].sort();
+    }
+  );
 
-  // GRAIN 3: Signal pairs (every 2-signal combo from elevated signals)
-  const pairGroups = new Map();
-  for (const d of collapseData) {
-    const sigs = d.signalSet.slice(0, 6);
-    for (let i = 0; i < sigs.length; i++) {
-      for (let j = i + 1; j < sigs.length; j++) {
-        const pair = [sigs[i], sigs[j]].sort().join(' + ');
-        if (!pairGroups.has(pair)) pairGroups.set(pair, []);
-        pairGroups.get(pair).push(d);
+  // GRAIN 3: Signal pairs — every 2-signal combination
+  const pairMap = new Map();
+  for (const c of chronicles) {
+    const sigs = [...c.elevatedSignals].sort();
+    for (let i = 0; i < sigs.length && i < 6; i++) {
+      for (let j = i + 1; j < sigs.length && j < 6; j++) {
+        const pairKey = `${sigs[i]} + ${sigs[j]}`;
+        if (!pairMap.has(pairKey)) pairMap.set(pairKey, []);
+        pairMap.get(pairKey).push(c);
       }
     }
   }
   const signalPairs = [];
-  for (const [fingerprint, instances] of pairGroups) {
+  for (const [fingerprint, instances] of pairMap) {
     const distinctCountries = new Set(instances.map(i => i.country));
     if (distinctCountries.size >= MIN_COUNTRIES) {
-      const pair = fingerprint.split(' + ');
       signalPairs.push({
         fingerprint,
-        signalPair: pair,
-        domainPair: pair.map(s => getDomain(s)),
+        signalPair: fingerprint.split(' + '),
+        domainPair: fingerprint.split(' + ').map(s => getDomain(s)),
         countryCount: distinctCountries.size,
         countries: [...distinctCountries].sort(),
         instances: instances.map(i => ({
-          country: i.country, collapseYear: i.year,
-          fromScore: +i.fromScore.toFixed(1), toScore: +i.toScore.toFixed(1)
+          country: i.country,
+          shiftYear: i.shiftYear,
+          delta: i.delta,
+          direction: i.direction
         }))
       });
     }
   }
   signalPairs.sort((a, b) => b.countryCount - a.countryCount);
 
-  // GRAIN 4: Lead signal (which signal elevated first before collapse)
-  const leadSignals = groupAndFilter(d => d.leadSignal);
-  for (const p of leadSignals) {
-    p.signal = p.fingerprint;
-    p.domain = getDomain(p.signal);
-  }
+  // GRAIN 4: Lead signal — which signal moved first before the shift
+  const leadSignals = groupAndFilter(
+    c => c.leadSignal,
+    (result, sample) => {
+      result.signal = sample.leadSignal;
+      result.domain = getDomain(sample.leadSignal);
+      result.leadEvent = sample.leadEvent;
+    }
+  );
 
-  // GRAIN 5: Timing (years between first elevation and collapse, bucketed)
-  const timingBuckets = groupAndFilter(d => {
-    if (d.yearsBeforeCollapse === null) return null;
-    if (d.yearsBeforeCollapse <= 1) return '0-1 years';
-    if (d.yearsBeforeCollapse <= 2) return '1-2 years';
-    if (d.yearsBeforeCollapse <= 3) return '2-3 years';
-    return '3-5 years';
-  });
-  for (const p of timingBuckets) {
-    p.timingWindow = p.fingerprint;
-  }
+  // GRAIN 5: Timing — how many years before the shift did signals first move
+  const timingPatterns = groupAndFilter(
+    c => {
+      if (c.leadYearsBefore === null) return null;
+      if (c.leadYearsBefore <= 1) return '0-1 years before';
+      if (c.leadYearsBefore <= 2) return '1-2 years before';
+      if (c.leadYearsBefore <= 3) return '2-3 years before';
+      if (c.leadYearsBefore <= 5) return '3-5 years before';
+      return '5+ years before';
+    },
+    (result) => {
+      result.timingWindow = result.fingerprint;
+    }
+  );
 
-  console.log(` ${collapses.length} collapses, ${orderedSequences.length} sequences, ${signalSets.length} sets, ${signalPairs.length} pairs, ${leadSignals.length} leads, ${timingBuckets.length} timing buckets.`);
+  console.log(` ${scoreShifts.length} shifts analyzed, ${chronicles.length} with data. Patterns: ${orderedSequences.length} sequences, ${signalSets.length} sets, ${signalPairs.length} pairs, ${leadSignals.length} leads, ${timingPatterns.length} timing.`);
 
   return {
-    totalCollapses: collapses.length,
+    totalShiftsAnalyzed: scoreShifts.length,
+    shiftsWithData: chronicles.length,
     orderedSequences,
     signalSets,
     signalPairs,
     leadSignals,
-    timingBuckets
+    timingPatterns,
+    chronicles: chronicles.map(c => ({
+      country: c.country,
+      shiftYear: c.shiftYear,
+      delta: c.delta,
+      direction: c.direction,
+      chronicle: c.chronicle
+    }))
   };
 }
 
