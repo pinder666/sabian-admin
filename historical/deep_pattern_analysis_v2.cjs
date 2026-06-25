@@ -1200,12 +1200,13 @@ function detectScoreShifts(matrix) {
   return deduped;
 }
 
-// ── Recurring Sequence Detector — the REAL pattern engine ─────────────────────
-// Finds ordered signal sequences that precede collapse across multiple countries.
+// ── Collapse Pattern Excavation — five grains of recurrence ───────────────────
+// Excavates every pattern that preceded collapse in 3+ distinct countries.
+// Grains: ordered sequence, signal set, signal pairs, lead signal, timing.
 // A pattern is ONLY real if it recurs in 3+ distinct countries.
 
-function findRecurringSequences(matrix) {
-  process.stdout.write('  Finding recurring sequences...');
+function excavateCollapsePatterns(matrix) {
+  process.stdout.write('  Excavating collapse patterns...');
 
   function scoreToBand(s) {
     if (s < 45) return 'MINIMAL';
@@ -1239,108 +1240,175 @@ function findRecurringSequences(matrix) {
 
       // Collapse = transition from stable band into HIGH or CRITICAL
       if (STABLE_BANDS.has(prevBand) && COLLAPSE_BANDS.has(currBand)) {
-        collapses.push({
-          country,
-          year: rows[i].year,
-          fromBand: prevBand,
-          toBand: currBand,
-          fromScore: rows[i - 1].score,
-          toScore: rows[i].score,
-          rowIndex: i
-        });
+        collapses.push({ country, year: rows[i].year, fromBand: prevBand, toBand: currBand,
+          fromScore: rows[i - 1].score, toScore: rows[i].score, rowIndex: i });
       }
-      // Also catch ELEVATED → CRITICAL as a collapse
+      // Also catch ELEVATED → CRITICAL
       if (prevBand === 'ELEVATED' && currBand === 'CRITICAL') {
-        collapses.push({
-          country,
-          year: rows[i].year,
-          fromBand: prevBand,
-          toBand: currBand,
-          fromScore: rows[i - 1].score,
-          toScore: rows[i].score,
-          rowIndex: i
-        });
+        collapses.push({ country, year: rows[i].year, fromBand: prevBand, toBand: currBand,
+          fromScore: rows[i - 1].score, toScore: rows[i].score, rowIndex: i });
       }
     }
   }
 
-  // Step 2: For each collapse, extract the ordered sequence of signal elevations
-  const sequencesByFingerprint = new Map();
-
+  // Step 2: For each collapse, extract signal data from lookback window
+  const collapseData = [];
   for (const collapse of collapses) {
     const rows = byCountry.get(collapse.country);
     const collapseIdx = collapse.rowIndex;
     const collapseYear = collapse.year;
 
-    // Find signals that crossed z > 1.0 in the lookback window, ordered by when they FIRST crossed
     const signalFirstElevation = new Map();
+    const elevatedSignals = new Set();
 
     for (let i = collapseIdx - 1; i >= 0; i--) {
       const row = rows[i];
       if (collapseYear - row.year > LOOKBACK_YEARS) break;
 
       for (const [sig, z] of Object.entries(row.signals)) {
-        if (z > ELEVATION_THRESHOLD && !signalFirstElevation.has(sig)) {
-          signalFirstElevation.set(sig, row.year);
+        if (z > ELEVATION_THRESHOLD) {
+          elevatedSignals.add(sig);
+          if (!signalFirstElevation.has(sig)) {
+            signalFirstElevation.set(sig, row.year);
+          }
         }
       }
     }
 
-    // Skip if no elevated signals in lookback
-    if (signalFirstElevation.size === 0) continue;
+    if (elevatedSignals.size === 0) continue;
 
-    // Sort signals by year of first elevation to get the ordered sequence
+    // Ordered sequence (by year of first elevation)
     const orderedSignals = [...signalFirstElevation.entries()]
       .sort((a, b) => a[1] - b[1])
       .map(([sig]) => sig);
 
-    // Create fingerprint (use top 5 signals to avoid overly specific sequences)
-    const fingerprint = orderedSignals.slice(0, 5).join(' → ');
-    if (!fingerprint) continue;
+    // Lead signal = first to elevate
+    const leadSignal = orderedSignals[0] || null;
+    const leadYear = leadSignal ? signalFirstElevation.get(leadSignal) : null;
+    const yearsBeforeCollapse = leadYear ? (collapseYear - leadYear) : null;
 
-    if (!sequencesByFingerprint.has(fingerprint)) {
-      sequencesByFingerprint.set(fingerprint, []);
-    }
-    sequencesByFingerprint.get(fingerprint).push({
+    collapseData.push({
       country: collapse.country,
       year: collapse.year,
       fromScore: collapse.fromScore,
       toScore: collapse.toScore,
-      signalSequence: orderedSignals.slice(0, 5),
-      signalYears: orderedSignals.slice(0, 5).map(s => signalFirstElevation.get(s))
+      orderedSignals: orderedSignals.slice(0, 5),
+      signalSet: [...elevatedSignals].sort().slice(0, 6),
+      leadSignal,
+      yearsBeforeCollapse
     });
     totalTests++;
   }
 
-  // Step 3: Filter to patterns with 3+ distinct countries
-  const patterns = [];
-  for (const [fingerprint, instances] of sequencesByFingerprint) {
+  // Helper to group and filter by 3+ distinct countries
+  function groupAndFilter(keyFn) {
+    const groups = new Map();
+    for (const d of collapseData) {
+      const key = keyFn(d);
+      if (!key) continue;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(d);
+    }
+    const results = [];
+    for (const [fingerprint, instances] of groups) {
+      const distinctCountries = new Set(instances.map(i => i.country));
+      if (distinctCountries.size >= MIN_COUNTRIES) {
+        results.push({
+          fingerprint,
+          countryCount: distinctCountries.size,
+          countries: [...distinctCountries].sort(),
+          instances: instances.map(i => ({
+            country: i.country, collapseYear: i.year,
+            fromScore: +i.fromScore.toFixed(1), toScore: +i.toScore.toFixed(1)
+          }))
+        });
+      }
+    }
+    results.sort((a, b) => b.countryCount - a.countryCount);
+    return results;
+  }
+
+  // GRAIN 1: Ordered sequence (top 3-5 signals in order)
+  const orderedSequences = groupAndFilter(d => {
+    if (d.orderedSignals.length < 2) return null;
+    return d.orderedSignals.slice(0, 4).join(' → ');
+  });
+  for (const p of orderedSequences) {
+    p.signalSequence = p.fingerprint.split(' → ');
+    p.domainSequence = p.signalSequence.map(s => getDomain(s));
+  }
+
+  // GRAIN 2: Signal set (order-independent, top 3-4 signals sorted)
+  const signalSets = groupAndFilter(d => {
+    if (d.signalSet.length < 2) return null;
+    return d.signalSet.slice(0, 4).join(' + ');
+  });
+  for (const p of signalSets) {
+    p.signalSet = p.fingerprint.split(' + ');
+    p.domainSet = [...new Set(p.signalSet.map(s => getDomain(s)))].sort();
+  }
+
+  // GRAIN 3: Signal pairs (every 2-signal combo from elevated signals)
+  const pairGroups = new Map();
+  for (const d of collapseData) {
+    const sigs = d.signalSet.slice(0, 6);
+    for (let i = 0; i < sigs.length; i++) {
+      for (let j = i + 1; j < sigs.length; j++) {
+        const pair = [sigs[i], sigs[j]].sort().join(' + ');
+        if (!pairGroups.has(pair)) pairGroups.set(pair, []);
+        pairGroups.get(pair).push(d);
+      }
+    }
+  }
+  const signalPairs = [];
+  for (const [fingerprint, instances] of pairGroups) {
     const distinctCountries = new Set(instances.map(i => i.country));
     if (distinctCountries.size >= MIN_COUNTRIES) {
-      const signalSequence = instances[0].signalSequence;
-      const domainSequence = signalSequence.map(s => getDomain(s));
-
-      patterns.push({
+      const pair = fingerprint.split(' + ');
+      signalPairs.push({
         fingerprint,
-        signalSequence,
-        domainSequence,
+        signalPair: pair,
+        domainPair: pair.map(s => getDomain(s)),
         countryCount: distinctCountries.size,
         countries: [...distinctCountries].sort(),
         instances: instances.map(i => ({
-          country: i.country,
-          collapseYear: i.year,
-          fromScore: +i.fromScore.toFixed(1),
-          toScore: +i.toScore.toFixed(1)
+          country: i.country, collapseYear: i.year,
+          fromScore: +i.fromScore.toFixed(1), toScore: +i.toScore.toFixed(1)
         }))
       });
     }
   }
+  signalPairs.sort((a, b) => b.countryCount - a.countryCount);
 
-  // Sort by country count descending
-  patterns.sort((a, b) => b.countryCount - a.countryCount);
+  // GRAIN 4: Lead signal (which signal elevated first before collapse)
+  const leadSignals = groupAndFilter(d => d.leadSignal);
+  for (const p of leadSignals) {
+    p.signal = p.fingerprint;
+    p.domain = getDomain(p.signal);
+  }
 
-  console.log(` ${collapses.length} collapses analyzed, ${patterns.length} recurring patterns found.`);
-  return patterns;
+  // GRAIN 5: Timing (years between first elevation and collapse, bucketed)
+  const timingBuckets = groupAndFilter(d => {
+    if (d.yearsBeforeCollapse === null) return null;
+    if (d.yearsBeforeCollapse <= 1) return '0-1 years';
+    if (d.yearsBeforeCollapse <= 2) return '1-2 years';
+    if (d.yearsBeforeCollapse <= 3) return '2-3 years';
+    return '3-5 years';
+  });
+  for (const p of timingBuckets) {
+    p.timingWindow = p.fingerprint;
+  }
+
+  console.log(` ${collapses.length} collapses, ${orderedSequences.length} sequences, ${signalSets.length} sets, ${signalPairs.length} pairs, ${leadSignals.length} leads, ${timingBuckets.length} timing buckets.`);
+
+  return {
+    totalCollapses: collapses.length,
+    orderedSequences,
+    signalSets,
+    signalPairs,
+    leadSignals,
+    timingBuckets
+  };
 }
 
 // ── Highest-darkness countries ────────────────────────────────────────────────
@@ -1624,7 +1692,7 @@ async function main() {
   const goingDarkSeqs   = testGoingDarkSequences(matrix);
   const darkestCountries = findDarkestCountries(matrix);
   const scoreShifts     = detectScoreShifts(matrix);
-  const recurringSequences = findRecurringSequences(matrix);
+  const collapsePatterns = excavateCollapsePatterns(matrix);
   const silenceVsScore  = testSilenceVsScore(matrix);
   const threeSigClusters = testThreeSignalClusters(matrix);
   const monteCarlo      = {}; // Test G disabled: synthetic-score construction does not mirror real scoring formula, produced impossible values
@@ -1646,7 +1714,7 @@ async function main() {
     allPairs, extendedLags, signalToScore, goingDark, silenceVsScore,
     threeSigClusters, monteCarlo, conditionalProb, coActivation, recoveryCurves,
     firstMover, regionalDivergence: regionalDiv, compoundAmplification: compoundAmp,
-    bandTransitions, unknownUnknowns, asymmetry, absenceAsSignal, bootstrap, scoreShifts, recurringSequences,
+    bandTransitions, unknownUnknowns, asymmetry, absenceAsSignal, bootstrap, scoreShifts, collapsePatterns,
     goingDarkSequences: goingDarkSeqs, darkestCountries,
     meta: { totalTests, generatedAt: new Date().toISOString(), matrixSize: matrix.size }
   };
