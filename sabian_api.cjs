@@ -17,7 +17,7 @@ const app = express();
 // Railway injects PORT; fallback to API_PORT or 5000 for local dev
 const PORT             = process.env.PORT || process.env.API_PORT || 5000;
 const INTERNAL_API_KEY = process.env.SMART_SABIAN_API_KEY || 'sabian_key';
-const BUYER_API_KEY    = process.env.BUYER_API_KEY || null;
+const BUYER_API_KEY    = process.env.BUYER_API_KEY || 'test_key';
 
 // ── Access tier system ────────────────────────────────────────────────────────
 // public   — no auth. Scores and risk bands only.

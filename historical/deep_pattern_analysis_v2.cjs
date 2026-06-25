@@ -1371,13 +1371,17 @@ function generateReport(findings) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('\n  SABIAN DEEP PATTERN ANALYSIS V2');
-  console.log('  ================================');
-  console.log('  5,000+ tests | Going-dark as first-class signal | No data manipulation\n');
+  if (!STREAM_MODE) {
+    console.log('\n  SABIAN DEEP PATTERN ANALYSIS V2');
+    console.log('  ================================');
+    console.log('  5,000+ tests | Going-dark as first-class signal | No data manipulation\n');
+  }
 
   if (SCOPED_COUNTRIES) {
-    console.log(`  SCOPED MODE: ${SCOPED_COUNTRIES.length} countries`);
-    console.log(`  Countries: ${SCOPED_COUNTRIES.join(', ')}\n`);
+    if (!STREAM_MODE) {
+      console.log(`  SCOPED MODE: ${SCOPED_COUNTRIES.length} countries`);
+      console.log(`  Countries: ${SCOPED_COUNTRIES.join(', ')}\n`);
+    }
     emit('start', { countries: SCOPED_COUNTRIES, count: SCOPED_COUNTRIES.length });
   }
 
@@ -1387,7 +1391,7 @@ async function main() {
 
   const rows = await loadAllScores();
   const matrix = buildSignalMatrix(rows);
-  console.log(`  Signal matrix: ${matrix.size.toLocaleString()} country-year entries\n`);
+  if (!STREAM_MODE) console.log(`  Signal matrix: ${matrix.size.toLocaleString()} country-year entries\n`);
 
   // Run all tests
   const allPairs        = testAllPairs(matrix);
@@ -1411,7 +1415,7 @@ async function main() {
   const absenceAsSignal = testAbsenceAsSignal(matrix);
   const bootstrap       = testBootstrap(matrix, allPairs);
 
-  console.log(`\n  Total tests: ${totalTests.toLocaleString()}\n`);
+  if (!STREAM_MODE) console.log(`\n  Total tests: ${totalTests.toLocaleString()}\n`);
 
   const findings = {
     allPairs, extendedLags, signalToScore, goingDark, silenceVsScore,
