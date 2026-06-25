@@ -1209,7 +1209,7 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
   process.stdout.write('  Excavating collapse patterns from score shifts...');
 
   const MIN_COUNTRIES = 3;
-  const ELEVATION_THRESHOLD = 0.5;
+  const ELEVATION_THRESHOLD = 1.0;  // Raised from 0.5 — "elevated" means truly elevated
   const LOOKBACK_YEARS = 10;
 
   // Step 0: Load ALL raw signal readings from historical_signal_readings
@@ -1277,8 +1277,8 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
   }
 
   // Step 1: Build chronicles for each score shift using RAW readings
-  // Filter to collapse-only (direction=up = stress rising) and exclude 2026 (incomplete data)
-  const collapseShifts = scoreShifts.filter(s => s.direction === 'up' && s.year < 2026);
+  // Filter to collapse-only (direction=up = stress rising)
+  const collapseShifts = scoreShifts.filter(s => s.direction === 'up');
   const chronicles = [];
 
   for (const shift of collapseShifts) {
@@ -1464,9 +1464,11 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
   }
   signalPairs.sort((a, b) => b.countryCount - a.countryCount);
 
-  // ── HIT-RATE COMPUTATION ──────────────────────────────────────────────────────
-  // For each signal pair: count ALL country-years where both signals elevated,
-  // then count how many were followed by an up-shift within 3 years.
+  // ── LIFT COMPUTATION ───────────────────────────────────────────────────────────
+  // LIFT = how much more often does this pair appear before collapse vs. baseline?
+  // Baseline = % of ALL country-years where pair appears
+  // Pre-collapse = % of 3-years-before-collapse country-years where pair appears
+  // Lift > 2 = pattern is 2x more predictive than random
 
   // Build shift lookup: country -> Set of years with collapse (up-shift)
   const collapseYears = new Map();
@@ -1475,11 +1477,41 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
     collapseYears.get(shift.country).add(shift.year);
   }
 
-  // For each top signal pair, compute hit rate and lead-time distribution
-  for (const pair of signalPairs.slice(0, 20)) {
+  // Build pre-collapse window lookup: country -> Set of years that are 1-3 years before a collapse
+  const preCollapseYears = new Map();
+  for (const shift of collapseShifts) {
+    if (!preCollapseYears.has(shift.country)) preCollapseYears.set(shift.country, new Set());
+    for (let y = shift.year - 3; y < shift.year; y++) {
+      preCollapseYears.get(shift.country).add(y);
+    }
+  }
+
+  // Count total country-years in dataset
+  let totalCountryYears = 0;
+  const allCountryYears = new Set();
+  for (const [country, signalMap] of countrySignalYears) {
+    for (const [, years] of signalMap) {
+      for (const y of years) {
+        const key = `${country}|${y}`;
+        if (!allCountryYears.has(key)) {
+          allCountryYears.add(key);
+          totalCountryYears++;
+        }
+      }
+    }
+  }
+
+  // Count total pre-collapse country-years
+  let totalPreCollapseYears = 0;
+  for (const [, years] of preCollapseYears) {
+    totalPreCollapseYears += years.size;
+  }
+
+  // For each top signal pair, compute LIFT and lead-time distribution
+  for (const pair of signalPairs.slice(0, 30)) {
     const [sigA, sigB] = pair.signalPair;
-    let totalOccurrences = 0;
-    let followedByCollapse = 0;
+    let pairInAll = 0;        // count of ALL country-years where pair elevated
+    let pairInPreCollapse = 0; // count of PRE-COLLAPSE country-years where pair elevated
 
     // Check every country-year for this pair
     for (const [country, signalMap] of countrySignalYears) {
@@ -1487,33 +1519,36 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
       const yearsB = signalMap.get(sigB);
       if (!yearsA || !yearsB) continue;
 
+      const preCollapseSet = preCollapseYears.get(country) || new Set();
+
       // Find years where BOTH signals were elevated
       for (const year of yearsA) {
-        if (year >= 2026) continue; // Exclude 2026
         if (!yearsB.has(year)) continue;
         const zA = getZScore(country, year, sigA);
         const zB = getZScore(country, year, sigB);
         if (zA === null || zB === null) continue;
         if (zA > ELEVATION_THRESHOLD && zB > ELEVATION_THRESHOLD) {
-          totalOccurrences++;
-          // Check if collapse followed within 3 years
-          const countryCollapses = collapseYears.get(country);
-          if (countryCollapses) {
-            for (let y = year + 1; y <= year + 3; y++) {
-              if (countryCollapses.has(y)) {
-                followedByCollapse++;
-                break;
-              }
-            }
+          pairInAll++;
+          if (preCollapseSet.has(year)) {
+            pairInPreCollapse++;
           }
         }
       }
     }
 
-    pair.hitRate = {
-      totalOccurrences,
-      followedByCollapse,
-      rate: totalOccurrences > 0 ? +(followedByCollapse / totalOccurrences).toFixed(3) : null
+    // Compute rates and lift
+    const baselineRate = totalCountryYears > 0 ? pairInAll / totalCountryYears : 0;
+    const preCollapseRate = totalPreCollapseYears > 0 ? pairInPreCollapse / totalPreCollapseYears : 0;
+    const lift = baselineRate > 0 ? preCollapseRate / baselineRate : null;
+
+    pair.lift = {
+      pairInAll,
+      pairInPreCollapse,
+      totalCountryYears,
+      totalPreCollapseYears,
+      baselineRate: +baselineRate.toFixed(4),
+      preCollapseRate: +preCollapseRate.toFixed(4),
+      lift: lift !== null ? +lift.toFixed(2) : null
     };
 
     // Lead-time distribution: yearsBefore for all instances
@@ -1596,7 +1631,7 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
     let maxYear = 0;
     for (const [, years] of signalMap) {
       for (const y of years) {
-        if (y > maxYear && y < 2026) maxYear = y;
+        if (y > maxYear) maxYear = y;
       }
     }
     if (maxYear > 0) latestYearByCountry.set(country, maxYear);
@@ -1654,12 +1689,16 @@ async function excavateCollapsePatterns(matrix, scoreShifts) {
     }
   );
 
-  console.log(` ${collapseShifts.length} collapse shifts analyzed (excl. 2026), ${chronicles.length} with data. Patterns: ${orderedSequences.length} sequences, ${signalSets.length} sets, ${signalPairs.length} pairs, ${leadSignals.length} leads. Extractive watchlist: ${extractiveWatchlist.length} countries.`);
+  // Sort signal pairs by lift (highest first)
+  signalPairs.sort((a, b) => (b.lift?.lift || 0) - (a.lift?.lift || 0));
+
+  const pairsWithLift = signalPairs.filter(p => p.lift?.lift && p.lift.lift > 1);
+  console.log(` ${collapseShifts.length} collapse shifts analyzed, ${chronicles.length} with data. Patterns: ${orderedSequences.length} sequences, ${signalSets.length} sets, ${signalPairs.length} pairs (${pairsWithLift.length} with lift>1), ${leadSignals.length} leads. Extractive watchlist: ${extractiveWatchlist.length} countries.`);
 
   return {
     totalShiftsAnalyzed: collapseShifts.length,
     shiftsWithData: chronicles.length,
-    filters: { directionFilter: 'up', yearExcluded: 2026 },
+    filters: { directionFilter: 'up', elevationThreshold: ELEVATION_THRESHOLD },
     orderedSequences,
     signalSets,
     signalPairs,

@@ -2033,7 +2033,7 @@ app.post('/api/collapse/analyze', requireTier('buyer'), async (req, res) => {
           fingerprint: pair.fingerprint,
           signalPair: pair.signalPair,
           domainPair: pair.domainPair,
-          hitRate: pair.hitRate || null,
+          lift: pair.lift || null,
           leadTimeDistribution: pair.leadTimeDistribution || null,
           countryInstances
         });
@@ -2107,7 +2107,7 @@ Write a complete intelligence briefing for ${country}. Cover ONLY what the paylo
 STRUCTURE YOUR RESPONSE:
 1. PATTERN MATCH — What pattern does this country match? Describe in plain terms (e.g., "institutional integrity combined with population displacement pressures") NOT signal names.
 2. HISTORICAL PRECEDENT — Which prior cases matched this pattern? What happened to them? Use the actual countries and years from historicalAnalogues.
-3. CONFIDENCE — The computed hit rate. State as "In X of Y prior occurrences, this pattern preceded a major score shift within 3 years." ONLY if hitRate is present in payload. If not present, say data is insufficient.
+3. CONFIDENCE — The computed LIFT. Lift measures how much MORE often this pattern appears before collapse vs. baseline. If lift is present in payload: state "This pattern appears X times more often in the years before a crisis than during normal periods" where X is the lift value. Lift > 2 is predictive. Lift near 1 is noise. If lift is null, say data is insufficient.
 4. TIMING — The lead-time distribution. Describe BOTH the structural horizon (8-10 year signals) AND tactical window (2-3 year signals) if both are present in the buckets. Use actual numbers from leadTimeDistribution.
 5. ENTRY DATE — When did ${country} first match this pattern? Use matchDates if present.
 6. EXTRACTIVE INDICATORS — Are corruption or investigative journalism signals elevated? Use extractiveActors if present.
@@ -2179,7 +2179,7 @@ app.post('/api/collapse/analyze-portfolio', requireTier('buyer'), async (req, re
         if (pair.countries && pair.countries.includes(country)) {
           payload.patternMatches.push({
             fingerprint: pair.fingerprint,
-            hitRate: pair.hitRate || null
+            lift: pair.lift || null
           });
         }
       }
