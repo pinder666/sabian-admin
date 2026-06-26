@@ -2584,7 +2584,7 @@ let collapsePatterns = [];
 let extractiveWatchlist = [];
 let extractionSignatures = [];
 let currentZoom = 'orbit';
-let selectedCountry = null;
+// selectedCountry already declared globally
 let allCountryData = new Map(); // country -> { patterns: [], extraction: [], score, level }
 
 async function loadCollapseAnalyzer() {
