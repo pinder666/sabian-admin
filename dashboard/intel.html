@@ -682,17 +682,14 @@
   <!-- ── COLLAPSE ANALYZER VIEW ────────────────────────────────────────────── -->
   <div class="view" id="view-analyzer">
     <div class="section-hdr">
-      <span class="section-title">COLLAPSE INTELLIGENCE ANALYZER</span>
-      <span class="section-meta">HISTORICAL PATTERN MATCHING</span>
+      <span class="section-title">COLLAPSE INTELLIGENCE</span>
+      <span class="section-meta" id="analyzer-meta">PATTERNS RANKED BY PREDICTIVE STRENGTH</span>
     </div>
-    <p style="font-size:0.9rem;color:var(--dim);margin-bottom:1.5rem;max-width:600px;line-height:1.6;">
-      Enter a country to receive a complete intelligence briefing — pattern matches, historical precedents, predictive confidence, timing, and tripwires.
-    </p>
 
-    <!-- Search -->
-    <div style="display:flex;gap:0.75rem;align-items:center;margin-bottom:2rem;">
-      <input type="text" class="ctrl-input" id="analyzer-country-input" placeholder="Enter country name…" style="flex:1;max-width:400px;padding:12px 16px;font-size:1rem;">
-      <button class="ctrl-select" id="analyzer-btn" onclick="runCollapseAnalysis()" style="background:var(--accent);color:#fff;padding:12px 28px;font-weight:700;letter-spacing:0.1em;cursor:pointer;">ANALYZE</button>
+    <!-- Loading state -->
+    <div id="analyzer-loading" style="padding:3rem;text-align:center;">
+      <div style="width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;"></div>
+      <div style="font-family:var(--mono);font-size:0.8rem;color:var(--dim);letter-spacing:0.08em;">Loading collapse patterns…</div>
     </div>
 
     <!-- Error state -->
@@ -700,62 +697,35 @@
       <div style="font-family:var(--mono);font-size:0.8rem;color:var(--critical);" id="analyzer-error-text"></div>
     </div>
 
-    <!-- Loading state -->
-    <div id="analyzer-loading" style="display:none;padding:3rem;text-align:center;">
-      <div style="width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;"></div>
-      <div style="font-family:var(--mono);font-size:0.8rem;color:var(--dim);letter-spacing:0.08em;">Analyzing historical patterns…</div>
+    <!-- Main content: patterns + extractive watchlist -->
+    <div id="analyzer-content" style="display:none;">
+      <!-- Two-column layout: patterns left, watchlist right -->
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;">
+
+        <!-- Patterns column -->
+        <div>
+          <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;">VALIDATED COLLAPSE PATTERNS</div>
+          <div id="analyzer-patterns-list"></div>
+        </div>
+
+        <!-- Extractive watchlist column -->
+        <div>
+          <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1rem;">
+            <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--warning);margin-bottom:0.75rem;">EXTRACTIVE ACTOR WATCHLIST</div>
+            <div id="analyzer-watchlist" style="font-size:0.85rem;"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Results -->
-    <div id="analyzer-results" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">
-        <span style="font-size:1.5rem;font-weight:700;color:var(--bright);" id="analyzer-country"></span>
-        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);" id="analyzer-ts"></span>
-      </div>
-
-      <!-- Briefing (main deliverable) -->
-      <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.5rem 2rem;margin-bottom:2rem;">
-        <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;">Intelligence Briefing</div>
-        <div style="font-size:1rem;line-height:1.8;color:var(--text);white-space:pre-wrap;" id="analyzer-briefing"></div>
-      </div>
-
-      <!-- Supporting evidence -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1rem;">
-        <!-- Pattern Matches -->
-        <div class="pattern-card">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Pattern Matches</div>
-          <div id="ev-patterns" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
+    <!-- Pattern detail modal (shows when expanding a pattern) -->
+    <div id="pattern-detail-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,12,26,0.9);z-index:300;overflow-y:auto;">
+      <div style="max-width:900px;margin:80px auto;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+          <div style="font-family:var(--mono);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);">PATTERN INTELLIGENCE</div>
+          <button onclick="closePatternModal()" style="background:none;border:none;color:var(--dim);font-size:1.5rem;cursor:pointer;">&times;</button>
         </div>
-
-        <!-- Historical Analogues -->
-        <div class="pattern-card">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Historical Analogues</div>
-          <div id="ev-analogues" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
-        </div>
-
-        <!-- Lead Time Distribution -->
-        <div class="pattern-card">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Lead Time Distribution</div>
-          <div id="ev-timing" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
-        </div>
-
-        <!-- Match Date -->
-        <div class="pattern-card">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Pattern Entry Date</div>
-          <div id="ev-matchdate" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
-        </div>
-
-        <!-- Extractive Actors -->
-        <div class="pattern-card">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Extractive Indicators</div>
-          <div id="ev-extractive" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
-        </div>
-
-        <!-- Tripwires -->
-        <div class="pattern-card">
-          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Historical Tripwires</div>
-          <div id="ev-tripwires" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
-        </div>
+        <div id="pattern-detail-content"></div>
       </div>
     </div>
   </div>
@@ -1225,6 +1195,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
       if (!heatmapLoaded) loadFamineRisk();
     }
     if (btn.dataset.view === 'patterns' && !patternsLoaded) loadPatterns();
+    if (btn.dataset.view === 'analyzer' && !analyzerLoaded) loadCollapseAnalyzer();
     // Show/update selected country indicator
     updateSelectedBanner();
     if (btn.dataset.view === 'extraction-live' && !extractionLoaded) loadExtractionSignatures();
@@ -2438,230 +2409,199 @@ function getDomainLabel(domain) {
   return labels[domain] || domain;
 }
 
-async function runCollapseAnalysis() {
-  const country = document.getElementById('analyzer-country-input').value.trim();
-  if (!country) {
-    showAnalyzerError('Please enter a country name.');
+let analyzerLoaded = false;
+let collapsePatterns = [];
+let extractiveWatchlist = [];
+
+async function loadCollapseAnalyzer() {
+  if (analyzerLoaded) return;
+  analyzerLoaded = true;
+
+  try {
+    const data = await apiFetch('/api/collapse/patterns');
+    if (data.error) throw new Error(data.error);
+
+    collapsePatterns = data.patterns || [];
+    extractiveWatchlist = data.extractiveWatchlist || [];
+
+    document.getElementById('analyzer-loading').style.display = 'none';
+    document.getElementById('analyzer-content').style.display = 'block';
+
+    document.getElementById('analyzer-meta').textContent =
+      collapsePatterns.length + ' PATTERNS | ' + data.totalShiftsAnalyzed + ' COLLAPSE EVENTS ANALYZED';
+
+    renderCollapsePatterns();
+    renderExtractiveWatchlist();
+
+  } catch (err) {
+    document.getElementById('analyzer-loading').style.display = 'none';
+    document.getElementById('analyzer-error-text').textContent = err.message || 'Failed to load patterns';
+    document.getElementById('analyzer-error').style.display = 'block';
+  }
+}
+
+function renderCollapsePatterns() {
+  const el = document.getElementById('analyzer-patterns-list');
+  if (!collapsePatterns.length) {
+    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No validated collapse patterns found.</div>';
     return;
   }
 
-  hideAnalyzerError();
-  hideAnalyzerResults();
-  showAnalyzerLoading();
+  let html = '';
+  collapsePatterns.forEach((p, idx) => {
+    const labels = (p.signalPair || []).map(s => getSignalLabel(s));
+    const domains = (p.domainPair || []).map(d => getDomainLabel(d));
+    const lift = p.lift?.lift || 0;
+    const strength = p.lift?.strength || 0;
+    const liftColor = lift >= 5 ? 'var(--critical)' : lift >= 2 ? 'var(--stable)' : 'var(--warning)';
+
+    html += '<div class="pattern-card" style="margin-bottom:1rem;">';
+
+    // Header: signature + lift badge
+    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.75rem;">';
+    html += '<div>';
+    html += '<div style="font-size:1rem;font-weight:700;color:var(--bright);margin-bottom:4px;">' + labels.join(' + ') + '</div>';
+    html += '<div style="font-size:0.72rem;color:var(--dim);">' + domains.join(' / ') + '</div>';
+    html += '</div>';
+    html += '<div style="text-align:right;">';
+    html += '<div style="font-family:var(--mono);font-size:1.2rem;font-weight:700;color:' + liftColor + ';">' + lift + 'x</div>';
+    html += '<div style="font-size:0.65rem;color:var(--dim);">more likely before crisis</div>';
+    html += '</div>';
+    html += '</div>';
+
+    // Countries matching this pattern
+    html += '<div style="margin-bottom:0.75rem;">';
+    html += '<div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;margin-bottom:6px;">COUNTRIES MATCHING</div>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:5px;">';
+    for (const c of (p.countries || []).slice(0, 12)) {
+      html += '<span style="font-size:0.75rem;padding:2px 8px;border-radius:3px;background:rgba(26,111,255,0.1);color:var(--text);border:1px solid rgba(26,111,255,0.2);">' + c + '</span>';
+    }
+    if ((p.countries || []).length > 12) {
+      html += '<span style="font-size:0.72rem;color:var(--dim);">+' + (p.countries.length - 12) + ' more</span>';
+    }
+    html += '</div>';
+    html += '</div>';
+
+    // Lead time distribution bars
+    if (p.leadTimeDistribution && p.leadTimeDistribution.buckets) {
+      const buckets = p.leadTimeDistribution.buckets;
+      const total = Object.values(buckets).reduce((a, b) => a + b, 0);
+      if (total > 0) {
+        html += '<div style="margin-bottom:0.75rem;">';
+        html += '<div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;margin-bottom:6px;">LEAD TIME (YEARS BEFORE CRISIS)</div>';
+        const order = ['0-1', '2-3', '4-5', '6-7', '8-10'];
+        for (const label of order) {
+          const count = buckets[label] || 0;
+          const pct = Math.round((count / total) * 100);
+          html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">';
+          html += '<span style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);width:40px;text-align:right;">' + label + '</span>';
+          html += '<div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="height:100%;background:var(--accent);width:' + pct + '%"></div></div>';
+          html += '<span style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);width:20px;">' + count + '</span>';
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+    }
+
+    // Evidence count
+    html += '<div style="font-size:0.72rem;color:var(--dim);">';
+    html += 'Evidence: ' + (p.lift?.pairInPreCollapse || 0) + ' of ' + (p.lift?.pairInAll || 0) + ' occurrences preceded collapse';
+    html += '</div>';
+
+    // Expand button
+    html += '<button onclick="expandPattern(' + idx + ')" style="margin-top:0.75rem;background:var(--panel2);border:1px solid var(--border);color:var(--accent);padding:6px 14px;border-radius:4px;font-family:var(--mono);font-size:0.72rem;cursor:pointer;">▸ EXPAND INTELLIGENCE</button>';
+
+    html += '</div>';
+  });
+
+  el.innerHTML = html;
+}
+
+function renderExtractiveWatchlist() {
+  const el = document.getElementById('analyzer-watchlist');
+  if (!extractiveWatchlist.length) {
+    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No extractive indicators currently elevated.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const item of extractiveWatchlist.slice(0, 15)) {
+    const signals = (item.elevatedSignals || []).map(s => getSignalLabel(s.signal)).join(', ');
+    html += '<div style="padding:8px 0;border-bottom:1px solid rgba(21,32,64,0.5);">';
+    html += '<div style="font-weight:600;color:var(--bright);font-size:0.85rem;">' + item.country + '</div>';
+    html += '<div style="font-size:0.72rem;color:var(--warning);">' + signals + '</div>';
+    html += '<div style="font-size:0.65rem;color:var(--dim);">Data: ' + item.latestYear + '</div>';
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
+
+async function expandPattern(idx) {
+  const pattern = collapsePatterns[idx];
+  if (!pattern) return;
+
+  const modal = document.getElementById('pattern-detail-modal');
+  const content = document.getElementById('pattern-detail-content');
+
+  modal.style.display = 'block';
+  content.innerHTML = '<div style="text-align:center;padding:2rem;"><div style="font-family:var(--mono);color:var(--dim);">Generating intelligence read...</div></div>';
 
   try {
-    const res = await fetch(BASE + '/api/collapse/analyze', {
+    // Call Claude to generate the pattern intelligence
+    const res = await fetch(BASE + '/api/mine/explain', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer sabian_user_2026'
       },
-      body: JSON.stringify({ country })
+      body: JSON.stringify({
+        finding: {
+          category: 'collapse_pattern',
+          payload: {
+            signature: (pattern.signalPair || []).map(s => getSignalLabel(s)).join(' + '),
+            domains: (pattern.domainPair || []).map(d => getDomainLabel(d)),
+            lift: pattern.lift?.lift,
+            countries: pattern.countries,
+            instances: pattern.instances?.slice(0, 10),
+            leadTimeDistribution: pattern.leadTimeDistribution
+          }
+        }
+      })
     });
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || `${res.status} ${res.statusText}`);
+    const data = await res.json();
+
+    // Build the full detail view
+    const labels = (pattern.signalPair || []).map(s => getSignalLabel(s));
+    let html = '';
+
+    html += '<div style="font-size:1.25rem;font-weight:700;color:var(--bright);margin-bottom:1rem;">' + labels.join(' + ') + '</div>';
+
+    // The AI explanation
+    html += '<div style="background:rgba(26,111,255,0.05);border:1px solid rgba(26,111,255,0.15);border-radius:6px;padding:1.25rem;margin-bottom:1.5rem;">';
+    html += '<div style="font-size:0.95rem;line-height:1.7;color:var(--text);">' + (data.explanation || 'Pattern detected.') + '</div>';
+    html += '</div>';
+
+    // Historical instances
+    if (pattern.instances && pattern.instances.length) {
+      html += '<div style="font-family:var(--mono);font-size:0.68rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;">HISTORICAL INSTANCES</div>';
+      html += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem;">';
+      for (const inst of pattern.instances.slice(0, 15)) {
+        html += '<span style="font-family:var(--mono);font-size:0.75rem;padding:4px 10px;border-radius:3px;background:var(--panel2);color:var(--text);border:1px solid var(--border);">' + inst.country + ' ' + inst.shiftYear + '</span>';
+      }
+      html += '</div>';
     }
 
-    const data = await res.json();
-    hideAnalyzerLoading();
-    renderAnalyzerResults(data);
+    content.innerHTML = html;
 
   } catch (err) {
-    hideAnalyzerLoading();
-    showAnalyzerError(err.message || 'Analysis failed.');
+    content.innerHTML = '<div style="color:var(--critical);">Failed to generate intelligence: ' + err.message + '</div>';
   }
 }
 
-function showAnalyzerLoading() {
-  document.getElementById('analyzer-loading').style.display = 'block';
-  document.getElementById('analyzer-btn').disabled = true;
+function closePatternModal() {
+  document.getElementById('pattern-detail-modal').style.display = 'none';
 }
-
-function hideAnalyzerLoading() {
-  document.getElementById('analyzer-loading').style.display = 'none';
-  document.getElementById('analyzer-btn').disabled = false;
-}
-
-function showAnalyzerError(msg) {
-  document.getElementById('analyzer-error-text').textContent = msg;
-  document.getElementById('analyzer-error').style.display = 'block';
-}
-
-function hideAnalyzerError() {
-  document.getElementById('analyzer-error').style.display = 'none';
-}
-
-function hideAnalyzerResults() {
-  document.getElementById('analyzer-results').style.display = 'none';
-}
-
-function renderAnalyzerResults(data) {
-  const { country, payload, briefing } = data;
-
-  document.getElementById('analyzer-country').textContent = country;
-  document.getElementById('analyzer-ts').textContent = payload.generatedAt ? new Date(payload.generatedAt).toLocaleString() : '';
-  document.getElementById('analyzer-briefing').textContent = briefing || 'No briefing generated.';
-
-  renderAnalyzerPatterns(payload.patternMatches || []);
-  renderAnalyzerAnalogues(payload.historicalAnalogues || []);
-  renderAnalyzerTiming(payload.patternMatches || []);
-  renderAnalyzerMatchDate(payload.matchDates);
-  renderAnalyzerExtractive(payload.extractiveActors);
-  renderAnalyzerTripwires(payload.tripwireSummary || []);
-
-  document.getElementById('analyzer-results').style.display = 'block';
-}
-
-function renderAnalyzerPatterns(matches) {
-  const el = document.getElementById('ev-patterns');
-  if (!matches.length) {
-    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No pattern matches found for this country.</div>';
-    return;
-  }
-
-  let html = '';
-  for (const m of matches) {
-    const labels = (m.signalPair || []).map(s => getSignalLabel(s));
-    const domains = (m.domainPair || []).map(d => getDomainLabel(d));
-
-    html += '<div style="margin-bottom:12px;">';
-    html += '<div style="font-weight:600;color:var(--bright);margin-bottom:4px;">' + labels.join(' + ') + '</div>';
-    html += '<div style="font-size:0.75rem;color:var(--dim);margin-bottom:6px;">Domains: ' + domains.join(', ') + '</div>';
-
-    if (m.lift && m.lift.lift) {
-      const liftVal = m.lift.lift;
-      const liftColor = liftVal >= 2 ? 'var(--stable)' : 'var(--warning)';
-      html += '<span style="display:inline-block;padding:2px 8px;border-radius:3px;font-family:var(--mono);font-size:0.75rem;font-weight:700;background:rgba(0,204,136,0.12);color:' + liftColor + ';border:1px solid rgba(0,204,136,0.3);">' + liftVal + 'x more likely before crisis</span>';
-      html += '<span style="font-size:0.72rem;color:var(--dim);margin-left:8px;">(' + m.lift.pairInPreCollapse + ' of ' + m.lift.pairInAll + ' occurrences)</span>';
-    }
-    html += '</div>';
-  }
-  el.innerHTML = html;
-}
-
-function renderAnalyzerAnalogues(analogueGroups) {
-  const el = document.getElementById('ev-analogues');
-  if (!analogueGroups.length) {
-    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No historical analogues available.</div>';
-    return;
-  }
-
-  let html = '';
-  for (const group of analogueGroups) {
-    if (!group.analogues || !group.analogues.length) continue;
-    html += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:0.5rem;">';
-    for (const a of group.analogues.slice(0, 8)) {
-      html += '<span style="font-family:var(--mono);font-size:0.72rem;padding:3px 8px;border-radius:3px;background:rgba(26,111,255,0.1);color:var(--text);border:1px solid rgba(26,111,255,0.2);">' + a.country + ' <span style="color:var(--dim)">' + a.shiftYear + '</span></span>';
-    }
-    html += '</div>';
-  }
-
-  if (!html) {
-    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No historical analogues available.</div>';
-  } else {
-    el.innerHTML = html;
-  }
-}
-
-function renderAnalyzerTiming(matches) {
-  const el = document.getElementById('ev-timing');
-  let dist = null;
-  for (const m of matches) {
-    if (m.leadTimeDistribution && m.leadTimeDistribution.buckets) {
-      dist = m.leadTimeDistribution;
-      break;
-    }
-  }
-
-  if (!dist) {
-    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">Lead time distribution not available.</div>';
-    return;
-  }
-
-  const buckets = dist.buckets;
-  const total = Object.values(buckets).reduce((a, b) => a + b, 0);
-  if (!total) {
-    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No timing data.</div>';
-    return;
-  }
-
-  const order = ['0-1', '2-3', '4-5', '6-7', '8-10'];
-  let html = '';
-  for (const label of order) {
-    const count = buckets[label] || 0;
-    const pct = Math.round((count / total) * 100);
-    html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">';
-    html += '<span style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);width:60px;text-align:right;">' + label + ' yrs</span>';
-    html += '<div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="height:100%;background:var(--accent);border-radius:4px;width:' + pct + '%"></div></div>';
-    html += '<span style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);width:30px;">' + count + '</span>';
-    html += '</div>';
-  }
-  el.innerHTML = html;
-}
-
-function renderAnalyzerMatchDate(matchDates) {
-  const el = document.getElementById('ev-matchdate');
-  if (!matchDates || !Object.keys(matchDates).length) {
-    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No pattern entry date available.</div>';
-    return;
-  }
-
-  let html = '<div style="font-size:0.85rem;">';
-  for (const [pattern, year] of Object.entries(matchDates)) {
-    const signals = pattern.split(' + ').map(s => getSignalLabel(s));
-    html += '<div style="margin-bottom:8px;">';
-    html += '<span style="color:var(--dim);">' + signals.join(' + ') + ':</span> ';
-    html += '<strong style="color:var(--bright)">' + year + '</strong>';
-    html += '</div>';
-  }
-  html += '</div>';
-  el.innerHTML = html;
-}
-
-function renderAnalyzerExtractive(extractive) {
-  const el = document.getElementById('ev-extractive');
-  if (!extractive || !extractive.elevatedSignals || !extractive.elevatedSignals.length) {
-    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No extractive indicators elevated.</div>';
-    return;
-  }
-
-  let html = '<div style="font-size:0.85rem;">';
-  html += '<div style="color:var(--dim);margin-bottom:8px;">Latest data year: ' + extractive.latestYear + '</div>';
-  for (const sig of extractive.elevatedSignals) {
-    const label = getSignalLabel(sig.signal);
-    html += '<div style="margin-bottom:6px;">';
-    html += '<span style="color:var(--bright);">' + label + '</span>';
-    html += '<span style="color:var(--warning);font-family:var(--mono);font-size:0.75rem;margin-left:8px;">elevated</span>';
-    html += '</div>';
-  }
-  html += '</div>';
-  el.innerHTML = html;
-}
-
-function renderAnalyzerTripwires(tripwires) {
-  const el = document.getElementById('ev-tripwires');
-  if (!tripwires.length) {
-    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No tripwire data available.</div>';
-    return;
-  }
-
-  let html = '';
-  for (const tw of tripwires.slice(0, 5)) {
-    const label = getSignalLabel(tw.signal);
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(21,32,64,0.5);">';
-    html += '<span style="font-size:0.85rem;color:var(--bright);">' + label + '</span>';
-    html += '<span style="font-family:var(--mono);font-size:0.75rem;color:var(--dim);">' + tw.count + ' prior cases</span>';
-    html += '</div>';
-  }
-  el.innerHTML = html;
-}
-
-// Enter key triggers analysis
-document.getElementById('analyzer-country-input')?.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') runCollapseAnalysis();
-});
 // ═══ END COLLAPSE ANALYZER ════════════════════════════════════════════════════
 
 

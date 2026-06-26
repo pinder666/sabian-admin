@@ -199,6 +199,50 @@ app.get('/api/patterns/library', requireTier('buyer'), (req, res) => {
   }
 });
 
+// ── Collapse patterns — returns signal pairs with lift, countries, timing ──────
+app.get('/api/collapse/patterns', requireTier('buyer'), (req, res) => {
+  try {
+    const findingsPath = path.join(__dirname, 'historical', 'deep_pattern_findings_v2.json');
+    if (!fs.existsSync(findingsPath)) {
+      return res.status(404).json({ error: 'Collapse patterns not computed. Run miner first.' });
+    }
+    const raw = JSON.parse(fs.readFileSync(findingsPath, 'utf8'));
+    const cp = raw.collapsePatterns;
+    if (!cp) {
+      return res.status(404).json({ error: 'Collapse patterns not computed. Run miner first.' });
+    }
+
+    // Return signal pairs with evidence (strength > 0), sorted by strength
+    const patterns = (cp.signalPairs || [])
+      .filter(p => p.lift && p.lift.strength && p.lift.strength > 0)
+      .map(p => ({
+        fingerprint: p.fingerprint,
+        signalPair: p.signalPair,
+        domainPair: p.domainPair,
+        lift: p.lift,
+        leadTimeDistribution: p.leadTimeDistribution,
+        countries: p.countries,
+        countryCount: p.countryCount,
+        instances: p.instances
+      }));
+
+    // Extractive watchlist
+    const extractiveWatchlist = cp.extractiveWatchlist || [];
+
+    res.json({
+      patterns,
+      extractiveWatchlist,
+      filters: cp.filters || {},
+      totalShiftsAnalyzed: cp.totalShiftsAnalyzed,
+      shiftsWithData: cp.shiftsWithData,
+      generatedAt: raw.meta?.generatedAt || null
+    });
+  } catch (err) {
+    console.error('Collapse patterns error:', err);
+    res.status(500).json({ error: 'Failed to load collapse patterns' });
+  }
+});
+
 // ── Signal pattern query — which countries show a specific signal at threshold ──
 app.get('/api/patterns/:signal', requireTier('buyer'), async (req, res) => {
   const signal = decodeURIComponent(req.params.signal);
