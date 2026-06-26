@@ -578,7 +578,7 @@
 <!-- TAB BAR -->
 <div class="tab-bar">
   <button class="tab-btn active" data-view="threats">WATCHLIST <span class="tab-label-num" id="tab-threats-count"></span></button>
-  <button class="tab-btn" data-view="analyzer">COLLAPSE ANALYZER</button>
+  <button class="tab-btn" data-view="analyzer">THREAT INTELLIGENCE</button>
   <button class="tab-btn" data-view="heatmap">FAMINE RISK <span class="tab-label-num" id="tab-famine-count"></span></button>
   <button class="tab-btn" data-view="patterns">MINED PATTERNS <span class="tab-label-num" id="tab-patterns-count"></span></button>
   <button class="tab-btn" data-view="extraction-live">EXTRACTION INTELLIGENCE <span class="tab-label-num" id="tab-extraction-count"></span></button>
@@ -679,17 +679,23 @@
     </div>
   </div>
 
-  <!-- ── COLLAPSE ANALYZER VIEW ────────────────────────────────────────────── -->
+  <!-- ── THREAT INTELLIGENCE VIEW — ZOOM ARCHITECTURE ──────────────────────── -->
   <div class="view" id="view-analyzer">
-    <div class="section-hdr">
-      <span class="section-title">COLLAPSE INTELLIGENCE</span>
-      <span class="section-meta" id="analyzer-meta">PATTERNS RANKED BY PREDICTIVE STRENGTH</span>
+    <!-- ZOOM LEVEL NAVIGATOR -->
+    <div id="zoom-nav" style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding:0.75rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:6px;">
+      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--dim);letter-spacing:0.1em;">DEPTH:</div>
+      <button onclick="setZoomLevel('orbit')" id="zoom-btn-orbit" class="zoom-btn active" style="background:var(--accent);border:none;color:var(--bright);padding:6px 14px;border-radius:4px;font-family:var(--mono);font-size:0.72rem;cursor:pointer;transition:all 0.2s;">ORBIT</button>
+      <button onclick="setZoomLevel('sector')" id="zoom-btn-sector" class="zoom-btn" style="background:var(--panel2);border:1px solid var(--border);color:var(--dim);padding:6px 14px;border-radius:4px;font-family:var(--mono);font-size:0.72rem;cursor:pointer;transition:all 0.2s;">SECTOR</button>
+      <button onclick="setZoomLevel('ground')" id="zoom-btn-ground" class="zoom-btn" style="background:var(--panel2);border:1px solid var(--border);color:var(--dim);padding:6px 14px;border-radius:4px;font-family:var(--mono);font-size:0.72rem;cursor:pointer;transition:all 0.2s;">GROUND</button>
+      <div style="flex:1;"></div>
+      <div id="zoom-breadcrumb" style="font-family:var(--mono);font-size:0.72rem;color:var(--dim);"></div>
+      <div id="analyzer-meta" style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);"></div>
     </div>
 
     <!-- Loading state -->
     <div id="analyzer-loading" style="padding:3rem;text-align:center;">
       <div style="width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;"></div>
-      <div style="font-family:var(--mono);font-size:0.8rem;color:var(--dim);letter-spacing:0.08em;">Loading collapse patterns…</div>
+      <div style="font-family:var(--mono);font-size:0.8rem;color:var(--dim);letter-spacing:0.08em;">Loading intelligence layers…</div>
     </div>
 
     <!-- Error state -->
@@ -697,33 +703,193 @@
       <div style="font-family:var(--mono);font-size:0.8rem;color:var(--critical);" id="analyzer-error-text"></div>
     </div>
 
-    <!-- Main content: patterns + extractive watchlist -->
-    <div id="analyzer-content" style="display:none;">
-      <!-- Two-column layout: patterns left, watchlist right -->
-      <div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;">
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <!-- ORBIT VIEW — See everything: radar of all countries                     -->
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="zoom-orbit" class="zoom-layer" style="display:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
 
-        <!-- Patterns column -->
-        <div>
-          <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;">VALIDATED COLLAPSE PATTERNS</div>
-          <div id="analyzer-patterns-list"></div>
+        <!-- Left: Global threat radar -->
+        <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+            <div style="font-family:var(--mono);font-size:0.72rem;letter-spacing:0.12em;color:var(--accent);">GLOBAL THREAT RADAR</div>
+            <div style="font-family:var(--mono);font-size:0.65rem;color:var(--dim);">CLICK ANY DOT TO ZOOM</div>
+          </div>
+          <div id="orbit-radar" style="position:relative;height:400px;background:radial-gradient(circle at center, rgba(26,111,255,0.03) 0%, transparent 70%);border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+            <!-- Concentric rings -->
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;height:90%;border:1px solid rgba(26,111,255,0.1);border-radius:50%;"></div>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60%;height:60%;border:1px solid rgba(26,111,255,0.1);border-radius:50%;"></div>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:30%;height:30%;border:1px solid rgba(26,111,255,0.15);border-radius:50%;"></div>
+            <!-- Country dots render here -->
+            <div id="orbit-dots"></div>
+            <!-- Ring labels -->
+            <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:0.58rem;color:var(--critical);opacity:0.7;">CRITICAL</div>
+            <div style="position:absolute;top:25%;left:8px;font-family:var(--mono);font-size:0.58rem;color:var(--warning);opacity:0.7;">HIGH</div>
+            <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:0.58rem;color:var(--stable);opacity:0.6;">STABLE</div>
+          </div>
+          <div style="display:flex;gap:1.5rem;margin-top:1rem;font-family:var(--mono);font-size:0.65rem;color:var(--dim);">
+            <div><span style="display:inline-block;width:8px;height:8px;background:var(--accent);border-radius:50%;margin-right:5px;"></span>Pattern match</div>
+            <div><span style="display:inline-block;width:8px;height:8px;background:var(--warning);border-radius:50%;margin-right:5px;box-shadow:0 0 6px var(--warning);"></span>Extraction active</div>
+            <div><span style="display:inline-block;width:8px;height:8px;background:var(--critical);border-radius:50%;margin-right:5px;box-shadow:0 0 8px var(--critical);"></span>Compound threat</div>
+          </div>
         </div>
 
-        <!-- Extractive watchlist column -->
+        <!-- Right: Quick stats + top threats -->
         <div>
+          <!-- Orbit stats -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1rem;">
+            <div style="background:var(--panel);padding:1rem;text-align:center;">
+              <div id="orbit-stat-patterns" style="font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--accent);">0</div>
+              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">PATTERNS</div>
+            </div>
+            <div style="background:var(--panel);padding:1rem;text-align:center;">
+              <div id="orbit-stat-extraction" style="font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--warning);">0</div>
+              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">EXTRACTION</div>
+            </div>
+            <div style="background:var(--panel);padding:1rem;text-align:center;">
+              <div id="orbit-stat-compound" style="font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--critical);">0</div>
+              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">COMPOUND</div>
+            </div>
+          </div>
+
+          <!-- Compound threats list (pattern + extraction) -->
+          <div style="background:linear-gradient(135deg, rgba(255,60,60,0.04) 0%, rgba(255,170,0,0.04) 100%);border:1px solid rgba(255,60,60,0.2);border-radius:6px;padding:1rem;margin-bottom:1rem;">
+            <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;color:var(--critical);margin-bottom:0.75rem;">COMPOUND THREATS — PATTERN + EXTRACTION</div>
+            <div id="orbit-compound-list" style="max-height:180px;overflow-y:auto;"></div>
+          </div>
+
+          <!-- Top patterns preview -->
           <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1rem;">
-            <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--warning);margin-bottom:0.75rem;">EXTRACTIVE ACTOR WATCHLIST</div>
-            <div id="analyzer-watchlist" style="font-size:0.85rem;"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+              <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;color:var(--accent);">TOP PATTERNS BY LIFT</div>
+              <button onclick="setZoomLevel('sector')" style="background:none;border:none;color:var(--accent);font-family:var(--mono);font-size:0.68rem;cursor:pointer;">VIEW ALL →</button>
+            </div>
+            <div id="orbit-patterns-preview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <!-- SECTOR VIEW — Linked panels: Patterns + Extraction                      -->
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="zoom-sector" class="zoom-layer" style="display:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+
+        <!-- Left panel: Collapse Patterns -->
+        <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">
+            <div style="font-family:var(--mono);font-size:0.75rem;letter-spacing:0.12em;color:var(--accent);">COLLAPSE PATTERNS</div>
+            <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);">RANKED BY PREDICTIVE LIFT</div>
+          </div>
+          <div id="sector-patterns-list" style="max-height:calc(100vh - 280px);overflow-y:auto;"></div>
+        </div>
+
+        <!-- Right panel: Extraction Intelligence -->
+        <div style="background:linear-gradient(180deg, var(--panel) 0%, rgba(255,170,0,0.02) 100%);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid rgba(255,170,0,0.2);">
+            <div style="font-family:var(--mono);font-size:0.75rem;letter-spacing:0.12em;color:var(--warning);">EXTRACTION INTELLIGENCE</div>
+            <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);">RANKED BY INTENSITY</div>
+          </div>
+
+          <!-- Extraction categories -->
+          <div id="sector-extraction-vulture" style="margin-bottom:1.25rem;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.6rem;">
+              <div style="width:4px;height:16px;background:var(--critical);border-radius:2px;"></div>
+              <div style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.08em;color:var(--bright);">VULTURE PLAYS</div>
+            </div>
+            <div id="sector-vulture-list"></div>
+          </div>
+
+          <div id="sector-extraction-insider" style="margin-bottom:1.25rem;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.6rem;">
+              <div style="width:4px;height:16px;background:var(--warning);border-radius:2px;"></div>
+              <div style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.08em;color:var(--bright);">INSIDER EXITS</div>
+            </div>
+            <div id="sector-insider-list"></div>
+          </div>
+
+          <div id="sector-extraction-positioning">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.6rem;">
+              <div style="width:4px;height:16px;background:var(--elevated);border-radius:2px;"></div>
+              <div style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.08em;color:var(--bright);">ACTIVE POSITIONING</div>
+            </div>
+            <div id="sector-positioning-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connection highlight bar (shows when hovering linked items) -->
+      <div id="sector-connection-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--accent);padding:0.75rem 2rem;z-index:100;">
+        <div style="display:flex;align-items:center;gap:1.5rem;">
+          <div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);">LINKED:</div>
+          <div id="sector-connection-content" style="font-size:0.85rem;color:var(--text);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <!-- GROUND VIEW — Single country deep dive                                  -->
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="zoom-ground" class="zoom-layer" style="display:none;">
+      <div style="display:grid;grid-template-columns:300px 1fr;gap:1.5rem;">
+
+        <!-- Left: Country profile -->
+        <div>
+          <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:1rem;">
+            <div id="ground-country-name" style="font-size:1.5rem;font-weight:700;color:var(--bright);margin-bottom:0.5rem;">Select a country</div>
+            <div id="ground-country-score" style="font-family:var(--mono);font-size:2.5rem;font-weight:700;color:var(--critical);margin-bottom:0.25rem;"></div>
+            <div id="ground-country-level" style="font-family:var(--mono);font-size:0.75rem;color:var(--dim);margin-bottom:1rem;"></div>
+
+            <!-- Pattern matches -->
+            <div style="margin-bottom:1rem;">
+              <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--accent);margin-bottom:0.5rem;">PATTERN MATCHES</div>
+              <div id="ground-patterns"></div>
+            </div>
+
+            <!-- Extraction indicators -->
+            <div>
+              <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:0.5rem;">EXTRACTION ACTIVITY</div>
+              <div id="ground-extraction"></div>
+            </div>
+          </div>
+
+          <!-- Signal list -->
+          <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1rem;">
+            <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--dim);margin-bottom:0.75rem;">ELEVATED SIGNALS</div>
+            <div id="ground-signals" style="max-height:200px;overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- Right: Timeline + Evidence -->
+        <div>
+          <!-- 10-year timeline -->
+          <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:1rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+              <div style="font-family:var(--mono);font-size:0.72rem;letter-spacing:0.12em;color:var(--accent);">10-YEAR SIGNAL CHRONICLE</div>
+              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);">SCROLL → FOR FULL TIMELINE</div>
+            </div>
+            <div id="ground-timeline" style="overflow-x:auto;"></div>
+          </div>
+
+          <!-- Evidence console -->
+          <div style="background:#0a0f18;border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem;">
+              <div style="width:8px;height:8px;background:#00ff88;border-radius:50%;animation:pulse 1.5s infinite;"></div>
+              <div style="font-family:var(--mono);font-size:0.72rem;letter-spacing:0.12em;color:#00ff88;">EVIDENCE CONSOLE</div>
+            </div>
+            <div id="ground-evidence" style="font-family:var(--mono);font-size:0.78rem;line-height:1.8;color:#a8f0a8;max-height:300px;overflow-y:auto;"></div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Pattern detail modal (shows when expanding a pattern) -->
-    <div id="pattern-detail-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,12,26,0.9);z-index:300;overflow-y:auto;">
-      <div style="max-width:900px;margin:80px auto;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:2rem;">
+    <div id="pattern-detail-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,12,26,0.95);z-index:300;overflow-y:auto;">
+      <div style="max-width:1000px;margin:60px auto;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:2rem;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
           <div style="font-family:var(--mono);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);">PATTERN INTELLIGENCE</div>
-          <button onclick="closePatternModal()" style="background:none;border:none;color:var(--dim);font-size:1.5rem;cursor:pointer;">&times;</button>
+          <button onclick="closePatternModal()" style="background:none;border:none;color:var(--dim);font-size:1.5rem;cursor:pointer;transition:color 0.2s;" onmouseover="this.style.color='var(--bright)'" onmouseout="this.style.color='var(--dim)'">&times;</button>
         </div>
         <div id="pattern-detail-content"></div>
       </div>
@@ -2365,7 +2531,7 @@ async function loadPatterns() {
 // ═══ END PATTERN LIBRARY ══════════════════════════════════════════════════════
 
 
-// ═══ COLLAPSE ANALYZER ════════════════════════════════════════════════════════
+// ═══ THREAT INTELLIGENCE — ZOOM ARCHITECTURE ═════════════════════════════════
 const SIGNAL_LABELS = {
   'corruption_risk': 'Institutional integrity',
   'occrp': 'Investigative journalism activity',
@@ -2409,131 +2575,535 @@ function getDomainLabel(domain) {
   return labels[domain] || domain;
 }
 
+// ═══ THREAT INTELLIGENCE — ZOOM ARCHITECTURE ═════════════════════════════════
+// Three levels: ORBIT (see all) → SECTOR (linked panels) → GROUND (single country)
+// Russian doll / satellite zoom: get closer and closer to the data
+
 let analyzerLoaded = false;
 let collapsePatterns = [];
 let extractiveWatchlist = [];
+let extractionSignatures = [];
+let currentZoom = 'orbit';
+let selectedCountry = null;
+let allCountryData = new Map(); // country -> { patterns: [], extraction: [], score, level }
 
 async function loadCollapseAnalyzer() {
   if (analyzerLoaded) return;
   analyzerLoaded = true;
 
   try {
-    const data = await apiFetch('/api/collapse/patterns');
-    if (data.error) throw new Error(data.error);
+    // Load both patterns AND extraction signatures
+    const [patternsData, extractionData] = await Promise.all([
+      apiFetch('/api/collapse/patterns'),
+      apiFetch('/public-api/extraction/signatures').catch(() => ({ signatures: [] }))
+    ]);
 
-    collapsePatterns = data.patterns || [];
-    extractiveWatchlist = data.extractiveWatchlist || [];
+    if (patternsData.error) throw new Error(patternsData.error);
+
+    collapsePatterns = patternsData.patterns || [];
+    extractiveWatchlist = patternsData.extractiveWatchlist || [];
+    extractionSignatures = extractionData.signatures || [];
+
+    // Build unified country data map
+    buildCountryDataMap();
 
     document.getElementById('analyzer-loading').style.display = 'none';
-    document.getElementById('analyzer-content').style.display = 'block';
-
     document.getElementById('analyzer-meta').textContent =
-      collapsePatterns.length + ' PATTERNS | ' + data.totalShiftsAnalyzed + ' COLLAPSE EVENTS ANALYZED';
+      collapsePatterns.length + ' PATTERNS | ' + extractionSignatures.length + ' EXTRACTION SIGNALS';
 
-    renderCollapsePatterns();
-    renderExtractiveWatchlist();
+    // Start at orbit view
+    setZoomLevel('orbit');
 
   } catch (err) {
     document.getElementById('analyzer-loading').style.display = 'none';
-    document.getElementById('analyzer-error-text').textContent = err.message || 'Failed to load patterns';
+    document.getElementById('analyzer-error-text').textContent = err.message || 'Failed to load intelligence';
     document.getElementById('analyzer-error').style.display = 'block';
   }
 }
 
-function renderCollapsePatterns() {
-  const el = document.getElementById('analyzer-patterns-list');
-  if (!collapsePatterns.length) {
-    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No validated collapse patterns found.</div>';
+function buildCountryDataMap() {
+  allCountryData.clear();
+
+  // Add pattern matches
+  for (const p of collapsePatterns) {
+    for (const country of (p.countries || [])) {
+      if (!allCountryData.has(country)) {
+        allCountryData.set(country, { patterns: [], extraction: [], watchlist: null });
+      }
+      allCountryData.get(country).patterns.push({
+        signature: (p.signalPair || []).map(s => getSignalLabel(s)).join(' + '),
+        signalPair: p.signalPair,
+        lift: p.lift?.lift || 0,
+        strength: p.lift?.strength || 0
+      });
+    }
+  }
+
+  // Add extraction signatures
+  for (const sig of extractionSignatures) {
+    const country = sig.country;
+    if (!allCountryData.has(country)) {
+      allCountryData.set(country, { patterns: [], extraction: [], watchlist: null });
+    }
+    allCountryData.get(country).extraction.push({
+      pattern: sig.pattern_id,
+      confidence: sig.confidence,
+      zScore: sig.z_score,
+      detectedAt: sig.detected_at
+    });
+  }
+
+  // Add watchlist items (enriches extraction data)
+  for (const w of extractiveWatchlist) {
+    if (!allCountryData.has(w.country)) {
+      allCountryData.set(w.country, { patterns: [], extraction: [], watchlist: null });
+    }
+    allCountryData.get(w.country).watchlist = w;
+  }
+}
+
+function setZoomLevel(level) {
+  currentZoom = level;
+
+  // Update nav buttons
+  document.querySelectorAll('.zoom-btn').forEach(btn => {
+    btn.style.background = 'var(--panel2)';
+    btn.style.color = 'var(--dim)';
+    btn.style.border = '1px solid var(--border)';
+  });
+  const activeBtn = document.getElementById('zoom-btn-' + level);
+  if (activeBtn) {
+    activeBtn.style.background = 'var(--accent)';
+    activeBtn.style.color = 'var(--bright)';
+    activeBtn.style.border = 'none';
+  }
+
+  // Hide all layers, show selected
+  document.querySelectorAll('.zoom-layer').forEach(el => el.style.display = 'none');
+  const layer = document.getElementById('zoom-' + level);
+  if (layer) layer.style.display = 'block';
+
+  // Update breadcrumb
+  const crumb = document.getElementById('zoom-breadcrumb');
+  if (level === 'orbit') crumb.textContent = '';
+  else if (level === 'sector') crumb.textContent = 'Global view';
+  else if (level === 'ground' && selectedCountry) crumb.textContent = 'Global → Sector → ' + selectedCountry;
+
+  // Render the appropriate view
+  if (level === 'orbit') renderOrbitView();
+  else if (level === 'sector') renderSectorView();
+  else if (level === 'ground') renderGroundView();
+}
+
+// ═══ ORBIT VIEW — See everything at once ═══════════════════════════════════════
+
+function renderOrbitView() {
+  // Count stats
+  const patternCountries = new Set();
+  const extractionCountries = new Set();
+  const compoundCountries = new Set();
+
+  for (const [country, data] of allCountryData) {
+    if (data.patterns.length > 0) patternCountries.add(country);
+    if (data.extraction.length > 0 || data.watchlist) extractionCountries.add(country);
+    if (data.patterns.length > 0 && (data.extraction.length > 0 || data.watchlist)) {
+      compoundCountries.add(country);
+    }
+  }
+
+  document.getElementById('orbit-stat-patterns').textContent = patternCountries.size;
+  document.getElementById('orbit-stat-extraction').textContent = extractionCountries.size;
+  document.getElementById('orbit-stat-compound').textContent = compoundCountries.size;
+
+  // Render radar dots
+  renderOrbitRadar();
+
+  // Render compound threats list
+  renderCompoundThreats(compoundCountries);
+
+  // Render top patterns preview
+  renderPatternsPreview();
+}
+
+function renderOrbitRadar() {
+  const container = document.getElementById('orbit-dots');
+  container.innerHTML = '';
+
+  const countries = [...allCountryData.entries()];
+  const total = countries.length;
+
+  countries.forEach(([country, data], idx) => {
+    const hasPattern = data.patterns.length > 0;
+    const hasExtraction = data.extraction.length > 0 || data.watchlist;
+    const isCompound = hasPattern && hasExtraction;
+
+    // Position: spiral from center
+    const maxLift = Math.max(...data.patterns.map(p => p.lift), 1);
+    const intensity = Math.min(maxLift / 15, 1); // 0-1 based on lift
+    const distFromCenter = 0.15 + (1 - intensity) * 0.35; // closer to center = higher threat
+
+    const angle = (idx / total) * 2 * Math.PI + (idx * 0.1);
+    const x = 50 + distFromCenter * 45 * Math.cos(angle);
+    const y = 50 + distFromCenter * 45 * Math.sin(angle);
+
+    // Dot styling
+    let color = 'var(--dim)';
+    let size = 6;
+    let glow = '';
+
+    if (isCompound) {
+      color = 'var(--critical)';
+      size = 10;
+      glow = 'box-shadow:0 0 8px var(--critical);animation:pulse 1.5s infinite;';
+    } else if (hasExtraction) {
+      color = 'var(--warning)';
+      size = 8;
+      glow = 'box-shadow:0 0 6px var(--warning);';
+    } else if (hasPattern) {
+      color = 'var(--accent)';
+      size = 7;
+    }
+
+    const dot = document.createElement('div');
+    dot.style.cssText = `
+      position:absolute;left:${x}%;top:${y}%;transform:translate(-50%,-50%);
+      width:${size}px;height:${size}px;border-radius:50%;background:${color};
+      cursor:pointer;transition:transform 0.2s;${glow}
+    `;
+    dot.title = country;
+    dot.onclick = () => { selectedCountry = country; setZoomLevel('ground'); };
+    dot.onmouseenter = () => { dot.style.transform = 'translate(-50%,-50%) scale(1.5)'; };
+    dot.onmouseleave = () => { dot.style.transform = 'translate(-50%,-50%) scale(1)'; };
+
+    container.appendChild(dot);
+  });
+}
+
+function renderCompoundThreats(compoundSet) {
+  const el = document.getElementById('orbit-compound-list');
+  if (compoundSet.size === 0) {
+    el.innerHTML = '<div style="color:var(--dim);font-size:0.8rem;">No compound threats detected</div>';
     return;
   }
 
   let html = '';
-  collapsePatterns.forEach((p, idx) => {
-    const labels = (p.signalPair || []).map(s => getSignalLabel(s));
-    const domains = (p.domainPair || []).map(d => getDomainLabel(d));
-    const lift = p.lift?.lift || 0;
-    const strength = p.lift?.strength || 0;
-    const liftColor = lift >= 5 ? 'var(--critical)' : lift >= 2 ? 'var(--stable)' : 'var(--warning)';
+  for (const country of [...compoundSet].slice(0, 8)) {
+    const data = allCountryData.get(country);
+    const topPattern = data.patterns[0];
+    const topExtraction = data.extraction[0] || data.watchlist;
 
-    html += '<div class="pattern-card" style="margin-bottom:1rem;">';
-
-    // Header: signature + lift badge
-    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.75rem;">';
+    html += '<div onclick="selectedCountry=\'' + country + '\';setZoomLevel(\'ground\')" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin-bottom:6px;background:rgba(255,60,60,0.06);border:1px solid rgba(255,60,60,0.15);border-radius:4px;cursor:pointer;transition:background 0.2s;" onmouseenter="this.style.background=\'rgba(255,60,60,0.12)\'" onmouseleave="this.style.background=\'rgba(255,60,60,0.06)\'">';
     html += '<div>';
-    html += '<div style="font-size:1rem;font-weight:700;color:var(--bright);margin-bottom:4px;">' + labels.join(' + ') + '</div>';
-    html += '<div style="font-size:0.72rem;color:var(--dim);">' + domains.join(' / ') + '</div>';
+    html += '<div style="font-weight:600;color:var(--bright);font-size:0.85rem;">' + country + '</div>';
+    html += '<div style="font-size:0.68rem;color:var(--dim);">' + (topPattern?.signature || 'Pattern') + '</div>';
     html += '</div>';
     html += '<div style="text-align:right;">';
-    html += '<div style="font-family:var(--mono);font-size:1.2rem;font-weight:700;color:' + liftColor + ';">' + lift + 'x</div>';
-    html += '<div style="font-size:0.65rem;color:var(--dim);">more likely before crisis</div>';
+    if (topPattern) html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);">' + topPattern.lift.toFixed(1) + 'x</div>';
+    html += '<div style="font-family:var(--mono);font-size:0.62rem;color:var(--warning);">EXTRACTION</div>';
     html += '</div>';
+    html += '</div>';
+  }
+
+  el.innerHTML = html;
+}
+
+function renderPatternsPreview() {
+  const el = document.getElementById('orbit-patterns-preview');
+  let html = '';
+
+  for (const p of collapsePatterns.slice(0, 4)) {
+    const labels = (p.signalPair || []).map(s => getSignalLabel(s));
+    const lift = p.lift?.lift || 0;
+
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">';
+    html += '<div style="font-size:0.82rem;color:var(--text);">' + labels.join(' + ') + '</div>';
+    html += '<div style="font-family:var(--mono);font-size:0.85rem;font-weight:600;color:' + (lift >= 5 ? 'var(--critical)' : 'var(--accent)') + ';">' + lift + 'x</div>';
+    html += '</div>';
+  }
+
+  el.innerHTML = html;
+}
+
+// ═══ SECTOR VIEW — Linked panels ═══════════════════════════════════════════════
+
+function renderSectorView() {
+  renderSectorPatterns();
+  renderSectorExtraction();
+}
+
+function renderSectorPatterns() {
+  const el = document.getElementById('sector-patterns-list');
+  let html = '';
+
+  collapsePatterns.forEach((p, idx) => {
+    const labels = (p.signalPair || []).map(s => getSignalLabel(s));
+    const lift = p.lift?.lift || 0;
+    const liftColor = lift >= 5 ? 'var(--critical)' : lift >= 2 ? 'var(--stable)' : 'var(--warning)';
+
+    html += '<div class="sector-pattern-card" data-countries="' + (p.countries || []).join(',') + '" style="padding:1rem;margin-bottom:0.75rem;background:var(--panel2);border:1px solid var(--border);border-radius:6px;transition:border-color 0.2s;" onmouseenter="highlightExtraction(this)" onmouseleave="clearHighlight()">';
+
+    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;">';
+    html += '<div style="font-size:0.92rem;font-weight:600;color:var(--bright);">' + labels.join(' + ') + '</div>';
+    html += '<div style="font-family:var(--mono);font-size:1.1rem;font-weight:700;color:' + liftColor + ';">' + lift + 'x</div>';
     html += '</div>';
 
-    // Countries matching this pattern
-    html += '<div style="margin-bottom:0.75rem;">';
-    html += '<div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;margin-bottom:6px;">COUNTRIES MATCHING</div>';
-    html += '<div style="display:flex;flex-wrap:wrap;gap:5px;">';
-    for (const c of (p.countries || []).slice(0, 12)) {
-      html += '<span style="font-size:0.75rem;padding:2px 8px;border-radius:3px;background:rgba(26,111,255,0.1);color:var(--text);border:1px solid rgba(26,111,255,0.2);">' + c + '</span>';
+    // Countries
+    html += '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:0.5rem;">';
+    for (const c of (p.countries || []).slice(0, 8)) {
+      const hasExtraction = allCountryData.get(c)?.extraction.length > 0 || allCountryData.get(c)?.watchlist;
+      const chipStyle = hasExtraction
+        ? 'background:rgba(255,170,0,0.15);border:1px solid rgba(255,170,0,0.3);color:var(--warning);'
+        : 'background:rgba(26,111,255,0.1);border:1px solid rgba(26,111,255,0.2);color:var(--text);';
+      html += '<span onclick="event.stopPropagation();selectedCountry=\'' + c + '\';setZoomLevel(\'ground\')" style="font-size:0.72rem;padding:2px 8px;border-radius:3px;cursor:pointer;' + chipStyle + '">' + c + (hasExtraction ? ' ●' : '') + '</span>';
     }
-    if ((p.countries || []).length > 12) {
-      html += '<span style="font-size:0.72rem;color:var(--dim);">+' + (p.countries.length - 12) + ' more</span>';
-    }
-    html += '</div>';
     html += '</div>';
 
-    // Lead time distribution bars
-    if (p.leadTimeDistribution && p.leadTimeDistribution.buckets) {
-      const buckets = p.leadTimeDistribution.buckets;
-      const total = Object.values(buckets).reduce((a, b) => a + b, 0);
-      if (total > 0) {
-        html += '<div style="margin-bottom:0.75rem;">';
-        html += '<div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;margin-bottom:6px;">LEAD TIME (YEARS BEFORE CRISIS)</div>';
-        const order = ['0-1', '2-3', '4-5', '6-7', '8-10'];
-        for (const label of order) {
-          const count = buckets[label] || 0;
-          const pct = Math.round((count / total) * 100);
-          html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">';
-          html += '<span style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);width:40px;text-align:right;">' + label + '</span>';
-          html += '<div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div style="height:100%;background:var(--accent);width:' + pct + '%"></div></div>';
-          html += '<span style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);width:20px;">' + count + '</span>';
-          html += '</div>';
-        }
-        html += '</div>';
-      }
-    }
-
-    // Evidence count
-    html += '<div style="font-size:0.72rem;color:var(--dim);">';
-    html += 'Evidence: ' + (p.lift?.pairInPreCollapse || 0) + ' of ' + (p.lift?.pairInAll || 0) + ' occurrences preceded collapse';
-    html += '</div>';
-
-    // Expand button
-    html += '<button onclick="expandPattern(' + idx + ')" style="margin-top:0.75rem;background:var(--panel2);border:1px solid var(--border);color:var(--accent);padding:6px 14px;border-radius:4px;font-family:var(--mono);font-size:0.72rem;cursor:pointer;">▸ EXPAND INTELLIGENCE</button>';
-
+    html += '<button onclick="expandPattern(' + idx + ')" style="background:none;border:1px solid var(--border);color:var(--accent);padding:4px 12px;border-radius:4px;font-family:var(--mono);font-size:0.68rem;cursor:pointer;">EXPAND</button>';
     html += '</div>';
   });
 
   el.innerHTML = html;
 }
 
-function renderExtractiveWatchlist() {
-  const el = document.getElementById('analyzer-watchlist');
-  if (!extractiveWatchlist.length) {
-    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No extractive indicators currently elevated.</div>';
+function renderSectorExtraction() {
+  // Group extraction by type
+  const vultures = extractionSignatures.filter(s => s.pattern_id === 'VULTURE_PLAY');
+  const insiders = extractionSignatures.filter(s => s.pattern_id === 'INSIDER_EXIT');
+  const positioning = extractionSignatures.filter(s => s.pattern_id === 'ACTIVE_POSITIONING');
+
+  // Also include watchlist items
+  const watchlistVultures = extractiveWatchlist.filter(w =>
+    (w.elevatedSignals || []).some(s => s.signal === 'corruption_risk' && s.z > 1.5)
+  );
+
+  renderExtractionCategory('sector-vulture-list', [...vultures, ...watchlistVultures.map(w => ({ country: w.country, z_score: w.elevatedSignals?.[0]?.z, confidence: 'HIGH', isWatchlist: true }))]);
+  renderExtractionCategory('sector-insider-list', insiders);
+  renderExtractionCategory('sector-positioning-list', positioning);
+}
+
+function renderExtractionCategory(elId, items) {
+  const el = document.getElementById(elId);
+  if (!items.length) {
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--dim);padding:8px 0;">None detected</div>';
     return;
   }
 
   let html = '';
-  for (const item of extractiveWatchlist.slice(0, 15)) {
-    const signals = (item.elevatedSignals || []).map(s => getSignalLabel(s.signal)).join(', ');
-    html += '<div style="padding:8px 0;border-bottom:1px solid rgba(21,32,64,0.5);">';
-    html += '<div style="font-weight:600;color:var(--bright);font-size:0.85rem;">' + item.country + '</div>';
-    html += '<div style="font-size:0.72rem;color:var(--warning);">' + signals + '</div>';
-    html += '<div style="font-size:0.65rem;color:var(--dim);">Data: ' + item.latestYear + '</div>';
-    html += '</div>';
+  for (const item of items.slice(0, 6)) {
+    const country = item.country;
+    const zScore = item.z_score || item.zScore || 0;
+    const countryData = allCountryData.get(country);
+    const hasPattern = countryData?.patterns.length > 0;
+
+    html += '<div class="sector-extraction-item" data-country="' + country + '" onclick="selectedCountry=\'' + country + '\';setZoomLevel(\'ground\')" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin-bottom:4px;background:' + (hasPattern ? 'rgba(255,60,60,0.06)' : 'var(--panel2)') + ';border:1px solid ' + (hasPattern ? 'rgba(255,60,60,0.15)' : 'var(--border)') + ';border-radius:4px;cursor:pointer;transition:all 0.2s;" onmouseenter="highlightPattern(this)" onmouseleave="clearHighlight()">';
+    html += '<div style="font-size:0.82rem;color:var(--bright);">' + country + (hasPattern ? ' <span style="color:var(--critical);font-size:0.68rem;">●</span>' : '') + '</div>';
+    html += '<div style="display:flex;align-items:center;gap:8px;">';
+    html += '<div style="font-family:var(--mono);font-size:0.75rem;color:var(--warning);">z:' + zScore.toFixed(1) + '</div>';
+    // Intensity bars
+    const bars = Math.min(Math.ceil(zScore / 0.5), 5);
+    html += '<div style="display:flex;gap:2px;">';
+    for (let i = 0; i < 5; i++) {
+      html += '<div style="width:4px;height:12px;border-radius:2px;background:' + (i < bars ? 'var(--warning)' : 'var(--border)') + ';"></div>';
+    }
+    html += '</div></div></div>';
   }
+
   el.innerHTML = html;
+}
+
+function highlightExtraction(patternEl) {
+  const countries = patternEl.dataset.countries.split(',');
+  patternEl.style.borderColor = 'var(--accent)';
+
+  document.querySelectorAll('.sector-extraction-item').forEach(el => {
+    if (countries.includes(el.dataset.country)) {
+      el.style.borderColor = 'var(--accent)';
+      el.style.background = 'rgba(26,111,255,0.1)';
+    }
+  });
+}
+
+function highlightPattern(extractionEl) {
+  const country = extractionEl.dataset.country;
+  extractionEl.style.borderColor = 'var(--warning)';
+
+  document.querySelectorAll('.sector-pattern-card').forEach(el => {
+    if (el.dataset.countries.split(',').includes(country)) {
+      el.style.borderColor = 'var(--warning)';
+    }
+  });
+}
+
+function clearHighlight() {
+  document.querySelectorAll('.sector-pattern-card, .sector-extraction-item').forEach(el => {
+    el.style.borderColor = 'var(--border)';
+    if (el.classList.contains('sector-extraction-item')) {
+      const country = el.dataset.country;
+      const hasPattern = allCountryData.get(country)?.patterns.length > 0;
+      el.style.background = hasPattern ? 'rgba(255,60,60,0.06)' : 'var(--panel2)';
+    }
+  });
+}
+
+// ═══ GROUND VIEW — Single country deep dive ════════════════════════════════════
+
+async function renderGroundView() {
+  if (!selectedCountry) {
+    document.getElementById('ground-country-name').textContent = 'Select a country from radar';
+    return;
+  }
+
+  const data = allCountryData.get(selectedCountry) || { patterns: [], extraction: [], watchlist: null };
+
+  // Header
+  document.getElementById('ground-country-name').textContent = selectedCountry;
+
+  // Fetch current score
+  try {
+    const scoreData = await apiFetch('/api/scores?country=' + encodeURIComponent(selectedCountry));
+    const countryScore = scoreData.scores?.find(s => s.country === selectedCountry);
+    if (countryScore) {
+      document.getElementById('ground-country-score').textContent = countryScore.score;
+      document.getElementById('ground-country-level').textContent = countryScore.risk_level;
+      document.getElementById('ground-country-score').style.color =
+        countryScore.risk_level === 'CRITICAL' ? 'var(--critical)' :
+        countryScore.risk_level === 'WARNING' ? 'var(--warning)' : 'var(--text)';
+    }
+  } catch (e) {
+    document.getElementById('ground-country-score').textContent = '--';
+    document.getElementById('ground-country-level').textContent = '';
+  }
+
+  // Pattern matches
+  const patternsEl = document.getElementById('ground-patterns');
+  if (data.patterns.length === 0) {
+    patternsEl.innerHTML = '<div style="color:var(--dim);font-size:0.8rem;">No pattern matches</div>';
+  } else {
+    let html = '';
+    for (const p of data.patterns) {
+      html += '<div style="padding:6px 10px;margin-bottom:4px;background:rgba(26,111,255,0.1);border:1px solid rgba(26,111,255,0.2);border-radius:4px;">';
+      html += '<div style="font-size:0.8rem;color:var(--text);">' + p.signature + '</div>';
+      html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);">' + p.lift.toFixed(1) + 'x lift</div>';
+      html += '</div>';
+    }
+    patternsEl.innerHTML = html;
+  }
+
+  // Extraction activity
+  const extractionEl = document.getElementById('ground-extraction');
+  if (data.extraction.length === 0 && !data.watchlist) {
+    extractionEl.innerHTML = '<div style="color:var(--dim);font-size:0.8rem;">No extraction activity</div>';
+  } else {
+    let html = '';
+    for (const e of data.extraction) {
+      html += '<div style="padding:6px 10px;margin-bottom:4px;background:rgba(255,170,0,0.1);border:1px solid rgba(255,170,0,0.2);border-radius:4px;">';
+      html += '<div style="font-size:0.8rem;color:var(--text);">' + e.pattern + '</div>';
+      html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--warning);">z:' + (e.zScore || 0).toFixed(1) + ' | ' + e.confidence + '</div>';
+      html += '</div>';
+    }
+    if (data.watchlist) {
+      for (const sig of (data.watchlist.elevatedSignals || [])) {
+        html += '<div style="padding:6px 10px;margin-bottom:4px;background:rgba(255,170,0,0.1);border:1px solid rgba(255,170,0,0.2);border-radius:4px;">';
+        html += '<div style="font-size:0.8rem;color:var(--text);">' + getSignalLabel(sig.signal) + '</div>';
+        html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--warning);">z:' + (sig.z || 0).toFixed(1) + '</div>';
+        html += '</div>';
+      }
+    }
+    extractionEl.innerHTML = html;
+  }
+
+  // Load timeline and evidence from API
+  await loadGroundTimeline();
+}
+
+async function loadGroundTimeline() {
+  const timelineEl = document.getElementById('ground-timeline');
+  const evidenceEl = document.getElementById('ground-evidence');
+  const signalsEl = document.getElementById('ground-signals');
+
+  timelineEl.innerHTML = '<div style="color:var(--dim);font-family:var(--mono);font-size:0.75rem;">Loading timeline...</div>';
+  evidenceEl.innerHTML = '<div style="color:#4a8a4a;">Querying historical_signal_readings...</div>';
+
+  try {
+    // Query the pattern explain endpoint for this country's data
+    const countryData = allCountryData.get(selectedCountry);
+    const signals = countryData?.patterns[0]?.signalPair || ['corruption_risk', 'governance'];
+
+    const res = await fetch(BASE + '/api/mine/explain', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sabian_user_2026' },
+      body: JSON.stringify({
+        finding: {
+          category: 'country_drill',
+          payload: {
+            signalPair: signals,
+            countries: [selectedCountry],
+            instances: [{ country: selectedCountry, shiftYear: 2026 }]
+          }
+        }
+      })
+    });
+
+    const data = await res.json();
+
+    // Render timeline
+    if (data.evidence && data.evidence.length > 0) {
+      const ev = data.evidence[0];
+      let timelineHtml = '<div style="display:flex;gap:8px;padding-bottom:8px;">';
+
+      const yearGroups = {};
+      for (const t of (ev.timeline || [])) {
+        if (!yearGroups[t.year]) yearGroups[t.year] = [];
+        yearGroups[t.year].push(t);
+      }
+
+      for (const [year, items] of Object.entries(yearGroups).sort((a, b) => a[0] - b[0])) {
+        timelineHtml += '<div style="min-width:120px;padding:10px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;">';
+        timelineHtml += '<div style="font-family:var(--mono);font-size:0.85rem;font-weight:600;color:var(--accent);margin-bottom:6px;">' + year + '</div>';
+        for (const item of items) {
+          timelineHtml += '<div style="font-size:0.72rem;color:var(--text);margin-bottom:3px;">' + item.signal + '</div>';
+          timelineHtml += '<div style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);">' + item.value + '</div>';
+        }
+        timelineHtml += '</div>';
+      }
+
+      timelineHtml += '</div>';
+      timelineEl.innerHTML = timelineHtml;
+
+      // Evidence console
+      let evHtml = '';
+      evHtml += '> COUNTRY: ' + selectedCountry + '\n';
+      evHtml += '> QUERY: historical_signal_readings WHERE country = "' + selectedCountry + '"\n';
+      evHtml += '> SIGNALS: ' + signals.join(', ') + '\n';
+      evHtml += '> ─────────────────────────────────────\n';
+      for (const t of (ev.timeline || [])) {
+        evHtml += '  ' + t.year + ' | ' + t.raw_signal + ' | ' + t.value + '\n';
+      }
+      evHtml += '> ─────────────────────────────────────\n';
+      evHtml += '> ROWS RETURNED: ' + (ev.timeline?.length || 0) + '\n';
+      evidenceEl.innerHTML = evHtml;
+    } else {
+      timelineEl.innerHTML = '<div style="color:var(--dim);">No timeline data available</div>';
+      evidenceEl.innerHTML = '> NO DATA FOUND FOR ' + selectedCountry;
+    }
+
+    // Elevated signals list
+    if (countryData?.watchlist?.elevatedSignals) {
+      let sigHtml = '';
+      for (const sig of countryData.watchlist.elevatedSignals) {
+        sigHtml += '<div style="padding:4px 0;border-bottom:1px solid var(--border);">';
+        sigHtml += '<div style="font-size:0.78rem;color:var(--text);">' + getSignalLabel(sig.signal) + '</div>';
+        sigHtml += '<div style="font-family:var(--mono);font-size:0.68rem;color:var(--warning);">z: ' + (sig.z || 0).toFixed(2) + '</div>';
+        sigHtml += '</div>';
+      }
+      signalsEl.innerHTML = sigHtml || '<div style="color:var(--dim);font-size:0.8rem;">None elevated</div>';
+    } else {
+      signalsEl.innerHTML = '<div style="color:var(--dim);font-size:0.8rem;">No elevation data</div>';
+    }
+
+  } catch (err) {
+    evidenceEl.innerHTML = '> ERROR: ' + err.message;
+  }
 }
 
 async function expandPattern(idx) {
@@ -2648,7 +3218,7 @@ async function expandPattern(idx) {
 function closePatternModal() {
   document.getElementById('pattern-detail-modal').style.display = 'none';
 }
-// ═══ END COLLAPSE ANALYZER ════════════════════════════════════════════════════
+// ═══ END THREAT INTELLIGENCE ══════════════════════════════════════════════════
 
 
 // ═══ EXTRACTION INTELLIGENCE LOADER ══════════════════════════════════════
