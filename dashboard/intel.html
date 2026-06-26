@@ -64,6 +64,7 @@
       animation: pulse 2s infinite;
     }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .nav-link {
       color: var(--dim); text-decoration: none; font-size: 0.78rem;
       letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s;
@@ -577,12 +578,10 @@
 <!-- TAB BAR -->
 <div class="tab-bar">
   <button class="tab-btn active" data-view="threats">WATCHLIST <span class="tab-label-num" id="tab-threats-count"></span></button>
-  <!-- <button class="tab-btn" data-view="sparklines">90-DAY TRENDS <span class="tab-label-num" id="tab-spark-count"></span></button> -->
-  <!-- <button class="tab-btn" data-view="ledger">OBSERVATION LEDGER <span class="tab-label-num" id="tab-ledger-count"></span></button> -->
-  <!-- <button class="tab-btn" data-view="freshness">SIGNAL FRESHNESS <span class="tab-label-num" id="tab-fresh-count"></span></button> -->
+  <button class="tab-btn" data-view="analyzer">COLLAPSE ANALYZER</button>
   <button class="tab-btn" data-view="heatmap">FAMINE RISK <span class="tab-label-num" id="tab-famine-count"></span></button>
   <button class="tab-btn" data-view="patterns">MINED PATTERNS <span class="tab-label-num" id="tab-patterns-count"></span></button>
-    <button class="tab-btn" data-view="extraction-live">EXTRACTION INTELLIGENCE <span class="tab-label-num" id="tab-extraction-count"></span></button>
+  <button class="tab-btn" data-view="extraction-live">EXTRACTION INTELLIGENCE <span class="tab-label-num" id="tab-extraction-count"></span></button>
 </div>
 
 <main>
@@ -677,6 +676,87 @@
     <!-- Table -->
     <div id="threat-table-wrap">
       <div class="loading-msg">Loading threat data…</div>
+    </div>
+  </div>
+
+  <!-- ── COLLAPSE ANALYZER VIEW ────────────────────────────────────────────── -->
+  <div class="view" id="view-analyzer">
+    <div class="section-hdr">
+      <span class="section-title">COLLAPSE INTELLIGENCE ANALYZER</span>
+      <span class="section-meta">HISTORICAL PATTERN MATCHING</span>
+    </div>
+    <p style="font-size:0.9rem;color:var(--dim);margin-bottom:1.5rem;max-width:600px;line-height:1.6;">
+      Enter a country to receive a complete intelligence briefing — pattern matches, historical precedents, predictive confidence, timing, and tripwires.
+    </p>
+
+    <!-- Search -->
+    <div style="display:flex;gap:0.75rem;align-items:center;margin-bottom:2rem;">
+      <input type="text" class="ctrl-input" id="analyzer-country-input" placeholder="Enter country name…" style="flex:1;max-width:400px;padding:12px 16px;font-size:1rem;">
+      <button class="ctrl-select" id="analyzer-btn" onclick="runCollapseAnalysis()" style="background:var(--accent);color:#fff;padding:12px 28px;font-weight:700;letter-spacing:0.1em;cursor:pointer;">ANALYZE</button>
+    </div>
+
+    <!-- Error state -->
+    <div id="analyzer-error" style="display:none;padding:1.5rem;background:rgba(255,60,60,0.06);border:1px solid rgba(255,60,60,0.2);border-radius:6px;margin-bottom:1.5rem;">
+      <div style="font-family:var(--mono);font-size:0.8rem;color:var(--critical);" id="analyzer-error-text"></div>
+    </div>
+
+    <!-- Loading state -->
+    <div id="analyzer-loading" style="display:none;padding:3rem;text-align:center;">
+      <div style="width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;"></div>
+      <div style="font-family:var(--mono);font-size:0.8rem;color:var(--dim);letter-spacing:0.08em;">Analyzing historical patterns…</div>
+    </div>
+
+    <!-- Results -->
+    <div id="analyzer-results" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">
+        <span style="font-size:1.5rem;font-weight:700;color:var(--bright);" id="analyzer-country"></span>
+        <span style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);" id="analyzer-ts"></span>
+      </div>
+
+      <!-- Briefing (main deliverable) -->
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.5rem 2rem;margin-bottom:2rem;">
+        <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;">Intelligence Briefing</div>
+        <div style="font-size:1rem;line-height:1.8;color:var(--text);white-space:pre-wrap;" id="analyzer-briefing"></div>
+      </div>
+
+      <!-- Supporting evidence -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1rem;">
+        <!-- Pattern Matches -->
+        <div class="pattern-card">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Pattern Matches</div>
+          <div id="ev-patterns" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
+        </div>
+
+        <!-- Historical Analogues -->
+        <div class="pattern-card">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Historical Analogues</div>
+          <div id="ev-analogues" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
+        </div>
+
+        <!-- Lead Time Distribution -->
+        <div class="pattern-card">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Lead Time Distribution</div>
+          <div id="ev-timing" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
+        </div>
+
+        <!-- Match Date -->
+        <div class="pattern-card">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Pattern Entry Date</div>
+          <div id="ev-matchdate" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
+        </div>
+
+        <!-- Extractive Actors -->
+        <div class="pattern-card">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Extractive Indicators</div>
+          <div id="ev-extractive" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
+        </div>
+
+        <!-- Tripwires -->
+        <div class="pattern-card">
+          <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Historical Tripwires</div>
+          <div id="ev-tripwires" style="font-size:0.85rem;color:var(--text);line-height:1.6;"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2313,6 +2393,276 @@ async function loadPatterns() {
 }
 // ═══ END PATTERN LIBRARY ══════════════════════════════════════════════════════
 
+
+// ═══ COLLAPSE ANALYZER ════════════════════════════════════════════════════════
+const SIGNAL_LABELS = {
+  'corruption_risk': 'Institutional integrity',
+  'occrp': 'Investigative journalism activity',
+  'displacement': 'Population displacement',
+  'displacement_stock': 'Cumulative displacement',
+  'displacement_flow': 'Displacement flows',
+  'fire_hotspot': 'Environmental stress (fire activity)',
+  'flight_movement': 'Air traffic patterns',
+  'food_security': 'Food security',
+  'fao_food': 'Agricultural indicators',
+  'cable_disruption': 'Infrastructure disruption',
+  'prediction_market': 'Market expectations',
+  'sovereign_cds': 'Sovereign credit risk',
+  'health_crisis': 'Health system stress',
+  'governance': 'Governance quality',
+  'economic_stress': 'Economic pressure',
+  'trade_collapse': 'Trade disruption',
+  'cyber_threat': 'Digital infrastructure risk',
+  'gdelt_tone': 'Media sentiment',
+  'military_proximity': 'Security posture',
+  'flood_risk': 'Flood exposure',
+  'power_grid': 'Power infrastructure',
+  'night_lights': 'Economic activity (satellite)',
+  'structural_pressure': 'Structural economic stress'
+};
+
+function getSignalLabel(sig) {
+  return SIGNAL_LABELS[sig] || sig.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function getDomainLabel(domain) {
+  const labels = {
+    'governance': 'Governance',
+    'economic': 'Economic',
+    'humanitarian': 'Humanitarian',
+    'physical': 'Infrastructure',
+    'behavioral': 'Behavioral',
+    'security': 'Security',
+    'environmental': 'Environmental'
+  };
+  return labels[domain] || domain;
+}
+
+async function runCollapseAnalysis() {
+  const country = document.getElementById('analyzer-country-input').value.trim();
+  if (!country) {
+    showAnalyzerError('Please enter a country name.');
+    return;
+  }
+
+  hideAnalyzerError();
+  hideAnalyzerResults();
+  showAnalyzerLoading();
+
+  try {
+    const res = await fetch(BASE + '/api/collapse/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer sabian_user_2026'
+      },
+      body: JSON.stringify({ country })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `${res.status} ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    hideAnalyzerLoading();
+    renderAnalyzerResults(data);
+
+  } catch (err) {
+    hideAnalyzerLoading();
+    showAnalyzerError(err.message || 'Analysis failed.');
+  }
+}
+
+function showAnalyzerLoading() {
+  document.getElementById('analyzer-loading').style.display = 'block';
+  document.getElementById('analyzer-btn').disabled = true;
+}
+
+function hideAnalyzerLoading() {
+  document.getElementById('analyzer-loading').style.display = 'none';
+  document.getElementById('analyzer-btn').disabled = false;
+}
+
+function showAnalyzerError(msg) {
+  document.getElementById('analyzer-error-text').textContent = msg;
+  document.getElementById('analyzer-error').style.display = 'block';
+}
+
+function hideAnalyzerError() {
+  document.getElementById('analyzer-error').style.display = 'none';
+}
+
+function hideAnalyzerResults() {
+  document.getElementById('analyzer-results').style.display = 'none';
+}
+
+function renderAnalyzerResults(data) {
+  const { country, payload, briefing } = data;
+
+  document.getElementById('analyzer-country').textContent = country;
+  document.getElementById('analyzer-ts').textContent = payload.generatedAt ? new Date(payload.generatedAt).toLocaleString() : '';
+  document.getElementById('analyzer-briefing').textContent = briefing || 'No briefing generated.';
+
+  renderAnalyzerPatterns(payload.patternMatches || []);
+  renderAnalyzerAnalogues(payload.historicalAnalogues || []);
+  renderAnalyzerTiming(payload.patternMatches || []);
+  renderAnalyzerMatchDate(payload.matchDates);
+  renderAnalyzerExtractive(payload.extractiveActors);
+  renderAnalyzerTripwires(payload.tripwireSummary || []);
+
+  document.getElementById('analyzer-results').style.display = 'block';
+}
+
+function renderAnalyzerPatterns(matches) {
+  const el = document.getElementById('ev-patterns');
+  if (!matches.length) {
+    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No pattern matches found for this country.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const m of matches) {
+    const labels = (m.signalPair || []).map(s => getSignalLabel(s));
+    const domains = (m.domainPair || []).map(d => getDomainLabel(d));
+
+    html += '<div style="margin-bottom:12px;">';
+    html += '<div style="font-weight:600;color:var(--bright);margin-bottom:4px;">' + labels.join(' + ') + '</div>';
+    html += '<div style="font-size:0.75rem;color:var(--dim);margin-bottom:6px;">Domains: ' + domains.join(', ') + '</div>';
+
+    if (m.lift && m.lift.lift) {
+      const liftVal = m.lift.lift;
+      const liftColor = liftVal >= 2 ? 'var(--stable)' : 'var(--warning)';
+      html += '<span style="display:inline-block;padding:2px 8px;border-radius:3px;font-family:var(--mono);font-size:0.75rem;font-weight:700;background:rgba(0,204,136,0.12);color:' + liftColor + ';border:1px solid rgba(0,204,136,0.3);">' + liftVal + 'x more likely before crisis</span>';
+      html += '<span style="font-size:0.72rem;color:var(--dim);margin-left:8px;">(' + m.lift.pairInPreCollapse + ' of ' + m.lift.pairInAll + ' occurrences)</span>';
+    }
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderAnalyzerAnalogues(analogueGroups) {
+  const el = document.getElementById('ev-analogues');
+  if (!analogueGroups.length) {
+    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No historical analogues available.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const group of analogueGroups) {
+    if (!group.analogues || !group.analogues.length) continue;
+    html += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:0.5rem;">';
+    for (const a of group.analogues.slice(0, 8)) {
+      html += '<span style="font-family:var(--mono);font-size:0.72rem;padding:3px 8px;border-radius:3px;background:rgba(26,111,255,0.1);color:var(--text);border:1px solid rgba(26,111,255,0.2);">' + a.country + ' <span style="color:var(--dim)">' + a.shiftYear + '</span></span>';
+    }
+    html += '</div>';
+  }
+
+  if (!html) {
+    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No historical analogues available.</div>';
+  } else {
+    el.innerHTML = html;
+  }
+}
+
+function renderAnalyzerTiming(matches) {
+  const el = document.getElementById('ev-timing');
+  let dist = null;
+  for (const m of matches) {
+    if (m.leadTimeDistribution && m.leadTimeDistribution.buckets) {
+      dist = m.leadTimeDistribution;
+      break;
+    }
+  }
+
+  if (!dist) {
+    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">Lead time distribution not available.</div>';
+    return;
+  }
+
+  const buckets = dist.buckets;
+  const total = Object.values(buckets).reduce((a, b) => a + b, 0);
+  if (!total) {
+    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No timing data.</div>';
+    return;
+  }
+
+  const order = ['0-1', '2-3', '4-5', '6-7', '8-10'];
+  let html = '';
+  for (const label of order) {
+    const count = buckets[label] || 0;
+    const pct = Math.round((count / total) * 100);
+    html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">';
+    html += '<span style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);width:60px;text-align:right;">' + label + ' yrs</span>';
+    html += '<div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="height:100%;background:var(--accent);border-radius:4px;width:' + pct + '%"></div></div>';
+    html += '<span style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);width:30px;">' + count + '</span>';
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderAnalyzerMatchDate(matchDates) {
+  const el = document.getElementById('ev-matchdate');
+  if (!matchDates || !Object.keys(matchDates).length) {
+    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No pattern entry date available.</div>';
+    return;
+  }
+
+  let html = '<div style="font-size:0.85rem;">';
+  for (const [pattern, year] of Object.entries(matchDates)) {
+    const signals = pattern.split(' + ').map(s => getSignalLabel(s));
+    html += '<div style="margin-bottom:8px;">';
+    html += '<span style="color:var(--dim);">' + signals.join(' + ') + ':</span> ';
+    html += '<strong style="color:var(--bright)">' + year + '</strong>';
+    html += '</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderAnalyzerExtractive(extractive) {
+  const el = document.getElementById('ev-extractive');
+  if (!extractive || !extractive.elevatedSignals || !extractive.elevatedSignals.length) {
+    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No extractive indicators elevated.</div>';
+    return;
+  }
+
+  let html = '<div style="font-size:0.85rem;">';
+  html += '<div style="color:var(--dim);margin-bottom:8px;">Latest data year: ' + extractive.latestYear + '</div>';
+  for (const sig of extractive.elevatedSignals) {
+    const label = getSignalLabel(sig.signal);
+    html += '<div style="margin-bottom:6px;">';
+    html += '<span style="color:var(--bright);">' + label + '</span>';
+    html += '<span style="color:var(--warning);font-family:var(--mono);font-size:0.75rem;margin-left:8px;">elevated</span>';
+    html += '</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderAnalyzerTripwires(tripwires) {
+  const el = document.getElementById('ev-tripwires');
+  if (!tripwires.length) {
+    el.innerHTML = '<div style="color:var(--dim);font-style:italic;">No tripwire data available.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const tw of tripwires.slice(0, 5)) {
+    const label = getSignalLabel(tw.signal);
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(21,32,64,0.5);">';
+    html += '<span style="font-size:0.85rem;color:var(--bright);">' + label + '</span>';
+    html += '<span style="font-family:var(--mono);font-size:0.75rem;color:var(--dim);">' + tw.count + ' prior cases</span>';
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
+
+// Enter key triggers analysis
+document.getElementById('analyzer-country-input')?.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') runCollapseAnalysis();
+});
+// ═══ END COLLAPSE ANALYZER ════════════════════════════════════════════════════
 
 
 // ═══ EXTRACTION INTELLIGENCE LOADER ══════════════════════════════════════
