@@ -3074,57 +3074,91 @@ async function loadGroundTimeline() {
       timelineHtml += '</div>';
       timelineEl.innerHTML = timelineHtml;
 
-      // Evidence console — INTERPRET the data, don't just dump it
+      // Evidence console — plain language for buyers, no database jargon
       let evHtml = '';
-      evHtml += '> ' + selectedCountry.toUpperCase() + ' — SIGNAL ANALYSIS\n';
-      evHtml += '> ─────────────────────────────────────\n';
+      evHtml += selectedCountry.toUpperCase() + '\n';
+      evHtml += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+
+      // Helper to format large numbers
+      function formatValue(signal, val) {
+        if (signal.includes('displacement') || signal.includes('refugee')) {
+          if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M people';
+          if (val >= 1000) return (val / 1000).toFixed(0) + 'K people';
+          return val.toFixed(0) + ' people';
+        }
+        if (signal.includes('corruption') || signal.includes('governance') || signal.includes('risk')) {
+          return (val * 100).toFixed(0) + '%';
+        }
+        return val.toFixed(1);
+      }
 
       // Group by signal and compute trends
       const signalData = {};
       for (const t of (ev.timeline || [])) {
-        if (!signalData[t.signal]) signalData[t.signal] = [];
-        signalData[t.signal].push({ year: t.year, value: parseFloat(t.value) });
+        const rawSig = t.raw_signal || t.signal;
+        if (!signalData[rawSig]) signalData[rawSig] = [];
+        signalData[rawSig].push({ year: t.year, value: parseFloat(t.value) });
       }
 
-      for (const [signal, readings] of Object.entries(signalData)) {
+      for (const [rawSignal, readings] of Object.entries(signalData)) {
         readings.sort((a, b) => a.year - b.year);
         const first = readings[0];
         const last = readings[readings.length - 1];
         const change = last.value - first.value;
-        const pctChange = first.value !== 0 ? ((change / first.value) * 100).toFixed(0) : 0;
-        const direction = change > 0 ? '↑' : change < 0 ? '↓' : '→';
-        const trend = change > 0 ? 'RISING' : change < 0 ? 'FALLING' : 'STABLE';
-        const color = signal.includes('corruption') ? (change < 0 ? 'improving' : 'worsening') : (change > 0 ? 'improving' : 'worsening');
+        const pctChange = first.value !== 0 ? Math.abs((change / first.value) * 100).toFixed(0) : 0;
 
-        evHtml += '>\n';
-        evHtml += '> ' + signal.toUpperCase() + '\n';
-        evHtml += '>   ' + first.year + ': ' + first.value.toFixed(2) + ' → ' + last.year + ': ' + last.value.toFixed(2) + '\n';
-        evHtml += '>   TREND: ' + trend + ' ' + direction + ' ' + Math.abs(pctChange) + '% (' + color + ')\n';
+        // Determine if higher is worse or better for this signal
+        const higherIsWorse = rawSignal.includes('corruption') || rawSignal.includes('displacement') ||
+                              rawSignal.includes('disruption') || rawSignal.includes('stress') ||
+                              rawSignal.includes('risk') || rawSignal.includes('conflict');
+
+        let status, arrow;
+        if (higherIsWorse) {
+          status = change > 0 ? 'DETERIORATING' : change < 0 ? 'IMPROVING' : 'STABLE';
+          arrow = change > 0 ? '▲' : change < 0 ? '▼' : '●';
+        } else {
+          status = change > 0 ? 'IMPROVING' : change < 0 ? 'DETERIORATING' : 'STABLE';
+          arrow = change > 0 ? '▲' : change < 0 ? '▼' : '●';
+        }
+
+        const label = getSignalLabel(rawSignal);
+        evHtml += label + '\n';
+        evHtml += first.year + ': ' + formatValue(rawSignal, first.value) + '  →  ' + last.year + ': ' + formatValue(rawSignal, last.value) + '\n';
+        evHtml += arrow + ' ' + status + ' (' + pctChange + '% change)\n\n';
       }
 
-      // Add interpretation
-      evHtml += '>\n> ─────────────────────────────────────\n';
-      evHtml += '> INTERPRETATION:\n';
+      // Assessment section
+      evHtml += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+      evHtml += 'ASSESSMENT\n\n';
 
       const countryPatterns = allCountryData.get(selectedCountry)?.patterns || [];
       const countryExtraction = allCountryData.get(selectedCountry)?.extraction || [];
       const hasExtraction = countryExtraction.length > 0 || allCountryData.get(selectedCountry)?.watchlist;
 
       if (countryPatterns.length > 0 && hasExtraction) {
-        evHtml += '>   COMPOUND THREAT: Pattern match + extraction active\n';
-        evHtml += '>   ' + countryPatterns.length + ' collapse pattern(s) detected\n';
-        evHtml += '>   Extractive actors may be positioning\n';
+        evHtml += 'COMPOUND THREAT DETECTED\n\n';
+        evHtml += 'Matches ' + countryPatterns.length + ' collapse pattern(s).\n';
+        evHtml += 'Pattern: ' + countryPatterns[0].signature + '\n';
+        evHtml += 'This pattern is ' + countryPatterns[0].lift.toFixed(1) + 'x more likely\n';
+        evHtml += 'to appear before a crisis than random chance.\n\n';
+        evHtml += 'Extraction indicators also elevated.\n';
+        evHtml += 'Extractive actors may be positioning.\n';
       } else if (countryPatterns.length > 0) {
-        evHtml += '>   PATTERN MATCH: ' + countryPatterns[0].signature + '\n';
-        evHtml += '>   Lift: ' + countryPatterns[0].lift.toFixed(1) + 'x more likely before crisis\n';
-        evHtml += '>   No extraction activity currently detected\n';
+        evHtml += 'COLLAPSE PATTERN MATCHED\n\n';
+        evHtml += 'Pattern: ' + countryPatterns[0].signature + '\n';
+        evHtml += 'This pattern is ' + countryPatterns[0].lift.toFixed(1) + 'x more likely\n';
+        evHtml += 'to appear before a crisis than random chance.\n\n';
+        evHtml += 'No extraction activity currently detected.\n';
       } else if (hasExtraction) {
-        evHtml += '>   EXTRACTION ACTIVE: Elevated corruption/crime indicators\n';
-        evHtml += '>   No collapse pattern currently matched\n';
-        evHtml += '>   Monitor for pattern emergence\n';
+        evHtml += 'EXTRACTION INDICATORS ELEVATED\n\n';
+        evHtml += 'Corruption or organized crime signals are elevated.\n';
+        evHtml += 'No collapse pattern currently matched.\n';
+        evHtml += 'Monitor for pattern emergence.\n';
       } else {
-        evHtml += '>   No pattern match or extraction detected\n';
-        evHtml += '>   Country within normal parameters\n';
+        evHtml += 'NO ACTIVE THREATS\n\n';
+        evHtml += 'No collapse patterns matched.\n';
+        evHtml += 'No extraction activity detected.\n';
+        evHtml += 'Country within normal parameters.\n';
       }
 
       evidenceEl.innerHTML = evHtml;
