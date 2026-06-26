@@ -1998,7 +1998,10 @@ app.post('/api/mine/portfolio', requireTier('buyer'), async (req, res) => {
   });
 });
 
-// Explain a finding using Claude
+// ── MILITARY-GRADE PATTERN EXPLANATION ────────────────────────────────────────
+// Pulls REAL historical data from database. Every claim backed by specific facts.
+// No abstractions. No vague summaries. Country, year, what happened.
+
 app.post('/api/mine/explain', requireTier('buyer'), async (req, res) => {
   const { finding } = req.body;
   if (!finding || !finding.category || !finding.payload) {
@@ -2008,22 +2011,141 @@ app.post('/api/mine/explain', requireTier('buyer'), async (req, res) => {
   try {
     const Anthropic = require('@anthropic-ai/sdk');
     const client = new Anthropic();
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
-    const prompt = `You are Sabian, a sovereign risk intelligence system. A pattern miner found the following pattern. Explain what it means in 2-3 sentences of plain English. Do not use jargon. Do not mention signal names, statistical notation, or technical terms. Only describe what changed, when, and why it matters to someone monitoring country risk.
+    const payload = finding.payload;
+    const instances = payload.instances || [];
+    const signalPair = payload.signalPair || [];
+    const countries = payload.countries || [];
 
-Category: ${finding.category}
-Payload: ${JSON.stringify(finding.payload)}
+    // ── STEP 1: Pull REAL signal readings for the historical instances ──
+    const evidenceChain = [];
+    const signalLabels = {
+      corruption_risk: 'corruption indicators',
+      displacement_stock: 'population displacement',
+      economic_stress: 'economic pressure',
+      governance: 'institutional stability',
+      vdem_governance: 'democratic governance',
+      trade_collapse: 'trade disruption',
+      capital_flows: 'capital movement',
+      structural_pressure: 'systemic stress',
+      power_grid: 'infrastructure capacity',
+      sanctions_pressure: 'sanctions impact',
+      unhcr_refugees: 'refugee flows',
+      iom_displacement: 'internal displacement',
+      health_crisis: 'health system stress',
+      food_insecurity: 'food supply instability',
+      usda_food_supply: 'food production',
+      energy_stress: 'energy availability',
+      currency_collapse: 'currency stability',
+      sovereign_cds: 'sovereign risk pricing',
+      fire_hotspot: 'environmental distress',
+      night_lights: 'economic activity',
+      internet_freedom: 'information access'
+    };
 
-Write only the explanation, nothing else.`;
+    // Get the signals we need to query
+    const signalsToQuery = signalPair.length > 0 ? signalPair :
+      (payload.signalSequence ? payload.signalSequence.slice(0, 3) : []);
+
+    if (signalsToQuery.length > 0 && instances.length > 0) {
+      // Query historical_signal_readings for actual data
+      for (const inst of instances.slice(0, 10)) {
+        const country = inst.country;
+        const year = inst.shiftYear || inst.year;
+        if (!country || !year) continue;
+
+        // Get readings from 5 years before to the shift year
+        const { data: readings, error } = await sb
+          .from('historical_signal_readings')
+          .select('signal_key, date, raw_value')
+          .eq('country', country)
+          .in('signal_key', signalsToQuery)
+          .eq('gap', false)
+          .gte('date', `${year - 5}-01-01`)
+          .lte('date', `${year}-12-31`)
+          .order('date', { ascending: true });
+
+        if (error || !readings || readings.length === 0) continue;
+
+        // Build the timeline for this country
+        const timeline = [];
+        for (const r of readings) {
+          const yr = parseInt(r.date.slice(0, 4));
+          const sigLabel = signalLabels[r.signal_key] || r.signal_key;
+          timeline.push({
+            year: yr,
+            signal: sigLabel,
+            raw_signal: r.signal_key,
+            value: parseFloat(r.raw_value).toFixed(2)
+          });
+        }
+
+        // Get the collapse score from historical_convergence_scores
+        const { data: scores } = await sb
+          .from('historical_convergence_scores')
+          .select('score, risk_level')
+          .eq('country', country)
+          .eq('year', year)
+          .limit(1);
+
+        const score = scores && scores[0] ? scores[0].score : null;
+        const riskLevel = scores && scores[0] ? scores[0].risk_level : null;
+
+        evidenceChain.push({
+          country,
+          collapseYear: year,
+          score,
+          riskLevel,
+          timeline
+        });
+      }
+    }
+
+    // ── STEP 2: Build the military-grade prompt ──
+    const prompt = `You are Sabian, a military-grade sovereign risk intelligence system. You are generating a briefing for a $10M/year client who demands FACTUAL, VERIFIABLE intelligence.
+
+RULES — FOLLOW EXACTLY:
+1. Every claim must cite SPECIFIC data: country name, year, what happened
+2. Use the EXACT facts from the evidence below — do not invent or extrapolate
+3. Format: short paragraphs, each starting with a country and year
+4. NO abstract summaries like "several countries experienced..." — NAME THEM
+5. NO vague phrases like "historically" or "typically" — CITE THE YEAR
+6. If the evidence shows a sequence (signal in 2019 → collapse in 2022), state it exactly
+7. End with ONE sentence on what this pattern means for countries matching it NOW
+8. Do NOT use signal names or technical terms — use the plain English labels provided
+9. This briefing will be challenged by world leaders — every fact must be defensible
+
+PATTERN DETECTED:
+- Signature: ${payload.signature || signalsToQuery.map(s => signalLabels[s] || s).join(' + ')}
+- Lift: ${payload.lift || 'N/A'}x more likely to precede collapse than baseline
+- Countries currently matching: ${countries.join(', ') || 'N/A'}
+- Historical lead time median: ${payload.leadTimeDistribution?.median || 'N/A'} years before collapse
+
+EVIDENCE CHAIN FROM DATABASE (cite these facts):
+${JSON.stringify(evidenceChain, null, 2)}
+
+Write a 3-5 paragraph intelligence briefing. Start immediately with facts — no preamble.`;
 
     const message = await client.messages.create({
       model: 'claude-sonnet-4-5',
-      max_tokens: 256,
+      max_tokens: 1200,
       messages: [{ role: 'user', content: prompt }]
     });
 
     const explanation = message.content[0]?.text || 'Pattern detected.';
-    res.json({ explanation });
+
+    // Also return the raw evidence so UI can display it
+    res.json({
+      explanation,
+      evidence: evidenceChain,
+      meta: {
+        signalsQueried: signalsToQuery,
+        instancesAnalyzed: evidenceChain.length,
+        patternLift: payload.lift
+      }
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -2544,10 +2544,10 @@ async function expandPattern(idx) {
   const content = document.getElementById('pattern-detail-content');
 
   modal.style.display = 'block';
-  content.innerHTML = '<div style="text-align:center;padding:2rem;"><div style="font-family:var(--mono);color:var(--dim);">Generating intelligence read...</div></div>';
+  content.innerHTML = '<div style="text-align:center;padding:2rem;"><div style="font-family:var(--mono);color:var(--dim);">Pulling historical evidence from database...</div></div>';
 
   try {
-    // Call Claude to generate the pattern intelligence
+    // Call the military-grade explain endpoint — it queries real data
     const res = await fetch(BASE + '/api/mine/explain', {
       method: 'POST',
       headers: {
@@ -2559,6 +2559,7 @@ async function expandPattern(idx) {
           category: 'collapse_pattern',
           payload: {
             signature: (pattern.signalPair || []).map(s => getSignalLabel(s)).join(' + '),
+            signalPair: pattern.signalPair,  // Raw signal keys for DB query
             domains: (pattern.domainPair || []).map(d => getDomainLabel(d)),
             lift: pattern.lift?.lift,
             countries: pattern.countries,
@@ -2575,20 +2576,65 @@ async function expandPattern(idx) {
     const labels = (pattern.signalPair || []).map(s => getSignalLabel(s));
     let html = '';
 
-    html += '<div style="font-size:1.25rem;font-weight:700;color:var(--bright);margin-bottom:1rem;">' + labels.join(' + ') + '</div>';
-
-    // The AI explanation
-    html += '<div style="background:rgba(26,111,255,0.05);border:1px solid rgba(26,111,255,0.15);border-radius:6px;padding:1.25rem;margin-bottom:1.5rem;">';
-    html += '<div style="font-size:0.95rem;line-height:1.7;color:var(--text);">' + (data.explanation || 'Pattern detected.') + '</div>';
+    // Header with pattern signature and lift
+    html += '<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">';
+    html += '<div style="font-size:1.25rem;font-weight:700;color:var(--bright);">' + labels.join(' + ') + '</div>';
+    if (pattern.lift?.lift) {
+      html += '<div style="font-family:var(--mono);font-size:0.75rem;background:rgba(255,179,71,0.15);border:1px solid rgba(255,179,71,0.3);color:var(--warning);padding:4px 10px;border-radius:3px;">' + pattern.lift.lift.toFixed(1) + 'x LIFT</div>';
+    }
     html += '</div>';
 
-    // Historical instances
-    if (pattern.instances && pattern.instances.length) {
-      html += '<div style="font-family:var(--mono);font-size:0.68rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;">HISTORICAL INSTANCES</div>';
-      html += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem;">';
-      for (const inst of pattern.instances.slice(0, 15)) {
-        html += '<span style="font-family:var(--mono);font-size:0.75rem;padding:4px 10px;border-radius:3px;background:var(--panel2);color:var(--text);border:1px solid var(--border);">' + inst.country + ' ' + inst.shiftYear + '</span>';
+    // Countries currently matching
+    if (pattern.countries && pattern.countries.length) {
+      html += '<div style="margin-bottom:1.25rem;">';
+      html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--dim);letter-spacing:0.1em;margin-bottom:0.5rem;">COUNTRIES CURRENTLY MATCHING</div>';
+      html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+      for (const c of pattern.countries) {
+        html += '<span style="font-family:var(--mono);font-size:0.75rem;padding:4px 10px;border-radius:3px;background:rgba(255,87,87,0.15);border:1px solid rgba(255,87,87,0.3);color:var(--critical);">' + c + '</span>';
       }
+      html += '</div></div>';
+    }
+
+    // The AI intelligence briefing
+    html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">INTELLIGENCE BRIEFING</div>';
+    html += '<div style="background:rgba(26,111,255,0.05);border:1px solid rgba(26,111,255,0.15);border-radius:6px;padding:1.25rem;margin-bottom:1.5rem;">';
+    html += '<div style="font-size:0.92rem;line-height:1.8;color:var(--text);white-space:pre-wrap;">' + (data.explanation || 'Pattern detected.') + '</div>';
+    html += '</div>';
+
+    // Evidence chain from database
+    if (data.evidence && data.evidence.length) {
+      html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">SOURCE EVIDENCE (' + data.evidence.length + ' historical cases)</div>';
+      html += '<div style="max-height:300px;overflow-y:auto;background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:1rem;">';
+
+      for (const ev of data.evidence) {
+        html += '<div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">';
+        html += '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">';
+        html += '<span style="font-weight:700;color:var(--bright);">' + ev.country + '</span>';
+        html += '<span style="font-family:var(--mono);font-size:0.72rem;color:var(--critical);">→ ' + ev.collapseYear + '</span>';
+        if (ev.score) {
+          html += '<span style="font-family:var(--mono);font-size:0.68rem;background:var(--panel);padding:2px 8px;border-radius:3px;color:var(--dim);">Score: ' + ev.score + '</span>';
+        }
+        html += '</div>';
+
+        // Timeline of signals
+        if (ev.timeline && ev.timeline.length) {
+          html += '<div style="display:flex;flex-wrap:wrap;gap:4px;">';
+          for (const t of ev.timeline.slice(0, 8)) {
+            html += '<span style="font-family:var(--mono);font-size:0.68rem;padding:3px 8px;border-radius:3px;background:var(--panel);color:var(--text);">';
+            html += t.year + ': ' + t.signal + ' = ' + t.value;
+            html += '</span>';
+          }
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+
+    // Lead time distribution
+    if (pattern.leadTimeDistribution?.median) {
+      html += '<div style="margin-top:1rem;font-family:var(--mono);font-size:0.72rem;color:var(--dim);">';
+      html += 'Median lead time: <span style="color:var(--warning);">' + pattern.leadTimeDistribution.median + ' years</span> before collapse';
       html += '</div>';
     }
 
