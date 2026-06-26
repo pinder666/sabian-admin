@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sabian — Collapse Intelligence Analyzer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #050c1a;
+      --panel:    #0a1428;
+      --panel2:   #0d1a33;
+      --border:   #152040;
+      --accent:   #1a6fff;
+      --dim:      #8aa0c0;
+      --text:     #c8d8f0;
+      --bright:   #e8f0ff;
+      --critical: #ff3c3c;
+      --warning:  #ffaa00;
+      --elevated: #00c8ee;
+      --stable:   #00cc88;
+      --mono:     'Courier New', 'Consolas', monospace;
+      --sans:     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 52px;
+      background: rgba(5,12,26,0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--mono); font-size: 1rem; font-weight: 700;
+      color: var(--bright); letter-spacing: 0.14em; text-transform: uppercase;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-right {
+      display: flex; align-items: center; gap: 1.5rem;
+    }
+    .nav-badge {
+      font-family: var(--mono); font-size: 0.7rem; color: var(--dim);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    #live-dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--stable); margin-right: 6px;
+      box-shadow: 0 0 6px var(--stable);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .nav-link {
+      color: var(--dim); text-decoration: none; font-size: 0.78rem;
+      letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--bright); }
+
+    /* ── MAIN CONTENT ────────────────────────────────────────────────────── */
+    main {
+      padding-top: 80px;
+      padding-bottom: 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .page-title {
+      font-family: var(--mono); font-size: 0.85rem;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .page-subtitle {
+      font-size: 0.9rem; color: var(--dim); margin-bottom: 2rem;
+      max-width: 600px; line-height: 1.6;
+    }
+
+    /* ── SEARCH BOX ──────────────────────────────────────────────────────── */
+    .search-box {
+      display: flex; gap: 0.75rem; align-items: center;
+      margin-bottom: 2rem;
+    }
+    .search-input {
+      flex: 1; max-width: 400px;
+      background: var(--panel2); border: 1px solid var(--border);
+      color: var(--bright); padding: 12px 16px; border-radius: 6px;
+      font-size: 1rem; font-family: var(--sans);
+      outline: none;
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--dim); }
+    .analyze-btn {
+      background: var(--accent); border: none; color: #fff;
+      padding: 12px 28px; border-radius: 6px;
+      font-family: var(--mono); font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .analyze-btn:hover { background: #2a7aff; }
+    .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── LOADING ─────────────────────────────────────────────────────────── */
+    .loading-state {
+      display: none;
+      padding: 3rem; text-align: center;
+    }
+    .loading-state.visible { display: block; }
+    .loading-spinner {
+      width: 40px; height: 40px; border: 3px solid var(--border);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text {
+      font-family: var(--mono); font-size: 0.8rem; color: var(--dim);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── RESULTS ─────────────────────────────────────────────────────────── */
+    .results-wrap { display: none; }
+    .results-wrap.visible { display: block; }
+
+    .results-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem; padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .results-country {
+      font-size: 1.5rem; font-weight: 700; color: var(--bright);
+    }
+    .results-ts {
+      font-family: var(--mono); font-size: 0.7rem; color: var(--dim);
+    }
+
+    /* ── BRIEFING (main deliverable) ─────────────────────────────────────── */
+    .briefing-section {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+    }
+    .briefing-label {
+      font-family: var(--mono); font-size: 0.68rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1rem;
+    }
+    .briefing-content {
+      font-size: 1rem; line-height: 1.8; color: var(--text);
+      white-space: pre-wrap;
+    }
+    .briefing-content strong { color: var(--bright); }
+
+    /* ── EVIDENCE PANELS ─────────────────────────────────────────────────── */
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+    }
+    .evidence-panel {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 6px; padding: 1.25rem;
+    }
+    .evidence-title {
+      font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.75rem;
+    }
+    .evidence-content {
+      font-size: 0.85rem; color: var(--text); line-height: 1.6;
+    }
+    .evidence-empty {
+      font-size: 0.8rem; color: var(--dim); font-style: italic;
+    }
+
+    /* ── LIFT BADGE ──────────────────────────────────────────────────────── */
+    .lift-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 3px;
+      font-family: var(--mono); font-size: 0.75rem; font-weight: 700;
+      background: rgba(0,204,136,0.12); color: var(--stable);
+      border: 1px solid rgba(0,204,136,0.3);
+    }
+    .lift-badge.weak {
+      background: rgba(255,170,0,0.1); color: var(--warning);
+      border-color: rgba(255,170,0,0.3);
+    }
+
+    /* ── ANALOGUE LIST ───────────────────────────────────────────────────── */
+    .analogue-list {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.5rem;
+    }
+    .analogue-chip {
+      font-family: var(--mono); font-size: 0.72rem; padding: 3px 8px;
+      border-radius: 3px; background: rgba(26,111,255,0.1);
+      color: var(--text); border: 1px solid rgba(26,111,255,0.2);
+    }
+    .analogue-year { color: var(--dim); }
+
+    /* ── DISTRIBUTION BAR ────────────────────────────────────────────────── */
+    .dist-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+    }
+    .dist-label {
+      font-family: var(--mono); font-size: 0.68rem; color: var(--dim);
+      width: 60px; text-align: right;
+    }
+    .dist-bar {
+      flex: 1; height: 8px; background: var(--border); border-radius: 4px;
+      overflow: hidden;
+    }
+    .dist-fill {
+      height: 100%; background: var(--accent); border-radius: 4px;
+    }
+    .dist-count {
+      font-family: var(--mono); font-size: 0.68rem; color: var(--dim);
+      width: 30px;
+    }
+
+    /* ── TRIPWIRE ────────────────────────────────────────────────────────── */
+    .tripwire-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 0; border-bottom: 1px solid rgba(21,32,64,0.5);
+    }
+    .tripwire-item:last-child { border-bottom: none; }
+    .tripwire-signal { font-size: 0.85rem; color: var(--bright); }
+    .tripwire-count {
+      font-family: var(--mono); font-size: 0.75rem; color: var(--dim);
+    }
+
+    /* ── ERROR STATE ─────────────────────────────────────────────────────── */
+    .error-state {
+      display: none; padding: 1.5rem;
+      background: rgba(255,60,60,0.06); border: 1px solid rgba(255,60,60,0.2);
+      border-radius: 6px; margin-bottom: 1.5rem;
+    }
+    .error-state.visible { display: block; }
+    .error-text {
+      font-family: var(--mono); font-size: 0.8rem; color: var(--critical);
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      main { padding-left: 1rem; padding-right: 1rem; }
+      .search-box { flex-direction: column; }
+      .search-input { max-width: 100%; }
+      .evidence-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/"><span>SABIAN</span> ANALYZER</a>
+  <div class="nav-right">
+    <span class="nav-badge"><span id="live-dot"></span>LIVE</span>
+    <a class="nav-link" href="/dashboard/intel.html">← Dashboard</a>
+  </div>
+</nav>
+
+<main>
+  <h1 class="page-title">Collapse Intelligence Analyzer</h1>
+  <p class="page-subtitle">
+    Enter a country to receive a complete intelligence briefing — pattern matches, historical precedents, predictive confidence, timing, and tripwires.
+  </p>
+
+  <!-- Search -->
+  <div class="search-box">
+    <input type="text" class="search-input" id="country-input" placeholder="Enter country name..." autocomplete="off">
+    <button class="analyze-btn" id="analyze-btn" onclick="runAnalysis()">ANALYZE</button>
+  </div>
+
+  <!-- Error state -->
+  <div class="error-state" id="error-state">
+    <div class="error-text" id="error-text"></div>
+  </div>
+
+  <!-- Loading state -->
+  <div class="loading-state" id="loading-state">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Analyzing historical patterns...</div>
+  </div>
+
+  <!-- Results -->
+  <div class="results-wrap" id="results-wrap">
+    <div class="results-header">
+      <span class="results-country" id="results-country"></span>
+      <span class="results-ts" id="results-ts"></span>
+    </div>
+
+    <!-- Briefing (main deliverable) -->
+    <div class="briefing-section">
+      <div class="briefing-label">Intelligence Briefing</div>
+      <div class="briefing-content" id="briefing-content"></div>
+    </div>
+
+    <!-- Supporting evidence -->
+    <div class="evidence-grid">
+      <!-- Pattern Matches -->
+      <div class="evidence-panel">
+        <div class="evidence-title">Pattern Matches</div>
+        <div class="evidence-content" id="ev-patterns"></div>
+      </div>
+
+      <!-- Historical Analogues -->
+      <div class="evidence-panel">
+        <div class="evidence-title">Historical Analogues</div>
+        <div class="evidence-content" id="ev-analogues"></div>
+      </div>
+
+      <!-- Lead Time Distribution -->
+      <div class="evidence-panel">
+        <div class="evidence-title">Lead Time Distribution</div>
+        <div class="evidence-content" id="ev-timing"></div>
+      </div>
+
+      <!-- Match Date -->
+      <div class="evidence-panel">
+        <div class="evidence-title">Pattern Entry Date</div>
+        <div class="evidence-content" id="ev-matchdate"></div>
+      </div>
+
+      <!-- Extractive Actors -->
+      <div class="evidence-panel">
+        <div class="evidence-title">Extractive Indicators</div>
+        <div class="evidence-content" id="ev-extractive"></div>
+      </div>
+
+      <!-- Tripwires -->
+      <div class="evidence-panel">
+        <div class="evidence-title">Historical Tripwires</div>
+        <div class="evidence-content" id="ev-tripwires"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const BASE = '';
+
+// Signal name to plain language mapping
+const SIGNAL_LABELS = {
+  'corruption_risk': 'Institutional integrity',
+  'occrp': 'Investigative journalism activity',
+  'displacement': 'Population displacement',
+  'displacement_stock': 'Cumulative displacement',
+  'displacement_flow': 'Displacement flows',
+  'fire_hotspot': 'Environmental stress (fire activity)',
+  'flight_movement': 'Air traffic patterns',
+  'food_security': 'Food security',
+  'fao_food': 'Agricultural indicators',
+  'cable_disruption': 'Infrastructure disruption',
+  'prediction_market': 'Market expectations',
+  'sovereign_cds': 'Sovereign credit risk',
+  'health_crisis': 'Health system stress',
+  'governance': 'Governance quality',
+  'economic_stress': 'Economic pressure',
+  'trade_collapse': 'Trade disruption',
+  'cyber_threat': 'Digital infrastructure risk',
+  'gdelt_tone': 'Media sentiment',
+  'military_proximity': 'Security posture',
+  'flood_risk': 'Flood exposure',
+  'power_grid': 'Power infrastructure',
+  'night_lights': 'Economic activity (satellite)',
+  'structural_pressure': 'Structural economic stress'
+};
+
+function getSignalLabel(sig) {
+  return SIGNAL_LABELS[sig] || sig.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function getDomainLabel(domain) {
+  const labels = {
+    'governance': 'Governance',
+    'economic': 'Economic',
+    'humanitarian': 'Humanitarian',
+    'physical': 'Infrastructure',
+    'behavioral': 'Behavioral',
+    'security': 'Security',
+    'environmental': 'Environmental'
+  };
+  return labels[domain] || domain;
+}
+
+async function runAnalysis() {
+  const country = document.getElementById('country-input').value.trim();
+  if (!country) {
+    showError('Please enter a country name.');
+    return;
+  }
+
+  hideError();
+  hideResults();
+  showLoading();
+
+  try {
+    const res = await fetch(BASE + '/api/collapse/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer sabian_user_2026'
+      },
+      body: JSON.stringify({ country })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `${res.status} ${res.statusText}`);
+    }
+
+    const data = await res.json();
+    hideLoading();
+    renderResults(data);
+
+  } catch (err) {
+    hideLoading();
+    showError(err.message || 'Analysis failed.');
+  }
+}
+
+function showLoading() {
+  document.getElementById('loading-state').classList.add('visible');
+  document.getElementById('analyze-btn').disabled = true;
+}
+
+function hideLoading() {
+  document.getElementById('loading-state').classList.remove('visible');
+  document.getElementById('analyze-btn').disabled = false;
+}
+
+function showError(msg) {
+  document.getElementById('error-text').textContent = msg;
+  document.getElementById('error-state').classList.add('visible');
+}
+
+function hideError() {
+  document.getElementById('error-state').classList.remove('visible');
+}
+
+function hideResults() {
+  document.getElementById('results-wrap').classList.remove('visible');
+}
+
+function renderResults(data) {
+  const { country, payload, briefing } = data;
+
+  document.getElementById('results-country').textContent = country;
+  document.getElementById('results-ts').textContent = payload.generatedAt ? new Date(payload.generatedAt).toLocaleString() : '';
+
+  // Briefing (main deliverable)
+  document.getElementById('briefing-content').textContent = briefing || 'No briefing generated.';
+
+  // Pattern matches
+  renderPatternMatches(payload.patternMatches || []);
+
+  // Historical analogues
+  renderAnalogues(payload.historicalAnalogues || []);
+
+  // Lead time distribution
+  renderTiming(payload.patternMatches || []);
+
+  // Match date
+  renderMatchDate(payload.matchDates);
+
+  // Extractive actors
+  renderExtractive(payload.extractiveActors);
+
+  // Tripwires
+  renderTripwires(payload.tripwireSummary || []);
+
+  document.getElementById('results-wrap').classList.add('visible');
+}
+
+function renderPatternMatches(matches) {
+  const el = document.getElementById('ev-patterns');
+  if (!matches.length) {
+    el.innerHTML = '<div class="evidence-empty">No pattern matches found for this country.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const m of matches) {
+    // Convert signal pair to plain language
+    const labels = (m.signalPair || []).map(s => getSignalLabel(s));
+    const domains = (m.domainPair || []).map(d => getDomainLabel(d));
+
+    html += '<div style="margin-bottom:12px;">';
+    html += '<div style="font-weight:600;color:var(--bright);margin-bottom:4px;">' + labels.join(' + ') + '</div>';
+    html += '<div style="font-size:0.75rem;color:var(--dim);margin-bottom:6px;">Domains: ' + domains.join(', ') + '</div>';
+
+    if (m.lift && m.lift.lift) {
+      const liftVal = m.lift.lift;
+      const liftClass = liftVal >= 2 ? '' : 'weak';
+      html += '<span class="lift-badge ' + liftClass + '">' + liftVal + 'x more likely before crisis</span>';
+      html += '<span style="font-size:0.72rem;color:var(--dim);margin-left:8px;">(' + m.lift.pairInPreCollapse + ' of ' + m.lift.pairInAll + ' occurrences)</span>';
+    }
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderAnalogues(analogueGroups) {
+  const el = document.getElementById('ev-analogues');
+  if (!analogueGroups.length) {
+    el.innerHTML = '<div class="evidence-empty">No historical analogues available.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const group of analogueGroups) {
+    if (!group.analogues || !group.analogues.length) continue;
+
+    html += '<div class="analogue-list">';
+    for (const a of group.analogues.slice(0, 8)) {
+      html += '<span class="analogue-chip">' + a.country + ' <span class="analogue-year">' + a.shiftYear + '</span></span>';
+    }
+    html += '</div>';
+  }
+
+  if (!html) {
+    el.innerHTML = '<div class="evidence-empty">No historical analogues available.</div>';
+  } else {
+    el.innerHTML = html;
+  }
+}
+
+function renderTiming(matches) {
+  const el = document.getElementById('ev-timing');
+
+  // Find first match with lead time distribution
+  let dist = null;
+  for (const m of matches) {
+    if (m.leadTimeDistribution && m.leadTimeDistribution.buckets) {
+      dist = m.leadTimeDistribution;
+      break;
+    }
+  }
+
+  if (!dist) {
+    el.innerHTML = '<div class="evidence-empty">Lead time distribution not available.</div>';
+    return;
+  }
+
+  const buckets = dist.buckets;
+  const total = Object.values(buckets).reduce((a, b) => a + b, 0);
+  if (!total) {
+    el.innerHTML = '<div class="evidence-empty">No timing data.</div>';
+    return;
+  }
+
+  const order = ['0-1', '2-3', '4-5', '6-7', '8-10'];
+  let html = '';
+  for (const label of order) {
+    const count = buckets[label] || 0;
+    const pct = Math.round((count / total) * 100);
+    html += '<div class="dist-row">';
+    html += '<span class="dist-label">' + label + ' yrs</span>';
+    html += '<div class="dist-bar"><div class="dist-fill" style="width:' + pct + '%"></div></div>';
+    html += '<span class="dist-count">' + count + '</span>';
+    html += '</div>';
+  }
+
+  el.innerHTML = html;
+}
+
+function renderMatchDate(matchDates) {
+  const el = document.getElementById('ev-matchdate');
+  if (!matchDates || !Object.keys(matchDates).length) {
+    el.innerHTML = '<div class="evidence-empty">No pattern entry date available.</div>';
+    return;
+  }
+
+  let html = '<div style="font-size:0.85rem;">';
+  for (const [pattern, year] of Object.entries(matchDates)) {
+    // Convert pattern fingerprint to plain language
+    const signals = pattern.split(' + ').map(s => getSignalLabel(s));
+    html += '<div style="margin-bottom:8px;">';
+    html += '<span style="color:var(--dim);">' + signals.join(' + ') + ':</span> ';
+    html += '<strong style="color:var(--bright)">' + year + '</strong>';
+    html += '</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderExtractive(extractive) {
+  const el = document.getElementById('ev-extractive');
+  if (!extractive || !extractive.elevatedSignals || !extractive.elevatedSignals.length) {
+    el.innerHTML = '<div class="evidence-empty">No extractive indicators elevated.</div>';
+    return;
+  }
+
+  let html = '<div style="font-size:0.85rem;">';
+  html += '<div style="color:var(--dim);margin-bottom:8px;">Latest data year: ' + extractive.latestYear + '</div>';
+  for (const sig of extractive.elevatedSignals) {
+    const label = getSignalLabel(sig.signal);
+    html += '<div style="margin-bottom:6px;">';
+    html += '<span style="color:var(--bright);">' + label + '</span>';
+    html += '<span style="color:var(--warning);font-family:var(--mono);font-size:0.75rem;margin-left:8px;">elevated</span>';
+    html += '</div>';
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderTripwires(tripwires) {
+  const el = document.getElementById('ev-tripwires');
+  if (!tripwires.length) {
+    el.innerHTML = '<div class="evidence-empty">No tripwire data available.</div>';
+    return;
+  }
+
+  let html = '';
+  for (const tw of tripwires.slice(0, 5)) {
+    const label = getSignalLabel(tw.signal);
+    html += '<div class="tripwire-item">';
+    html += '<span class="tripwire-signal">' + label + '</span>';
+    html += '<span class="tripwire-count">' + tw.count + ' prior cases</span>';
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
+
+// Enter key triggers analysis
+document.getElementById('country-input').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') runAnalysis();
+});
+</script>
+</body>
+</html>
