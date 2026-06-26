@@ -3074,17 +3074,59 @@ async function loadGroundTimeline() {
       timelineHtml += '</div>';
       timelineEl.innerHTML = timelineHtml;
 
-      // Evidence console
+      // Evidence console — INTERPRET the data, don't just dump it
       let evHtml = '';
-      evHtml += '> COUNTRY: ' + selectedCountry + '\n';
-      evHtml += '> QUERY: historical_signal_readings WHERE country = "' + selectedCountry + '"\n';
-      evHtml += '> SIGNALS: ' + signals.join(', ') + '\n';
+      evHtml += '> ' + selectedCountry.toUpperCase() + ' — SIGNAL ANALYSIS\n';
       evHtml += '> ─────────────────────────────────────\n';
+
+      // Group by signal and compute trends
+      const signalData = {};
       for (const t of (ev.timeline || [])) {
-        evHtml += '  ' + t.year + ' | ' + t.raw_signal + ' | ' + t.value + '\n';
+        if (!signalData[t.signal]) signalData[t.signal] = [];
+        signalData[t.signal].push({ year: t.year, value: parseFloat(t.value) });
       }
-      evHtml += '> ─────────────────────────────────────\n';
-      evHtml += '> ROWS RETURNED: ' + (ev.timeline?.length || 0) + '\n';
+
+      for (const [signal, readings] of Object.entries(signalData)) {
+        readings.sort((a, b) => a.year - b.year);
+        const first = readings[0];
+        const last = readings[readings.length - 1];
+        const change = last.value - first.value;
+        const pctChange = first.value !== 0 ? ((change / first.value) * 100).toFixed(0) : 0;
+        const direction = change > 0 ? '↑' : change < 0 ? '↓' : '→';
+        const trend = change > 0 ? 'RISING' : change < 0 ? 'FALLING' : 'STABLE';
+        const color = signal.includes('corruption') ? (change < 0 ? 'improving' : 'worsening') : (change > 0 ? 'improving' : 'worsening');
+
+        evHtml += '>\n';
+        evHtml += '> ' + signal.toUpperCase() + '\n';
+        evHtml += '>   ' + first.year + ': ' + first.value.toFixed(2) + ' → ' + last.year + ': ' + last.value.toFixed(2) + '\n';
+        evHtml += '>   TREND: ' + trend + ' ' + direction + ' ' + Math.abs(pctChange) + '% (' + color + ')\n';
+      }
+
+      // Add interpretation
+      evHtml += '>\n> ─────────────────────────────────────\n';
+      evHtml += '> INTERPRETATION:\n';
+
+      const countryPatterns = allCountryData.get(selectedCountry)?.patterns || [];
+      const countryExtraction = allCountryData.get(selectedCountry)?.extraction || [];
+      const hasExtraction = countryExtraction.length > 0 || allCountryData.get(selectedCountry)?.watchlist;
+
+      if (countryPatterns.length > 0 && hasExtraction) {
+        evHtml += '>   COMPOUND THREAT: Pattern match + extraction active\n';
+        evHtml += '>   ' + countryPatterns.length + ' collapse pattern(s) detected\n';
+        evHtml += '>   Extractive actors may be positioning\n';
+      } else if (countryPatterns.length > 0) {
+        evHtml += '>   PATTERN MATCH: ' + countryPatterns[0].signature + '\n';
+        evHtml += '>   Lift: ' + countryPatterns[0].lift.toFixed(1) + 'x more likely before crisis\n';
+        evHtml += '>   No extraction activity currently detected\n';
+      } else if (hasExtraction) {
+        evHtml += '>   EXTRACTION ACTIVE: Elevated corruption/crime indicators\n';
+        evHtml += '>   No collapse pattern currently matched\n';
+        evHtml += '>   Monitor for pattern emergence\n';
+      } else {
+        evHtml += '>   No pattern match or extraction detected\n';
+        evHtml += '>   Country within normal parameters\n';
+      }
+
       evidenceEl.innerHTML = evHtml;
     } else {
       timelineEl.innerHTML = '<div style="color:var(--dim);">No timeline data available</div>';
