@@ -2594,27 +2594,31 @@ async function loadCollapseAnalyzer() {
   try {
     // Load both patterns AND extraction signatures
     const [patternsData, extractionData] = await Promise.all([
-      apiFetch('/api/collapse/patterns'),
-      apiFetch('/public-api/extraction/signatures').catch(() => ({ signatures: [] }))
+      apiFetch('/api/collapse/patterns').catch(err => { console.error('Patterns API error:', err); return { patterns: [], extractiveWatchlist: [] }; }),
+      apiFetch('/public-api/extraction/signatures').catch(err => { console.error('Extraction API error:', err); return { signatures: [] }; })
     ]);
-
-    if (patternsData.error) throw new Error(patternsData.error);
 
     collapsePatterns = patternsData.patterns || [];
     extractiveWatchlist = patternsData.extractiveWatchlist || [];
     extractionSignatures = extractionData.signatures || [];
 
+    console.log('Loaded:', collapsePatterns.length, 'patterns,', extractionSignatures.length, 'extraction signals');
+
     // Build unified country data map
     buildCountryDataMap();
 
+    // Hide loading, show orbit
     document.getElementById('analyzer-loading').style.display = 'none';
+    document.getElementById('zoom-orbit').style.display = 'block';
+
     document.getElementById('analyzer-meta').textContent =
       collapsePatterns.length + ' PATTERNS | ' + extractionSignatures.length + ' EXTRACTION SIGNALS';
 
-    // Start at orbit view
-    setZoomLevel('orbit');
+    // Render the orbit view
+    renderOrbitView();
 
   } catch (err) {
+    console.error('Analyzer load failed:', err);
     document.getElementById('analyzer-loading').style.display = 'none';
     document.getElementById('analyzer-error-text').textContent = err.message || 'Failed to load intelligence';
     document.getElementById('analyzer-error').style.display = 'block';
