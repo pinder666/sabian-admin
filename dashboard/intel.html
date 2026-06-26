@@ -3074,31 +3074,66 @@ async function loadGroundTimeline() {
       timelineHtml += '</div>';
       timelineEl.innerHTML = timelineHtml;
 
-      // Evidence console — plain language for buyers, no database jargon
-      let evHtml = '';
-      evHtml += selectedCountry.toUpperCase() + '\n';
-      evHtml += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+      // Evidence console — REAL intelligence briefing a buyer can act on
+      const countryPatterns = allCountryData.get(selectedCountry)?.patterns || [];
+      const countryExtraction = allCountryData.get(selectedCountry)?.extraction || [];
+      const hasExtraction = countryExtraction.length > 0 || allCountryData.get(selectedCountry)?.watchlist;
 
       // Helper to format large numbers
       function formatValue(signal, val) {
         if (signal.includes('displacement') || signal.includes('refugee')) {
-          if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M people';
-          if (val >= 1000) return (val / 1000).toFixed(0) + 'K people';
-          return val.toFixed(0) + ' people';
+          if (val >= 1000000) return (val / 1000000).toFixed(1) + ' million';
+          if (val >= 1000) return (val / 1000).toFixed(0) + ',000';
+          return val.toFixed(0);
         }
-        if (signal.includes('corruption') || signal.includes('governance') || signal.includes('risk')) {
-          return (val * 100).toFixed(0) + '%';
+        if (signal.includes('corruption')) {
+          // Corruption is 0-1, convert to ranking language
+          if (val >= 0.8) return 'extremely high (top 20% worst globally)';
+          if (val >= 0.6) return 'high (top 40% worst globally)';
+          if (val >= 0.4) return 'moderate';
+          return 'low';
+        }
+        if (signal.includes('governance')) {
+          if (val <= 20) return 'failed state level (' + val.toFixed(0) + '/100)';
+          if (val <= 40) return 'weak institutions (' + val.toFixed(0) + '/100)';
+          if (val <= 60) return 'developing (' + val.toFixed(0) + '/100)';
+          return 'functional (' + val.toFixed(0) + '/100)';
         }
         return val.toFixed(1);
       }
 
-      // Group by signal and compute trends
+      // Group by signal
       const signalData = {};
       for (const t of (ev.timeline || [])) {
         const rawSig = t.raw_signal || t.signal;
         if (!signalData[rawSig]) signalData[rawSig] = [];
         signalData[rawSig].push({ year: t.year, value: parseFloat(t.value) });
       }
+
+      // Build the intelligence briefing
+      let evHtml = '';
+      evHtml += 'INTELLIGENCE BRIEFING: ' + selectedCountry.toUpperCase() + '\n';
+      evHtml += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+
+      // Threat status
+      if (countryPatterns.length > 0 && hasExtraction) {
+        evHtml += '⚠ THREAT LEVEL: COMPOUND\n';
+        evHtml += 'This country shows BOTH collapse warning signs AND\n';
+        evHtml += 'active extraction by corrupt actors.\n\n';
+      } else if (countryPatterns.length > 0) {
+        evHtml += '⚠ THREAT LEVEL: ELEVATED\n';
+        evHtml += 'This country matches historical collapse patterns.\n\n';
+      } else if (hasExtraction) {
+        evHtml += '⚠ THREAT LEVEL: WATCH\n';
+        evHtml += 'Extraction indicators elevated. No collapse pattern yet.\n\n';
+      } else {
+        evHtml += '● THREAT LEVEL: BASELINE\n';
+        evHtml += 'No active warning patterns detected.\n\n';
+      }
+
+      // What the data shows
+      evHtml += 'WHAT THE DATA SHOWS:\n';
+      evHtml += '─────────────────────────────────────────────\n';
 
       for (const [rawSignal, readings] of Object.entries(signalData)) {
         readings.sort((a, b) => a.year - b.year);
@@ -3107,58 +3142,67 @@ async function loadGroundTimeline() {
         const change = last.value - first.value;
         const pctChange = first.value !== 0 ? Math.abs((change / first.value) * 100).toFixed(0) : 0;
 
-        // Determine if higher is worse or better for this signal
-        const higherIsWorse = rawSignal.includes('corruption') || rawSignal.includes('displacement') ||
-                              rawSignal.includes('disruption') || rawSignal.includes('stress') ||
-                              rawSignal.includes('risk') || rawSignal.includes('conflict');
-
-        let status, arrow;
-        if (higherIsWorse) {
-          status = change > 0 ? 'DETERIORATING' : change < 0 ? 'IMPROVING' : 'STABLE';
-          arrow = change > 0 ? '▲' : change < 0 ? '▼' : '●';
-        } else {
-          status = change > 0 ? 'IMPROVING' : change < 0 ? 'DETERIORATING' : 'STABLE';
-          arrow = change > 0 ? '▲' : change < 0 ? '▼' : '●';
-        }
-
         const label = getSignalLabel(rawSignal);
-        evHtml += label + '\n';
-        evHtml += first.year + ': ' + formatValue(rawSignal, first.value) + '  →  ' + last.year + ': ' + formatValue(rawSignal, last.value) + '\n';
-        evHtml += arrow + ' ' + status + ' (' + pctChange + '% change)\n\n';
+
+        if (rawSignal.includes('displacement')) {
+          const displaced = formatValue(rawSignal, last.value);
+          const direction = change > 0 ? 'increased' : change < 0 ? 'decreased' : 'unchanged';
+          evHtml += '\n' + displaced + ' people displaced as of ' + last.year + '.\n';
+          if (change !== 0) {
+            evHtml += 'This has ' + direction + ' ' + pctChange + '% since ' + first.year + '.\n';
+          }
+        } else if (rawSignal.includes('corruption')) {
+          const level = formatValue(rawSignal, last.value);
+          evHtml += '\nCorruption risk is ' + level + '.\n';
+          if (change > 0.05) {
+            evHtml += 'Corruption has worsened since ' + first.year + '.\n';
+          } else if (change < -0.05) {
+            evHtml += 'Corruption has improved since ' + first.year + '.\n';
+          } else {
+            evHtml += 'Corruption levels have remained stable.\n';
+          }
+        } else if (rawSignal.includes('governance')) {
+          const level = formatValue(rawSignal, last.value);
+          evHtml += '\nGovernance quality: ' + level + '.\n';
+        } else if (rawSignal.includes('disruption')) {
+          evHtml += '\nInfrastructure disruption score: ' + last.value.toFixed(1) + '\n';
+          if (change > 0) {
+            evHtml += 'Infrastructure reliability declining.\n';
+          }
+        } else {
+          evHtml += '\n' + label + ': ' + formatValue(rawSignal, last.value) + ' (' + last.year + ')\n';
+        }
       }
 
-      // Assessment section
-      evHtml += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-      evHtml += 'ASSESSMENT\n\n';
+      // Pattern explanation
+      if (countryPatterns.length > 0) {
+        evHtml += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+        evHtml += 'WHY THIS MATTERS:\n';
+        evHtml += '─────────────────────────────────────────────\n\n';
+        evHtml += 'This country matches ' + countryPatterns.length + ' historical collapse pattern(s):\n\n';
+        for (const p of countryPatterns.slice(0, 3)) {
+          evHtml += '• ' + p.signature + '\n';
+          evHtml += '  When these signals appear together, a crisis follows\n';
+          evHtml += '  ' + p.lift.toFixed(1) + 'x more often than chance would predict.\n\n';
+        }
+      }
 
-      const countryPatterns = allCountryData.get(selectedCountry)?.patterns || [];
-      const countryExtraction = allCountryData.get(selectedCountry)?.extraction || [];
-      const hasExtraction = countryExtraction.length > 0 || allCountryData.get(selectedCountry)?.watchlist;
-
+      // What to watch
+      evHtml += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+      evHtml += 'WATCH FOR:\n';
+      evHtml += '─────────────────────────────────────────────\n';
       if (countryPatterns.length > 0 && hasExtraction) {
-        evHtml += 'COMPOUND THREAT DETECTED\n\n';
-        evHtml += 'Matches ' + countryPatterns.length + ' collapse pattern(s).\n';
-        evHtml += 'Pattern: ' + countryPatterns[0].signature + '\n';
-        evHtml += 'This pattern is ' + countryPatterns[0].lift.toFixed(1) + 'x more likely\n';
-        evHtml += 'to appear before a crisis than random chance.\n\n';
-        evHtml += 'Extraction indicators also elevated.\n';
-        evHtml += 'Extractive actors may be positioning.\n';
+        evHtml += '• Rapid capital outflows\n';
+        evHtml += '• Key officials relocating assets abroad\n';
+        evHtml += '• International organizations withdrawing\n';
+        evHtml += '• Currency or debt market movements\n';
       } else if (countryPatterns.length > 0) {
-        evHtml += 'COLLAPSE PATTERN MATCHED\n\n';
-        evHtml += 'Pattern: ' + countryPatterns[0].signature + '\n';
-        evHtml += 'This pattern is ' + countryPatterns[0].lift.toFixed(1) + 'x more likely\n';
-        evHtml += 'to appear before a crisis than random chance.\n\n';
-        evHtml += 'No extraction activity currently detected.\n';
-      } else if (hasExtraction) {
-        evHtml += 'EXTRACTION INDICATORS ELEVATED\n\n';
-        evHtml += 'Corruption or organized crime signals are elevated.\n';
-        evHtml += 'No collapse pattern currently matched.\n';
-        evHtml += 'Monitor for pattern emergence.\n';
+        evHtml += '• Emergence of extraction indicators\n';
+        evHtml += '• Acceleration in displacement\n';
+        evHtml += '• Governance score decline\n';
       } else {
-        evHtml += 'NO ACTIVE THREATS\n\n';
-        evHtml += 'No collapse patterns matched.\n';
-        evHtml += 'No extraction activity detected.\n';
-        evHtml += 'Country within normal parameters.\n';
+        evHtml += '• Pattern emergence in coming quarters\n';
+        evHtml += '• Signal elevation above thresholds\n';
       }
 
       evidenceEl.innerHTML = evHtml;
