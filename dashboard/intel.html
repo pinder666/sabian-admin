@@ -3025,209 +3025,63 @@ async function loadGroundTimeline() {
   const evidenceEl = document.getElementById('ground-evidence');
   const signalsEl = document.getElementById('ground-signals');
 
-  timelineEl.innerHTML = '<div style="color:var(--dim);font-family:var(--mono);font-size:0.75rem;">Loading timeline...</div>';
-  evidenceEl.innerHTML = '<div style="color:#4a8a4a;">Querying historical_signal_readings...</div>';
+  timelineEl.innerHTML = '<div style="color:var(--dim);font-family:var(--mono);font-size:0.75rem;">Loading...</div>';
+  evidenceEl.innerHTML = '<div style="color:#4a8a4a;">Analyzing all signals...</div>';
 
   try {
-    // Query the pattern explain endpoint for this country's data
-    const countryData = allCountryData.get(selectedCountry);
-    const signals = countryData?.patterns[0]?.signalPair || ['corruption_risk', 'governance'];
-
-    const res = await fetch(BASE + '/api/mine/explain', {
+    // Query ALL signals for this country — not just pattern pair
+    const res = await fetch(BASE + '/api/country/drill', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sabian_user_2026' },
-      body: JSON.stringify({
-        finding: {
-          category: 'country_drill',
-          payload: {
-            signalPair: signals,
-            countries: [selectedCountry],
-            instances: [{ country: selectedCountry, shiftYear: 2026 }]
-          }
-        }
-      })
+      body: JSON.stringify({ country: selectedCountry })
     });
 
     const data = await res.json();
+    if (data.error) throw new Error(data.error);
 
-    // Render timeline
-    if (data.evidence && data.evidence.length > 0) {
-      const ev = data.evidence[0];
-      let timelineHtml = '<div style="display:flex;gap:8px;padding-bottom:8px;">';
+    // Render timeline from ALL live signals
+    if (data.data?.signals?.length > 0) {
+      let timelineHtml = '<div style="display:flex;gap:8px;padding-bottom:8px;overflow-x:auto;">';
 
-      const yearGroups = {};
-      for (const t of (ev.timeline || [])) {
-        if (!yearGroups[t.year]) yearGroups[t.year] = [];
-        yearGroups[t.year].push(t);
-      }
-
-      for (const [year, items] of Object.entries(yearGroups).sort((a, b) => a[0] - b[0])) {
-        timelineHtml += '<div style="min-width:120px;padding:10px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;">';
-        timelineHtml += '<div style="font-family:var(--mono);font-size:0.85rem;font-weight:600;color:var(--accent);margin-bottom:6px;">' + year + '</div>';
-        for (const item of items) {
-          timelineHtml += '<div style="font-size:0.72rem;color:var(--text);margin-bottom:3px;">' + item.signal + '</div>';
-          timelineHtml += '<div style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);">' + item.value + '</div>';
-        }
+      for (const sig of data.data.signals.slice(0, 15)) {
+        const changeDir = sig.change > 0 ? '↑' : sig.change < 0 ? '↓' : '→';
+        const changeColor = sig.change > 0 ? 'var(--warning)' : sig.change < 0 ? 'var(--stable)' : 'var(--dim)';
+        timelineHtml += '<div style="min-width:140px;padding:10px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;">';
+        timelineHtml += '<div style="font-size:0.75rem;font-weight:600;color:var(--text);margin-bottom:6px;">' + sig.label + '</div>';
+        timelineHtml += '<div style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);">' + sig.firstYear + ': ' + formatNum(sig.signal, sig.firstValue) + '</div>';
+        timelineHtml += '<div style="font-family:var(--mono);font-size:0.68rem;color:' + changeColor + ';">' + sig.latestYear + ': ' + formatNum(sig.signal, sig.latestValue) + ' ' + changeDir + '</div>';
         timelineHtml += '</div>';
       }
 
       timelineHtml += '</div>';
       timelineEl.innerHTML = timelineHtml;
 
-      // Evidence console — REAL intelligence briefing a buyer can act on
-      const countryPatterns = allCountryData.get(selectedCountry)?.patterns || [];
-      const countryExtraction = allCountryData.get(selectedCountry)?.extraction || [];
-      const hasExtraction = countryExtraction.length > 0 || allCountryData.get(selectedCountry)?.watchlist;
+      // Evidence console — Claude's briefing based on ALL signals
+      evidenceEl.innerHTML = data.briefing || 'No briefing generated.';
 
-      // Helper to format large numbers
-      function formatValue(signal, val) {
-        if (signal.includes('displacement') || signal.includes('refugee')) {
-          if (val >= 1000000) return (val / 1000000).toFixed(1) + ' million';
-          if (val >= 1000) return (val / 1000).toFixed(0) + ',000';
-          return val.toFixed(0);
-        }
-        if (signal.includes('corruption')) {
-          // Corruption is 0-1, convert to ranking language
-          if (val >= 0.8) return 'extremely high (top 20% worst globally)';
-          if (val >= 0.6) return 'high (top 40% worst globally)';
-          if (val >= 0.4) return 'moderate';
-          return 'low';
-        }
-        if (signal.includes('governance')) {
-          if (val <= 20) return 'failed state level (' + val.toFixed(0) + '/100)';
-          if (val <= 40) return 'weak institutions (' + val.toFixed(0) + '/100)';
-          if (val <= 60) return 'developing (' + val.toFixed(0) + '/100)';
-          return 'functional (' + val.toFixed(0) + '/100)';
-        }
-        return val.toFixed(1);
-      }
-
-      // Group by signal
-      const signalData = {};
-      for (const t of (ev.timeline || [])) {
-        const rawSig = t.raw_signal || t.signal;
-        if (!signalData[rawSig]) signalData[rawSig] = [];
-        signalData[rawSig].push({ year: t.year, value: parseFloat(t.value) });
-      }
-
-      // Build the intelligence briefing
-      let evHtml = '';
-      evHtml += 'INTELLIGENCE BRIEFING: ' + selectedCountry.toUpperCase() + '\n';
-      evHtml += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
-
-      // Threat status
-      if (countryPatterns.length > 0 && hasExtraction) {
-        evHtml += '⚠ THREAT LEVEL: COMPOUND\n';
-        evHtml += 'This country shows BOTH collapse warning signs AND\n';
-        evHtml += 'active extraction by corrupt actors.\n\n';
-      } else if (countryPatterns.length > 0) {
-        evHtml += '⚠ THREAT LEVEL: ELEVATED\n';
-        evHtml += 'This country matches historical collapse patterns.\n\n';
-      } else if (hasExtraction) {
-        evHtml += '⚠ THREAT LEVEL: WATCH\n';
-        evHtml += 'Extraction indicators elevated. No collapse pattern yet.\n\n';
-      } else {
-        evHtml += '● THREAT LEVEL: BASELINE\n';
-        evHtml += 'No active warning patterns detected.\n\n';
-      }
-
-      // What the data shows
-      evHtml += 'WHAT THE DATA SHOWS:\n';
-      evHtml += '─────────────────────────────────────────────\n';
-
-      for (const [rawSignal, readings] of Object.entries(signalData)) {
-        readings.sort((a, b) => a.year - b.year);
-        const first = readings[0];
-        const last = readings[readings.length - 1];
-        const change = last.value - first.value;
-        const pctChange = first.value !== 0 ? Math.abs((change / first.value) * 100).toFixed(0) : 0;
-
-        const label = getSignalLabel(rawSignal);
-
-        if (rawSignal.includes('displacement')) {
-          const displaced = formatValue(rawSignal, last.value);
-          const direction = change > 0 ? 'increased' : change < 0 ? 'decreased' : 'unchanged';
-          evHtml += '\n' + displaced + ' people displaced as of ' + last.year + '.\n';
-          if (change !== 0) {
-            evHtml += 'This has ' + direction + ' ' + pctChange + '% since ' + first.year + '.\n';
-          }
-        } else if (rawSignal.includes('corruption')) {
-          const level = formatValue(rawSignal, last.value);
-          evHtml += '\nCorruption risk is ' + level + '.\n';
-          if (change > 0.05) {
-            evHtml += 'Corruption has worsened since ' + first.year + '.\n';
-          } else if (change < -0.05) {
-            evHtml += 'Corruption has improved since ' + first.year + '.\n';
-          } else {
-            evHtml += 'Corruption levels have remained stable.\n';
-          }
-        } else if (rawSignal.includes('governance')) {
-          const level = formatValue(rawSignal, last.value);
-          evHtml += '\nGovernance quality: ' + level + '.\n';
-        } else if (rawSignal.includes('disruption')) {
-          evHtml += '\nInfrastructure disruption score: ' + last.value.toFixed(1) + '\n';
-          if (change > 0) {
-            evHtml += 'Infrastructure reliability declining.\n';
-          }
-        } else {
-          evHtml += '\n' + label + ': ' + formatValue(rawSignal, last.value) + ' (' + last.year + ')\n';
-        }
-      }
-
-      // Pattern explanation
-      if (countryPatterns.length > 0) {
-        evHtml += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-        evHtml += 'WHY THIS MATTERS:\n';
-        evHtml += '─────────────────────────────────────────────\n\n';
-        evHtml += 'This country matches ' + countryPatterns.length + ' historical collapse pattern(s):\n\n';
-        for (const p of countryPatterns.slice(0, 3)) {
-          evHtml += '• ' + p.signature + '\n';
-          evHtml += '  When these signals appear together, a crisis follows\n';
-          evHtml += '  ' + p.lift.toFixed(1) + 'x more often than chance would predict.\n\n';
-        }
-      }
-
-      // What to watch
-      evHtml += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-      evHtml += 'WATCH FOR:\n';
-      evHtml += '─────────────────────────────────────────────\n';
-      if (countryPatterns.length > 0 && hasExtraction) {
-        evHtml += '• Rapid capital outflows\n';
-        evHtml += '• Key officials relocating assets abroad\n';
-        evHtml += '• International organizations withdrawing\n';
-        evHtml += '• Currency or debt market movements\n';
-      } else if (countryPatterns.length > 0) {
-        evHtml += '• Emergence of extraction indicators\n';
-        evHtml += '• Acceleration in displacement\n';
-        evHtml += '• Governance score decline\n';
-      } else {
-        evHtml += '• Pattern emergence in coming quarters\n';
-        evHtml += '• Signal elevation above thresholds\n';
-      }
-
-      evidenceEl.innerHTML = evHtml;
     } else {
       timelineEl.innerHTML = '<div style="color:var(--dim);">No timeline data available</div>';
-      evidenceEl.innerHTML = '> NO DATA FOUND FOR ' + selectedCountry;
+      evidenceEl.innerHTML = 'No signals with real data found for ' + selectedCountry;
     }
 
-    // Elevated signals list
-    if (countryData?.watchlist?.elevatedSignals) {
-      let sigHtml = '';
-      for (const sig of countryData.watchlist.elevatedSignals) {
-        sigHtml += '<div style="padding:4px 0;border-bottom:1px solid var(--border);">';
-        sigHtml += '<div style="font-size:0.78rem;color:var(--text);">' + getSignalLabel(sig.signal) + '</div>';
-        sigHtml += '<div style="font-family:var(--mono);font-size:0.68rem;color:var(--warning);">z: ' + (sig.z || 0).toFixed(2) + '</div>';
-        sigHtml += '</div>';
-      }
-      signalsEl.innerHTML = sigHtml || '<div style="color:var(--dim);font-size:0.8rem;">None elevated</div>';
-    } else {
-      signalsEl.innerHTML = '<div style="color:var(--dim);font-size:0.8rem;">No elevation data</div>';
-    }
+    // Signals count
+    signalsEl.innerHTML = '<div style="font-size:0.8rem;color:var(--text);">' + (data.data?.signalCount || 0) + ' signals analyzed</div>';
 
   } catch (err) {
-    evidenceEl.innerHTML = '> ERROR: ' + err.message;
+    evidenceEl.innerHTML = 'ERROR: ' + err.message;
   }
+}
+
+function formatNum(sig, val) {
+  if (sig.includes('displacement') || sig.includes('refugee')) {
+    if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M';
+    if (val >= 1000) return Math.round(val / 1000) + 'K';
+  }
+  if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M';
+  if (val >= 1000) return Math.round(val / 1000).toLocaleString();
+  if (val < 1 && val > 0) return (val * 100).toFixed(0) + '%';
+  if (val === 0) return '0';
+  return val.toFixed(1);
 }
 
 async function expandPattern(idx) {

@@ -2368,6 +2368,204 @@ app.post('/api/collapse/analyze-portfolio', requireTier('buyer'), async (req, re
 // ═══ END COLLAPSE INTELLIGENCE ANALYZER ═════════════════════════════════════════
 
 
+// ── COUNTRY DEEP DRILL — ALL SIGNALS ────────────────────────────────────────
+// Pulls EVERY signal for a country, drops dead signals, sends to Claude for briefing
+
+app.post('/api/country/drill', requireTier('buyer'), async (req, res) => {
+  const { country } = req.body;
+  if (!country) {
+    return res.status(400).json({ error: 'country required' });
+  }
+
+  try {
+    const Anthropic = require('@anthropic-ai/sdk');
+    const client = new Anthropic();
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+    // Complete label map — every signal_key that exists in the database
+    const signalLabels = {
+      corruption_risk: 'Corruption',
+      occrp: 'Corruption reporting exposure',
+      sovereign_cds: 'Sovereign debt risk',
+      fire_hotspot: 'Fire activity',
+      capital_flows: 'Capital flows',
+      defense_spending: 'Defense spending',
+      diaspora_remittance: 'Diaspora remittances',
+      maritime_trade: 'Maritime trade',
+      chokepoint: 'Trade chokepoint exposure',
+      currency_collapse: 'Currency stability',
+      energy_stress: 'Energy supply',
+      imf_fiscal: 'IMF fiscal position',
+      iom_displacement: 'Internal displacement',
+      night_lights: 'Night-time economic activity',
+      prediction_market: 'Prediction market sentiment',
+      rail_corridor: 'Rail infrastructure',
+      resource_conflict: 'Resource conflict',
+      sanctions_pressure: 'Sanctions impact',
+      structural_pressure: 'Structural stress',
+      trade_collapse: 'Trade disruption',
+      unhcr_odp: 'Refugee outflows',
+      unhcr_refugees: 'Refugee outflows',
+      usda_food: 'Food production',
+      usda_food_supply: 'Food supply',
+      water_stress: 'Water stress',
+      gdelt_tone: 'Media sentiment',
+      gps_jamming: 'GPS interference',
+      health_crisis: 'Health system',
+      displacement: 'Displacement',
+      displacement_flow: 'New displacement',
+      displacement_stock: 'Displaced population',
+      economic_stress: 'Economic pressure',
+      governance: 'Governance quality',
+      vdem_governance: 'Democratic institutions',
+      power_grid: 'Power infrastructure',
+      food_insecurity: 'Food security',
+      internet_freedom: 'Information access',
+      cable_disruption: 'Infrastructure disruption',
+      flight_movement: 'Air traffic',
+      port_congestion: 'Port activity',
+      dark_vessel: 'Maritime anomalies',
+      flood_risk: 'Flood exposure',
+      cyber_threat: 'Cyber threat',
+      military_proximity: 'Military activity',
+      nelda_election: 'Election integrity',
+      cpi_inflation: 'Inflation',
+      seismic_activity: 'Seismic activity',
+      dam_risk: 'Dam infrastructure risk',
+      pipeline_risk: 'Pipeline infrastructure risk',
+      fao_food: 'FAO food indicators'
+    };
+
+    // STEP 1: Pull ALL signals for this country (not just pattern pair)
+    const { data: allReadings, error } = await sb
+      .from('historical_signal_readings')
+      .select('signal_key, date, raw_value')
+      .eq('country', country)
+      .eq('gap', false)
+      .not('raw_value', 'is', null)
+      .order('date', { ascending: true });
+
+    if (error) throw error;
+
+    // STEP 2: Group by signal, keeping all readings including zeros
+    const signalData = {};
+    for (const r of (allReadings || [])) {
+      const sig = r.signal_key;
+      const val = parseFloat(r.raw_value);
+      const year = parseInt(r.date.slice(0, 4));
+      if (isNaN(val)) continue;
+      if (!signalData[sig]) signalData[sig] = [];
+      signalData[sig].push({ year, value: val });
+    }
+
+    // STEP 3: Filter signals — drop only if ALL zeros or no label
+    const liveSignals = [];
+    for (const [sig, readings] of Object.entries(signalData)) {
+      if (!signalLabels[sig]) continue;
+      if (readings.length < 2) continue;
+      readings.sort((a, b) => a.year - b.year);
+      const allZero = readings.every(r => r.value === 0);
+      if (allZero) continue;
+      const first = readings[0];
+      const last = readings[readings.length - 1];
+      liveSignals.push({
+        signal: sig,
+        label: signalLabels[sig],
+        firstYear: first.year,
+        firstValue: first.value,
+        latestYear: last.year,
+        latestValue: last.value,
+        change: last.value - first.value,
+        readings: readings.slice(-10)
+      });
+    }
+
+    // STEP 4: Get historical scores for this country
+    const { data: scores } = await sb
+      .from('historical_convergence_scores')
+      .select('year, score, risk_level')
+      .eq('country', country)
+      .order('year', { ascending: true });
+
+    // STEP 5: Get pattern matches and extraction status
+    const findingsPath = path.join(__dirname, 'historical', 'deep_pattern_findings_v2.json');
+    let patternMatches = [];
+    let extractionStatus = [];
+    if (fs.existsSync(findingsPath)) {
+      const findings = JSON.parse(fs.readFileSync(findingsPath, 'utf8'));
+      const cp = findings.collapsePatterns;
+      if (cp?.signalPairs) {
+        for (const pair of cp.signalPairs) {
+          if (pair.countries?.includes(country)) {
+            patternMatches.push({
+              signature: pair.signalPair.map(s => signalLabels[s] || s).join(' + '),
+              lift: pair.lift?.lift,
+              instances: pair.instances?.filter(i => i.country === country)
+            });
+          }
+        }
+      }
+      if (cp?.extractiveWatchlist) {
+        const watch = cp.extractiveWatchlist.find(w => w.country === country);
+        if (watch) extractionStatus = watch.elevatedSignals || [];
+      }
+    }
+
+    // STEP 6: Build payload for Claude
+    const payload = {
+      country,
+      signalCount: liveSignals.length,
+      signals: liveSignals,
+      scores: scores || [],
+      patternMatches,
+      extractionStatus
+    };
+
+    // STEP 7: Claude writes the briefing FROM the data
+    const prompt = `You are Sabian, writing an intelligence briefing for a $10M/year client.
+
+COUNTRY: ${country}
+
+RULES — EVERY STATEMENT MUST CITE A NUMBER FROM THE DATA BELOW:
+1. State facts WITH the number and year: "Displaced population rose from 1.2 million in 2021 to 6.8 million in 2025"
+2. Never make a claim without the number that proves it
+3. If a signal improved, say by how much and between which years
+4. If a signal worsened, say by how much and between which years
+5. Compare: "This is unusual because..." only if you have data to compare
+6. NO generic phrases like "watch for pattern emergence" or "monitor for changes"
+7. NO fluff. If there's nothing significant to say about a signal, skip it.
+8. Use the plain English label provided, never the raw signal key
+9. End with a clear 1-sentence assessment based only on what the data shows
+
+DATA — ${liveSignals.length} SIGNALS WITH REAL DATA:
+${JSON.stringify(liveSignals, null, 2)}
+
+HISTORICAL SCORES:
+${JSON.stringify(scores?.slice(-10) || [], null, 2)}
+
+PATTERN MATCHES: ${patternMatches.length > 0 ? JSON.stringify(patternMatches) : 'None'}
+
+EXTRACTION INDICATORS: ${extractionStatus.length > 0 ? JSON.stringify(extractionStatus) : 'None detected'}
+
+Write a 2-4 paragraph briefing. Start with the most important finding. Every sentence must contain a number from the data above.`;
+
+    const message = await client.messages.create({
+      model: 'claude-sonnet-4-5',
+      max_tokens: 1500,
+      messages: [{ role: 'user', content: prompt }]
+    });
+
+    res.json({
+      briefing: message.content[0]?.text || '',
+      data: payload
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ═══ EXTRACTION SIGNATURES ENDPOINT ════════════════════════════════════════
 app.get('/public-api/extraction/signatures', async (req, res) => {
   try {
