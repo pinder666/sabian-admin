@@ -2576,6 +2576,8 @@ let extractionSignatures = [];
 let currentZoom = 'orbit';
 // selectedCountry already declared globally
 let allCountryData = new Map(); // country -> { patterns: [], extraction: [], score, level }
+let matchDatesByCountry = [];
+let groundPatterns = [];
 
 async function loadCollapseAnalyzer() {
   if (analyzerLoaded) return;
@@ -2591,6 +2593,7 @@ async function loadCollapseAnalyzer() {
     collapsePatterns = patternsData.patterns || [];
     extractiveWatchlist = patternsData.extractiveWatchlist || [];
     extractionSignatures = extractionData.signatures || [];
+    matchDatesByCountry = patternsData.matchDatesByCountry || [];
 
     console.log('Loaded:', collapsePatterns.length, 'patterns,', extractionSignatures.length, 'extraction signals');
 
@@ -2948,6 +2951,7 @@ async function renderGroundView() {
   }
 
   const data = allCountryData.get(selectedCountry) || { patterns: [], extraction: [], watchlist: null };
+  groundPatterns = data.patterns; // Store for click handler
 
   // Header
   document.getElementById('ground-country-name').textContent = selectedCountry;
@@ -2968,18 +2972,21 @@ async function renderGroundView() {
     document.getElementById('ground-country-level').textContent = '';
   }
 
-  // Pattern matches
+  // Pattern matches (clickable)
   const patternsEl = document.getElementById('ground-patterns');
   if (data.patterns.length === 0) {
     patternsEl.innerHTML = '<div style="color:var(--dim);font-size:0.8rem;">No pattern matches</div>';
   } else {
     let html = '';
-    for (const p of data.patterns) {
-      html += '<div style="padding:6px 10px;margin-bottom:4px;background:rgba(26,111,255,0.1);border:1px solid rgba(26,111,255,0.2);border-radius:4px;">';
+    data.patterns.forEach((p, idx) => {
+      html += '<div onclick="expandGroundPattern(' + idx + ')" style="padding:6px 10px;margin-bottom:4px;background:rgba(26,111,255,0.1);border:1px solid rgba(26,111,255,0.2);border-radius:4px;cursor:pointer;transition:background 0.2s;" onmouseenter="this.style.background=\'rgba(26,111,255,0.18)\'" onmouseleave="this.style.background=\'rgba(26,111,255,0.1)\'">';
       html += '<div style="font-size:0.8rem;color:var(--text);">' + p.signature + '</div>';
-      html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);">' + p.lift.toFixed(1) + 'x lift</div>';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+      html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);">' + p.lift.toFixed(1) + 'x</div>';
+      html += '<div style="font-size:0.6rem;color:var(--dim);">▸</div>';
       html += '</div>';
-    }
+      html += '</div>';
+    });
     patternsEl.innerHTML = html;
   }
 
@@ -3072,6 +3079,122 @@ async function loadGroundBriefing() {
   } catch (err) {
     evidenceEl.innerHTML = '<div style="color:var(--critical);">Error: ' + err.message + '</div>';
   }
+}
+
+function expandGroundPattern(idx) {
+  const pattern = groundPatterns[idx];
+  if (!pattern) return;
+
+  // Find full pattern data from collapsePatterns by matching signalPair
+  const fullPattern = collapsePatterns.find(p =>
+    p.signalPair && pattern.signalPair &&
+    p.signalPair[0] === pattern.signalPair[0] &&
+    p.signalPair[1] === pattern.signalPair[1]
+  );
+
+  // Find entry date for this country
+  const countryMatches = matchDatesByCountry.find(m => m.country === selectedCountry);
+  const entryYear = countryMatches?.matches?.[fullPattern?.fingerprint] || null;
+
+  const modal = document.getElementById('pattern-detail-modal');
+  const content = document.getElementById('pattern-detail-content');
+  modal.style.display = 'block';
+
+  let html = '';
+
+  // Header with signature
+  html += '<div style="font-size:1.15rem;font-weight:700;color:var(--bright);margin-bottom:1.25rem;">' + pattern.signature + '</div>';
+
+  if (fullPattern) {
+    // Lift explanation
+    if (fullPattern.lift?.lift) {
+      html += '<div style="background:rgba(26,111,255,0.08);border:1px solid rgba(26,111,255,0.2);border-radius:6px;padding:1rem;margin-bottom:1.25rem;">';
+      html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">PREDICTIVE STRENGTH</div>';
+      html += '<div style="font-size:0.88rem;color:var(--text);line-height:1.6;">';
+      html += 'This pattern appears <strong>' + fullPattern.lift.lift.toFixed(1) + 'x</strong> more often before crisis than baseline. ';
+      if (fullPattern.lift.pairInPreCollapse && fullPattern.lift.pairInAll) {
+        html += 'Observed in ' + fullPattern.lift.pairInPreCollapse + ' of ' + fullPattern.lift.pairInAll + ' historical occurrences.';
+      }
+      html += '</div></div>';
+    }
+
+    // Entry date for THIS country
+    if (entryYear) {
+      html += '<div style="margin-bottom:1.25rem;">';
+      html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">ENTRY DATE</div>';
+      html += '<div style="font-size:0.88rem;color:var(--text);">' + selectedCountry + ' first matched this pattern in <strong>' + entryYear + '</strong>.</div>';
+      html += '</div>';
+    }
+
+    // Lead-time buckets (NO median, NO 0-1)
+    if (fullPattern.leadTimeDistribution?.buckets) {
+      const buckets = fullPattern.leadTimeDistribution.buckets;
+      const order = ['2-3', '4-5', '6-7', '8-10'];
+      const total = order.reduce((sum, k) => sum + (buckets[k] || 0), 0);
+      if (total > 0) {
+        html += '<div style="margin-bottom:1.25rem;">';
+        html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;">LEAD TIME DISTRIBUTION</div>';
+        for (const label of order) {
+          const count = buckets[label] || 0;
+          if (count === 0) continue;
+          const pct = Math.round((count / total) * 100);
+          html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">';
+          html += '<span style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);width:50px;text-align:right;">' + label + ' yr</span>';
+          html += '<div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="height:100%;background:var(--accent);width:' + pct + '%;border-radius:4px;"></div></div>';
+          html += '<span style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);width:40px;">' + count + '</span>';
+          html += '</div>';
+        }
+        html += '</div>';
+      }
+    }
+
+    // Peer countries currently matching (excluding this country)
+    if (fullPattern.countries && fullPattern.countries.length > 1) {
+      const peers = fullPattern.countries.filter(c => c !== selectedCountry);
+      if (peers.length > 0) {
+        html += '<div style="margin-bottom:1.25rem;">';
+        html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;">ALSO MATCHING</div>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+        for (const c of peers.slice(0, 12)) {
+          html += '<span style="font-size:0.78rem;padding:4px 10px;border-radius:3px;background:var(--panel2);border:1px solid var(--border);color:var(--text);">' + c + '</span>';
+        }
+        if (peers.length > 12) {
+          html += '<span style="font-size:0.72rem;color:var(--dim);">+' + (peers.length - 12) + ' more</span>';
+        }
+        html += '</div></div>';
+      }
+    }
+
+    // Historical instances (country, shiftYear, delta — NO outcome claims)
+    if (fullPattern.instances && fullPattern.instances.length > 0) {
+      html += '<div style="margin-bottom:1rem;">';
+      html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;">HISTORICAL INSTANCES</div>';
+      html += '<div style="max-height:180px;overflow-y:auto;">';
+      const seen = new Set();
+      for (const inst of fullPattern.instances) {
+        const key = inst.country + '|' + inst.shiftYear;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const isCurrentCountry = inst.country === selectedCountry;
+        const bg = isCurrentCountry ? 'rgba(255,170,0,0.12)' : 'var(--panel2)';
+        const border = isCurrentCountry ? 'rgba(255,170,0,0.25)' : 'var(--border)';
+        const color = isCurrentCountry ? 'var(--warning)' : 'var(--text)';
+        html += '<div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;margin:0 6px 6px 0;background:' + bg + ';border:1px solid ' + border + ';border-radius:3px;">';
+        html += '<span style="font-size:0.78rem;color:' + color + ';">' + inst.country + '</span>';
+        html += '<span style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);">' + inst.shiftYear + '</span>';
+        if (inst.delta) {
+          html += '<span style="font-family:var(--mono);font-size:0.65rem;color:var(--dim);">Δ' + inst.delta.toFixed(1) + '</span>';
+        }
+        html += '</div>';
+      }
+      html += '</div></div>';
+    }
+
+  } else {
+    html += '<div style="color:var(--dim);font-size:0.88rem;">Pattern details not available.</div>';
+  }
+
+  content.innerHTML = html;
 }
 
 async function expandPattern(idx) {
