@@ -2566,6 +2566,68 @@ Write a 2-4 paragraph briefing. Start with the most important finding. Every sen
   }
 });
 
+// ── EXTRACTION INTELLIGENCE BY COUNTRY ────────────────────────────────────────
+// Pulls real extraction signatures from database, ranked by confidence
+
+app.get('/api/extraction/country/:country', requireTier('buyer'), async (req, res) => {
+  const { country } = req.params;
+  if (!country) {
+    return res.status(400).json({ error: 'country required' });
+  }
+
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+    const { data, error } = await sb
+      .from('extraction_signatures')
+      .select('country, event_date, event_type, date_range_start, date_range_end, pattern_id, actor_count, recurring_count, primary_window, confidence, detected_at')
+      .eq('country', country)
+      .order('detected_at', { ascending: false });
+
+    if (error) throw error;
+
+    // Translate pattern_id to plain language
+    const patternLabels = {
+      'VULTURE_PLAY': 'Distressed-asset positioning',
+      'INSIDER_EXIT': 'Insider exit activity',
+      'ACTIVE_POSITIONING': 'Active positioning'
+    };
+
+    // Confidence ranking: HIGH=1, MEDIUM=2, REVIEW=3
+    const confidenceRank = { 'HIGH': 1, 'MEDIUM': 2, 'REVIEW': 3 };
+
+    const events = (data || []).map(row => ({
+      pattern: patternLabels[row.pattern_id] || row.pattern_id,
+      patternId: row.pattern_id,
+      actorCount: row.actor_count || 0,
+      recurringCount: row.recurring_count || 0,
+      windowStart: row.date_range_start,
+      windowEnd: row.date_range_end,
+      primaryWindow: row.primary_window,
+      confidence: row.confidence,
+      confidenceRank: confidenceRank[row.confidence] || 99,
+      detectedAt: row.detected_at,
+      eventDate: row.event_date
+    }));
+
+    // Sort: confidence (HIGH first), then actor_count (highest first)
+    events.sort((a, b) => {
+      if (a.confidenceRank !== b.confidenceRank) return a.confidenceRank - b.confidenceRank;
+      return b.actorCount - a.actorCount;
+    });
+
+    res.json({
+      country,
+      eventCount: events.length,
+      events
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ═══ EXTRACTION SIGNATURES ENDPOINT ════════════════════════════════════════
 app.get('/public-api/extraction/signatures', async (req, res) => {
   try {

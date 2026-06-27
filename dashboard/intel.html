@@ -829,57 +829,47 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
-    <!-- GROUND VIEW — Single country deep dive                                  -->
+    <!-- GROUND VIEW — Single country deep dive (simplified layout)              -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <div id="zoom-ground" class="zoom-layer" style="display:none;">
-      <div style="display:grid;grid-template-columns:300px 1fr;gap:1.5rem;">
+      <div style="display:grid;grid-template-columns:280px 1fr;gap:1.5rem;align-items:start;">
 
-        <!-- Left: Country profile -->
-        <div>
-          <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:1rem;">
-            <div id="ground-country-name" style="font-size:1.5rem;font-weight:700;color:var(--bright);margin-bottom:0.5rem;">Select a country</div>
-            <div id="ground-country-score" style="font-family:var(--mono);font-size:2.5rem;font-weight:700;color:var(--critical);margin-bottom:0.25rem;"></div>
-            <div id="ground-country-level" style="font-family:var(--mono);font-size:0.75rem;color:var(--dim);margin-bottom:1rem;"></div>
+        <!-- Left: Country profile (compact) -->
+        <div style="position:sticky;top:120px;">
+          <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
+            <div id="ground-country-name" style="font-size:1.4rem;font-weight:700;color:var(--bright);margin-bottom:0.5rem;">Select a country</div>
+            <div style="display:flex;align-items:baseline;gap:0.5rem;margin-bottom:1rem;">
+              <div id="ground-country-score" style="font-family:var(--mono);font-size:2rem;font-weight:700;color:var(--critical);"></div>
+              <div id="ground-country-level" style="font-family:var(--mono);font-size:0.72rem;color:var(--dim);"></div>
+            </div>
 
-            <!-- Pattern matches -->
-            <div style="margin-bottom:1rem;">
-              <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--accent);margin-bottom:0.5rem;">PATTERN MATCHES</div>
+            <!-- Pattern matches (compact) -->
+            <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">
+              <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--accent);margin-bottom:0.5rem;">PATTERNS</div>
               <div id="ground-patterns"></div>
             </div>
 
-            <!-- Extraction indicators -->
-            <div>
-              <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:0.5rem;">EXTRACTION ACTIVITY</div>
+            <!-- Extraction activity (real data) -->
+            <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">
+              <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:0.5rem;">EXTRACTION</div>
               <div id="ground-extraction"></div>
             </div>
-          </div>
 
-          <!-- Signal list -->
-          <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1rem;">
-            <div style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--dim);margin-bottom:0.75rem;">ELEVATED SIGNALS</div>
-            <div id="ground-signals" style="max-height:200px;overflow-y:auto;"></div>
+            <!-- Signal count -->
+            <div>
+              <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--dim);margin-bottom:0.5rem;">SIGNALS ANALYZED</div>
+              <div id="ground-signals"></div>
+            </div>
           </div>
         </div>
 
-        <!-- Right: Timeline + Evidence -->
-        <div>
-          <!-- 10-year timeline -->
-          <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:1rem;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-              <div style="font-family:var(--mono);font-size:0.72rem;letter-spacing:0.12em;color:var(--accent);">10-YEAR SIGNAL CHRONICLE</div>
-              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);">SCROLL → FOR FULL TIMELINE</div>
-            </div>
-            <div id="ground-timeline" style="overflow-x:auto;"></div>
+        <!-- Right: Intelligence briefing (main content, no timeline) -->
+        <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.5rem;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">
+            <div style="width:10px;height:10px;background:var(--accent);border-radius:50%;"></div>
+            <div style="font-family:var(--mono);font-size:0.78rem;letter-spacing:0.12em;color:var(--accent);">INTELLIGENCE BRIEFING</div>
           </div>
-
-          <!-- Evidence console -->
-          <div style="background:#0a0f18;border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem;">
-              <div style="width:8px;height:8px;background:#00ff88;border-radius:50%;animation:pulse 1.5s infinite;"></div>
-              <div style="font-family:var(--mono);font-size:0.72rem;letter-spacing:0.12em;color:#00ff88;">EVIDENCE CONSOLE</div>
-            </div>
-            <div id="ground-evidence" style="font-family:var(--mono);font-size:0.78rem;line-height:1.8;color:#a8f0a8;max-height:300px;overflow-y:auto;"></div>
-          </div>
+          <div id="ground-evidence" style="font-size:0.92rem;line-height:1.85;color:var(--text);"></div>
         </div>
       </div>
     </div>
@@ -2993,43 +2983,74 @@ async function renderGroundView() {
     patternsEl.innerHTML = html;
   }
 
-  // Extraction activity
+  // Extraction activity — load from real extraction_signatures table
   const extractionEl = document.getElementById('ground-extraction');
-  if (data.extraction.length === 0 && !data.watchlist) {
-    extractionEl.innerHTML = '<div style="color:var(--dim);font-size:0.8rem;">No extraction activity</div>';
-  } else {
-    let html = '';
-    for (const e of data.extraction) {
-      html += '<div style="padding:6px 10px;margin-bottom:4px;background:rgba(255,170,0,0.1);border:1px solid rgba(255,170,0,0.2);border-radius:4px;">';
-      html += '<div style="font-size:0.8rem;color:var(--text);">' + e.pattern + '</div>';
-      html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--warning);">z:' + (e.zScore || 0).toFixed(1) + ' | ' + e.confidence + '</div>';
-      html += '</div>';
-    }
-    if (data.watchlist) {
-      for (const sig of (data.watchlist.elevatedSignals || [])) {
-        html += '<div style="padding:6px 10px;margin-bottom:4px;background:rgba(255,170,0,0.1);border:1px solid rgba(255,170,0,0.2);border-radius:4px;">';
-        html += '<div style="font-size:0.8rem;color:var(--text);">' + getSignalLabel(sig.signal) + '</div>';
-        html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--warning);">z:' + (sig.z || 0).toFixed(1) + '</div>';
-        html += '</div>';
-      }
-    }
-    extractionEl.innerHTML = html;
-  }
+  extractionEl.innerHTML = '<div style="color:var(--dim);font-size:0.75rem;">Loading...</div>';
+  loadExtractionForCountry(selectedCountry);
 
-  // Load timeline and evidence from API
-  await loadGroundTimeline();
+  // Load intelligence briefing (no timeline)
+  await loadGroundBriefing();
 }
 
-async function loadGroundTimeline() {
-  const timelineEl = document.getElementById('ground-timeline');
+async function loadExtractionForCountry(country) {
+  const extractionEl = document.getElementById('ground-extraction');
+
+  try {
+    const res = await fetch(BASE + '/api/extraction/country/' + encodeURIComponent(country), {
+      headers: { 'Authorization': 'Bearer sabian_user_2026' }
+    });
+    const data = await res.json();
+
+    if (data.error) throw new Error(data.error);
+
+    if (!data.events || data.events.length === 0) {
+      extractionEl.innerHTML = '<div style="color:var(--dim);font-size:0.75rem;">No extraction activity detected</div>';
+      return;
+    }
+
+    // Confidence colors
+    const confColor = { 'HIGH': 'var(--critical)', 'MEDIUM': 'var(--warning)', 'REVIEW': 'var(--dim)' };
+    const confBg = { 'HIGH': 'rgba(255,60,60,0.12)', 'MEDIUM': 'rgba(255,170,0,0.1)', 'REVIEW': 'rgba(136,160,192,0.08)' };
+    const confBorder = { 'HIGH': 'rgba(255,60,60,0.25)', 'MEDIUM': 'rgba(255,170,0,0.2)', 'REVIEW': 'rgba(136,160,192,0.15)' };
+
+    let html = '';
+    html += '<div style="font-size:0.72rem;color:var(--text);margin-bottom:6px;">' + data.eventCount + ' event' + (data.eventCount !== 1 ? 's' : '') + '</div>';
+
+    for (const e of data.events.slice(0, 4)) {
+      const color = confColor[e.confidence] || 'var(--dim)';
+      const bg = confBg[e.confidence] || 'rgba(136,160,192,0.08)';
+      const border = confBorder[e.confidence] || 'rgba(136,160,192,0.15)';
+
+      html += '<div style="padding:6px 8px;margin-bottom:4px;background:' + bg + ';border:1px solid ' + border + ';border-radius:4px;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+      html += '<div style="font-size:0.75rem;color:var(--text);">' + e.pattern + '</div>';
+      html += '<div style="font-family:var(--mono);font-size:0.58rem;color:' + color + ';">' + e.confidence + '</div>';
+      html += '</div>';
+      html += '<div style="font-size:0.65rem;color:var(--dim);margin-top:2px;">' + e.actorCount + ' actor' + (e.actorCount !== 1 ? 's' : '');
+      if (e.recurringCount > 0) html += ', ' + e.recurringCount + ' repeat';
+      html += '</div>';
+      html += '</div>';
+    }
+
+    if (data.events.length > 4) {
+      html += '<div style="font-size:0.65rem;color:var(--dim);text-align:center;">+' + (data.events.length - 4) + ' more</div>';
+    }
+
+    extractionEl.innerHTML = html;
+
+  } catch (err) {
+    extractionEl.innerHTML = '<div style="color:var(--dim);font-size:0.75rem;">Unable to load</div>';
+  }
+}
+
+async function loadGroundBriefing() {
   const evidenceEl = document.getElementById('ground-evidence');
   const signalsEl = document.getElementById('ground-signals');
 
-  timelineEl.innerHTML = '<div style="color:var(--dim);font-family:var(--mono);font-size:0.75rem;">Loading...</div>';
-  evidenceEl.innerHTML = '<div style="color:#4a8a4a;">Analyzing all signals...</div>';
+  evidenceEl.innerHTML = '<div style="color:var(--dim);">Analyzing all signals...</div>';
 
   try {
-    // Query ALL signals for this country — not just pattern pair
+    // Query ALL signals for this country
     const res = await fetch(BASE + '/api/country/drill', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sabian_user_2026' },
@@ -3039,49 +3060,18 @@ async function loadGroundTimeline() {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
 
-    // Render timeline from ALL live signals
-    if (data.data?.signals?.length > 0) {
-      let timelineHtml = '<div style="display:flex;gap:8px;padding-bottom:8px;overflow-x:auto;">';
-
-      for (const sig of data.data.signals.slice(0, 15)) {
-        const changeDir = sig.change > 0 ? '↑' : sig.change < 0 ? '↓' : '→';
-        const changeColor = sig.change > 0 ? 'var(--warning)' : sig.change < 0 ? 'var(--stable)' : 'var(--dim)';
-        timelineHtml += '<div style="min-width:140px;padding:10px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;">';
-        timelineHtml += '<div style="font-size:0.75rem;font-weight:600;color:var(--text);margin-bottom:6px;">' + sig.label + '</div>';
-        timelineHtml += '<div style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);">' + sig.firstYear + ': ' + formatNum(sig.signal, sig.firstValue) + '</div>';
-        timelineHtml += '<div style="font-family:var(--mono);font-size:0.68rem;color:' + changeColor + ';">' + sig.latestYear + ': ' + formatNum(sig.signal, sig.latestValue) + ' ' + changeDir + '</div>';
-        timelineHtml += '</div>';
-      }
-
-      timelineHtml += '</div>';
-      timelineEl.innerHTML = timelineHtml;
-
-      // Evidence console — Claude's briefing based on ALL signals
-      evidenceEl.innerHTML = data.briefing || 'No briefing generated.';
-
+    if (data.briefing) {
+      evidenceEl.innerHTML = data.briefing;
     } else {
-      timelineEl.innerHTML = '<div style="color:var(--dim);">No timeline data available</div>';
-      evidenceEl.innerHTML = 'No signals with real data found for ' + selectedCountry;
+      evidenceEl.innerHTML = '<div style="color:var(--dim);">No briefing available for ' + selectedCountry + '</div>';
     }
 
     // Signals count
-    signalsEl.innerHTML = '<div style="font-size:0.8rem;color:var(--text);">' + (data.data?.signalCount || 0) + ' signals analyzed</div>';
+    signalsEl.innerHTML = '<div style="font-size:0.85rem;color:var(--text);">' + (data.data?.signalCount || 0) + '</div>';
 
   } catch (err) {
-    evidenceEl.innerHTML = 'ERROR: ' + err.message;
+    evidenceEl.innerHTML = '<div style="color:var(--critical);">Error: ' + err.message + '</div>';
   }
-}
-
-function formatNum(sig, val) {
-  if (sig.includes('displacement') || sig.includes('refugee')) {
-    if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M';
-    if (val >= 1000) return Math.round(val / 1000) + 'K';
-  }
-  if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M';
-  if (val >= 1000) return Math.round(val / 1000).toLocaleString();
-  if (val < 1 && val > 0) return (val * 100).toFixed(0) + '%';
-  if (val === 0) return '0';
-  return val.toFixed(1);
 }
 
 async function expandPattern(idx) {
