@@ -2999,8 +2999,11 @@ async function renderGroundView() {
   await loadGroundBriefing();
 }
 
+let groundExtractionEvents = []; // Store for click handler
+
 async function loadExtractionForCountry(country) {
   const extractionEl = document.getElementById('ground-extraction');
+  groundExtractionEvents = [];
 
   try {
     const res = await fetch(BASE + '/api/extraction/country/' + encodeURIComponent(country), {
@@ -3015,6 +3018,8 @@ async function loadExtractionForCountry(country) {
       return;
     }
 
+    groundExtractionEvents = data.events;
+
     // Confidence colors
     const confColor = { 'HIGH': 'var(--critical)', 'MEDIUM': 'var(--warning)', 'REVIEW': 'var(--dim)' };
     const confBg = { 'HIGH': 'rgba(255,60,60,0.12)', 'MEDIUM': 'rgba(255,170,0,0.1)', 'REVIEW': 'rgba(136,160,192,0.08)' };
@@ -3023,24 +3028,26 @@ async function loadExtractionForCountry(country) {
     let html = '';
     html += '<div style="font-size:0.72rem;color:var(--text);margin-bottom:6px;">' + data.eventCount + ' event' + (data.eventCount !== 1 ? 's' : '') + '</div>';
 
-    for (const e of data.events.slice(0, 4)) {
+    data.events.slice(0, 4).forEach((e, idx) => {
       const color = confColor[e.confidence] || 'var(--dim)';
       const bg = confBg[e.confidence] || 'rgba(136,160,192,0.08)';
       const border = confBorder[e.confidence] || 'rgba(136,160,192,0.15)';
 
-      html += '<div style="padding:6px 8px;margin-bottom:4px;background:' + bg + ';border:1px solid ' + border + ';border-radius:4px;">';
+      html += '<div onclick="expandExtractionEvent(' + idx + ')" style="padding:6px 8px;margin-bottom:4px;background:' + bg + ';border:1px solid ' + border + ';border-radius:4px;cursor:pointer;transition:background 0.2s;" onmouseenter="this.style.opacity=\'0.8\'" onmouseleave="this.style.opacity=\'1\'">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
       html += '<div style="font-size:0.75rem;color:var(--text);">' + e.pattern + '</div>';
+      html += '<div style="display:flex;align-items:center;gap:6px;">';
       html += '<div style="font-family:var(--mono);font-size:0.58rem;color:' + color + ';">' + e.confidence + '</div>';
-      html += '</div>';
+      html += '<div style="font-size:0.6rem;color:var(--dim);">▸</div>';
+      html += '</div></div>';
       html += '<div style="font-size:0.65rem;color:var(--dim);margin-top:2px;">' + e.actorCount + ' actor' + (e.actorCount !== 1 ? 's' : '');
       if (e.recurringCount > 0) html += ', ' + e.recurringCount + ' repeat';
       html += '</div>';
       html += '</div>';
-    }
+    });
 
     if (data.events.length > 4) {
-      html += '<div style="font-size:0.65rem;color:var(--dim);text-align:center;">+' + (data.events.length - 4) + ' more</div>';
+      html += '<div onclick="showAllExtractionEvents()" style="font-size:0.65rem;color:var(--accent);text-align:center;cursor:pointer;padding:4px;">+' + (data.events.length - 4) + ' more ▸</div>';
     }
 
     extractionEl.innerHTML = html;
@@ -3050,6 +3057,132 @@ async function loadExtractionForCountry(country) {
   }
 }
 
+function expandExtractionEvent(idx) {
+  const e = groundExtractionEvents[idx];
+  if (!e) return;
+
+  const modal = document.getElementById('pattern-detail-modal');
+  const content = document.getElementById('pattern-detail-content');
+  modal.style.display = 'block';
+
+  // Confidence colors
+  const confColor = { 'HIGH': 'var(--critical)', 'MEDIUM': 'var(--warning)', 'REVIEW': 'var(--dim)' };
+  const color = confColor[e.confidence] || 'var(--dim)';
+
+  let html = '';
+
+  // Header
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">';
+  html += '<div style="font-size:1.15rem;font-weight:700;color:var(--bright);">' + e.pattern + '</div>';
+  html += '<div style="font-family:var(--mono);font-size:0.75rem;padding:4px 12px;border-radius:4px;background:' + (e.confidence === 'HIGH' ? 'rgba(255,60,60,0.2)' : e.confidence === 'MEDIUM' ? 'rgba(255,170,0,0.15)' : 'rgba(136,160,192,0.1)') + ';color:' + color + ';">' + e.confidence + ' confidence</div>';
+  html += '</div>';
+
+  // Actor analysis
+  html += '<div style="background:rgba(26,111,255,0.08);border:1px solid rgba(26,111,255,0.2);border-radius:6px;padding:1rem;margin-bottom:1.25rem;">';
+  html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">ACTOR ANALYSIS</div>';
+  html += '<div style="font-size:0.88rem;color:var(--text);line-height:1.6;">';
+  html += '<strong>' + e.actorCount + '</strong> distinct actors detected in ' + selectedCountry + '. ';
+  if (e.recurringCount > 0) {
+    const pct = Math.round((e.recurringCount / e.actorCount) * 100);
+    html += '<strong>' + e.recurringCount + '</strong> (' + pct + '%) are recurring — same actors appearing in multiple windows, suggesting sustained positioning.';
+  } else {
+    html += 'No recurring actors detected.';
+  }
+  html += '</div></div>';
+
+  // Window information
+  if (e.windowStart || e.windowEnd || e.primaryWindow) {
+    html += '<div style="margin-bottom:1.25rem;">';
+    html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">OBSERVATION WINDOW</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">';
+    if (e.windowStart) {
+      html += '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:8px;">';
+      html += '<div style="font-size:0.65rem;color:var(--dim);">Window start</div>';
+      html += '<div style="font-family:var(--mono);font-size:0.85rem;color:var(--text);">' + e.windowStart + '</div>';
+      html += '</div>';
+    }
+    if (e.windowEnd) {
+      html += '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:8px;">';
+      html += '<div style="font-size:0.65rem;color:var(--dim);">Window end</div>';
+      html += '<div style="font-family:var(--mono);font-size:0.85rem;color:var(--text);">' + e.windowEnd + '</div>';
+      html += '</div>';
+    }
+    if (e.primaryWindow) {
+      html += '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:8px;grid-column:span 2;">';
+      html += '<div style="font-size:0.65rem;color:var(--dim);">Primary window</div>';
+      html += '<div style="font-family:var(--mono);font-size:0.85rem;color:var(--text);">' + e.primaryWindow + '</div>';
+      html += '</div>';
+    }
+    html += '</div></div>';
+  }
+
+  // Detection timestamp
+  if (e.detectedAt) {
+    html += '<div style="margin-bottom:1rem;">';
+    html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">DETECTED</div>';
+    html += '<div style="font-size:0.85rem;color:var(--text);">' + new Date(e.detectedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) + '</div>';
+    html += '</div>';
+  }
+
+  // Confidence explanation
+  html += '<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">';
+  html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">CONFIDENCE GRADE</div>';
+  html += '<div style="font-size:0.82rem;color:var(--dim);line-height:1.5;">';
+  if (e.confidence === 'HIGH') {
+    html += 'HIGH confidence: Multiple recurring actors, consistent pattern across observation windows, strong signal-to-noise.';
+  } else if (e.confidence === 'MEDIUM') {
+    html += 'MEDIUM confidence: Pattern detected with some recurring actors. Warrants attention but may require additional observation.';
+  } else {
+    html += 'REVIEW confidence: Early signal detection. Pattern emerging but not yet confirmed across multiple windows.';
+  }
+  html += '</div></div>';
+
+  content.innerHTML = html;
+}
+
+function showAllExtractionEvents() {
+  const modal = document.getElementById('pattern-detail-modal');
+  const content = document.getElementById('pattern-detail-content');
+  modal.style.display = 'block';
+
+  const confColor = { 'HIGH': 'var(--critical)', 'MEDIUM': 'var(--warning)', 'REVIEW': 'var(--dim)' };
+  const confBg = { 'HIGH': 'rgba(255,60,60,0.12)', 'MEDIUM': 'rgba(255,170,0,0.1)', 'REVIEW': 'rgba(136,160,192,0.08)' };
+
+  let html = '';
+  html += '<div style="font-size:1.1rem;font-weight:700;color:var(--bright);margin-bottom:1rem;">All extraction events — ' + selectedCountry + '</div>';
+  html += '<div style="max-height:400px;overflow-y:auto;">';
+
+  groundExtractionEvents.forEach((e, idx) => {
+    const color = confColor[e.confidence] || 'var(--dim)';
+    const bg = confBg[e.confidence] || 'rgba(136,160,192,0.08)';
+
+    html += '<div onclick="document.getElementById(\'pattern-detail-modal\').style.display=\'none\';expandExtractionEvent(' + idx + ')" style="padding:10px 12px;margin-bottom:6px;background:' + bg + ';border-radius:4px;cursor:pointer;" onmouseenter="this.style.opacity=\'0.8\'" onmouseleave="this.style.opacity=\'1\'">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+    html += '<div style="font-size:0.85rem;color:var(--text);">' + e.pattern + '</div>';
+    html += '<div style="font-family:var(--mono);font-size:0.65rem;color:' + color + ';">' + e.confidence + '</div>';
+    html += '</div>';
+    html += '<div style="font-size:0.72rem;color:var(--dim);margin-top:4px;">' + e.actorCount + ' actors';
+    if (e.recurringCount > 0) html += ', ' + e.recurringCount + ' repeat';
+    if (e.windowStart || e.windowEnd) html += ' • ' + (e.windowStart || '') + ' – ' + (e.windowEnd || '');
+    html += '</div>';
+    html += '</div>';
+  });
+
+  html += '</div>';
+  content.innerHTML = html;
+}
+
+function renderMarkdown(md) {
+  if (!md) return '';
+  return md
+    .replace(/^## (.+)$/gm, '<div style="font-size:1.1rem;font-weight:700;color:var(--bright);margin:1.25rem 0 0.75rem 0;">$1</div>')
+    .replace(/^# (.+)$/gm, '<div style="font-size:1.2rem;font-weight:700;color:var(--bright);margin:0 0 1rem 0;">$1</div>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--bright);">$1</strong>')
+    .replace(/\n\n/g, '</p><p style="margin:0.75rem 0;">')
+    .replace(/^/, '<p style="margin:0.75rem 0;">')
+    .replace(/$/, '</p>');
+}
+
 async function loadGroundBriefing() {
   const evidenceEl = document.getElementById('ground-evidence');
   const signalsEl = document.getElementById('ground-signals');
@@ -3057,7 +3190,6 @@ async function loadGroundBriefing() {
   evidenceEl.innerHTML = '<div style="color:var(--dim);">Analyzing all signals...</div>';
 
   try {
-    // Query ALL signals for this country
     const res = await fetch(BASE + '/api/country/drill', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer sabian_user_2026' },
@@ -3068,12 +3200,11 @@ async function loadGroundBriefing() {
     if (data.error) throw new Error(data.error);
 
     if (data.briefing) {
-      evidenceEl.innerHTML = data.briefing;
+      evidenceEl.innerHTML = renderMarkdown(data.briefing);
     } else {
       evidenceEl.innerHTML = '<div style="color:var(--dim);">No briefing available for ' + selectedCountry + '</div>';
     }
 
-    // Signals count
     signalsEl.innerHTML = '<div style="font-size:0.85rem;color:var(--text);">' + (data.data?.signalCount || 0) + '</div>';
 
   } catch (err) {
