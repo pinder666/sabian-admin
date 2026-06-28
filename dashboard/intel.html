@@ -581,7 +581,6 @@
   <button class="tab-btn" data-view="analyzer">THREAT INTELLIGENCE</button>
   <button class="tab-btn" data-view="heatmap">FAMINE RISK <span class="tab-label-num" id="tab-famine-count"></span></button>
   <button class="tab-btn" data-view="patterns">MINED PATTERNS <span class="tab-label-num" id="tab-patterns-count"></span></button>
-  <button class="tab-btn" data-view="extraction-live">EXTRACTION INTELLIGENCE <span class="tab-label-num" id="tab-extraction-count"></span></button>
 </div>
 
 <main>
@@ -740,21 +739,21 @@
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1rem;">
             <div style="background:var(--panel);padding:1rem;text-align:center;">
               <div id="orbit-stat-patterns" style="font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--accent);">0</div>
-              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">PATTERNS</div>
+              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">PATTERN MATCHES</div>
             </div>
             <div style="background:var(--panel);padding:1rem;text-align:center;">
-              <div id="orbit-stat-extraction" style="font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--warning);">0</div>
-              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">EXTRACTION</div>
+              <div id="orbit-stat-watchlist" style="font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--warning);">0</div>
+              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">WATCHLIST</div>
             </div>
             <div style="background:var(--panel);padding:1rem;text-align:center;">
-              <div id="orbit-stat-compound" style="font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--critical);">0</div>
-              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">COMPOUND</div>
+              <div id="orbit-stat-total" style="font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--text);">0</div>
+              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">COUNTRIES</div>
             </div>
           </div>
 
-          <!-- Compound threats list (pattern + extraction) -->
-          <div style="background:linear-gradient(135deg, rgba(255,60,60,0.04) 0%, rgba(255,170,0,0.04) 100%);border:1px solid rgba(255,60,60,0.2);border-radius:6px;padding:1rem;margin-bottom:1rem;">
-            <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;color:var(--critical);margin-bottom:0.75rem;">COMPOUND THREATS — PATTERN + EXTRACTION</div>
+          <!-- Pattern matches list -->
+          <div style="background:linear-gradient(135deg, rgba(26,111,255,0.04) 0%, rgba(26,111,255,0.02) 100%);border:1px solid rgba(26,111,255,0.2);border-radius:6px;padding:1rem;margin-bottom:1rem;">
+            <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;color:var(--accent);margin-bottom:0.75rem;">HIGHEST RISK — MULTIPLE PATTERN MATCHES</div>
             <div id="orbit-compound-list" style="max-height:180px;overflow-y:auto;"></div>
           </div>
 
@@ -788,34 +787,12 @@
         <!-- Right panel: Extraction Intelligence -->
         <div style="background:linear-gradient(180deg, var(--panel) 0%, rgba(255,170,0,0.02) 100%);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid rgba(255,170,0,0.2);">
-            <div style="font-family:var(--mono);font-size:0.75rem;letter-spacing:0.12em;color:var(--warning);">EXTRACTION INTELLIGENCE</div>
-            <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);">RANKED BY INTENSITY</div>
+            <div style="font-family:var(--mono);font-size:0.75rem;letter-spacing:0.12em;color:var(--warning);">WATCHLIST</div>
+            <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);">ELEVATED SIGNALS</div>
           </div>
 
-          <!-- Extraction categories -->
-          <div id="sector-extraction-vulture" style="margin-bottom:1.25rem;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.6rem;">
-              <div style="width:4px;height:16px;background:var(--critical);border-radius:2px;"></div>
-              <div style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.08em;color:var(--bright);">VULTURE PLAYS</div>
-            </div>
-            <div id="sector-vulture-list"></div>
-          </div>
-
-          <div id="sector-extraction-insider" style="margin-bottom:1.25rem;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.6rem;">
-              <div style="width:4px;height:16px;background:var(--warning);border-radius:2px;"></div>
-              <div style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.08em;color:var(--bright);">INSIDER EXITS</div>
-            </div>
-            <div id="sector-insider-list"></div>
-          </div>
-
-          <div id="sector-extraction-positioning">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.6rem;">
-              <div style="width:4px;height:16px;background:var(--elevated);border-radius:2px;"></div>
-              <div style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.08em;color:var(--bright);">ACTIVE POSITIONING</div>
-            </div>
-            <div id="sector-positioning-list"></div>
-          </div>
+          <!-- Watchlist countries (structural detection from real signals) -->
+          <div id="sector-watchlist-countries"></div>
         </div>
       </div>
 
@@ -849,10 +826,10 @@
               <div id="ground-patterns"></div>
             </div>
 
-            <!-- Extraction activity (real data) -->
-            <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">
-              <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:0.5rem;">EXTRACTION</div>
-              <div id="ground-extraction"></div>
+            <!-- Watchlist status -->
+            <div id="ground-watchlist-section" style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);display:none;">
+              <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:0.5rem;">WATCHLIST</div>
+              <div id="ground-watchlist"></div>
             </div>
 
             <!-- Signal count -->
@@ -1071,61 +1048,6 @@
 </style>
 
 
-<div class="view" id="view-extraction-live">
-
-  <!-- Header -->
-  <div style="margin-bottom:1.5rem">
-    <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-bottom:0.4rem">EXTRACTION INTELLIGENCE </div>
-    <div style="font-size:0.82rem;color:var(--dim);max-width:760px;line-height:1.6">
-      Structural patterns detected across 214 countries where actor filing clusters correlate with convergence band crossings.
-      Actor identities are redacted — structure visible, names restricted to counsel review.
-      Patterns are classified by window phase (pre-event positioning, active, post-event extraction) and recurring seat presence.
-    </div>
-  </div>
-
-  <!-- Summary bar -->
-  <div class="status-bar" id="ext-summary-bar">
-    <div class="stat-cell"><div class="stat-label">TOTAL SIGNATURES</div><div class="stat-value" id="ext-total">—</div><div class="stat-sub">detected</div></div>
-    <div class="stat-cell"><div class="stat-label">VULTURE PLAY</div><div class="stat-value critical" id="ext-vulture">—</div><div class="stat-sub">post-event extraction</div></div>
-    <div class="stat-cell"><div class="stat-label">INSIDER EXIT</div><div class="stat-value warning" id="ext-insider">—</div><div class="stat-sub">pre-event positioning</div></div>
-    <div class="stat-cell"><div class="stat-label">ACTIVE POSITIONING</div><div class="stat-value elevated" id="ext-active">—</div><div class="stat-sub">pre-event accumulation</div></div>
-    <div class="stat-cell"><div class="stat-label">HIGH CONFIDENCE</div><div class="stat-value" id="ext-high">—</div><div class="stat-sub">recurring seats + tight lag</div></div>
-  </div>
-
-  <!-- Filters -->
-  <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
-    <select id="ext-filter-pattern" style="background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:0.8rem">
-      <option value="">ALL PATTERNS</option>
-      <option value="VULTURE_PLAY">VULTURE PLAY</option>
-      <option value="INSIDER_EXIT">INSIDER EXIT</option>
-      <option value="ACTIVE_POSITIONING">ACTIVE POSITIONING</option>
-    </select>
-    <select id="ext-filter-confidence" style="background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:0.8rem">
-      <option value="">ALL CONFIDENCE</option>
-      <option value="HIGH">HIGH</option>
-      <option value="MEDIUM">MEDIUM</option>
-      <option value="REVIEW">REVIEW</option>
-    </select>
-    <input id="ext-filter-country" placeholder="Filter country..." style="background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:0.8rem;width:160px">
-    <button onclick="applyExtFilters()" style="background:var(--accent);border:none;color:#000;padding:6px 14px;border-radius:4px;font-size:0.8rem;cursor:pointer;font-weight:700">Filter</button>
-  </div>
-
-  <!-- Signatures table -->
-  <div id="ext-signatures-wrap"><div class="loading-msg">Loading extraction signatures…</div></div>
-
-  <!-- Methodology -->
-  <div style="padding:1rem 1.25rem;background:var(--panel);border:1px solid var(--border);border-radius:6px;margin-top:2rem">
-    <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:0.5rem">Pattern Definitions</div>
-    <ul style="font-size:0.8rem;color:var(--dim);line-height:1.8;padding-left:1.2rem">
-      <li><strong style="color:var(--text)">Vulture Play</strong> — Litigation-track actor filings in the POST window (0–730 days after a CRITICAL crossing). Recurring seat presence elevates to HIGH confidence.</li>
-      <li><strong style="color:var(--text)">Insider Exit</strong> — Operational actor cluster (5+ entities) filing in the PRE window (0–180 days before a significant crossing). Indicates local knowledge of deterioration.</li>
-      <li><strong style="color:var(--text)">Active Positioning</strong> — Financial actor 13F filings concentrating in the PRE window (30–365 days before a crossing). Indicates portfolio repositioning ahead of event.</li>
-      <li><strong style="color:var(--text)">Recurring Seat</strong> — Actor hash appearing in event windows across 3+ different countries. Same structural player, different theater.</li>
-      <li>Actor names are never stored in this view. Click any row for restricted dossier access — counsel review required before name disclosure.</li>
-    </ul>
-  </div>
-
-</div>
 
 </main>
 
@@ -1354,7 +1276,6 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     if (btn.dataset.view === 'analyzer' && !analyzerLoaded) loadCollapseAnalyzer();
     // Show/update selected country indicator
     updateSelectedBanner();
-    if (btn.dataset.view === 'extraction-live' && !extractionLoaded) loadExtractionSignatures();
   });
 });
 
@@ -2152,52 +2073,6 @@ function closeDetail() {
 
 document.getElementById('backdrop').addEventListener('click', closeDetail);
 
-// ── BUYER KEY CHECK ────────────────────────────────────────────────────────
-function checkBuyerKey() {
-  const key = document.getElementById('buyer-key-input').value.trim();
-  if (key === 'cc77ec38601f82587e06dc4158df6e28ae22a84146f82b7279af5932bec9fd3f') {
-    localStorage.setItem('sabian_buyer_key', key);
-    document.querySelector('[data-view="extraction"]').click();
-  } else {
-    document.getElementById('key-error').style.display = 'block';
-  }
-}
-
-async function loadExtractionEvents() {
-  const key = localStorage.getItem('sabian_buyer_key');
-  if (!key) return;
-  const wrap = document.getElementById('extraction-events-wrap');
-  if (!wrap) return;
-  wrap.innerHTML = '<div class="loading-msg">Loading extraction intelligence...</div>';
-  try {
-    const res = await fetch('/api/extraction/events', {
-      headers: { Authorization: 'Bearer ' + key }
-    });
-    if (!res.ok) throw new Error('Access denied');
-    const data = await res.json();
-    const events = data.events || [];
-    const byPattern = {};
-    events.forEach(e => {
-      if (!byPattern[e.pattern_type]) byPattern[e.pattern_type] = [];
-      byPattern[e.pattern_type].push(e);
-    });
-    const confColor = { high: 'var(--stable)', medium: 'var(--warning)', review: 'var(--dim)' };
-    let html = '<div style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);margin-bottom:1rem">' + events.length + ' verified extraction events across ' + Object.keys(byPattern).length + ' patterns detected from real signal data</div>';
-    Object.entries(byPattern).forEach(([pattern, evts]) => {
-      html += '<div class="section-hdr"><span class="section-title">' + pattern.replace(/_/g,' ').toUpperCase() + '</span><span class="section-meta">' + evts.length + ' events</span></div>';
-      html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1.5rem">';
-      evts.forEach(e => {
-        const cc = confColor[e.confidence] || 'var(--dim)';
-        html += '<div style="background:var(--panel);padding:1rem 1.25rem"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px"><span style="font-family:var(--mono);font-size:0.78rem;color:var(--bright)">' + e.country + ' ' + e.year + '</span><span style="font-family:var(--mono);font-size:0.62rem;color:' + cc + ';white-space:nowrap;margin-left:8px">' + e.confidence.toUpperCase() + '</span></div><div style="font-size:0.78rem;color:var(--text);line-height:1.5">' + e.outcome_description + '</div></div>';
-      });
-      html += '</div>';
-    });
-    wrap.innerHTML = html;
-  } catch(err) {
-    wrap.innerHTML = '<div class="error-msg">Failed to load: ' + err.message + '</div>';
-  }
-}
-
 // ── BOOT ───────────────────────────────────────────────────────────────────
 
 // ═══ PATTERN LIBRARY ══════════════════════════════════════════════════════════
@@ -2572,10 +2447,9 @@ function getDomainLabel(domain) {
 let analyzerLoaded = false;
 let collapsePatterns = [];
 let extractiveWatchlist = [];
-let extractionSignatures = [];
 let currentZoom = 'orbit';
 // selectedCountry already declared globally
-let allCountryData = new Map(); // country -> { patterns: [], extraction: [], score, level }
+let allCountryData = new Map(); // country -> { patterns: [], score, level }
 let matchDatesByCountry = [];
 let groundPatterns = [];
 
@@ -2584,18 +2458,17 @@ async function loadCollapseAnalyzer() {
   analyzerLoaded = true;
 
   try {
-    // Load both patterns AND extraction signatures
-    const [patternsData, extractionData] = await Promise.all([
-      apiFetch('/api/collapse/patterns').catch(err => { console.error('Patterns API error:', err); return { patterns: [], extractiveWatchlist: [] }; }),
-      apiFetch('/public-api/extraction/signatures').catch(err => { console.error('Extraction API error:', err); return { signatures: [] }; })
-    ]);
+    // Load pattern data only (extraction actor data is noise, removed)
+    const patternsData = await apiFetch('/api/collapse/patterns').catch(err => {
+      console.error('Patterns API error:', err);
+      return { patterns: [], extractiveWatchlist: [] };
+    });
 
     collapsePatterns = patternsData.patterns || [];
     extractiveWatchlist = patternsData.extractiveWatchlist || [];
-    extractionSignatures = extractionData.signatures || [];
     matchDatesByCountry = patternsData.matchDatesByCountry || [];
 
-    console.log('Loaded:', collapsePatterns.length, 'patterns,', extractionSignatures.length, 'extraction signals');
+    console.log('Loaded:', collapsePatterns.length, 'collapse patterns');
 
     // Build unified country data map
     buildCountryDataMap();
@@ -2605,7 +2478,7 @@ async function loadCollapseAnalyzer() {
     document.getElementById('zoom-orbit').style.display = 'block';
 
     document.getElementById('analyzer-meta').textContent =
-      collapsePatterns.length + ' PATTERNS | ' + extractionSignatures.length + ' EXTRACTION SIGNALS';
+      collapsePatterns.length + ' COLLAPSE PATTERNS';
 
     // Render the orbit view
     renderOrbitView();
@@ -2621,11 +2494,11 @@ async function loadCollapseAnalyzer() {
 function buildCountryDataMap() {
   allCountryData.clear();
 
-  // Add pattern matches
+  // Add pattern matches (real signal data)
   for (const p of collapsePatterns) {
     for (const country of (p.countries || [])) {
       if (!allCountryData.has(country)) {
-        allCountryData.set(country, { patterns: [], extraction: [], watchlist: null });
+        allCountryData.set(country, { patterns: [], watchlist: null });
       }
       allCountryData.get(country).patterns.push({
         signature: (p.signalPair || []).map(s => getSignalLabel(s)).join(' + '),
@@ -2636,24 +2509,10 @@ function buildCountryDataMap() {
     }
   }
 
-  // Add extraction signatures
-  for (const sig of extractionSignatures) {
-    const country = sig.country;
-    if (!allCountryData.has(country)) {
-      allCountryData.set(country, { patterns: [], extraction: [], watchlist: null });
-    }
-    allCountryData.get(country).extraction.push({
-      pattern: sig.pattern_id,
-      confidence: sig.confidence,
-      zScore: sig.z_score,
-      detectedAt: sig.detected_at
-    });
-  }
-
-  // Add watchlist items (enriches extraction data)
+  // Add watchlist items (structural detection from real signals)
   for (const w of extractiveWatchlist) {
     if (!allCountryData.has(w.country)) {
-      allCountryData.set(w.country, { patterns: [], extraction: [], watchlist: null });
+      allCountryData.set(w.country, { patterns: [], watchlist: null });
     }
     allCountryData.get(w.country).watchlist = w;
   }
@@ -2695,28 +2554,24 @@ function setZoomLevel(level) {
 // ═══ ORBIT VIEW — See everything at once ═══════════════════════════════════════
 
 function renderOrbitView() {
-  // Count stats
+  // Count stats from real pattern data only
   const patternCountries = new Set();
-  const extractionCountries = new Set();
-  const compoundCountries = new Set();
+  const watchlistCountries = new Set();
 
   for (const [country, data] of allCountryData) {
     if (data.patterns.length > 0) patternCountries.add(country);
-    if (data.extraction.length > 0 || data.watchlist) extractionCountries.add(country);
-    if (data.patterns.length > 0 && (data.extraction.length > 0 || data.watchlist)) {
-      compoundCountries.add(country);
-    }
+    if (data.watchlist) watchlistCountries.add(country);
   }
 
   document.getElementById('orbit-stat-patterns').textContent = patternCountries.size;
-  document.getElementById('orbit-stat-extraction').textContent = extractionCountries.size;
-  document.getElementById('orbit-stat-compound').textContent = compoundCountries.size;
+  document.getElementById('orbit-stat-watchlist').textContent = watchlistCountries.size;
+  document.getElementById('orbit-stat-total').textContent = allCountryData.size;
 
   // Render radar dots
   renderOrbitRadar();
 
   // Render compound threats list
-  renderCompoundThreats(compoundCountries);
+  renderHighRiskCountries();
 
   // Render top patterns preview
   renderPatternsPreview();
@@ -2731,8 +2586,8 @@ function renderOrbitRadar() {
 
   countries.forEach(([country, data], idx) => {
     const hasPattern = data.patterns.length > 0;
-    const hasExtraction = data.extraction.length > 0 || data.watchlist;
-    const isCompound = hasPattern && hasExtraction;
+    const hasWatchlist = data.watchlist !== null;
+    const isHighRisk = data.patterns.length > 1 || (hasPattern && hasWatchlist);
 
     // Position: spiral from center
     const maxLift = Math.max(...data.patterns.map(p => p.lift), 1);
@@ -2748,11 +2603,11 @@ function renderOrbitRadar() {
     let size = 6;
     let glow = '';
 
-    if (isCompound) {
+    if (isHighRisk) {
       color = 'var(--critical)';
       size = 10;
       glow = 'box-shadow:0 0 8px var(--critical);animation:pulse 1.5s infinite;';
-    } else if (hasExtraction) {
+    } else if (hasWatchlist) {
       color = 'var(--warning)';
       size = 8;
       glow = 'box-shadow:0 0 6px var(--warning);';
@@ -2776,27 +2631,39 @@ function renderOrbitRadar() {
   });
 }
 
-function renderCompoundThreats(compoundSet) {
+function renderHighRiskCountries() {
   const el = document.getElementById('orbit-compound-list');
-  if (compoundSet.size === 0) {
-    el.innerHTML = '<div style="color:var(--dim);font-size:0.8rem;">No compound threats detected</div>';
+
+  // Rank countries by pattern count and max lift
+  const ranked = [...allCountryData.entries()]
+    .filter(([_, data]) => data.patterns.length > 0)
+    .map(([country, data]) => ({
+      country,
+      patternCount: data.patterns.length,
+      maxLift: Math.max(...data.patterns.map(p => p.lift), 0),
+      topPattern: data.patterns[0],
+      hasWatchlist: data.watchlist !== null
+    }))
+    .sort((a, b) => {
+      if (b.patternCount !== a.patternCount) return b.patternCount - a.patternCount;
+      return b.maxLift - a.maxLift;
+    });
+
+  if (ranked.length === 0) {
+    el.innerHTML = '<div style="color:var(--dim);font-size:0.8rem;">No pattern matches detected</div>';
     return;
   }
 
   let html = '';
-  for (const country of [...compoundSet].slice(0, 8)) {
-    const data = allCountryData.get(country);
-    const topPattern = data.patterns[0];
-    const topExtraction = data.extraction[0] || data.watchlist;
-
-    html += '<div onclick="selectedCountry=\'' + country + '\';setZoomLevel(\'ground\')" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin-bottom:6px;background:rgba(255,60,60,0.06);border:1px solid rgba(255,60,60,0.15);border-radius:4px;cursor:pointer;transition:background 0.2s;" onmouseenter="this.style.background=\'rgba(255,60,60,0.12)\'" onmouseleave="this.style.background=\'rgba(255,60,60,0.06)\'">';
+  for (const item of ranked.slice(0, 8)) {
+    html += '<div onclick="selectedCountry=\'' + item.country + '\';setZoomLevel(\'ground\')" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin-bottom:6px;background:rgba(26,111,255,0.06);border:1px solid rgba(26,111,255,0.15);border-radius:4px;cursor:pointer;transition:background 0.2s;" onmouseenter="this.style.background=\'rgba(26,111,255,0.12)\'" onmouseleave="this.style.background=\'rgba(26,111,255,0.06)\'">';
     html += '<div>';
-    html += '<div style="font-weight:600;color:var(--bright);font-size:0.85rem;">' + country + '</div>';
-    html += '<div style="font-size:0.68rem;color:var(--dim);">' + (topPattern?.signature || 'Pattern') + '</div>';
+    html += '<div style="font-weight:600;color:var(--bright);font-size:0.85rem;">' + item.country + '</div>';
+    html += '<div style="font-size:0.68rem;color:var(--dim);">' + item.patternCount + ' pattern' + (item.patternCount > 1 ? 's' : '') + '</div>';
     html += '</div>';
     html += '<div style="text-align:right;">';
-    if (topPattern) html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);">' + topPattern.lift.toFixed(1) + 'x</div>';
-    html += '<div style="font-family:var(--mono);font-size:0.62rem;color:var(--warning);">EXTRACTION</div>';
+    html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);">' + item.maxLift.toFixed(1) + 'x lift</div>';
+    if (item.hasWatchlist) html += '<div style="font-family:var(--mono);font-size:0.62rem;color:var(--warning);">WATCHLIST</div>';
     html += '</div>';
     html += '</div>';
   }
@@ -2825,7 +2692,7 @@ function renderPatternsPreview() {
 
 function renderSectorView() {
   renderSectorPatterns();
-  renderSectorExtraction();
+  renderSectorWatchlist();
 }
 
 function renderSectorPatterns() {
@@ -2837,7 +2704,7 @@ function renderSectorPatterns() {
     const lift = p.lift?.lift || 0;
     const liftColor = lift >= 5 ? 'var(--critical)' : lift >= 2 ? 'var(--stable)' : 'var(--warning)';
 
-    html += '<div class="sector-pattern-card" data-countries="' + (p.countries || []).join(',') + '" style="padding:1rem;margin-bottom:0.75rem;background:var(--panel2);border:1px solid var(--border);border-radius:6px;transition:border-color 0.2s;" onmouseenter="highlightExtraction(this)" onmouseleave="clearHighlight()">';
+    html += '<div class="sector-pattern-card" data-countries="' + (p.countries || []).join(',') + '" style="padding:1rem;margin-bottom:0.75rem;background:var(--panel2);border:1px solid var(--border);border-radius:6px;transition:border-color 0.2s;" onmouseenter="highlightWatchlist(this)" onmouseleave="clearHighlight()">';
 
     html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;">';
     html += '<div style="font-size:0.92rem;font-weight:600;color:var(--bright);">' + labels.join(' + ') + '</div>';
@@ -2847,11 +2714,11 @@ function renderSectorPatterns() {
     // Countries
     html += '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:0.5rem;">';
     for (const c of (p.countries || []).slice(0, 8)) {
-      const hasExtraction = allCountryData.get(c)?.extraction.length > 0 || allCountryData.get(c)?.watchlist;
-      const chipStyle = hasExtraction
+      const hasWatchlist = allCountryData.get(c)?.watchlist !== null;
+      const chipStyle = hasWatchlist
         ? 'background:rgba(255,170,0,0.15);border:1px solid rgba(255,170,0,0.3);color:var(--warning);'
         : 'background:rgba(26,111,255,0.1);border:1px solid rgba(26,111,255,0.2);color:var(--text);';
-      html += '<span onclick="event.stopPropagation();selectedCountry=\'' + c + '\';setZoomLevel(\'ground\')" style="font-size:0.72rem;padding:2px 8px;border-radius:3px;cursor:pointer;' + chipStyle + '">' + c + (hasExtraction ? ' ●' : '') + '</span>';
+      html += '<span onclick="event.stopPropagation();selectedCountry=\'' + c + '\';setZoomLevel(\'ground\')" style="font-size:0.72rem;padding:2px 8px;border-radius:3px;cursor:pointer;' + chipStyle + '">' + c + (hasWatchlist ? ' ●' : '') + '</span>';
     }
     html += '</div>';
 
@@ -2862,57 +2729,42 @@ function renderSectorPatterns() {
   el.innerHTML = html;
 }
 
-function renderSectorExtraction() {
-  // Group extraction by type
-  const vultures = extractionSignatures.filter(s => s.pattern_id === 'VULTURE_PLAY');
-  const insiders = extractionSignatures.filter(s => s.pattern_id === 'INSIDER_EXIT');
-  const positioning = extractionSignatures.filter(s => s.pattern_id === 'ACTIVE_POSITIONING');
+function renderSectorWatchlist() {
+  const el = document.getElementById('sector-watchlist-countries');
 
-  // Also include watchlist items
-  const watchlistVultures = extractiveWatchlist.filter(w =>
-    (w.elevatedSignals || []).some(s => s.signal === 'corruption_risk' && s.z > 1.5)
-  );
-
-  renderExtractionCategory('sector-vulture-list', [...vultures, ...watchlistVultures.map(w => ({ country: w.country, z_score: w.elevatedSignals?.[0]?.z, confidence: 'HIGH', isWatchlist: true }))]);
-  renderExtractionCategory('sector-insider-list', insiders);
-  renderExtractionCategory('sector-positioning-list', positioning);
-}
-
-function renderExtractionCategory(elId, items) {
-  const el = document.getElementById(elId);
-  if (!items.length) {
-    el.innerHTML = '<div style="font-size:0.75rem;color:var(--dim);padding:8px 0;">None detected</div>';
+  if (extractiveWatchlist.length === 0) {
+    el.innerHTML = '<div style="font-size:0.75rem;color:var(--dim);padding:8px 0;">No watchlist items</div>';
     return;
   }
 
   let html = '';
-  for (const item of items.slice(0, 6)) {
-    const country = item.country;
-    const zScore = item.z_score || item.zScore || 0;
+  for (const w of extractiveWatchlist.slice(0, 10)) {
+    const country = w.country;
     const countryData = allCountryData.get(country);
     const hasPattern = countryData?.patterns.length > 0;
+    const topSignal = w.elevatedSignals?.[0];
 
-    html += '<div class="sector-extraction-item" data-country="' + country + '" onclick="selectedCountry=\'' + country + '\';setZoomLevel(\'ground\')" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin-bottom:4px;background:' + (hasPattern ? 'rgba(255,60,60,0.06)' : 'var(--panel2)') + ';border:1px solid ' + (hasPattern ? 'rgba(255,60,60,0.15)' : 'var(--border)') + ';border-radius:4px;cursor:pointer;transition:all 0.2s;" onmouseenter="highlightPattern(this)" onmouseleave="clearHighlight()">';
+    html += '<div class="sector-watchlist-item" data-country="' + country + '" onclick="selectedCountry=\'' + country + '\';setZoomLevel(\'ground\')" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin-bottom:4px;background:' + (hasPattern ? 'rgba(255,60,60,0.06)' : 'var(--panel2)') + ';border:1px solid ' + (hasPattern ? 'rgba(255,60,60,0.15)' : 'var(--border)') + ';border-radius:4px;cursor:pointer;transition:all 0.2s;">';
+    html += '<div>';
     html += '<div style="font-size:0.82rem;color:var(--bright);">' + country + (hasPattern ? ' <span style="color:var(--critical);font-size:0.68rem;">●</span>' : '') + '</div>';
-    html += '<div style="display:flex;align-items:center;gap:8px;">';
-    html += '<div style="font-family:var(--mono);font-size:0.75rem;color:var(--warning);">z:' + zScore.toFixed(1) + '</div>';
-    // Intensity bars
-    const bars = Math.min(Math.ceil(zScore / 0.5), 5);
-    html += '<div style="display:flex;gap:2px;">';
-    for (let i = 0; i < 5; i++) {
-      html += '<div style="width:4px;height:12px;border-radius:2px;background:' + (i < bars ? 'var(--warning)' : 'var(--border)') + ';"></div>';
+    if (topSignal) {
+      html += '<div style="font-size:0.68rem;color:var(--dim);">' + getSignalLabel(topSignal.signal) + '</div>';
     }
-    html += '</div></div></div>';
+    html += '</div>';
+    if (topSignal) {
+      html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--warning);">z:' + topSignal.z.toFixed(1) + '</div>';
+    }
+    html += '</div>';
   }
 
   el.innerHTML = html;
 }
 
-function highlightExtraction(patternEl) {
+function highlightWatchlist(patternEl) {
   const countries = patternEl.dataset.countries.split(',');
   patternEl.style.borderColor = 'var(--accent)';
 
-  document.querySelectorAll('.sector-extraction-item').forEach(el => {
+  document.querySelectorAll('.sector-watchlist-item').forEach(el => {
     if (countries.includes(el.dataset.country)) {
       el.style.borderColor = 'var(--accent)';
       el.style.background = 'rgba(26,111,255,0.1)';
@@ -2920,9 +2772,9 @@ function highlightExtraction(patternEl) {
   });
 }
 
-function highlightPattern(extractionEl) {
-  const country = extractionEl.dataset.country;
-  extractionEl.style.borderColor = 'var(--warning)';
+function highlightPattern(watchlistEl) {
+  const country = watchlistEl.dataset.country;
+  watchlistEl.style.borderColor = 'var(--warning)';
 
   document.querySelectorAll('.sector-pattern-card').forEach(el => {
     if (el.dataset.countries.split(',').includes(country)) {
@@ -2932,9 +2784,9 @@ function highlightPattern(extractionEl) {
 }
 
 function clearHighlight() {
-  document.querySelectorAll('.sector-pattern-card, .sector-extraction-item').forEach(el => {
+  document.querySelectorAll('.sector-pattern-card, .sector-watchlist-item').forEach(el => {
     el.style.borderColor = 'var(--border)';
-    if (el.classList.contains('sector-extraction-item')) {
+    if (el.classList.contains('sector-watchlist-item')) {
       const country = el.dataset.country;
       const hasPattern = allCountryData.get(country)?.patterns.length > 0;
       el.style.background = hasPattern ? 'rgba(255,60,60,0.06)' : 'var(--panel2)';
@@ -2950,7 +2802,7 @@ async function renderGroundView() {
     return;
   }
 
-  const data = allCountryData.get(selectedCountry) || { patterns: [], extraction: [], watchlist: null };
+  const data = allCountryData.get(selectedCountry) || { patterns: [], watchlist: null };
   groundPatterns = data.patterns; // Store for click handler
 
   // Header
@@ -2990,186 +2842,25 @@ async function renderGroundView() {
     patternsEl.innerHTML = html;
   }
 
-  // Extraction activity — load from real extraction_signatures table
-  const extractionEl = document.getElementById('ground-extraction');
-  extractionEl.innerHTML = '<div style="color:var(--dim);font-size:0.75rem;">Loading...</div>';
-  loadExtractionForCountry(selectedCountry);
+  // Watchlist status (structural detection from real signals)
+  const watchlistSection = document.getElementById('ground-watchlist-section');
+  const watchlistEl = document.getElementById('ground-watchlist');
+  if (data.watchlist) {
+    watchlistSection.style.display = 'block';
+    let html = '';
+    for (const sig of (data.watchlist.elevatedSignals || []).slice(0, 3)) {
+      html += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:0.75rem;">';
+      html += '<span style="color:var(--text);">' + getSignalLabel(sig.signal) + '</span>';
+      html += '<span style="font-family:var(--mono);color:var(--warning);">z:' + sig.z.toFixed(1) + '</span>';
+      html += '</div>';
+    }
+    watchlistEl.innerHTML = html || '<div style="color:var(--dim);font-size:0.75rem;">On watchlist</div>';
+  } else {
+    watchlistSection.style.display = 'none';
+  }
 
   // Load intelligence briefing (no timeline)
   await loadGroundBriefing();
-}
-
-let groundExtractionEvents = []; // Store for click handler
-
-async function loadExtractionForCountry(country) {
-  const extractionEl = document.getElementById('ground-extraction');
-  groundExtractionEvents = [];
-
-  try {
-    const res = await fetch(BASE + '/api/extraction/country/' + encodeURIComponent(country), {
-      headers: { 'Authorization': 'Bearer sabian_user_2026' }
-    });
-    const data = await res.json();
-
-    if (data.error) throw new Error(data.error);
-
-    if (!data.events || data.events.length === 0) {
-      extractionEl.innerHTML = '<div style="color:var(--dim);font-size:0.75rem;">No extraction activity detected</div>';
-      return;
-    }
-
-    groundExtractionEvents = data.events;
-
-    // Confidence colors
-    const confColor = { 'HIGH': 'var(--critical)', 'MEDIUM': 'var(--warning)', 'REVIEW': 'var(--dim)' };
-    const confBg = { 'HIGH': 'rgba(255,60,60,0.12)', 'MEDIUM': 'rgba(255,170,0,0.1)', 'REVIEW': 'rgba(136,160,192,0.08)' };
-    const confBorder = { 'HIGH': 'rgba(255,60,60,0.25)', 'MEDIUM': 'rgba(255,170,0,0.2)', 'REVIEW': 'rgba(136,160,192,0.15)' };
-
-    let html = '';
-    html += '<div style="font-size:0.72rem;color:var(--text);margin-bottom:6px;">' + data.eventCount + ' event' + (data.eventCount !== 1 ? 's' : '') + '</div>';
-
-    data.events.slice(0, 4).forEach((e, idx) => {
-      const color = confColor[e.confidence] || 'var(--dim)';
-      const bg = confBg[e.confidence] || 'rgba(136,160,192,0.08)';
-      const border = confBorder[e.confidence] || 'rgba(136,160,192,0.15)';
-
-      html += '<div onclick="expandExtractionEvent(' + idx + ')" style="padding:6px 8px;margin-bottom:4px;background:' + bg + ';border:1px solid ' + border + ';border-radius:4px;cursor:pointer;transition:background 0.2s;" onmouseenter="this.style.opacity=\'0.8\'" onmouseleave="this.style.opacity=\'1\'">';
-      html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
-      html += '<div style="font-size:0.75rem;color:var(--text);">' + e.pattern + '</div>';
-      html += '<div style="display:flex;align-items:center;gap:6px;">';
-      html += '<div style="font-family:var(--mono);font-size:0.58rem;color:' + color + ';">' + e.confidence + '</div>';
-      html += '<div style="font-size:0.6rem;color:var(--dim);">▸</div>';
-      html += '</div></div>';
-      html += '<div style="font-size:0.65rem;color:var(--dim);margin-top:2px;">' + e.actorCount + ' actor' + (e.actorCount !== 1 ? 's' : '');
-      if (e.recurringCount > 0) html += ', ' + e.recurringCount + ' repeat';
-      html += '</div>';
-      html += '</div>';
-    });
-
-    if (data.events.length > 4) {
-      html += '<div onclick="showAllExtractionEvents()" style="font-size:0.65rem;color:var(--accent);text-align:center;cursor:pointer;padding:4px;">+' + (data.events.length - 4) + ' more ▸</div>';
-    }
-
-    extractionEl.innerHTML = html;
-
-  } catch (err) {
-    extractionEl.innerHTML = '<div style="color:var(--dim);font-size:0.75rem;">Unable to load</div>';
-  }
-}
-
-function expandExtractionEvent(idx) {
-  const e = groundExtractionEvents[idx];
-  if (!e) return;
-
-  const modal = document.getElementById('pattern-detail-modal');
-  const content = document.getElementById('pattern-detail-content');
-  modal.style.display = 'block';
-
-  // Confidence colors
-  const confColor = { 'HIGH': 'var(--critical)', 'MEDIUM': 'var(--warning)', 'REVIEW': 'var(--dim)' };
-  const color = confColor[e.confidence] || 'var(--dim)';
-
-  let html = '';
-
-  // Header
-  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">';
-  html += '<div style="font-size:1.15rem;font-weight:700;color:var(--bright);">' + e.pattern + '</div>';
-  html += '<div style="font-family:var(--mono);font-size:0.75rem;padding:4px 12px;border-radius:4px;background:' + (e.confidence === 'HIGH' ? 'rgba(255,60,60,0.2)' : e.confidence === 'MEDIUM' ? 'rgba(255,170,0,0.15)' : 'rgba(136,160,192,0.1)') + ';color:' + color + ';">' + e.confidence + ' confidence</div>';
-  html += '</div>';
-
-  // Actor analysis
-  html += '<div style="background:rgba(26,111,255,0.08);border:1px solid rgba(26,111,255,0.2);border-radius:6px;padding:1rem;margin-bottom:1.25rem;">';
-  html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">ACTOR ANALYSIS</div>';
-  html += '<div style="font-size:0.88rem;color:var(--text);line-height:1.6;">';
-  html += '<strong>' + e.actorCount + '</strong> distinct actors detected in ' + selectedCountry + '. ';
-  if (e.recurringCount > 0) {
-    const pct = Math.round((e.recurringCount / e.actorCount) * 100);
-    html += '<strong>' + e.recurringCount + '</strong> (' + pct + '%) are recurring — same actors appearing in multiple windows, suggesting sustained positioning.';
-  } else {
-    html += 'No recurring actors detected.';
-  }
-  html += '</div></div>';
-
-  // Window information
-  if (e.windowStart || e.windowEnd || e.primaryWindow) {
-    html += '<div style="margin-bottom:1.25rem;">';
-    html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">OBSERVATION WINDOW</div>';
-    html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">';
-    if (e.windowStart) {
-      html += '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:8px;">';
-      html += '<div style="font-size:0.65rem;color:var(--dim);">Window start</div>';
-      html += '<div style="font-family:var(--mono);font-size:0.85rem;color:var(--text);">' + e.windowStart + '</div>';
-      html += '</div>';
-    }
-    if (e.windowEnd) {
-      html += '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:8px;">';
-      html += '<div style="font-size:0.65rem;color:var(--dim);">Window end</div>';
-      html += '<div style="font-family:var(--mono);font-size:0.85rem;color:var(--text);">' + e.windowEnd + '</div>';
-      html += '</div>';
-    }
-    if (e.primaryWindow) {
-      html += '<div style="background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:8px;grid-column:span 2;">';
-      html += '<div style="font-size:0.65rem;color:var(--dim);">Primary window</div>';
-      html += '<div style="font-family:var(--mono);font-size:0.85rem;color:var(--text);">' + e.primaryWindow + '</div>';
-      html += '</div>';
-    }
-    html += '</div></div>';
-  }
-
-  // Detection timestamp
-  if (e.detectedAt) {
-    html += '<div style="margin-bottom:1rem;">';
-    html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">DETECTED</div>';
-    html += '<div style="font-size:0.85rem;color:var(--text);">' + new Date(e.detectedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) + '</div>';
-    html += '</div>';
-  }
-
-  // Confidence explanation
-  html += '<div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">';
-  html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">CONFIDENCE GRADE</div>';
-  html += '<div style="font-size:0.82rem;color:var(--dim);line-height:1.5;">';
-  if (e.confidence === 'HIGH') {
-    html += 'HIGH confidence: Multiple recurring actors, consistent pattern across observation windows, strong signal-to-noise.';
-  } else if (e.confidence === 'MEDIUM') {
-    html += 'MEDIUM confidence: Pattern detected with some recurring actors. Warrants attention but may require additional observation.';
-  } else {
-    html += 'REVIEW confidence: Early signal detection. Pattern emerging but not yet confirmed across multiple windows.';
-  }
-  html += '</div></div>';
-
-  content.innerHTML = html;
-}
-
-function showAllExtractionEvents() {
-  const modal = document.getElementById('pattern-detail-modal');
-  const content = document.getElementById('pattern-detail-content');
-  modal.style.display = 'block';
-
-  const confColor = { 'HIGH': 'var(--critical)', 'MEDIUM': 'var(--warning)', 'REVIEW': 'var(--dim)' };
-  const confBg = { 'HIGH': 'rgba(255,60,60,0.12)', 'MEDIUM': 'rgba(255,170,0,0.1)', 'REVIEW': 'rgba(136,160,192,0.08)' };
-
-  let html = '';
-  html += '<div style="font-size:1.1rem;font-weight:700;color:var(--bright);margin-bottom:1rem;">All extraction events — ' + selectedCountry + '</div>';
-  html += '<div style="max-height:400px;overflow-y:auto;">';
-
-  groundExtractionEvents.forEach((e, idx) => {
-    const color = confColor[e.confidence] || 'var(--dim)';
-    const bg = confBg[e.confidence] || 'rgba(136,160,192,0.08)';
-
-    html += '<div onclick="document.getElementById(\'pattern-detail-modal\').style.display=\'none\';expandExtractionEvent(' + idx + ')" style="padding:10px 12px;margin-bottom:6px;background:' + bg + ';border-radius:4px;cursor:pointer;" onmouseenter="this.style.opacity=\'0.8\'" onmouseleave="this.style.opacity=\'1\'">';
-    html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
-    html += '<div style="font-size:0.85rem;color:var(--text);">' + e.pattern + '</div>';
-    html += '<div style="font-family:var(--mono);font-size:0.65rem;color:' + color + ';">' + e.confidence + '</div>';
-    html += '</div>';
-    html += '<div style="font-size:0.72rem;color:var(--dim);margin-top:4px;">' + e.actorCount + ' actors';
-    if (e.recurringCount > 0) html += ', ' + e.recurringCount + ' repeat';
-    if (e.windowStart || e.windowEnd) html += ' • ' + (e.windowStart || '') + ' – ' + (e.windowEnd || '');
-    html += '</div>';
-    html += '</div>';
-  });
-
-  html += '</div>';
-  content.innerHTML = html;
 }
 
 function renderMarkdown(md) {
@@ -3442,85 +3133,6 @@ function closePatternModal() {
 }
 // ═══ END THREAT INTELLIGENCE ══════════════════════════════════════════════════
 
-
-// ═══ EXTRACTION INTELLIGENCE LOADER ══════════════════════════════════════
-let extractionLoaded = false;
-let allSignatures = [];
-
-async function loadExtractionSignatures(filters) {
-  extractionLoaded = true;
-  let url = '/public-api/extraction/signatures';
-  const params = [];
-  if (filters && filters.pattern)    params.push('pattern_id=' + filters.pattern);
-  if (filters && filters.confidence) params.push('confidence=' + filters.confidence);
-  if (filters && filters.country)    params.push('country=' + encodeURIComponent(filters.country));
-  if (params.length) url += '?' + params.join('&');
-
-  document.getElementById('ext-signatures-wrap').innerHTML = '<div class="loading-msg">Loading…</div>';
-  const data = await apiFetch(url);
-  if (!data || data.error) {
-    document.getElementById('ext-signatures-wrap').innerHTML = '<div class="error-msg">Failed to load signatures.</div>';
-    return;
-  }
-  allSignatures = data.signatures || [];
-
-  // Summary bar
-  document.getElementById('ext-total').textContent   = data.total || 0;
-  document.getElementById('ext-vulture').textContent = data.by_pattern.VULTURE_PLAY || 0;
-  document.getElementById('ext-insider').textContent = data.by_pattern.INSIDER_EXIT || 0;
-  document.getElementById('ext-active').textContent  = data.by_pattern.ACTIVE_POSITIONING || 0;
-  document.getElementById('ext-high').textContent    = data.by_confidence.HIGH || 0;
-  document.getElementById('tab-extraction-count').textContent = '(' + (data.total || 0) + ')';
-
-  renderSignatures(allSignatures);
-}
-
-function renderSignatures(sigs) {
-  if (!sigs.length) {
-    document.getElementById('ext-signatures-wrap').innerHTML = '<div class="loading-msg">No signatures match current filters.</div>';
-    return;
-  }
-  const patternLabel = { VULTURE_PLAY: 'Vulture Play', INSIDER_EXIT: 'Insider Exit', ACTIVE_POSITIONING: 'Active Positioning' };
-  const patternColor = { VULTURE_PLAY: 'var(--critical)', INSIDER_EXIT: 'var(--warning)', ACTIVE_POSITIONING: 'var(--elevated)' };
-  const confColor    = { HIGH: 'var(--stable)', MEDIUM: 'var(--warning)', REVIEW: 'var(--dim)' };
-
-  let html = '<table class="threat-table"><thead><tr>'
-    + '<th>#</th><th>Country</th><th>Pattern</th><th>Window</th>'
-    + '<th>Actors</th><th>Recurring Seats</th><th>Confidence</th><th>Date Range</th><th></th>'
-    + '</tr></thead><tbody>';
-
-  sigs.forEach((s, i) => {
-    const pc = patternColor[s.pattern_id] || 'var(--text)';
-    const cc = confColor[s.confidence]    || 'var(--dim)';
-    const label = patternLabel[s.pattern_id] || s.pattern_id;
-    html += '<tr>'
-      + '<td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">' + (i+1) + '</td>'
-      + '<td><span class="country-name">' + s.country + '</span></td>'
-      + '<td><span style="color:' + pc + ';font-weight:700;font-size:0.78rem">' + label + '</span></td>'
-      + '<td><span class="signal-chip">' + s.primary_window + '</span></td>'
-      + '<td style="font-family:var(--mono);font-size:0.9rem;font-weight:700">' + s.actor_count + '</td>'
-      + '<td style="font-family:var(--mono);font-size:0.9rem;font-weight:700;color:' + (s.recurring_count > 0 ? 'var(--critical)' : 'var(--dim)') + '">' + s.recurring_count + '</td>'
-      + '<td><span style="color:' + cc + ';font-family:var(--mono);font-size:0.78rem;font-weight:700">' + s.confidence + '</span></td>'
-      + '<td style="font-family:var(--mono);font-size:0.72rem;color:var(--dim)">' + (s.date_range_start || '').slice(0,7) + ' → ' + (s.date_range_end || '').slice(0,7) + '</td>'
-      + '<td><span class="restricted-badge" onclick="showRestricted()" style="cursor:pointer;font-family:var(--mono);font-size:0.65rem;color:var(--dim);border:1px solid var(--border);padding:2px 6px;border-radius:3px">RESTRICTED</span></td>'
-      + '</tr>';
-  });
-  html += '</tbody></table>';
-  document.getElementById('ext-signatures-wrap').innerHTML = html;
-}
-
-function applyExtFilters() {
-  loadExtractionSignatures({
-    pattern:    document.getElementById('ext-filter-pattern').value,
-    confidence: document.getElementById('ext-filter-confidence').value,
-    country:    document.getElementById('ext-filter-country').value.trim()
-  });
-}
-
-function showRestricted() {
-  alert('RESTRICTED — Actor identification requires counsel review. Contact the Sabian team to initiate disclosure procedures.');
-}
-// ═══ END EXTRACTION INTELLIGENCE LOADER ══════════════════════════════════
 
 loadThreats();
 </script>
