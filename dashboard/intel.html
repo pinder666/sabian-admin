@@ -577,7 +577,7 @@
 
 <!-- TAB BAR -->
 <div class="tab-bar">
-  <button class="tab-btn active" data-view="threats">WATCHLIST <span class="tab-label-num" id="tab-threats-count"></span></button>
+  <button class="tab-btn active" data-view="threats">DETERIORATING <span class="tab-label-num" id="tab-threats-count"></span></button>
   <button class="tab-btn" data-view="analyzer">THREAT INTELLIGENCE</button>
   <button class="tab-btn" data-view="heatmap">FAMINE RISK <span class="tab-label-num" id="tab-famine-count"></span></button>
   <button class="tab-btn" data-view="patterns">MINED PATTERNS <span class="tab-label-num" id="tab-patterns-count"></span></button>
@@ -743,7 +743,7 @@
             </div>
             <div style="background:var(--panel);padding:1rem;text-align:center;">
               <div id="orbit-stat-watchlist" style="font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--warning);">0</div>
-              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">WATCHLIST</div>
+              <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);letter-spacing:0.08em;">DETERIORATING</div>
             </div>
             <div style="background:var(--panel);padding:1rem;text-align:center;">
               <div id="orbit-stat-total" style="font-family:var(--mono);font-size:1.8rem;font-weight:700;color:var(--text);">0</div>
@@ -760,7 +760,7 @@
           <!-- Top patterns preview -->
           <div style="background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1rem;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
-              <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;color:var(--accent);">TOP PATTERNS BY LIFT</div>
+              <div style="font-family:var(--mono);font-size:0.68rem;letter-spacing:0.1em;color:var(--accent);">TOP PATTERNS</div>
               <button onclick="setZoomLevel('sector')" style="background:none;border:none;color:var(--accent);font-family:var(--mono);font-size:0.68rem;cursor:pointer;">VIEW ALL →</button>
             </div>
             <div id="orbit-patterns-preview"></div>
@@ -773,27 +773,17 @@
     <!-- SECTOR VIEW — Linked panels: Patterns + Extraction                      -->
     <!-- ═══════════════════════════════════════════════════════════════════════ -->
     <div id="zoom-sector" class="zoom-layer" style="display:none;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+      <div style="display:grid;grid-template-columns:1fr;gap:1.5rem;">
 
-        <!-- Left panel: Collapse Patterns -->
+        <!-- Collapse Patterns -->
         <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">
             <div style="font-family:var(--mono);font-size:0.75rem;letter-spacing:0.12em;color:var(--accent);">COLLAPSE PATTERNS</div>
-            <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);">RANKED BY PREDICTIVE LIFT</div>
+            <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);">BY HISTORICAL OCCURRENCE</div>
           </div>
           <div id="sector-patterns-list" style="max-height:calc(100vh - 280px);overflow-y:auto;"></div>
         </div>
 
-        <!-- Right panel: Extraction Intelligence -->
-        <div style="background:linear-gradient(180deg, var(--panel) 0%, rgba(255,170,0,0.02) 100%);border:1px solid var(--border);border-radius:8px;padding:1.25rem;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid rgba(255,170,0,0.2);">
-            <div style="font-family:var(--mono);font-size:0.75rem;letter-spacing:0.12em;color:var(--warning);">WATCHLIST</div>
-            <div style="font-family:var(--mono);font-size:0.62rem;color:var(--dim);">ELEVATED SIGNALS</div>
-          </div>
-
-          <!-- Watchlist countries (structural detection from real signals) -->
-          <div id="sector-watchlist-countries"></div>
-        </div>
       </div>
 
       <!-- Connection highlight bar (shows when hovering linked items) -->
@@ -828,7 +818,7 @@
 
             <!-- Watchlist status -->
             <div id="ground-watchlist-section" style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);display:none;">
-              <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:0.5rem;">WATCHLIST</div>
+              <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--warning);margin-bottom:0.5rem;">DETERIORATING</div>
               <div id="ground-watchlist"></div>
             </div>
 
@@ -2687,8 +2677,8 @@ function renderHighRiskCountries() {
     html += '<div style="font-size:0.68rem;color:var(--dim);">' + item.patternCount + ' pattern' + (item.patternCount > 1 ? 's' : '') + '</div>';
     html += '</div>';
     html += '<div style="text-align:right;">';
-    html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);">' + item.maxLift.toFixed(1) + 'x lift</div>';
-    if (item.hasWatchlist) html += '<div style="font-family:var(--mono);font-size:0.62rem;color:var(--warning);">WATCHLIST</div>';
+    html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);">' + item.patternCount + ' pattern' + (item.patternCount > 1 ? 's' : '') + '</div>';
+    if (item.hasWatchlist) html += '<div style="font-family:var(--mono);font-size:0.62rem;color:var(--warning);">DETERIORATING</div>';
     html += '</div>';
     html += '</div>';
   }
@@ -2702,11 +2692,9 @@ function renderPatternsPreview() {
 
   for (const p of collapsePatterns.slice(0, 4)) {
     const labels = (p.signalPair || []).map(s => getSignalLabel(s));
-    const lift = p.lift?.lift || 0;
-
     html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">';
     html += '<div style="font-size:0.82rem;color:var(--text);">' + labels.join(' + ') + '</div>';
-    html += '<div style="font-family:var(--mono);font-size:0.85rem;font-weight:600;color:' + (lift >= 5 ? 'var(--critical)' : 'var(--accent)') + ';">' + lift + 'x</div>';
+    html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--dim);">' + (p.countries?.length || 0) + ' countries</div>';
     html += '</div>';
   }
 
@@ -2717,7 +2705,6 @@ function renderPatternsPreview() {
 
 function renderSectorView() {
   renderSectorPatterns();
-  renderSectorWatchlist();
 }
 
 function renderSectorPatterns() {
@@ -2726,24 +2713,17 @@ function renderSectorPatterns() {
 
   collapsePatterns.forEach((p, idx) => {
     const labels = (p.signalPair || []).map(s => getSignalLabel(s));
-    const lift = p.lift?.lift || 0;
-    const liftColor = lift >= 5 ? 'var(--critical)' : lift >= 2 ? 'var(--stable)' : 'var(--warning)';
-
-    html += '<div class="sector-pattern-card" data-countries="' + (p.countries || []).join(',') + '" style="padding:1rem;margin-bottom:0.75rem;background:var(--panel2);border:1px solid var(--border);border-radius:6px;transition:border-color 0.2s;" onmouseenter="highlightWatchlist(this)" onmouseleave="clearHighlight()">';
+    html += '<div class="sector-pattern-card" data-countries="' + (p.countries || []).join(',') + '" style="padding:1rem;margin-bottom:0.75rem;background:var(--panel2);border:1px solid var(--border);border-radius:6px;transition:border-color 0.2s;">';
 
     html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;">';
     html += '<div style="font-size:0.92rem;font-weight:600;color:var(--bright);">' + labels.join(' + ') + '</div>';
-    html += '<div style="font-family:var(--mono);font-size:1.1rem;font-weight:700;color:' + liftColor + ';">' + lift + 'x</div>';
+    html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--dim);">' + (p.countries?.length || 0) + ' countries</div>';
     html += '</div>';
 
     // Countries
     html += '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:0.5rem;">';
     for (const c of (p.countries || []).slice(0, 8)) {
-      const hasWatchlist = allCountryData.get(c)?.watchlist !== null;
-      const chipStyle = hasWatchlist
-        ? 'background:rgba(255,170,0,0.15);border:1px solid rgba(255,170,0,0.3);color:var(--warning);'
-        : 'background:rgba(26,111,255,0.1);border:1px solid rgba(26,111,255,0.2);color:var(--text);';
-      html += '<span onclick="event.stopPropagation();selectedCountry=\'' + c + '\';setZoomLevel(\'ground\')" style="font-size:0.72rem;padding:2px 8px;border-radius:3px;cursor:pointer;' + chipStyle + '">' + c + (hasWatchlist ? ' ●' : '') + '</span>';
+      html += '<span onclick="event.stopPropagation();selectedCountry=\'' + c + '\';setZoomLevel(\'ground\')" style="font-size:0.72rem;padding:2px 8px;border-radius:3px;cursor:pointer;background:rgba(26,111,255,0.1);border:1px solid rgba(26,111,255,0.2);color:var(--text);">' + c + '</span>';
     }
     html += '</div>';
 
@@ -2752,71 +2732,6 @@ function renderSectorPatterns() {
   });
 
   el.innerHTML = html;
-}
-
-function renderSectorWatchlist() {
-  const el = document.getElementById('sector-watchlist-countries');
-
-  if (extractiveWatchlist.length === 0) {
-    el.innerHTML = '<div style="font-size:0.75rem;color:var(--dim);padding:8px 0;">No watchlist items</div>';
-    return;
-  }
-
-  let html = '';
-  for (const w of extractiveWatchlist.slice(0, 10)) {
-    const country = w.country;
-    const countryData = allCountryData.get(country);
-    const hasPattern = countryData?.patterns.length > 0;
-    const topSignal = w.elevatedSignals?.[0];
-
-    html += '<div class="sector-watchlist-item" data-country="' + country + '" onclick="selectedCountry=\'' + country + '\';setZoomLevel(\'ground\')" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin-bottom:4px;background:' + (hasPattern ? 'rgba(255,60,60,0.06)' : 'var(--panel2)') + ';border:1px solid ' + (hasPattern ? 'rgba(255,60,60,0.15)' : 'var(--border)') + ';border-radius:4px;cursor:pointer;transition:all 0.2s;">';
-    html += '<div>';
-    html += '<div style="font-size:0.82rem;color:var(--bright);">' + country + (hasPattern ? ' <span style="color:var(--critical);font-size:0.68rem;">●</span>' : '') + '</div>';
-    if (topSignal) {
-      html += '<div style="font-size:0.68rem;color:var(--dim);">' + getSignalLabel(topSignal.signal) + '</div>';
-    }
-    html += '</div>';
-    if (topSignal) {
-      html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--warning);">z:' + topSignal.z.toFixed(1) + '</div>';
-    }
-    html += '</div>';
-  }
-
-  el.innerHTML = html;
-}
-
-function highlightWatchlist(patternEl) {
-  const countries = patternEl.dataset.countries.split(',');
-  patternEl.style.borderColor = 'var(--accent)';
-
-  document.querySelectorAll('.sector-watchlist-item').forEach(el => {
-    if (countries.includes(el.dataset.country)) {
-      el.style.borderColor = 'var(--accent)';
-      el.style.background = 'rgba(26,111,255,0.1)';
-    }
-  });
-}
-
-function highlightPattern(watchlistEl) {
-  const country = watchlistEl.dataset.country;
-  watchlistEl.style.borderColor = 'var(--warning)';
-
-  document.querySelectorAll('.sector-pattern-card').forEach(el => {
-    if (el.dataset.countries.split(',').includes(country)) {
-      el.style.borderColor = 'var(--warning)';
-    }
-  });
-}
-
-function clearHighlight() {
-  document.querySelectorAll('.sector-pattern-card, .sector-watchlist-item').forEach(el => {
-    el.style.borderColor = 'var(--border)';
-    if (el.classList.contains('sector-watchlist-item')) {
-      const country = el.dataset.country;
-      const hasPattern = allCountryData.get(country)?.patterns.length > 0;
-      el.style.background = hasPattern ? 'rgba(255,60,60,0.06)' : 'var(--panel2)';
-    }
-  });
 }
 
 // ═══ GROUND VIEW — Single country deep dive ════════════════════════════════════
@@ -2858,10 +2773,7 @@ async function renderGroundView() {
     data.patterns.forEach((p, idx) => {
       html += '<div onclick="expandGroundPattern(' + idx + ')" style="padding:6px 10px;margin-bottom:4px;background:rgba(26,111,255,0.1);border:1px solid rgba(26,111,255,0.2);border-radius:4px;cursor:pointer;transition:background 0.2s;" onmouseenter="this.style.background=\'rgba(26,111,255,0.18)\'" onmouseleave="this.style.background=\'rgba(26,111,255,0.1)\'">';
       html += '<div style="font-size:0.8rem;color:var(--text);">' + p.signature + '</div>';
-      html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
-      html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);">' + p.lift.toFixed(1) + 'x</div>';
-      html += '<div style="font-size:0.6rem;color:var(--dim);">▸</div>';
-      html += '</div>';
+      html += '<div style="font-size:0.6rem;color:var(--dim);text-align:right;">▸</div>';
       html += '</div>';
     });
     patternsEl.innerHTML = html;
@@ -2879,7 +2791,7 @@ async function renderGroundView() {
       html += '<span style="font-family:var(--mono);color:var(--warning);">z:' + sig.z.toFixed(1) + '</span>';
       html += '</div>';
     }
-    watchlistEl.innerHTML = html || '<div style="color:var(--dim);font-size:0.75rem;">On watchlist</div>';
+    watchlistEl.innerHTML = html || '<div style="color:var(--dim);font-size:0.75rem;">Signals deteriorating</div>';
   } else {
     watchlistSection.style.display = 'none';
   }
@@ -3046,15 +2958,12 @@ function expandGroundPattern(idx) {
   html += '<div style="font-size:1.15rem;font-weight:700;color:var(--bright);margin-bottom:1.25rem;">' + pattern.signature + '</div>';
 
   if (fullPattern) {
-    // Lift explanation
-    if (fullPattern.lift?.lift) {
+    // Historical occurrence
+    if (fullPattern.lift?.pairInPreCollapse && fullPattern.lift?.pairInAll) {
       html += '<div style="background:rgba(26,111,255,0.08);border:1px solid rgba(26,111,255,0.2);border-radius:6px;padding:1rem;margin-bottom:1.25rem;">';
-      html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">PREDICTIVE STRENGTH</div>';
+      html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">HISTORICAL OCCURRENCE</div>';
       html += '<div style="font-size:0.88rem;color:var(--text);line-height:1.6;">';
-      html += 'This pattern appears <strong>' + fullPattern.lift.lift.toFixed(1) + 'x</strong> more often before crisis than baseline. ';
-      if (fullPattern.lift.pairInPreCollapse && fullPattern.lift.pairInAll) {
-        html += 'Observed in ' + fullPattern.lift.pairInPreCollapse + ' of ' + fullPattern.lift.pairInAll + ' historical occurrences.';
-      }
+      html += 'This pattern preceded crisis in <strong>' + fullPattern.lift.pairInPreCollapse + ' of ' + fullPattern.lift.pairInAll + '</strong> historical cases where it appeared.';
       html += '</div></div>';
     }
 
@@ -3073,7 +2982,7 @@ function expandGroundPattern(idx) {
       const total = order.reduce((sum, k) => sum + (buckets[k] || 0), 0);
       if (total > 0) {
         html += '<div style="margin-bottom:1.25rem;">';
-        html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;">LEAD TIME DISTRIBUTION</div>';
+        html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;">HISTORICAL TIMING</div>';
         for (const label of order) {
           const count = buckets[label] || 0;
           if (count === 0) continue;
@@ -3122,9 +3031,6 @@ function expandGroundPattern(idx) {
         html += '<div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;margin:0 6px 6px 0;background:' + bg + ';border:1px solid ' + border + ';border-radius:3px;">';
         html += '<span style="font-size:0.78rem;color:' + color + ';">' + inst.country + '</span>';
         html += '<span style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);">' + inst.shiftYear + '</span>';
-        if (inst.delta) {
-          html += '<span style="font-family:var(--mono);font-size:0.65rem;color:var(--dim);">Δ' + inst.delta.toFixed(1) + '</span>';
-        }
         html += '</div>';
       }
       html += '</div></div>';
@@ -3177,12 +3083,9 @@ async function expandPattern(idx) {
     const labels = (pattern.signalPair || []).map(s => getSignalLabel(s));
     let html = '';
 
-    // Header with pattern signature and lift
+    // Header with pattern signature
     html += '<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">';
     html += '<div style="font-size:1.25rem;font-weight:700;color:var(--bright);">' + labels.join(' + ') + '</div>';
-    if (pattern.lift?.lift) {
-      html += '<div style="font-family:var(--mono);font-size:0.75rem;background:rgba(255,179,71,0.15);border:1px solid rgba(255,179,71,0.3);color:var(--warning);padding:4px 10px;border-radius:3px;">' + pattern.lift.lift.toFixed(1) + 'x LIFT</div>';
-    }
     html += '</div>';
 
     // Countries currently matching
@@ -3229,13 +3132,6 @@ async function expandPattern(idx) {
         }
         html += '</div>';
       }
-      html += '</div>';
-    }
-
-    // Lead time distribution
-    if (pattern.leadTimeDistribution?.median) {
-      html += '<div style="margin-top:1rem;font-family:var(--mono);font-size:0.72rem;color:var(--dim);">';
-      html += 'Median lead time: <span style="color:var(--warning);">' + pattern.leadTimeDistribution.median + ' years</span> before collapse';
       html += '</div>';
     }
 
