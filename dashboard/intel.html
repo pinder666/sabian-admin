@@ -832,6 +832,12 @@
               <div id="ground-watchlist"></div>
             </div>
 
+            <!-- Positioned Actors (conditional — only renders if country has litigation data) -->
+            <div id="ground-actors-section" style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);display:none;">
+              <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--accent);margin-bottom:0.5rem;">POSITIONED ACTORS</div>
+              <div id="ground-actors"></div>
+            </div>
+
             <!-- Signal count -->
             <div>
               <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--dim);margin-bottom:0.5rem;">SIGNALS ANALYZED</div>
@@ -1099,6 +1105,25 @@
 <script>
 // ── CONFIG ─────────────────────────────────────────────────────────────────
 const BASE = '';  // same origin
+
+// Supabase client for direct actor queries (RLS enabled: read-only public access)
+const SUPABASE_URL = 'https://qdxgcyawpqxhhjprqyas.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkeGdjeWF3cHF4aGhqcHJxeWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0MDQ1MDAsImV4cCI6MjA5NDk4MDUwMH0.14alHJf-MxciWa_Tt4etJa_h_zUVDf0qM23-yG7c5SU';
+
+async function supabaseQuery(table, params = {}) {
+  let url = `${SUPABASE_URL}/rest/v1/${table}?`;
+  for (const [k, v] of Object.entries(params)) {
+    url += `${k}=${encodeURIComponent(v)}&`;
+  }
+  const res = await fetch(url, {
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+    }
+  });
+  if (!res.ok) return [];
+  return res.json();
+}
 
 // ── SCORE BANDS (aligned with legend) ──────────────────────────────────────
 const BANDS = { CRITICAL: 81, WARNING: 66, ELEVATED: 41 };
@@ -2861,6 +2886,9 @@ async function renderGroundView() {
 
   // Load intelligence briefing (no timeline)
   await loadGroundBriefing();
+
+  // Load positioned actors (conditional — renders if data exists)
+  await loadGroundActors();
 }
 
 function renderMarkdown(md) {
@@ -2900,6 +2928,96 @@ async function loadGroundBriefing() {
 
   } catch (err) {
     evidenceEl.innerHTML = '<div style="color:var(--critical);">Error: ' + err.message + '</div>';
+  }
+}
+
+// ═══ POSITIONED ACTORS — court-verified litigation actors ═══════════════════════
+
+async function loadGroundActors() {
+  const section = document.getElementById('ground-actors-section');
+  const container = document.getElementById('ground-actors');
+
+  try {
+    // Query actors for this country directly — no whitelist, data decides
+    const actors = await supabaseQuery('extraction_actors_verified', {
+      'sovereign': `eq.${selectedCountry}`,
+      'select': 'actor_normalized,canonical_parent,docket_number,docket_url'
+    });
+
+    if (!actors || actors.length === 0) {
+      section.style.display = 'none';
+      return;
+    }
+
+    // Query party links for co-party network
+    const docketNumbers = [...new Set(actors.map(a => a.docket_number))];
+    const parties = await supabaseQuery('extraction_party_links', {
+      'docket_number': `in.(${docketNumbers.join(',')})`,
+      'is_institutional': 'eq.true',
+      'select': 'docket_number,party_normalized'
+    });
+
+    // Build docket -> parties map (dedupe within each docket)
+    const docketParties = {};
+    for (const p of parties) {
+      if (!docketParties[p.docket_number]) docketParties[p.docket_number] = new Set();
+      docketParties[p.docket_number].add(p.party_normalized);
+    }
+
+    // Aggregate actors: use canonical_parent if set, else actor_normalized
+    const actorMap = {};
+    for (const a of actors) {
+      const name = a.canonical_parent || a.actor_normalized;
+      if (!actorMap[name]) {
+        actorMap[name] = { dockets: [], coparties: new Set() };
+      }
+      actorMap[name].dockets.push({ number: a.docket_number, url: a.docket_url });
+
+      // Add co-parties from this docket (Set ensures distinct parties)
+      const coparties = docketParties[a.docket_number] || new Set();
+      for (const cp of coparties) {
+        if (cp !== name) actorMap[name].coparties.add(cp);
+      }
+    }
+
+    // Sort by docket count descending
+    const sorted = Object.entries(actorMap)
+      .map(([name, data]) => ({
+        name,
+        docketCount: data.dockets.length,
+        dockets: data.dockets,
+        coparties: [...data.coparties] // Convert Set to array (already distinct)
+      }))
+      .sort((a, b) => b.docketCount - a.docketCount);
+
+    // Render (top 10)
+    let html = '';
+    for (const actor of sorted.slice(0, 10)) {
+      const docketUrl = actor.dockets[0]?.url || '#';
+      const copartyList = actor.coparties.slice(0, 3).join(', ');
+      const remainingCoparties = actor.coparties.length - 3;
+
+      html += '<a href="' + docketUrl + '" target="_blank" rel="noopener" style="display:block;padding:6px 8px;margin-bottom:4px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;text-decoration:none;transition:border-color 0.2s;" onmouseenter="this.style.borderColor=\'var(--accent)\'" onmouseleave="this.style.borderColor=\'var(--border)\'">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+      html += '<span style="font-size:0.78rem;color:var(--bright);font-weight:500;">' + actor.name + '</span>';
+      html += '<span style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);">' + actor.docketCount + '</span>';
+      html += '</div>';
+      if (copartyList) {
+        html += '<div style="font-size:0.68rem;color:var(--dim);margin-top:2px;">' + copartyList + (remainingCoparties > 0 ? ' +' + remainingCoparties : '') + '</div>';
+      }
+      html += '</a>';
+    }
+
+    if (sorted.length > 10) {
+      html += '<div style="font-size:0.68rem;color:var(--dim);padding-top:4px;">+' + (sorted.length - 10) + ' more actors</div>';
+    }
+
+    container.innerHTML = html;
+    section.style.display = 'block';
+
+  } catch (err) {
+    console.error('Failed to load actors:', err);
+    section.style.display = 'none';
   }
 }
 
