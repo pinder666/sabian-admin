@@ -2467,6 +2467,7 @@ let currentZoom = 'orbit';
 let allCountryData = new Map(); // country -> { patterns: [], score, level }
 let matchDatesByCountry = [];
 let groundPatterns = [];
+let actorCountsBySovereign = new Map();
 
 async function loadCollapseAnalyzer() {
   if (analyzerLoaded) return;
@@ -2484,6 +2485,20 @@ async function loadCollapseAnalyzer() {
     matchDatesByCountry = patternsData.matchDatesByCountry || [];
 
     console.log('Loaded:', collapsePatterns.length, 'collapse patterns');
+
+    // Prefetch actor counts by sovereign for SECTOR display
+    try {
+      const actorData = await supabaseQuery('extraction_actors_verified', {
+        'select': 'sovereign'
+      });
+      actorCountsBySovereign.clear();
+      for (const row of (actorData || [])) {
+        actorCountsBySovereign.set(row.sovereign, (actorCountsBySovereign.get(row.sovereign) || 0) + 1);
+      }
+      console.log('Actor counts:', actorCountsBySovereign.size, 'sovereigns');
+    } catch (e) {
+      console.warn('Actor counts unavailable:', e.message);
+    }
 
     // Build unified country data map
     buildCountryDataMap();
@@ -2715,9 +2730,15 @@ function renderSectorPatterns() {
     const labels = (p.signalPair || []).map(s => getSignalLabel(s));
     html += '<div class="sector-pattern-card" data-countries="' + (p.countries || []).join(',') + '" style="padding:1rem;margin-bottom:0.75rem;background:var(--panel2);border:1px solid var(--border);border-radius:6px;transition:border-color 0.2s;">';
 
+    const patternActorCount = (p.countries || []).reduce((sum, c) => sum + (actorCountsBySovereign.get(c) || 0), 0);
     html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;">';
     html += '<div style="font-size:0.92rem;font-weight:600;color:var(--bright);">' + labels.join(' + ') + '</div>';
-    html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--dim);">' + (p.countries?.length || 0) + ' countries</div>';
+    html += '<div style="display:flex;gap:10px;font-family:var(--mono);font-size:0.72rem;">';
+    html += '<span style="color:var(--dim);">' + (p.countries?.length || 0) + ' countries</span>';
+    if (patternActorCount > 0) {
+      html += '<span style="color:var(--warning);">' + patternActorCount + ' actors</span>';
+    }
+    html += '</div>';
     html += '</div>';
 
     // Countries
