@@ -2770,10 +2770,20 @@ async function renderGroundView() {
     patternsEl.innerHTML = '<div style="color:var(--dim);font-size:0.8rem;">No pattern matches</div>';
   } else {
     let html = '';
+    const countryMatches = matchDatesByCountry.find(m => m.country === selectedCountry);
     data.patterns.forEach((p, idx) => {
+      const fullPattern = collapsePatterns.find(cp => cp.signalPair && p.signalPair && cp.signalPair[0] === p.signalPair[0] && cp.signalPair[1] === p.signalPair[1]);
+      const entryYear = countryMatches?.matches?.[fullPattern?.fingerprint] || null;
       html += '<div onclick="expandGroundPattern(' + idx + ')" style="padding:6px 10px;margin-bottom:4px;background:rgba(26,111,255,0.1);border:1px solid rgba(26,111,255,0.2);border-radius:4px;cursor:pointer;transition:background 0.2s;" onmouseenter="this.style.background=\'rgba(26,111,255,0.18)\'" onmouseleave="this.style.background=\'rgba(26,111,255,0.1)\'">';
-      html += '<div style="font-size:0.8rem;color:var(--text);">' + p.signature + '</div>';
-      html += '<div style="font-size:0.6rem;color:var(--dim);text-align:right;">▸</div>';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+      html += '<span style="font-size:0.8rem;color:var(--text);">' + p.signature + '</span>';
+      html += '<div style="display:flex;align-items:center;gap:6px;">';
+      if (entryYear) {
+        html += '<span style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);">since ' + entryYear + '</span>';
+      }
+      html += '<span style="font-size:0.6rem;color:var(--dim);">▸</span>';
+      html += '</div>';
+      html += '</div>';
       html += '</div>';
     });
     patternsEl.innerHTML = html;
