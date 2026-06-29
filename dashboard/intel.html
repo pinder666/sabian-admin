@@ -2363,14 +2363,14 @@ function summarizeLibraryFinding(f) {
 
     case 'conditional_probability':
       const prob = p.P_scoreHigh_given_sigElevated || 0;
-      return `When ${signal} is elevated above ${p.sigThreshold}, ${(prob * 100).toFixed(0)}% chance score exceeds ${p.scoreThreshold}. Lift: ${(p.lift || 0).toFixed(1)}x.`;
+      return `When ${signal} is elevated above ${p.sigThreshold}, ${(prob * 100).toFixed(0)}% chance score exceeds ${p.scoreThreshold}.`;
 
     case 'going_dark_sequence':
       return `${signal} tends to go silent first before other categories. First to dark ${p.timesFirstDark || 0} times.`;
 
     case 'regional_divergence':
       const dir = p.direction === 'above_global' ? 'above' : 'below';
-      return `${p.region}: ${signal} runs ${dir} global average by ${Math.abs(p.deviation || 0).toFixed(2)} standard deviations (n=${p.n_region}).`;
+      return `${p.region}: ${signal} runs ${dir} global average by ${Math.abs(p.deviation || 0).toFixed(2)} standard deviations.`;
 
     default:
       return 'Pattern detected.';
@@ -2788,7 +2788,7 @@ async function renderGroundView() {
     for (const sig of (data.watchlist.elevatedSignals || []).slice(0, 3)) {
       html += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:0.75rem;">';
       html += '<span style="color:var(--text);">' + getSignalLabel(sig.signal) + '</span>';
-      html += '<span style="font-family:var(--mono);color:var(--warning);">z:' + sig.z.toFixed(1) + '</span>';
+      html += '<span style="font-family:var(--mono);font-size:0.68rem;padding:2px 6px;border-radius:3px;background:rgba(255,170,0,0.15);color:var(--warning);">↑</span>';
       html += '</div>';
     }
     watchlistEl.innerHTML = html || '<div style="color:var(--dim);font-size:0.75rem;">Signals deteriorating</div>';
@@ -3005,7 +3005,7 @@ function expandGroundPattern(idx) {
         html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;">ALSO MATCHING</div>';
         html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
         for (const c of peers.slice(0, 12)) {
-          html += '<span style="font-size:0.78rem;padding:4px 10px;border-radius:3px;background:var(--panel2);border:1px solid var(--border);color:var(--text);">' + c + '</span>';
+          html += '<span onclick="closePatternModal();selectedCountry=\'' + c + '\';setZoomLevel(\'ground\')" style="font-size:0.78rem;padding:4px 10px;border-radius:3px;background:var(--panel2);border:1px solid var(--border);color:var(--text);cursor:pointer;" onmouseenter="this.style.background=\'var(--panel)\'" onmouseleave="this.style.background=\'var(--panel2)\'">' + c + '</span>';
         }
         if (peers.length > 12) {
           html += '<span style="font-size:0.72rem;color:var(--dim);">+' + (peers.length - 12) + ' more</span>';
@@ -3028,7 +3028,7 @@ function expandGroundPattern(idx) {
         const bg = isCurrentCountry ? 'rgba(255,170,0,0.12)' : 'var(--panel2)';
         const border = isCurrentCountry ? 'rgba(255,170,0,0.25)' : 'var(--border)';
         const color = isCurrentCountry ? 'var(--warning)' : 'var(--text)';
-        html += '<div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;margin:0 6px 6px 0;background:' + bg + ';border:1px solid ' + border + ';border-radius:3px;">';
+        html += '<div onclick="closePatternModal();selectedCountry=\'' + inst.country + '\';setZoomLevel(\'ground\')" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;margin:0 6px 6px 0;background:' + bg + ';border:1px solid ' + border + ';border-radius:3px;cursor:pointer;" onmouseenter="this.style.opacity=\'0.75\'" onmouseleave="this.style.opacity=\'1\'">';
         html += '<span style="font-size:0.78rem;color:' + color + ';">' + inst.country + '</span>';
         html += '<span style="font-family:var(--mono);font-size:0.7rem;color:var(--dim);">' + inst.shiftYear + '</span>';
         html += '</div>';
@@ -3094,7 +3094,7 @@ async function expandPattern(idx) {
       html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--dim);letter-spacing:0.1em;margin-bottom:0.5rem;">COUNTRIES CURRENTLY MATCHING</div>';
       html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
       for (const c of pattern.countries) {
-        html += '<span style="font-family:var(--mono);font-size:0.75rem;padding:4px 10px;border-radius:3px;background:rgba(255,87,87,0.15);border:1px solid rgba(255,87,87,0.3);color:var(--critical);">' + c + '</span>';
+        html += '<span onclick="closePatternModal();selectedCountry=\'' + c + '\';setZoomLevel(\'ground\')" style="font-family:var(--mono);font-size:0.75rem;padding:4px 10px;border-radius:3px;background:rgba(255,87,87,0.15);border:1px solid rgba(255,87,87,0.3);color:var(--critical);cursor:pointer;" onmouseenter="this.style.background=\'rgba(255,87,87,0.25)\'" onmouseleave="this.style.background=\'rgba(255,87,87,0.15)\'">' + c + '</span>';
       }
       html += '</div></div>';
     }
@@ -3113,7 +3113,7 @@ async function expandPattern(idx) {
       for (const ev of data.evidence) {
         html += '<div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">';
         html += '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">';
-        html += '<span style="font-weight:700;color:var(--bright);">' + ev.country + '</span>';
+        html += '<span onclick="closePatternModal();selectedCountry=\'' + ev.country + '\';setZoomLevel(\'ground\')" style="font-weight:700;color:var(--bright);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">' + ev.country + '</span>';
         html += '<span style="font-family:var(--mono);font-size:0.72rem;color:var(--critical);">→ ' + ev.collapseYear + '</span>';
         if (ev.score) {
           html += '<span style="font-family:var(--mono);font-size:0.68rem;background:var(--panel);padding:2px 8px;border-radius:3px;color:var(--dim);">Score: ' + ev.score + '</span>';
@@ -3124,8 +3124,10 @@ async function expandPattern(idx) {
         if (ev.timeline && ev.timeline.length) {
           html += '<div style="display:flex;flex-wrap:wrap;gap:4px;">';
           for (const t of ev.timeline.slice(0, 8)) {
+            const label = SIGNAL_LABELS[t.signal];
+            if (!label) continue;
             html += '<span style="font-family:var(--mono);font-size:0.68rem;padding:3px 8px;border-radius:3px;background:var(--panel);color:var(--text);">';
-            html += t.year + ': ' + t.signal + ' = ' + t.value;
+            html += t.year + ': ' + label + ' = ' + t.value;
             html += '</span>';
           }
           html += '</div>';
