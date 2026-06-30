@@ -2468,6 +2468,8 @@ let allCountryData = new Map(); // country -> { patterns: [], score, level }
 let matchDatesByCountry = [];
 let groundPatterns = [];
 let actorCountsBySovereign = new Map();
+let signalSourcesMeta = {}; // { signalKey: { source, url } }
+let groundSignalData = []; // Store for drill access
 
 async function loadCollapseAnalyzer() {
   if (analyzerLoaded) return;
@@ -2498,6 +2500,15 @@ async function loadCollapseAnalyzer() {
       console.log('Actor counts:', actorCountsBySovereign.size, 'sovereigns');
     } catch (e) {
       console.warn('Actor counts unavailable:', e.message);
+    }
+
+    // Fetch signal source metadata for drill-to-evidence
+    try {
+      const sourcesRes = await fetch(BASE + '/api/signal/sources');
+      signalSourcesMeta = await sourcesRes.json();
+      console.log('Signal sources:', Object.keys(signalSourcesMeta).length);
+    } catch (e) {
+      console.warn('Signal sources unavailable:', e.message);
     }
 
     // Build unified country data map
@@ -2867,11 +2878,79 @@ async function loadGroundBriefing() {
       evidenceEl.innerHTML = '<div style="color:var(--dim);">No briefing available for ' + selectedCountry + '</div>';
     }
 
+    // Store signal data for drill access
+    groundSignalData = data.data?.signals || [];
+
+    // Render drill section below briefing
+    if (groundSignalData.length > 0) {
+      let drillHtml = '<div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">';
+      drillHtml += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;">CURRENT READINGS</div>';
+      drillHtml += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+      for (const sig of groundSignalData.slice(0, 12)) {
+        drillHtml += '<span onclick="showReadingDrill(\'' + sig.signal + '\')" style="font-family:var(--mono);font-size:0.72rem;padding:4px 10px;border-radius:4px;background:var(--panel2);border:1px solid var(--border);color:var(--text);cursor:pointer;" onmouseenter="this.style.borderColor=\'var(--accent)\'" onmouseleave="this.style.borderColor=\'var(--border)\'">';
+        drillHtml += sig.label + ': ' + (typeof sig.latestValue === 'number' ? sig.latestValue.toFixed(2) : sig.latestValue);
+        drillHtml += '</span>';
+      }
+      drillHtml += '</div></div>';
+      evidenceEl.innerHTML += drillHtml;
+    }
+
     signalsEl.innerHTML = '<div style="font-size:0.85rem;color:var(--text);">' + (data.data?.signalCount || 0) + '</div>';
 
   } catch (err) {
     evidenceEl.innerHTML = '<div style="color:var(--critical);">Error: ' + err.message + '</div>';
   }
+}
+
+function showReadingDrill(signalKey) {
+  const sig = groundSignalData.find(s => s.signal === signalKey);
+  if (!sig) return;
+
+  const sourceMeta = signalSourcesMeta[signalKey] || {};
+  const modal = document.getElementById('pattern-detail-modal');
+  const content = document.getElementById('pattern-detail-content');
+  modal.style.display = 'block';
+
+  let html = '<div style="font-size:1.15rem;font-weight:700;color:var(--bright);margin-bottom:1.25rem;">' + sig.label + '</div>';
+
+  // Current value
+  html += '<div style="background:rgba(26,111,255,0.08);border:1px solid rgba(26,111,255,0.2);border-radius:6px;padding:1rem;margin-bottom:1.25rem;">';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+  html += '<div>';
+  html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--dim);margin-bottom:0.25rem;">LATEST READING</div>';
+  html += '<div style="font-size:1.5rem;font-weight:700;color:var(--bright);">' + (typeof sig.latestValue === 'number' ? sig.latestValue.toFixed(2) : sig.latestValue) + '</div>';
+  html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--dim);">' + sig.latestYear + '</div>';
+  html += '</div>';
+  html += '<div style="text-align:right;">';
+  html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--dim);margin-bottom:0.25rem;">BASELINE</div>';
+  html += '<div style="font-size:1.1rem;color:var(--text);">' + (typeof sig.firstValue === 'number' ? sig.firstValue.toFixed(2) : sig.firstValue) + '</div>';
+  html += '<div style="font-family:var(--mono);font-size:0.72rem;color:var(--dim);">' + sig.firstYear + '</div>';
+  html += '</div>';
+  html += '</div></div>';
+
+  // Source verification
+  html += '<div style="margin-bottom:1.25rem;">';
+  html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">SOURCE</div>';
+  html += '<div style="font-size:0.88rem;color:var(--text);">' + (sourceMeta.source || 'Sabian Database') + '</div>';
+  if (sourceMeta.url) {
+    html += '<a href="' + sourceMeta.url + '" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);text-decoration:underline;">Verify at source →</a>';
+  }
+  html += '</div>';
+
+  // Historical trend
+  if (sig.readings && sig.readings.length > 1) {
+    html += '<div style="margin-bottom:1rem;">';
+    html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.75rem;">HISTORICAL TREND</div>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:4px;">';
+    for (const r of sig.readings.slice(-8)) {
+      html += '<span style="font-family:var(--mono);font-size:0.68rem;padding:3px 8px;border-radius:3px;background:var(--panel);color:var(--text);">';
+      html += r.year + ': ' + (typeof r.value === 'number' ? r.value.toFixed(2) : r.value);
+      html += '</span>';
+    }
+    html += '</div></div>';
+  }
+
+  content.innerHTML = html;
 }
 
 // ═══ POSITIONED ACTORS — court-verified litigation actors ═══════════════════════
