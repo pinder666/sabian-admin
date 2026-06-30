@@ -2931,10 +2931,7 @@ function showReadingDrill(signalKey) {
   // Source verification
   html += '<div style="margin-bottom:1.25rem;">';
   html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;margin-bottom:0.5rem;">SOURCE</div>';
-  html += '<div style="font-size:0.88rem;color:var(--text);">' + (sourceMeta.source || 'Sabian Database') + '</div>';
-  if (sourceMeta.url) {
-    html += '<a href="' + sourceMeta.url + '" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:0.72rem;color:var(--accent);text-decoration:underline;">Verify at source →</a>';
-  }
+  html += '<div style="font-size:0.88rem;color:var(--text);">' + (sourceMeta.source || 'Sabian') + '</div>';
   html += '</div>';
 
   // Historical trend
@@ -3015,19 +3012,22 @@ async function loadGroundActors() {
     // Render (top 10)
     let html = '';
     for (const actor of sorted.slice(0, 10)) {
-      const docketUrl = actor.dockets[0]?.url || '#';
+      const docketNumber = actor.dockets[0]?.number || '';
       const copartyList = actor.coparties.slice(0, 3).join(', ');
       const remainingCoparties = actor.coparties.length - 3;
 
-      html += '<a href="' + docketUrl + '" target="_blank" rel="noopener" style="display:block;padding:6px 8px;margin-bottom:4px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;text-decoration:none;transition:border-color 0.2s;" onmouseenter="this.style.borderColor=\'var(--accent)\'" onmouseleave="this.style.borderColor=\'var(--border)\'">';
+      html += '<div style="display:block;padding:6px 8px;margin-bottom:4px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
       html += '<span style="font-size:0.78rem;color:var(--bright);font-weight:500;">' + actor.name + '</span>';
       html += '<span style="font-family:var(--mono);font-size:0.68rem;color:var(--dim);">' + actor.docketCount + '</span>';
       html += '</div>';
+      if (docketNumber) {
+        html += '<div style="font-family:var(--mono);font-size:0.65rem;color:var(--dim);margin-top:2px;">' + docketNumber + '</div>';
+      }
       if (copartyList) {
         html += '<div style="font-size:0.68rem;color:var(--dim);margin-top:2px;">' + copartyList + (remainingCoparties > 0 ? ' +' + remainingCoparties : '') + '</div>';
       }
-      html += '</a>';
+      html += '</div>';
     }
 
     if (sorted.length > 10) {

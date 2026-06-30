@@ -15,6 +15,22 @@ const runConvergence = require('./convergence_engine.cjs');
 const runBriefing = require('./government_briefing.cjs');
 
 // ── Load signal manifest at startup for source metadata ───────────────────────
+function cleanSourceName(raw) {
+  if (!raw) return '';
+  if (/^Composite/i.test(raw)) return 'Sabian';
+  raw = raw.split('(')[0].trim();
+  const firstWord = raw.split(/\s+/)[0];
+  if (/\.(org|net|com|gov|io)$/i.test(firstWord)) return firstWord.split('.')[0];
+  const words = raw.split(/\s+/);
+  let result = words[0];
+  if (words.length > 1) {
+    const w2 = words[1];
+    const skip = /^[A-Z0-9]{2,5}$/.test(w2) || /^v\d/i.test(w2) || /^\d+\.\d/.test(w2) || /^API$/i.test(w2) || /^[a-z]+$/.test(w2) || w2.length > 8;
+    if (!skip) result += ' ' + w2;
+  }
+  return result;
+}
+
 const SIGNAL_MANIFEST = (() => {
   try {
     const manifestPath = path.join(__dirname, 'SIGNAL_MANIFEST.json');
@@ -22,11 +38,7 @@ const SIGNAL_MANIFEST = (() => {
     const sources = {};
     for (const [key, entry] of Object.entries(raw)) {
       if (key === '_meta' || !entry.source) continue;
-      let url = null;
-      if (entry.endpoint) {
-        url = 'https://' + entry.endpoint.replace(/^https?:\/\//, '').split('/')[0];
-      }
-      sources[key] = { source: entry.source.split('(')[0].trim(), url };
+      sources[key] = { source: cleanSourceName(entry.source) };
     }
     console.log('[STARTUP] Signal manifest loaded:', Object.keys(sources).length, 'signals');
     return sources;
