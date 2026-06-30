@@ -14,6 +14,28 @@ const { getCountryLedger, getOpenObservations, getLedgerStats } = require('./obs
 const runConvergence = require('./convergence_engine.cjs');
 const runBriefing = require('./government_briefing.cjs');
 
+// ── Load signal manifest at startup for source metadata ───────────────────────
+const SIGNAL_MANIFEST = (() => {
+  try {
+    const manifestPath = path.join(__dirname, 'SIGNAL_MANIFEST.json');
+    const raw = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    const sources = {};
+    for (const [key, entry] of Object.entries(raw)) {
+      if (key === '_meta' || !entry.source) continue;
+      let url = null;
+      if (entry.endpoint) {
+        url = 'https://' + entry.endpoint.replace(/^https?:\/\//, '').split('/')[0];
+      }
+      sources[key] = { source: entry.source.split('(')[0].trim(), url };
+    }
+    console.log('[STARTUP] Signal manifest loaded:', Object.keys(sources).length, 'signals');
+    return sources;
+  } catch (e) {
+    console.warn('[STARTUP] Signal manifest not loaded:', e.message);
+    return {};
+  }
+})();
+
 const app = express();
 // Railway injects PORT; fallback to API_PORT or 5000 for local dev
 const PORT             = process.env.PORT || process.env.API_PORT || 5000;
@@ -229,9 +251,13 @@ app.get('/api/collapse/patterns', requireTier('buyer'), (req, res) => {
     // Extractive watchlist
     const extractiveWatchlist = cp.extractiveWatchlist || [];
 
+    // Match dates by country (when each country entered each pattern)
+    const matchDatesByCountry = cp.matchDatesByCountry || [];
+
     res.json({
       patterns,
       extractiveWatchlist,
+      matchDatesByCountry,
       filters: cp.filters || {},
       totalShiftsAnalyzed: cp.totalShiftsAnalyzed,
       shiftsWithData: cp.shiftsWithData,
@@ -2835,6 +2861,11 @@ app.get('/public-api/global', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// ── Signal source metadata for drill-to-evidence ──────────────────────────────
+app.get('/api/signal/sources', (req, res) => {
+  res.json(SIGNAL_MANIFEST);
 });
 
 // ── Start ──────────────────────────────────────────────────────────────────────
