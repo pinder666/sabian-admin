@@ -829,7 +829,7 @@
 
             <!-- Signal count -->
             <div>
-              <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--dim);margin-bottom:0.5rem;">SIGNALS ANALYZED</div>
+              <div style="font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;color:var(--dim);margin-bottom:0.5rem;">DATA COVERAGE</div>
               <div id="ground-signals"></div>
             </div>
           </div>
@@ -918,11 +918,11 @@
   <!-- ── FRESHNESS VIEW ───────────────────────────────────────────────────── -->
   <div class="view" id="view-freshness">
     <div class="section-hdr">
-      <span class="section-title">SIGNAL FRESHNESS </span>
-      <span class="section-meta">LIVE SIGNAL COVERAGE PER COUNTRY</span>
+      <span class="section-title">COVERAGE </span>
+      <span class="section-meta">LIVE DATA COVERAGE</span>
     </div>
     <p class="freshness-note">
-      Signal coverage per country — last scan.
+      Data coverage per country — last scan.
     </p>
     <div class="threat-controls">
       <input class="ctrl-input" id="fresh-search" type="text" placeholder="Search country…" oninput="filterFreshness()">
@@ -1758,7 +1758,7 @@ function renderLedger() {
 async function loadFreshness() {
   freshnessLoaded = true;
   const wrap = document.getElementById('freshness-grid-wrap');
-  wrap.innerHTML = '<div class="loading-msg">Fetching signal coverage…</div>';
+  wrap.innerHTML = '<div class="loading-msg">Loading data coverage…</div>';
 
   // Use allCountries data: signals_available from the threats list (stored in history)
   // Supplement with country history to get signals_available
@@ -2832,7 +2832,7 @@ async function renderGroundView() {
       html += '<span style="font-family:var(--mono);font-size:0.68rem;padding:2px 6px;border-radius:3px;background:rgba(255,170,0,0.15);color:var(--warning);">↑</span>';
       html += '</div>';
     }
-    watchlistEl.innerHTML = html || '<div style="color:var(--dim);font-size:0.75rem;">Signals deteriorating</div>';
+    watchlistEl.innerHTML = html || '<div style="color:var(--dim);font-size:0.75rem;">Deteriorating</div>';
   } else {
     watchlistSection.style.display = 'none';
   }
@@ -2859,7 +2859,7 @@ async function loadGroundBriefing() {
   const evidenceEl = document.getElementById('ground-evidence');
   const signalsEl = document.getElementById('ground-signals');
 
-  evidenceEl.innerHTML = '<div style="color:var(--dim);">Analyzing all signals...</div>';
+  evidenceEl.innerHTML = '<div style="color:var(--dim);">Analyzing...</div>';
 
   try {
     const res = await fetch(BASE + '/api/country/drill', {
