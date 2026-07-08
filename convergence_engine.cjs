@@ -1576,10 +1576,9 @@ async function runConvergence(country, date) {
     const riskLevel       = getRiskLevel(convergenceScore);
     const thresholdWindow = getThresholdWindow(convergenceScore);
 
-    const sortedByScore = [...scoredSignals].sort((a, b) => b.score - a.score);
-    const top3Signals   = sortedByScore.slice(0, 3).map(s => ({
-      name: s.name, score: s.score, label: s.label, trend: s.trend
-    }));
+    const allSignals = scoredSignals
+      .filter(s => s.score !== null)
+      .map(s => ({ name: s.name, score: s.score, label: s.label, trend: s.trend }));
 
     logToHive({
       source: 'convergence_engine',
@@ -1610,7 +1609,7 @@ async function runConvergence(country, date) {
       source_health_snapshot,
       signals: enrichedSignals,
       decomposition,
-      top_3_signals: top3Signals,
+      active_domains: allSignals,
       generated_at: new Date().toISOString()
     };
 
