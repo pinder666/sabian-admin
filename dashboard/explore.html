@@ -128,6 +128,14 @@
       cursor: pointer; transition: all 0.2s;
     }
     .ctrl-btn:hover { border-color: var(--accent); color: var(--text); }
+    .ctrl-input {
+      background: var(--panel2); border: 1px solid var(--border);
+      color: var(--text); padding: 8px 12px; border-radius: 4px;
+      font-size: 0.85rem; font-family: var(--sans);
+      outline: none;
+    }
+    .ctrl-input:focus { border-color: var(--accent); }
+    .ctrl-input::placeholder { color: var(--dim); }
 
     /* ── SUMMARY BAR ─────────────────────────────────────────────────────── */
     .summary-bar {
@@ -274,14 +282,16 @@
   <div class="mode-bar">
     <a href="explore.html" class="mode-btn active">EXPLORE</a>
     <a href="intel.html" class="mode-btn">WATCHLIST</a>
-    <a href="#" class="mode-btn" data-view="compare">COMPARE</a>
-    <a href="#" class="mode-btn" data-view="regional">REGIONAL</a>
-    <a href="#" class="mode-btn" data-view="domain">DOMAIN DRILL</a>
-    <a href="#" class="mode-btn" data-view="portfolio">PORTFOLIO</a>
-    <a href="#" class="mode-btn" data-view="patterns">PATTERNS</a>
+    <a href="intel.html" class="mode-btn">THREAT INTELLIGENCE</a>
+    <a href="intel.html" class="mode-btn">FAMINE RISK</a>
   </div>
 
   <main>
+    <!-- SEARCH BAR -->
+    <div class="filter-bar" style="margin-bottom: 0.5rem;">
+      <input class="ctrl-input" id="search-country" type="text" placeholder="SEARCH COUNTRIES" oninput="applyFilters()" style="width: 100%; font-family: var(--mono); letter-spacing: 0.1em;">
+    </div>
+
     <!-- FILTER BAR -->
     <div class="filter-bar">
       <div class="filter-row">
@@ -450,6 +460,7 @@
 
     // ── APPLY FILTERS ───────────────────────────────────────────────────────
     function applyFilters() {
+      const searchTerm = (document.getElementById('search-country').value || '').toLowerCase().trim();
       const levelFilter = document.getElementById('filter-level').value;
       const regionFilter = document.getElementById('filter-region').value;
       const domainFilter = document.getElementById('filter-domain').value;
@@ -459,6 +470,7 @@
       window.SABIAN.filters = { level: levelFilter, region: regionFilter, domain: domainFilter };
 
       let filtered = allCountries.filter(c => {
+        if (searchTerm && !(c.country || '').toLowerCase().includes(searchTerm)) return false;
         if (levelFilter && c.risk_level !== levelFilter) return false;
         if (regionFilter && c.theater !== regionFilter) return false;
         if (domainFilter) {
@@ -547,7 +559,7 @@
       return `<div class="domain-list">${domains.map(d => {
         const score = d.score || 0;
         const width = Math.min(100, Math.max(5, score));
-        return `<div class="domain-row" onclick="event.stopPropagation(); openDomain('${escapeHtml(d.name)}')">
+        return `<div class="domain-row">
           <span class="domain-name">${formatDomainName(d.name)}</span>
           <div class="domain-bar-wrap">
             <div class="domain-bar ${barClass}" style="width: ${width}%"></div>
