@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sabian — Explore</title>
+  <title>Sabian — Explore Domain</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -89,182 +89,144 @@
     main {
       padding-top: 110px;
       padding-bottom: 3rem;
-      max-width: 1600px;
+      max-width: 1200px;
       margin: 0 auto;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
 
-    /* ── FILTER BAR ──────────────────────────────────────────────────────── */
-    .filter-bar {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1rem;
+    /* ── DOMAIN SELECTOR (Landing State) ─────────────────────────────────── */
+    .domain-selector {
+      text-align: center;
+      padding: 6rem 2rem;
     }
-    .filter-row {
+    .domain-selector-title {
+      font-family: var(--mono); font-size: 1.2rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--dim); margin-bottom: 2rem;
+    }
+    .domain-selector select {
+      background: var(--panel); border: 2px solid var(--accent);
+      color: var(--bright); padding: 16px 32px;
+      border-radius: 4px;
+      font-family: var(--mono); font-size: 1rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; outline: none;
+    }
+    .domain-selector select:hover { background: var(--panel2); }
+
+    /* ── LEADERBOARD HEADER ──────────────────────────────────────────────── */
+    .leaderboard-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .leaderboard-title {
+      font-family: var(--mono); font-size: 1.1rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .leaderboard-meta {
+      font-family: var(--mono); font-size: 0.75rem;
+      color: var(--dim); letter-spacing: 0.08em;
+    }
+    .leaderboard-controls {
       display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
     }
-    .filter-group {
-      display: flex; align-items: center; gap: 0.5rem;
+    .ctrl-input {
+      background: var(--panel2); border: 1px solid var(--border);
+      color: var(--text); padding: 8px 12px; border-radius: 4px;
+      font-family: var(--mono); font-size: 0.8rem;
+      letter-spacing: 0.06em; outline: none; width: 200px;
     }
-    .filter-label {
-      font-family: var(--mono); font-size: 0.65rem;
-      letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim);
-    }
+    .ctrl-input:focus { border-color: var(--accent); }
+    .ctrl-input::placeholder { color: var(--dim); text-transform: uppercase; }
     .ctrl-select {
       background: var(--panel2); border: 1px solid var(--border);
-      color: var(--text); padding: 6px 12px; border-radius: 4px;
-      font-size: 0.8rem; font-family: var(--sans);
-      outline: none; cursor: pointer;
+      color: var(--text); padding: 8px 12px; border-radius: 4px;
+      font-family: var(--mono); font-size: 0.8rem;
+      letter-spacing: 0.06em; cursor: pointer; outline: none;
     }
     .ctrl-select:hover { border-color: var(--accent); }
     .ctrl-btn {
       background: var(--panel2); border: 1px solid var(--border);
-      color: var(--dim); padding: 6px 14px; border-radius: 4px;
+      color: var(--dim); padding: 8px 14px; border-radius: 4px;
       font-family: var(--mono); font-size: 0.72rem;
-      letter-spacing: 0.06em; text-transform: uppercase;
+      letter-spacing: 0.08em; text-transform: uppercase;
       cursor: pointer; transition: all 0.2s;
     }
     .ctrl-btn:hover { border-color: var(--accent); color: var(--text); }
-    .ctrl-input {
-      background: var(--panel2); border: 1px solid var(--border);
-      color: var(--text); padding: 8px 12px; border-radius: 4px;
-      font-size: 0.85rem; font-family: var(--sans);
-      outline: none;
-    }
-    .ctrl-input:focus { border-color: var(--accent); }
-    .ctrl-input::placeholder { color: var(--dim); }
 
-    /* ── SUMMARY BAR ─────────────────────────────────────────────────────── */
-    .summary-bar {
+    /* ── LEADERBOARD ROWS ────────────────────────────────────────────────── */
+    .leaderboard {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .leaderboard-row {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1px;
-      background: var(--border);
+      grid-template-columns: 40px 180px 90px 1fr;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      margin-bottom: 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: border-color 0.2s;
     }
-    .summary-cell {
-      background: var(--panel); padding: 0.9rem 1.2rem;
-      text-align: center;
+    .leaderboard-row:hover { border-color: var(--accent); }
+    .rank {
+      font-family: var(--mono); font-size: 0.85rem;
+      color: var(--dim); text-align: right;
     }
-    .summary-value {
-      font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--bright);
-    }
-    .summary-value.critical { color: var(--critical); }
-    .summary-value.warning  { color: var(--warning); }
-    .summary-value.elevated { color: var(--elevated); }
-    .summary-value.stable   { color: var(--stable); }
-    .summary-label {
-      font-family: var(--mono); font-size: 0.62rem;
-      letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim);
-      margin-top: 4px;
-    }
-    .summary-icon {
-      display: inline-block; margin-right: 4px;
-    }
-    .summary-icon.critical { color: var(--critical); }
-    .summary-icon.warning  { color: var(--warning); }
-    .summary-icon.elevated { color: var(--elevated); }
-    .summary-icon.stable   { color: var(--stable); }
-
-    /* ── RESULTS TABLE ───────────────────────────────────────────────────── */
-    .section-hdr {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .section-title {
-      font-family: var(--mono); font-size: 0.75rem;
-      letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
-    }
-    .section-meta { font-size: 0.72rem; color: var(--dim); }
-
-    .results-table { width: 100%; border-collapse: collapse; }
-    .results-table th {
-      padding: 0.5rem 0.75rem;
-      font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--dim); text-align: left;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap; cursor: pointer; user-select: none;
-    }
-    .results-table th:hover { color: var(--text); }
-    .results-table th.sorted { color: var(--accent); }
-    .results-table td {
-      padding: 0.65rem 0.75rem; border-bottom: 1px solid rgba(21,32,64,0.5);
-      font-size: 0.82rem; vertical-align: top;
-    }
-    .results-table tr:hover td { background: rgba(26,111,255,0.04); }
-    .results-table tr { cursor: pointer; }
-
+    .rank-top { color: var(--accent); font-weight: 700; }
     .country-name {
       font-weight: 600; color: var(--bright);
+      font-size: 0.95rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .country-name:hover { color: var(--accent); }
-
-    /* ── RISK BADGE ──────────────────────────────────────────────────────── */
     .badge {
-      display: inline-block; padding: 2px 8px; border-radius: 3px;
+      display: inline-block; padding: 3px 10px; border-radius: 3px;
       font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
       letter-spacing: 0.08em; text-transform: uppercase;
+      text-align: center;
     }
     .badge-CRITICAL { background: rgba(220,38,38,0.15); color: var(--critical); border: 1px solid rgba(220,38,38,0.3); }
     .badge-WARNING  { background: rgba(245,158,11,0.12); color: var(--warning);  border: 1px solid rgba(245,158,11,0.3); }
     .badge-ELEVATED { background: rgba(234,179,8,0.1);   color: var(--elevated); border: 1px solid rgba(234,179,8,0.3); }
     .badge-STABLE   { background: rgba(107,114,128,0.1); color: var(--stable);   border: 1px solid rgba(107,114,128,0.3); }
 
-    /* ── DOMAIN BARS ─────────────────────────────────────────────────────── */
-    .domain-list { display: flex; flex-direction: column; gap: 4px; min-width: 200px; }
-    .domain-row {
-      display: flex; align-items: center; gap: 8px;
+    /* ── MASSIVE BAR ─────────────────────────────────────────────────────── */
+    .bar-container {
+      display: flex; align-items: center; gap: 12px;
     }
-    .domain-name {
-      font-family: var(--mono); font-size: 0.68rem; color: var(--dim);
-      width: 90px; text-transform: uppercase; letter-spacing: 0.04em;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    .bar-wrap {
+      flex: 1; height: 24px; background: var(--border); border-radius: 4px;
+      overflow: hidden;
     }
-    .domain-bar-wrap {
-      flex: 1; height: 6px; background: var(--border); border-radius: 3px;
-      overflow: hidden; min-width: 80px; max-width: 160px;
+    .bar-fill {
+      height: 100%; border-radius: 4px;
+      transition: width 0.4s ease-out;
     }
-    .domain-bar {
-      height: 100%; border-radius: 3px;
-      transition: width 0.3s;
+    .bar-fill.critical { background: linear-gradient(90deg, var(--critical), #ef4444); }
+    .bar-fill.warning  { background: linear-gradient(90deg, var(--warning), #fbbf24); }
+    .bar-fill.elevated { background: linear-gradient(90deg, var(--elevated), #facc15); }
+    .bar-fill.stable   { background: linear-gradient(90deg, var(--stable), #9ca3af); }
+    .bar-score {
+      font-family: var(--mono); font-size: 0.9rem; font-weight: 700;
+      color: var(--bright); min-width: 45px; text-align: right;
     }
-    .domain-bar.critical { background: var(--critical); }
-    .domain-bar.warning  { background: var(--warning); }
-    .domain-bar.elevated { background: var(--elevated); }
-    .domain-bar.stable   { background: var(--stable); }
 
-    /* ── TREND ───────────────────────────────────────────────────────────── */
-    .trend {
-      font-family: var(--mono); font-size: 0.75rem; white-space: nowrap;
-    }
-    .trend.rising  { color: var(--critical); }
-    .trend.flat    { color: var(--dim); }
-    .trend.falling { color: var(--stable); }
-
-    /* ── ACTIONS BAR ─────────────────────────────────────────────────────── */
-    .actions-bar {
-      margin-top: 1.5rem;
-      padding: 1rem 1.25rem;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      display: flex; gap: 1rem; flex-wrap: wrap;
+    /* ── EXPORT BAR ──────────────────────────────────────────────────────── */
+    .export-bar {
+      margin-top: 2rem;
+      display: flex; justify-content: flex-end;
     }
 
     /* ── UTILITIES ───────────────────────────────────────────────────────── */
+    .hidden { display: none; }
     .loading-msg {
-      font-family: var(--mono); font-size: 0.8rem; color: var(--dim);
-      padding: 2rem; text-align: center;
+      font-family: var(--mono); font-size: 0.85rem; color: var(--dim);
+      text-align: center; padding: 3rem;
     }
-    .no-domains { color: var(--dim); font-size: 0.75rem; }
   </style>
 </head>
 <body>
@@ -287,89 +249,45 @@
   </div>
 
   <main>
-    <!-- SEARCH BAR -->
-    <div class="filter-bar" style="margin-bottom: 0.5rem;">
-      <input class="ctrl-input" id="search-country" type="text" placeholder="SEARCH COUNTRIES" oninput="applyFilters()" style="width: 100%; font-family: var(--mono); letter-spacing: 0.1em;">
+    <!-- LANDING: SELECT DOMAIN -->
+    <div id="domain-selector" class="domain-selector">
+      <div class="domain-selector-title">SELECT A DOMAIN TO EXPLORE</div>
+      <select id="domain-dropdown" onchange="selectDomain(this.value)">
+        <option value="">CHOOSE DOMAIN</option>
+      </select>
     </div>
 
-    <!-- FILTER BAR -->
-    <div class="filter-bar">
-      <div class="filter-row">
-        <div class="filter-group">
-          <span class="filter-label">Level:</span>
-          <select class="ctrl-select" id="filter-level" onchange="applyFilters()">
-            <option value="">All</option>
-            <option value="CRITICAL">Critical</option>
-            <option value="WARNING">Warning</option>
-            <option value="ELEVATED">Elevated</option>
-            <option value="STABLE">Stable</option>
-          </select>
+    <!-- LEADERBOARD (hidden until domain selected) -->
+    <div id="leaderboard-view" class="hidden">
+      <div class="leaderboard-header">
+        <div>
+          <div class="leaderboard-title" id="leaderboard-title">—</div>
+          <div class="leaderboard-meta"><span id="country-count">0</span> COUNTRIES RANKED</div>
         </div>
-        <div class="filter-group">
-          <span class="filter-label">Region:</span>
-          <select class="ctrl-select" id="filter-region" onchange="applyFilters()">
-            <option value="">All</option>
+        <div class="leaderboard-controls">
+          <input class="ctrl-input" id="search-input" type="text" placeholder="SEARCH" oninput="renderLeaderboard()">
+          <select class="ctrl-select" id="filter-level" onchange="renderLeaderboard()">
+            <option value="">ALL LEVELS</option>
+            <option value="CRITICAL">CRITICAL</option>
+            <option value="WARNING">WARNING</option>
+            <option value="ELEVATED">ELEVATED</option>
+            <option value="STABLE">STABLE</option>
           </select>
-        </div>
-        <div class="filter-group">
-          <span class="filter-label">Domain:</span>
-          <select class="ctrl-select" id="filter-domain" onchange="applyFilters()">
-            <option value="">Any Domain</option>
+          <select class="ctrl-select" id="filter-region" onchange="renderLeaderboard()">
+            <option value="">ALL REGIONS</option>
           </select>
+          <select class="ctrl-select" id="domain-switch" onchange="selectDomain(this.value)"></select>
+          <button class="ctrl-btn" onclick="clearFilters()">CLEAR</button>
         </div>
-        <button class="ctrl-btn" onclick="clearFilters()">Clear Filters</button>
       </div>
-    </div>
 
-    <!-- SUMMARY BAR -->
-    <div class="summary-bar">
-      <div class="summary-cell">
-        <div class="summary-value" id="sum-total">—</div>
-        <div class="summary-label">COUNTRIES</div>
+      <div id="leaderboard" class="leaderboard">
+        <div class="loading-msg">Loading...</div>
       </div>
-      <div class="summary-cell">
-        <div class="summary-value critical" id="sum-critical">—</div>
-        <div class="summary-label"><span class="summary-icon critical">████</span>CRITICAL</div>
-      </div>
-      <div class="summary-cell">
-        <div class="summary-value warning" id="sum-warning">—</div>
-        <div class="summary-label"><span class="summary-icon warning">▓▓▓▓</span>WARNING</div>
-      </div>
-      <div class="summary-cell">
-        <div class="summary-value elevated" id="sum-elevated">—</div>
-        <div class="summary-label"><span class="summary-icon elevated">░░░░</span>ELEVATED</div>
-      </div>
-      <div class="summary-cell">
-        <div class="summary-value stable" id="sum-stable">—</div>
-        <div class="summary-label"><span class="summary-icon stable">────</span>STABLE</div>
-      </div>
-    </div>
 
-    <!-- RESULTS HEADER -->
-    <div class="section-hdr">
-      <span class="section-title">RESULTS (<span id="results-count">0</span> COUNTRIES)</span>
-      <div class="filter-group">
-        <span class="filter-label">Sort:</span>
-        <select class="ctrl-select" id="sort-by" onchange="applyFilters()">
-          <option value="level">Level</option>
-          <option value="score">Score</option>
-          <option value="country">Country</option>
-          <option value="trend">Trend</option>
-        </select>
+      <div class="export-bar">
+        <button class="ctrl-btn" onclick="exportCSV()">EXPORT CSV</button>
       </div>
-    </div>
-
-    <!-- RESULTS TABLE -->
-    <div id="results-wrap">
-      <div class="loading-msg">Loading data…</div>
-    </div>
-
-    <!-- ACTIONS BAR -->
-    <div class="actions-bar">
-      <button class="ctrl-btn" onclick="exportCSV()">Export CSV</button>
-      <button class="ctrl-btn" onclick="exportPDF()">Export PDF</button>
-      <button class="ctrl-btn" onclick="selectForCompare()">Select for Compare</button>
-      <button class="ctrl-btn" onclick="addToPortfolio()">Add to Portfolio</button>
     </div>
   </main>
 
@@ -387,8 +305,9 @@
 
     // ── GLOBALS ─────────────────────────────────────────────────────────────
     let allCountries = [];
-    let allDomains = new Set();
-    const API_BASE = '';
+    let allDomains = [];
+    let allRegions = [];
+    let selectedDomain = '';
 
     // ── INIT ────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', () => {
@@ -399,42 +318,53 @@
     // ── LOAD DATA ───────────────────────────────────────────────────────────
     async function loadData() {
       try {
-        const res = await fetch(`${API_BASE}/public-api/threats`);
+        const res = await fetch('/public-api/threats');
         const data = await res.json();
         allCountries = data.countries || [];
 
-        // Collect all unique domains and regions
-        const allRegions = new Set();
+        const domainSet = new Set();
+        const regionSet = new Set();
         allCountries.forEach(c => {
-          if (c.theater) allRegions.add(c.theater);
+          if (c.theater) regionSet.add(c.theater);
           (c.active_domains || []).forEach(d => {
-            if (d.name) allDomains.add(d.name);
+            if (d.name && (d.score || 0) > 0) domainSet.add(d.name);
           });
         });
 
-        // Populate region filter dropdown
-        const regionSelect = document.getElementById('filter-region');
-        [...allRegions].sort().forEach(r => {
-          const opt = document.createElement('option');
-          opt.value = r;
-          opt.textContent = r;
-          regionSelect.appendChild(opt);
-        });
+        allDomains = [...domainSet].sort();
+        allRegions = [...regionSet].sort();
 
-        // Populate domain filter dropdown
-        const domainSelect = document.getElementById('filter-domain');
-        [...allDomains].sort().forEach(d => {
-          const opt = document.createElement('option');
-          opt.value = d;
-          opt.textContent = formatDomainName(d);
-          domainSelect.appendChild(opt);
-        });
-
-        applyFilters();
+        populateDropdowns();
       } catch (err) {
-        document.getElementById('results-wrap').innerHTML =
+        document.getElementById('domain-selector').innerHTML =
           `<div class="loading-msg">Error loading data: ${err.message}</div>`;
       }
+    }
+
+    // ── POPULATE DROPDOWNS ──────────────────────────────────────────────────
+    function populateDropdowns() {
+      const mainDropdown = document.getElementById('domain-dropdown');
+      const switchDropdown = document.getElementById('domain-switch');
+      const regionDropdown = document.getElementById('filter-region');
+
+      allDomains.forEach(d => {
+        const opt1 = document.createElement('option');
+        opt1.value = d;
+        opt1.textContent = formatDomainName(d);
+        mainDropdown.appendChild(opt1);
+
+        const opt2 = document.createElement('option');
+        opt2.value = d;
+        opt2.textContent = formatDomainName(d);
+        switchDropdown.appendChild(opt2);
+      });
+
+      allRegions.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r;
+        opt.textContent = r;
+        regionDropdown.appendChild(opt);
+      });
     }
 
     // ── FORMAT DOMAIN NAME ──────────────────────────────────────────────────
@@ -443,142 +373,93 @@
       return name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     }
 
-    // ── GET LEVEL ORDER ─────────────────────────────────────────────────────
-    function levelOrder(level) {
-      const order = { CRITICAL: 0, WARNING: 1, ELEVATED: 2, STABLE: 3 };
-      return order[level] ?? 4;
+    // ── SELECT DOMAIN ───────────────────────────────────────────────────────
+    function selectDomain(domain) {
+      if (!domain) return;
+
+      selectedDomain = domain;
+      window.SABIAN.activeDomain = domain;
+
+      document.getElementById('domain-selector').classList.add('hidden');
+      document.getElementById('leaderboard-view').classList.remove('hidden');
+      document.getElementById('leaderboard-title').textContent = formatDomainName(domain).toUpperCase();
+      document.getElementById('domain-switch').value = domain;
+
+      renderLeaderboard();
     }
 
-    // ── GET TREND ORDER ─────────────────────────────────────────────────────
-    function trendOrder(trajectory) {
-      if (!trajectory) return 1;
-      const t = trajectory.toUpperCase();
-      if (t.includes('RISING') || t.includes('WORSENING') || t.includes('UP')) return 0;
-      if (t.includes('FALLING') || t.includes('IMPROVING') || t.includes('DOWN')) return 2;
-      return 1;
+    // ── GET DOMAIN SCORE ────────────────────────────────────────────────────
+    function getDomainScore(country, domainName) {
+      const domains = country.active_domains || [];
+      const d = domains.find(x => x.name === domainName);
+      return d ? (d.score || 0) : 0;
     }
 
-    // ── APPLY FILTERS ───────────────────────────────────────────────────────
-    function applyFilters() {
-      const searchTerm = (document.getElementById('search-country').value || '').toLowerCase().trim();
+    // ── RENDER LEADERBOARD ──────────────────────────────────────────────────
+    function renderLeaderboard() {
+      const search = (document.getElementById('search-input').value || '').toLowerCase().trim();
       const levelFilter = document.getElementById('filter-level').value;
       const regionFilter = document.getElementById('filter-region').value;
-      const domainFilter = document.getElementById('filter-domain').value;
-      const sortBy = document.getElementById('sort-by').value;
-
-      // Store in shared state
-      window.SABIAN.filters = { level: levelFilter, region: regionFilter, domain: domainFilter };
 
       let filtered = allCountries.filter(c => {
-        if (searchTerm && !(c.country || '').toLowerCase().includes(searchTerm)) return false;
+        const score = getDomainScore(c, selectedDomain);
+        if (score <= 0) return false;
+        if (search && !(c.country || '').toLowerCase().includes(search)) return false;
         if (levelFilter && c.risk_level !== levelFilter) return false;
         if (regionFilter && c.theater !== regionFilter) return false;
-        if (domainFilter) {
-          const domains = c.active_domains || [];
-          if (!domains.some(d => d.name === domainFilter)) return false;
-        }
         return true;
       });
 
-      // Sort
-      filtered.sort((a, b) => {
-        if (sortBy === 'level') {
-          const diff = levelOrder(a.risk_level) - levelOrder(b.risk_level);
-          return diff !== 0 ? diff : (b.convergence_score || 0) - (a.convergence_score || 0);
-        }
-        if (sortBy === 'score') return (b.convergence_score || 0) - (a.convergence_score || 0);
-        if (sortBy === 'country') return (a.country || '').localeCompare(b.country || '');
-        if (sortBy === 'trend') return trendOrder(a.trajectory) - trendOrder(b.trajectory);
-        return 0;
-      });
+      filtered.sort((a, b) => getDomainScore(b, selectedDomain) - getDomainScore(a, selectedDomain));
 
-      updateSummary(filtered);
-      renderTable(filtered);
-    }
+      const maxScore = filtered.length > 0 ? getDomainScore(filtered[0], selectedDomain) : 100;
 
-    // ── UPDATE SUMMARY ──────────────────────────────────────────────────────
-    function updateSummary(countries) {
-      const counts = { CRITICAL: 0, WARNING: 0, ELEVATED: 0, STABLE: 0 };
-      countries.forEach(c => {
-        if (counts.hasOwnProperty(c.risk_level)) counts[c.risk_level]++;
-      });
-      document.getElementById('sum-total').textContent = countries.length;
-      document.getElementById('sum-critical').textContent = counts.CRITICAL;
-      document.getElementById('sum-warning').textContent = counts.WARNING;
-      document.getElementById('sum-elevated').textContent = counts.ELEVATED;
-      document.getElementById('sum-stable').textContent = counts.STABLE;
-      document.getElementById('results-count').textContent = countries.length;
-    }
+      document.getElementById('country-count').textContent = filtered.length;
 
-    // ── RENDER TABLE ────────────────────────────────────────────────────────
-    function renderTable(countries) {
-      if (countries.length === 0) {
-        document.getElementById('results-wrap').innerHTML =
-          '<div class="loading-msg">No countries match filters.</div>';
+      if (filtered.length === 0) {
+        document.getElementById('leaderboard').innerHTML =
+          '<div class="loading-msg">NO COUNTRIES MATCH FILTERS</div>';
         return;
       }
 
-      let html = `<table class="results-table">
-        <thead>
-          <tr>
-            <th>COUNTRY</th>
-            <th>LEVEL</th>
-            <th>ACTIVE DOMAINS</th>
-            <th>TREND</th>
-          </tr>
-        </thead>
-        <tbody>`;
+      let html = '';
+      filtered.forEach((c, i) => {
+        const rank = i + 1;
+        const score = getDomainScore(c, selectedDomain);
+        const width = maxScore > 0 ? (score / maxScore) * 100 : 0;
+        const barClass = c.risk_level ? c.risk_level.toLowerCase() : 'stable';
+        const rankClass = rank <= 3 ? 'rank rank-top' : 'rank';
 
-      countries.forEach(c => {
-        const domains = c.active_domains || [];
-        const activeDomains = domains.filter(d => (d.score || 0) > 0);
-
-        const trend = getTrend(c.trajectory);
-        const domainHtml = renderDomains(activeDomains, c.risk_level);
-
-        html += `<tr onclick="openCountry('${escapeHtml(c.country)}')">
-          <td><span class="country-name">${escapeHtml(c.country)}</span></td>
-          <td><span class="badge badge-${c.risk_level}">${c.risk_level}</span></td>
-          <td>${domainHtml}</td>
-          <td><span class="trend ${trend.class}">${trend.symbol} ${trend.label}</span></td>
-        </tr>`;
+        html += `
+          <div class="leaderboard-row" onclick="openCountry('${escapeHtml(c.country)}')">
+            <div class="${rankClass}">${rank}</div>
+            <div class="country-name">${escapeHtml(c.country)}</div>
+            <span class="badge badge-${c.risk_level}">${c.risk_level}</span>
+            <div class="bar-container">
+              <div class="bar-wrap">
+                <div class="bar-fill ${barClass}" style="width: ${width}%"></div>
+              </div>
+              <div class="bar-score">${score}</div>
+            </div>
+          </div>
+        `;
       });
 
-      html += '</tbody></table>';
-      document.getElementById('results-wrap').innerHTML = html;
+      document.getElementById('leaderboard').innerHTML = html;
     }
 
-    // ── RENDER DOMAINS ──────────────────────────────────────────────────────
-    function renderDomains(domains, riskLevel) {
-      if (!domains || domains.length === 0) {
-        return '<span class="no-domains">—</span>';
-      }
-
-      const barClass = riskLevel ? riskLevel.toLowerCase() : 'stable';
-
-      return `<div class="domain-list">${domains.map(d => {
-        const score = d.score || 0;
-        const width = Math.min(100, Math.max(5, score));
-        return `<div class="domain-row">
-          <span class="domain-name">${formatDomainName(d.name)}</span>
-          <div class="domain-bar-wrap">
-            <div class="domain-bar ${barClass}" style="width: ${width}%"></div>
-          </div>
-        </div>`;
-      }).join('')}</div>`;
+    // ── CLEAR FILTERS ───────────────────────────────────────────────────────
+    function clearFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('filter-level').value = '';
+      document.getElementById('filter-region').value = '';
+      renderLeaderboard();
     }
 
-    // ── GET TREND ───────────────────────────────────────────────────────────
-    function getTrend(trajectory) {
-      if (!trajectory) return { symbol: '──', label: 'Flat', class: 'flat' };
-      const t = trajectory.toUpperCase();
-      if (t.includes('RISING') || t.includes('WORSENING') || t.includes('UP')) {
-        return { symbol: '▲', label: 'Rising', class: 'rising' };
-      }
-      if (t.includes('FALLING') || t.includes('IMPROVING') || t.includes('DOWN')) {
-        return { symbol: '▼', label: 'Falling', class: 'falling' };
-      }
-      return { symbol: '──', label: 'Flat', class: 'flat' };
+    // ── OPEN COUNTRY ────────────────────────────────────────────────────────
+    function openCountry(country) {
+      window.SABIAN.activeCountry = country;
+      window.location.href = `intel.html?country=${encodeURIComponent(country)}`;
     }
 
     // ── ESCAPE HTML ─────────────────────────────────────────────────────────
@@ -587,79 +468,41 @@
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // ── CLEAR FILTERS ───────────────────────────────────────────────────────
-    function clearFilters() {
-      document.getElementById('filter-level').value = '';
-      document.getElementById('filter-region').value = '';
-      document.getElementById('filter-domain').value = '';
-      applyFilters();
-    }
-
-    // ── NAVIGATION: OPEN COUNTRY ────────────────────────────────────────────
-    function openCountry(country) {
-      window.SABIAN.activeCountry = country;
-      window.location.href = `intel.html?country=${encodeURIComponent(country)}`;
-    }
-
-    // ── NAVIGATION: OPEN DOMAIN ─────────────────────────────────────────────
-    function openDomain(domain) {
-      window.SABIAN.activeDomain = domain;
-    }
-
     // ── EXPORT CSV ──────────────────────────────────────────────────────────
     function exportCSV() {
+      const search = (document.getElementById('search-input').value || '').toLowerCase().trim();
       const levelFilter = document.getElementById('filter-level').value;
       const regionFilter = document.getElementById('filter-region').value;
-      const domainFilter = document.getElementById('filter-domain').value;
 
       let filtered = allCountries.filter(c => {
+        const score = getDomainScore(c, selectedDomain);
+        if (score <= 0) return false;
+        if (search && !(c.country || '').toLowerCase().includes(search)) return false;
         if (levelFilter && c.risk_level !== levelFilter) return false;
         if (regionFilter && c.theater !== regionFilter) return false;
-        if (domainFilter) {
-          const domains = c.active_domains || [];
-          if (!domains.some(d => d.name === domainFilter)) return false;
-        }
         return true;
       });
 
-      const headers = ['Country', 'Level', 'Score', 'Trajectory', 'Active Domains'];
-      const rows = filtered.map(c => {
-        const domains = (c.active_domains || [])
-          .filter(d => (d.score || 0) > 0)
-          .map(d => formatDomainName(d.name))
-          .join('; ');
-        return [
-          c.country,
-          c.risk_level,
-          c.convergence_score || '',
-          c.trajectory || '',
-          domains
-        ];
-      });
+      filtered.sort((a, b) => getDomainScore(b, selectedDomain) - getDomainScore(a, selectedDomain));
 
-      const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+      const timestamp = new Date().toISOString();
+      const dataRows = filtered.map((c, i) =>
+        `${i + 1},${c.country},${c.risk_level},${getDomainScore(c, selectedDomain)}`
+      ).join('\n');
+
+      const csv = `# SABIAN INTELLIGENCE
+# DOMAIN: ${formatDomainName(selectedDomain).toUpperCase()}
+# GENERATED: ${timestamp}
+Rank,Country,Level,Score
+${dataRows}`;
+
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `sabian_explore_${new Date().toISOString().slice(0,10)}.csv`;
+      a.download = `sabian_${selectedDomain}_${new Date().toISOString().slice(0,10)}.csv`;
       a.click();
       URL.revokeObjectURL(url);
-    }
-
-    // ── EXPORT PDF ──────────────────────────────────────────────────────────
-    function exportPDF() {
-      // PDF export — not yet built
-    }
-
-    // ── SELECT FOR COMPARE ──────────────────────────────────────────────────
-    function selectForCompare() {
-      // Compare — not yet built
-    }
-
-    // ── ADD TO PORTFOLIO ────────────────────────────────────────────────────
-    function addToPortfolio() {
-      // Portfolio — not yet built
     }
   </script>
 
