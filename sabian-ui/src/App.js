@@ -75,7 +75,7 @@ function CountryRow({ country, onClick, selected }) {
         <ScoreBar score={country.convergence_score} level={country.risk_level} />
       </td>
       <td style={{ padding: '8px 12px', color: '#666', fontSize: 12, maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-        {country.top_3_signals?.[0]?.name || '—'}
+        {country.active_domains?.[0]?.name || '—'}
       </td>
     </tr>
   );
@@ -93,7 +93,7 @@ function CountryDetail({ country, onClose }) {
       .finally(() => setLoading(false));
   }, [country.country]);
 
-  const signals = detail?.current?.top_3_signals || [];
+  const signals = detail?.current?.active_domains || [];
   const history = detail?.history || [];
 
   return (

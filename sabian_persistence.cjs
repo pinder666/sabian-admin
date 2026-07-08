@@ -111,7 +111,7 @@ async function saveConvergenceScore(country, scanDate, result, theater) {
         signals_available: result.signals_available,
         signals_failed: result.signals_failed || [],
         threshold_window: result.threshold_window,
-        top_3_signals: result.top_3_signals || [],
+        active_domains: result.active_domains || [],
         freshness_pct: result.freshness_pct ?? null,
         trajectory: result.trajectory || 'STABLE',
         row_hash: rowHash,
@@ -256,11 +256,9 @@ async function getHistory(country, days) {
         risk_level,
         is_live: false,
         signals_available: Object.keys(bd).length,
-        top_3_signals: Object.entries(bd)
+        active_domains: Object.entries(bd)
           .filter(([, v]) => v && typeof v === 'object' && v.stress_z != null)
           .map(([name, v]) => ({ name, score: Math.round(Math.abs(+v.stress_z) * 30), stress_z: +v.stress_z }))
-          .sort((a, b) => b.score - a.score)
-          .slice(0, 3)
       };
     });
 
@@ -269,7 +267,7 @@ async function getHistory(country, days) {
     since.setDate(since.getDate() - (days || 90));
     const { data: daily } = await supabase
       .from('convergence_scores')
-      .select('scan_date, convergence_score, risk_level, signals_available, top_3_signals')
+      .select('scan_date, convergence_score, risk_level, signals_available, active_domains')
       .eq('country', country)
       .gte('scan_date', since.toISOString().slice(0, 10))
       .order('scan_date', { ascending: true });
@@ -310,7 +308,7 @@ async function getLatestScores() {
     // 1. LIVE: newest daily rows from convergence_scores (the countries scanned today).
     const { data: daily, error: dErr } = await supabase
       .from('convergence_scores')
-      .select('country, scan_date, convergence_score, risk_level, theater, top_3_signals, signals_available, is_no_change')
+      .select('country, scan_date, convergence_score, risk_level, theater, active_domains, signals_available, is_no_change')
       .order('scan_date', { ascending: false })
       .limit(5000);
     if (dErr) throw dErr;
@@ -324,7 +322,7 @@ async function getLatestScores() {
         if (row.scan_date === today) scannedToday++;
         const dataAge = currentYear - (+String(row.scan_date).slice(0, 4) || currentYear);
         // Compute acute_score: mean of top-3 signal scores
-        const top3 = row.top_3_signals || [];
+        const top3 = row.active_domains || [];
         const acuteScores = top3.map(s => s.score || 0);
         const acute_score = acuteScores.length > 0 ? Math.round(acuteScores.reduce((a,b)=>a+b,0) / acuteScores.length) : null;
         latest[row.country] = {
@@ -373,13 +371,11 @@ async function getLatestScores() {
       else if (score >= 41) risk_level = 'ELEVATED';
 
       const bd = row.breakdown || {};
-      const top_3_signals = Object.entries(bd)
+      const active_domains = Object.entries(bd)
         .filter(([, v]) => v && typeof v === 'object' && v.stress_z != null)
-        .map(([name, v]) => ({ name, score: Math.round(Math.abs(+v.stress_z) * 30), stress_z: +v.stress_z }))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 3);
+        .map(([name, v]) => ({ name, score: Math.round(Math.abs(+v.stress_z) * 30), stress_z: +v.stress_z }));
 
-      const acuteScores = top_3_signals.map(s => s.score || 0);
+      const acuteScores = active_domains.map(s => s.score || 0);
       const acute_score = acuteScores.length > 0 ? Math.round(acuteScores.reduce((a,b)=>a+b,0) / acuteScores.length) : null;
 
       const dataAge = currentYear - row.year;
@@ -397,7 +393,7 @@ async function getLatestScores() {
         convergence_score: score,
         risk_level,
         theater: null,
-        top_3_signals,
+        active_domains,
         signals_available: Object.keys(bd).length,
         is_live: false,
         acute_score

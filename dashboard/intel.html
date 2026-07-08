@@ -1475,7 +1475,7 @@ function renderThreatsTable(rows) {
   rows.forEach((c, i) => {
     const color = riskColor(c.risk_level);
     const sc = c.convergence_score || 0;
-    const top3 = c.top_3_signals || [];
+    const top3 = c.active_domains || [];
     const chips = top3.map(s => `<span class="signal-chip" title="${sigDesc(s.name)}">${sigDisplay(s.name)}</span>`).join('');
     const cached = historyCache[c.country];
     const sparkCellId = 'spark-cell-' + c.country.replace(/[^a-zA-Z0-9]/g, '_');
@@ -1802,7 +1802,7 @@ function renderFreshnessGrid() {
     const pctStr  = pct != null ? pct + '%' : '—';
     const pctClass= pct == null ? '' : pct >= 70 ? 'high' : pct >= 40 ? 'medium' : 'low';
     const pctColor= pct == null ? 'var(--dim)' : pct >= 70 ? 'var(--stable)' : pct >= 40 ? 'var(--warning)' : 'var(--critical)';
-    const top3    = c.top_3_signals || [];
+    const top3    = c.active_domains || [];
     const chips   = top3.map(s => `<span class="sig-dot live">${(s.name||'').replace(/_/g,' ').slice(0,12)}</span>`).join('');
     const avail   = c.signals_available;
     const missing = avail != null ? (47 - avail) : null;
