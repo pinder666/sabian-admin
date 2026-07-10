@@ -2880,6 +2880,124 @@ app.get('/api/signal/sources', (req, res) => {
   res.json(SIGNAL_MANIFEST);
 });
 
+// ── Country Comparison Intelligence — EXPLORE page support ────────────────────
+// GET /api/country/compare/:name  (buyer+) — comparison context for each domain
+// Returns historical max label and 30-day change for each active domain
+app.get('/api/country/compare/:name', requireTier('buyer'), async (req, res) => {
+  const country = decodeURIComponent(req.params.name);
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+    // 1. Get all historical convergence scores for this country (breakdown has gz per domain)
+    const { data: histData, error: histError } = await sb
+      .from('historical_convergence_scores')
+      .select('year, score, breakdown')
+      .ilike('country', country)
+      .order('year', { ascending: false });
+
+    if (histError) return res.status(500).json({ error: histError.message });
+    if (!histData || histData.length === 0) {
+      return res.status(404).json({ error: `No historical data for ${country}` });
+    }
+
+    // Most recent year is first (current state)
+    const currentYear = histData[0];
+    const currentBreakdown = currentYear.breakdown || {};
+    const currentYearNum = currentYear.year;
+
+    // 2. Get signal_readings for 30-day change (live daily data)
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().slice(0, 10);
+
+    const { data: readingsData, error: readingsError } = await sb
+      .from('signal_readings')
+      .select('signal_name, score, scan_date')
+      .eq('country', country)
+      .gte('scan_date', thirtyDaysAgoStr)
+      .order('scan_date', { ascending: false });
+
+    if (readingsError) {
+      console.warn('signal_readings query failed:', readingsError.message);
+    }
+
+    // Build 30-day change lookup: latest score vs earliest score in window
+    const change30d = {};
+    if (readingsData && readingsData.length > 0) {
+      const bySignal = {};
+      for (const r of readingsData) {
+        if (!bySignal[r.signal_name]) bySignal[r.signal_name] = [];
+        bySignal[r.signal_name].push({ score: r.score, date: r.scan_date });
+      }
+      for (const [sigName, readings] of Object.entries(bySignal)) {
+        if (readings.length >= 2) {
+          const newest = readings[0].score;
+          const oldest = readings[readings.length - 1].score;
+          const delta = Math.round(newest - oldest);
+          change30d[sigName] = {
+            change: delta,
+            label: delta > 0 ? `+${delta} in 30d` : delta < 0 ? `${delta} in 30d` : 'sustained'
+          };
+        } else if (readings.length === 1) {
+          change30d[sigName] = { change: 0, label: 'sustained' };
+        }
+      }
+    }
+
+    // 3. For each domain in current breakdown, find historical max
+    const comparisons = {};
+    const domainKeys = Object.keys(currentBreakdown);
+
+    for (const domain of domainKeys) {
+      const currentGz = currentBreakdown[domain]?.gz ?? currentBreakdown[domain]?.stress_z ?? null;
+      if (currentGz === null || currentGz === undefined) continue;
+
+      // Find the most recent year before now where gz was this high or higher
+      let historicalMaxLabel = null;
+      let lastHighYear = null;
+
+      for (const row of histData.slice(1)) { // skip current year, already sorted desc by year
+        const bd = row.breakdown || {};
+        const rowGz = bd[domain]?.gz ?? bd[domain]?.stress_z ?? null;
+        if (rowGz !== null && rowGz >= currentGz) {
+          lastHighYear = row.year; // first match going backwards in time = most recent previous peak
+          break;
+        }
+      }
+
+      if (lastHighYear) {
+        historicalMaxLabel = `highest since ${lastHighYear}`;
+      } else {
+        historicalMaxLabel = 'highest on record';
+      }
+
+      // Map domain key to display name for 30d lookup
+      const displayName = domain.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      const change = change30d[displayName] || change30d[domain] || null;
+
+      comparisons[domain] = {
+        current_gz: +currentGz.toFixed(2),
+        historical_max_label: historicalMaxLabel,
+        change_30d: change ? change.change : null,
+        change_30d_label: change ? change.label : null
+      };
+    }
+
+    res.json({
+      country,
+      current_year: currentYearNum,
+      current_score: currentYear.score,
+      domain_count: Object.keys(comparisons).length,
+      comparisons
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── Start ──────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`\nSabian Intelligence Terminal — Port ${PORT}`);
@@ -2915,6 +3033,7 @@ app.listen(PORT, () => {
   console.log(`  GET /api/intelligence/:country/snapshot/:date — Step 6: specific date snapshot`);
   console.log(`  GET /api/intelligence/contagion/:c      — contagion pathways`);
   console.log(`  POST /api/intelligence/portfolio        — portfolio exposure analysis`);
+  console.log(`  GET /api/country/compare/:name          — comparison context for EXPLORE page`);
   console.log(`  GET /api/intelligence/findings              — all findings sorted by match count`);
   console.log(`  GET /api/intelligence/finding/:id/matches   — countries currently matching a finding`);
   console.log(`  GET /api/intelligence/:country/findings     — all findings currently active for a country`);
