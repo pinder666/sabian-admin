@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sabian — Explore Domain</title>
+  <title>Sabian — Explore</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -34,7 +34,7 @@
       min-height: 100vh;
     }
 
-    /* ── NAV ─────────────────────────────────────────────────────────────── */
+    /* NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
@@ -57,13 +57,13 @@
     }
     #live-dot {
       display: inline-block; width: 7px; height: 7px; border-radius: 50%;
-      background: var(--stable); margin-right: 6px;
-      box-shadow: 0 0 6px var(--stable);
+      background: var(--accent); margin-right: 6px;
+      box-shadow: 0 0 6px var(--accent);
       animation: pulse 2s infinite;
     }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-    /* ── MODE TABS ───────────────────────────────────────────────────────── */
+    /* MODE TABS */
     .mode-bar {
       position: fixed; top: 52px; left: 0; right: 0; z-index: 190;
       display: flex; align-items: center; gap: 0;
@@ -85,153 +85,190 @@
     .mode-btn:hover { color: var(--text); }
     .mode-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-    /* ── MAIN CONTENT ────────────────────────────────────────────────────── */
+    /* MAIN */
     main {
       padding-top: 110px;
       padding-bottom: 3rem;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
     }
 
-    /* ── DOMAIN SELECTOR (Landing State) ─────────────────────────────────── */
-    .domain-selector {
-      text-align: center;
-      padding: 6rem 2rem;
-    }
-    .domain-selector-title {
-      font-family: var(--mono); font-size: 1.2rem;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--dim); margin-bottom: 2rem;
-    }
-    .domain-selector select {
-      background: var(--panel); border: 2px solid var(--accent);
-      color: var(--bright); padding: 16px 32px;
-      border-radius: 4px;
-      font-family: var(--mono); font-size: 1rem;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      cursor: pointer; outline: none;
-    }
-    .domain-selector select:hover { background: var(--panel2); }
-
-    /* ── LEADERBOARD HEADER ──────────────────────────────────────────────── */
-    .leaderboard-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
-    }
-    .leaderboard-title {
-      font-family: var(--mono); font-size: 1.1rem;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--accent);
-    }
-    .leaderboard-meta {
-      font-family: var(--mono); font-size: 0.75rem;
-      color: var(--dim); letter-spacing: 0.08em;
-    }
-    .leaderboard-controls {
+    /* FILTER BAR */
+    .filter-bar {
       display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
     }
-    .ctrl-input {
+    .filter-input {
       background: var(--panel2); border: 1px solid var(--border);
       color: var(--text); padding: 8px 12px; border-radius: 4px;
       font-family: var(--mono); font-size: 0.8rem;
-      letter-spacing: 0.06em; outline: none; width: 200px;
+      letter-spacing: 0.06em; outline: none; width: 180px;
     }
-    .ctrl-input:focus { border-color: var(--accent); }
-    .ctrl-input::placeholder { color: var(--dim); text-transform: uppercase; }
-    .ctrl-select {
+    .filter-input:focus { border-color: var(--accent); }
+    .filter-input::placeholder { color: var(--dim); text-transform: uppercase; }
+    .filter-select {
       background: var(--panel2); border: 1px solid var(--border);
       color: var(--text); padding: 8px 12px; border-radius: 4px;
       font-family: var(--mono); font-size: 0.8rem;
       letter-spacing: 0.06em; cursor: pointer; outline: none;
     }
-    .ctrl-select:hover { border-color: var(--accent); }
-    .ctrl-btn {
+    .filter-select:hover { border-color: var(--accent); }
+    .filter-btn {
       background: var(--panel2); border: 1px solid var(--border);
       color: var(--dim); padding: 8px 14px; border-radius: 4px;
       font-family: var(--mono); font-size: 0.72rem;
       letter-spacing: 0.08em; text-transform: uppercase;
       cursor: pointer; transition: all 0.2s;
     }
-    .ctrl-btn:hover { border-color: var(--accent); color: var(--text); }
-
-    /* ── LEADERBOARD ROWS ────────────────────────────────────────────────── */
-    .leaderboard {
-      display: flex; flex-direction: column; gap: 2px;
+    .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+    .filter-label {
+      font-family: var(--mono); font-size: 0.7rem; color: var(--dim);
+      letter-spacing: 0.1em; text-transform: uppercase;
     }
-    .leaderboard-row {
-      display: grid;
-      grid-template-columns: 40px 180px 90px 1fr;
-      align-items: center;
-      gap: 16px;
-      padding: 12px 16px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 4px;
+    .filter-check {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: var(--mono); font-size: 0.72rem; color: var(--dim);
+      letter-spacing: 0.08em; text-transform: uppercase;
       cursor: pointer;
-      transition: border-color 0.2s;
     }
-    .leaderboard-row:hover { border-color: var(--accent); }
-    .rank {
-      font-family: var(--mono); font-size: 0.85rem;
-      color: var(--dim); text-align: right;
+    .filter-check input {
+      accent-color: var(--accent);
+      width: 14px; height: 14px;
+      cursor: pointer;
     }
-    .rank-top { color: var(--accent); font-weight: 700; }
+
+    /* SUMMARY STATS */
+    .summary-bar {
+      display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      font-family: var(--mono); font-size: 0.75rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .summary-total { color: var(--bright); font-weight: 700; }
+    .summary-stat { display: flex; align-items: center; gap: 0.5rem; }
+    .stat-dot { width: 10px; height: 10px; border-radius: 2px; }
+    .stat-dot.critical { background: var(--critical); }
+    .stat-dot.warning { background: var(--warning); }
+    .stat-dot.elevated { background: var(--elevated); }
+    .stat-dot.stable { background: var(--stable); }
+
+    /* BAND SECTIONS */
+    .band-section { margin-bottom: 1.5rem; }
+    .band-header {
+      font-family: var(--mono); font-size: 0.8rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.25rem;
+    }
+    .band-header.critical { color: var(--critical); }
+    .band-header.warning { color: var(--warning); }
+    .band-header.elevated { color: var(--elevated); }
+    .band-header.stable { color: var(--stable); }
+    .band-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0.25rem 0;
+    }
+
+    /* COUNTRY ROWS */
+    .country-row {
+      display: grid;
+      grid-template-columns: 200px 90px 1fr 70px 70px;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-radius: 3px;
+    }
+    .country-row:hover { background: var(--panel); }
     .country-name {
       font-weight: 600; color: var(--bright);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .badge {
-      display: inline-block; padding: 3px 10px; border-radius: 3px;
+    .level-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 3px;
       font-family: var(--mono); font-size: 0.65rem; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
+      letter-spacing: 0.06em; text-transform: uppercase;
       text-align: center;
     }
-    .badge-CRITICAL { background: rgba(220,38,38,0.15); color: var(--critical); border: 1px solid rgba(220,38,38,0.3); }
-    .badge-WARNING  { background: rgba(245,158,11,0.12); color: var(--warning);  border: 1px solid rgba(245,158,11,0.3); }
-    .badge-ELEVATED { background: rgba(234,179,8,0.1);   color: var(--elevated); border: 1px solid rgba(234,179,8,0.3); }
-    .badge-STABLE   { background: rgba(107,114,128,0.1); color: var(--stable);   border: 1px solid rgba(107,114,128,0.3); }
+    .level-badge.critical { background: rgba(220,38,38,0.15); color: var(--critical); border: 1px solid rgba(220,38,38,0.3); }
+    .level-badge.warning { background: rgba(245,158,11,0.12); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
+    .level-badge.elevated { background: rgba(234,179,8,0.1); color: var(--elevated); border: 1px solid rgba(234,179,8,0.3); }
+    .level-badge.stable { background: rgba(107,114,128,0.1); color: var(--stable); border: 1px solid rgba(107,114,128,0.3); }
 
-    /* ── MASSIVE BAR ─────────────────────────────────────────────────────── */
-    .bar-container {
-      display: flex; align-items: center; gap: 12px;
+    /* INTENSITY BAR */
+    .intensity-wrap {
+      display: flex; align-items: center; gap: 10px;
     }
-    .bar-wrap {
-      flex: 1; height: 24px; background: var(--border); border-radius: 4px;
+    .intensity-track {
+      flex: 1; height: 16px; background: var(--border); border-radius: 3px;
       overflow: hidden;
     }
-    .bar-fill {
-      height: 100%; border-radius: 4px;
-      transition: width 0.4s ease-out;
+    .intensity-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 0.3s ease-out;
     }
-    .bar-fill.critical { background: linear-gradient(90deg, var(--critical), #ef4444); }
-    .bar-fill.warning  { background: linear-gradient(90deg, var(--warning), #fbbf24); }
-    .bar-fill.elevated { background: linear-gradient(90deg, var(--elevated), #facc15); }
-    .bar-fill.stable   { background: linear-gradient(90deg, var(--stable), #9ca3af); }
-    .bar-score {
-      font-family: var(--mono); font-size: 0.9rem; font-weight: 700;
-      color: var(--bright); min-width: 45px; text-align: right;
+    .intensity-fill.critical { background: linear-gradient(90deg, var(--critical), #ef4444); }
+    .intensity-fill.warning { background: linear-gradient(90deg, var(--warning), #fbbf24); }
+    .intensity-fill.elevated { background: linear-gradient(90deg, var(--elevated), #facc15); }
+    .intensity-fill.stable { background: linear-gradient(90deg, var(--stable), #9ca3af); }
+
+    /* DOMAIN COUNT */
+    .domain-count {
+      font-family: var(--mono); font-size: 0.75rem;
+      color: var(--dim); text-align: center;
     }
 
-    /* ── EXPORT BAR ──────────────────────────────────────────────────────── */
+    /* TREND */
+    .trend {
+      font-family: var(--mono); font-size: 0.75rem;
+      text-align: center;
+    }
+    .trend.rising { color: var(--critical); }
+    .trend.flat { color: var(--dim); }
+    .trend.falling { color: #22c55e; }
+
+    /* EMPTY STATE */
+    .empty-msg {
+      font-family: var(--mono); font-size: 0.85rem; color: var(--dim);
+      text-align: center; padding: 3rem;
+    }
+
+    /* STABLE COLLAPSE */
+    .stable-toggle {
+      font-family: var(--mono); font-size: 0.75rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--dim);
+      padding: 0.75rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      transition: border-color 0.2s;
+    }
+    .stable-toggle:hover { border-color: var(--accent); color: var(--text); }
+    .stable-content { display: none; }
+    .stable-content.expanded { display: block; }
+
+    /* EXPORT BAR */
     .export-bar {
       margin-top: 2rem;
       display: flex; justify-content: flex-end;
-    }
-
-    /* ── UTILITIES ───────────────────────────────────────────────────────── */
-    .hidden { display: none; }
-    .loading-msg {
-      font-family: var(--mono); font-size: 0.85rem; color: var(--dim);
-      text-align: center; padding: 3rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
     <a href="/" class="nav-logo">SABIAN <span>INTELLIGENCE</span></a>
     <div class="nav-right">
@@ -240,7 +277,6 @@
     </div>
   </nav>
 
-  <!-- MODE BAR -->
   <div class="mode-bar">
     <a href="explore.html" class="mode-btn active">EXPLORE</a>
     <a href="intel.html" class="mode-btn">WATCHLIST</a>
@@ -249,50 +285,32 @@
   </div>
 
   <main>
-    <!-- LANDING: SELECT DOMAIN -->
-    <div id="domain-selector" class="domain-selector">
-      <div class="domain-selector-title">SELECT A DOMAIN TO EXPLORE</div>
-      <select id="domain-dropdown" onchange="selectDomain(this.value)">
-        <option value="">CHOOSE DOMAIN</option>
+    <div class="filter-bar">
+      <input class="filter-input" id="search-input" type="text" placeholder="SEARCH COUNTRY" oninput="render()">
+      <select class="filter-select" id="filter-level" onchange="render()">
+        <option value="">ALL LEVELS</option>
       </select>
+      <select class="filter-select" id="filter-region" onchange="render()">
+        <option value="">ALL REGIONS</option>
+      </select>
+      <label class="filter-check">
+        <input type="checkbox" id="filter-portfolio" onchange="render()">
+        MY PORTFOLIO ONLY
+      </label>
+      <button class="filter-btn" onclick="clearFilters()">CLEAR</button>
     </div>
 
-    <!-- LEADERBOARD (hidden until domain selected) -->
-    <div id="leaderboard-view" class="hidden">
-      <div class="leaderboard-header">
-        <div>
-          <div class="leaderboard-title" id="leaderboard-title">—</div>
-          <div class="leaderboard-meta"><span id="country-count">0</span> COUNTRIES RANKED</div>
-        </div>
-        <div class="leaderboard-controls">
-          <input class="ctrl-input" id="search-input" type="text" placeholder="SEARCH" oninput="renderLeaderboard()">
-          <select class="ctrl-select" id="filter-level" onchange="renderLeaderboard()">
-            <option value="">ALL LEVELS</option>
-            <option value="CRITICAL">CRITICAL</option>
-            <option value="WARNING">WARNING</option>
-            <option value="ELEVATED">ELEVATED</option>
-            <option value="STABLE">STABLE</option>
-          </select>
-          <select class="ctrl-select" id="filter-region" onchange="renderLeaderboard()">
-            <option value="">ALL REGIONS</option>
-          </select>
-          <select class="ctrl-select" id="domain-switch" onchange="selectDomain(this.value)"></select>
-          <button class="ctrl-btn" onclick="clearFilters()">CLEAR</button>
-        </div>
-      </div>
+    <div class="summary-bar" id="summary-bar"></div>
 
-      <div id="leaderboard" class="leaderboard">
-        <div class="loading-msg">Loading...</div>
-      </div>
+    <div id="results"></div>
 
-      <div class="export-bar">
-        <button class="ctrl-btn" onclick="exportCSV()">EXPORT CSV</button>
-      </div>
+    <div class="export-bar">
+      <button class="filter-btn" onclick="exportCSV()">EXPORT CSV</button>
     </div>
   </main>
 
   <script>
-    // ── SHARED STATE ────────────────────────────────────────────────────────
+    // Shared state
     window.SABIAN = window.SABIAN || {
       activeCountry: null,
       activeYear: null,
@@ -300,207 +318,286 @@
       activeRegion: null,
       compareList: [],
       portfolio: JSON.parse(localStorage.getItem('sabian_portfolio') || '[]'),
-      filters: { level: '', region: '', domain: '' }
+      filters: { level: '', region: '' }
     };
 
-    // ── GLOBALS ─────────────────────────────────────────────────────────────
     let allCountries = [];
-    let allDomains = [];
-    let allRegions = [];
-    let selectedDomain = '';
+    let maxScore = 100;
 
-    // ── INIT ────────────────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('nav-date').textContent = new Date().toISOString().slice(0, 10);
       loadData();
     });
 
-    // ── LOAD DATA ───────────────────────────────────────────────────────────
     async function loadData() {
       try {
         const res = await fetch('/public-api/threats');
         const data = await res.json();
         allCountries = data.countries || [];
 
-        const domainSet = new Set();
-        const regionSet = new Set();
-        allCountries.forEach(c => {
-          if (c.theater) regionSet.add(c.theater);
-          (c.active_domains || []).forEach(d => {
-            if (d.name && (d.score || 0) > 0) domainSet.add(d.name);
-          });
-        });
+        // Find max convergence score for bar scaling
+        maxScore = Math.max(...allCountries.map(c => c.convergence_score || c.score || 0), 100);
 
-        allDomains = [...domainSet].sort();
-        allRegions = [...regionSet].sort();
-
-        populateDropdowns();
+        // Populate filter dropdowns from live data
+        populateFilters();
+        render();
       } catch (err) {
-        document.getElementById('domain-selector').innerHTML =
-          `<div class="loading-msg">Error loading data: ${err.message}</div>`;
+        document.getElementById('results').innerHTML =
+          `<div class="empty-msg">ERROR LOADING DATA: ${escapeHtml(err.message)}</div>`;
       }
     }
 
-    // ── POPULATE DROPDOWNS ──────────────────────────────────────────────────
-    function populateDropdowns() {
-      const mainDropdown = document.getElementById('domain-dropdown');
-      const switchDropdown = document.getElementById('domain-switch');
-      const regionDropdown = document.getElementById('filter-region');
+    function populateFilters() {
+      const levels = new Set();
+      const regions = new Set();
 
-      allDomains.forEach(d => {
-        const opt1 = document.createElement('option');
-        opt1.value = d;
-        opt1.textContent = formatDomainName(d);
-        mainDropdown.appendChild(opt1);
-
-        const opt2 = document.createElement('option');
-        opt2.value = d;
-        opt2.textContent = formatDomainName(d);
-        switchDropdown.appendChild(opt2);
+      allCountries.forEach(c => {
+        if (c.risk_level) levels.add(c.risk_level);
+        if (c.theater) regions.add(c.theater);
       });
 
-      allRegions.forEach(r => {
+      const levelSelect = document.getElementById('filter-level');
+      [...levels].sort().forEach(level => {
         const opt = document.createElement('option');
-        opt.value = r;
-        opt.textContent = r;
-        regionDropdown.appendChild(opt);
+        opt.value = level;
+        opt.textContent = level;
+        levelSelect.appendChild(opt);
+      });
+
+      const regionSelect = document.getElementById('filter-region');
+      [...regions].sort().forEach(region => {
+        const opt = document.createElement('option');
+        opt.value = region;
+        opt.textContent = region;
+        regionSelect.appendChild(opt);
       });
     }
 
-    // ── FORMAT DOMAIN NAME ──────────────────────────────────────────────────
-    function formatDomainName(name) {
-      if (!name) return '';
-      return name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    }
-
-    // ── SELECT DOMAIN ───────────────────────────────────────────────────────
-    function selectDomain(domain) {
-      if (!domain) return;
-
-      selectedDomain = domain;
-      window.SABIAN.activeDomain = domain;
-
-      document.getElementById('domain-selector').classList.add('hidden');
-      document.getElementById('leaderboard-view').classList.remove('hidden');
-      document.getElementById('leaderboard-title').textContent = formatDomainName(domain).toUpperCase();
-      document.getElementById('domain-switch').value = domain;
-
-      renderLeaderboard();
-    }
-
-    // ── GET DOMAIN SCORE ────────────────────────────────────────────────────
-    function getDomainScore(country, domainName) {
-      const domains = country.active_domains || [];
-      const d = domains.find(x => x.name === domainName);
-      return d ? (d.score || 0) : 0;
-    }
-
-    // ── RENDER LEADERBOARD ──────────────────────────────────────────────────
-    function renderLeaderboard() {
+    function getFilteredCountries() {
       const search = (document.getElementById('search-input').value || '').toLowerCase().trim();
       const levelFilter = document.getElementById('filter-level').value;
       const regionFilter = document.getElementById('filter-region').value;
+      const portfolioOnly = document.getElementById('filter-portfolio').checked;
+      const portfolio = window.SABIAN.portfolio || [];
 
-      let filtered = allCountries.filter(c => {
-        const score = getDomainScore(c, selectedDomain);
-        if (score <= 0) return false;
+      return allCountries.filter(c => {
         if (search && !(c.country || '').toLowerCase().includes(search)) return false;
         if (levelFilter && c.risk_level !== levelFilter) return false;
         if (regionFilter && c.theater !== regionFilter) return false;
+        if (portfolioOnly && !portfolio.includes(c.country)) return false;
         return true;
       });
+    }
 
-      filtered.sort((a, b) => getDomainScore(b, selectedDomain) - getDomainScore(a, selectedDomain));
+    function render() {
+      const filtered = getFilteredCountries();
+      const portfolio = window.SABIAN.portfolio || [];
 
-      const maxScore = filtered.length > 0 ? getDomainScore(filtered[0], selectedDomain) : 100;
+      // Count by band
+      const bands = ['CRITICAL', 'WARNING', 'ELEVATED', 'STABLE'];
+      const counts = {};
+      bands.forEach(b => counts[b] = { total: 0, exposure: 0 });
 
-      document.getElementById('country-count').textContent = filtered.length;
-
-      if (filtered.length === 0) {
-        document.getElementById('leaderboard').innerHTML =
-          '<div class="loading-msg">NO COUNTRIES MATCH FILTERS</div>';
-        return;
-      }
-
-      let html = '';
-      filtered.forEach((c, i) => {
-        const rank = i + 1;
-        const score = getDomainScore(c, selectedDomain);
-        const width = maxScore > 0 ? (score / maxScore) * 100 : 0;
-        const barClass = c.risk_level ? c.risk_level.toLowerCase() : 'stable';
-        const rankClass = rank <= 3 ? 'rank rank-top' : 'rank';
-
-        html += `
-          <div class="leaderboard-row" onclick="openCountry('${escapeHtml(c.country)}')">
-            <div class="${rankClass}">${rank}</div>
-            <div class="country-name">${escapeHtml(c.country)}</div>
-            <span class="badge badge-${c.risk_level}">${c.risk_level}</span>
-            <div class="bar-container">
-              <div class="bar-wrap">
-                <div class="bar-fill ${barClass}" style="width: ${width}%"></div>
-              </div>
-              <div class="bar-score">${score}</div>
-            </div>
-          </div>
-        `;
+      filtered.forEach(c => {
+        const band = (c.risk_level || 'STABLE').toUpperCase();
+        if (counts[band]) {
+          counts[band].total++;
+          if (portfolio.includes(c.country)) counts[band].exposure++;
+        }
       });
 
-      document.getElementById('leaderboard').innerHTML = html;
+      // Render summary bar
+      const totalCountries = filtered.length;
+      const summaryHtml = `
+        <span class="summary-total">${totalCountries} COUNTRIES</span>
+        <span class="summary-stat"><span class="stat-dot critical"></span>${counts.CRITICAL.total} CRITICAL</span>
+        <span class="summary-stat"><span class="stat-dot warning"></span>${counts.WARNING.total} WARNING</span>
+        <span class="summary-stat"><span class="stat-dot elevated"></span>${counts.ELEVATED.total} ELEVATED</span>
+        <span class="summary-stat"><span class="stat-dot stable"></span>${counts.STABLE.total} STABLE</span>
+      `;
+      document.getElementById('summary-bar').innerHTML = summaryHtml;
+
+      // Group by band, portfolio first within each
+      const grouped = {};
+      bands.forEach(b => grouped[b] = { portfolio: [], other: [] });
+
+      filtered.forEach(c => {
+        const band = (c.risk_level || 'STABLE').toUpperCase();
+        if (grouped[band]) {
+          if (portfolio.includes(c.country)) {
+            grouped[band].portfolio.push(c);
+          } else {
+            grouped[band].other.push(c);
+          }
+        }
+      });
+
+      // Sort within groups by convergence score descending
+      const sortByScore = (a, b) => (b.convergence_score || b.score || 0) - (a.convergence_score || a.score || 0);
+      bands.forEach(b => {
+        grouped[b].portfolio.sort(sortByScore);
+        grouped[b].other.sort(sortByScore);
+      });
+
+      // Render
+      let html = '';
+
+      bands.forEach(band => {
+        const bandData = grouped[band];
+        const total = bandData.portfolio.length + bandData.other.length;
+        if (total === 0) return;
+
+        const exposure = bandData.portfolio.length;
+        const bandClass = band.toLowerCase();
+
+        // For STABLE, collapse by default
+        if (band === 'STABLE' && total > 0) {
+          html += `
+            <div class="band-section">
+              <div class="stable-toggle" onclick="toggleStable()">
+                <span>${band} — ${exposure > 0 ? exposure + ' EXPOSURE / ' : ''}${total} TOTAL</span>
+                <span id="stable-arrow">▼</span>
+              </div>
+              <div class="stable-content" id="stable-content">
+          `;
+
+          if (bandData.portfolio.length > 0) {
+            bandData.portfolio.forEach(c => { html += renderRow(c, bandClass); });
+            if (bandData.other.length > 0) {
+              html += '<hr class="band-divider">';
+            }
+          }
+          bandData.other.forEach(c => { html += renderRow(c, bandClass); });
+
+          html += `</div></div>`;
+        } else {
+          html += `
+            <div class="band-section">
+              <div class="band-header ${bandClass}">${band} — ${exposure > 0 ? exposure + ' EXPOSURE / ' : ''}${total} TOTAL</div>
+          `;
+
+          if (bandData.portfolio.length > 0) {
+            bandData.portfolio.forEach(c => { html += renderRow(c, bandClass); });
+            if (bandData.other.length > 0) {
+              html += '<hr class="band-divider">';
+            }
+          }
+          bandData.other.forEach(c => { html += renderRow(c, bandClass); });
+
+          html += '</div>';
+        }
+      });
+
+      if (html === '') {
+        html = '<div class="empty-msg">NO COUNTRIES MATCH FILTERS</div>';
+      }
+
+      document.getElementById('results').innerHTML = html;
     }
 
-    // ── CLEAR FILTERS ───────────────────────────────────────────────────────
-    function clearFilters() {
-      document.getElementById('search-input').value = '';
-      document.getElementById('filter-level').value = '';
-      document.getElementById('filter-region').value = '';
-      renderLeaderboard();
+    function renderRow(c, bandClass) {
+      const score = c.convergence_score || c.score || 0;
+      const width = maxScore > 0 ? (score / maxScore) * 100 : 0;
+
+      // Domain count: active domains with score > 0 / total available (if known)
+      const activeDomains = (c.active_domains || []).filter(d => (d.score || 0) > 0).length;
+      const totalDomains = c.signals_available || null;
+      const domainCount = totalDomains ? `${activeDomains}/${totalDomains}` : `${activeDomains}`;
+
+      // Trend
+      const trajectory = c.trajectory || 'STABLE';
+      let trendDisplay = '── Flat';
+      let trendClass = 'flat';
+      if (trajectory === 'RISING') {
+        trendDisplay = '▲ Rising';
+        trendClass = 'rising';
+      } else if (trajectory === 'SHARP_FALL') {
+        trendDisplay = '▼ Falling';
+        trendClass = 'falling';
+      }
+
+      return `
+        <div class="country-row" onclick="openCountry('${escapeHtml(c.country)}')">
+          <div class="country-name">${escapeHtml(c.country)}</div>
+          <span class="level-badge ${bandClass}">${c.risk_level || 'STABLE'}</span>
+          <div class="intensity-wrap">
+            <div class="intensity-track">
+              <div class="intensity-fill ${bandClass}" style="width: ${width}%"></div>
+            </div>
+          </div>
+          <div class="domain-count">${domainCount}</div>
+          <div class="trend ${trendClass}">${trendDisplay}</div>
+        </div>
+      `;
     }
 
-    // ── OPEN COUNTRY ────────────────────────────────────────────────────────
+    function toggleStable() {
+      const content = document.getElementById('stable-content');
+      const arrow = document.getElementById('stable-arrow');
+      if (content.classList.contains('expanded')) {
+        content.classList.remove('expanded');
+        arrow.textContent = '▼';
+      } else {
+        content.classList.add('expanded');
+        arrow.textContent = '▲';
+      }
+    }
+
     function openCountry(country) {
       window.SABIAN.activeCountry = country;
       window.location.href = `intel.html?country=${encodeURIComponent(country)}`;
     }
 
-    // ── ESCAPE HTML ─────────────────────────────────────────────────────────
+    function clearFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('filter-level').value = '';
+      document.getElementById('filter-region').value = '';
+      document.getElementById('filter-portfolio').checked = false;
+      render();
+    }
+
     function escapeHtml(str) {
       if (!str) return '';
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // ── EXPORT CSV ──────────────────────────────────────────────────────────
     function exportCSV() {
-      const search = (document.getElementById('search-input').value || '').toLowerCase().trim();
-      const levelFilter = document.getElementById('filter-level').value;
-      const regionFilter = document.getElementById('filter-region').value;
+      const filtered = getFilteredCountries();
+      const portfolio = window.SABIAN.portfolio || [];
 
-      let filtered = allCountries.filter(c => {
-        const score = getDomainScore(c, selectedDomain);
-        if (score <= 0) return false;
-        if (search && !(c.country || '').toLowerCase().includes(search)) return false;
-        if (levelFilter && c.risk_level !== levelFilter) return false;
-        if (regionFilter && c.theater !== regionFilter) return false;
-        return true;
+      // Sort by band then by score
+      const bandOrder = { 'CRITICAL': 0, 'WARNING': 1, 'ELEVATED': 2, 'STABLE': 3 };
+      filtered.sort((a, b) => {
+        const bandA = bandOrder[(a.risk_level || 'STABLE').toUpperCase()] || 3;
+        const bandB = bandOrder[(b.risk_level || 'STABLE').toUpperCase()] || 3;
+        if (bandA !== bandB) return bandA - bandB;
+        return (b.convergence_score || b.score || 0) - (a.convergence_score || a.score || 0);
       });
 
-      filtered.sort((a, b) => getDomainScore(b, selectedDomain) - getDomainScore(a, selectedDomain));
-
       const timestamp = new Date().toISOString();
-      const dataRows = filtered.map((c, i) =>
-        `${i + 1},${c.country},${c.risk_level},${getDomainScore(c, selectedDomain)}`
-      ).join('\n');
+      const lines = [
+        '# SABIAN INTELLIGENCE',
+        `# GENERATED: ${timestamp}`,
+        '# EXPLORE VIEW',
+        'Country,Level,Intensity,Active Domains,Total Domains,Trend,In Portfolio'
+      ];
 
-      const csv = `# SABIAN INTELLIGENCE
-# DOMAIN: ${formatDomainName(selectedDomain).toUpperCase()}
-# GENERATED: ${timestamp}
-Rank,Country,Level,Score
-${dataRows}`;
+      filtered.forEach(c => {
+        const score = c.convergence_score || c.score || 0;
+        const activeDomains = (c.active_domains || []).filter(d => (d.score || 0) > 0).length;
+        const totalDomains = c.signals_available || null;
+        const trajectory = c.trajectory || 'flat';
+        const inPortfolio = portfolio.includes(c.country) ? 'Yes' : 'No';
 
+        lines.push(`${c.country},${c.risk_level || 'STABLE'},${score},${activeDomains},${totalDomains || ''},${trajectory},${inPortfolio}`);
+      });
+
+      const csv = lines.join('\n');
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `sabian_${selectedDomain}_${new Date().toISOString().slice(0,10)}.csv`;
+      a.download = `sabian_explore_${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
       URL.revokeObjectURL(url);
     }
