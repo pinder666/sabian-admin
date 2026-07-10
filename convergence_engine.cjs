@@ -713,18 +713,21 @@ async function scoreImfFiscal(country, date) {
     if (result.error) {
       return { name: 'Fiscal Stress', score: null, label: result.error, trend: 'unknown', source: 'IMF' };
     }
-    if (result.conflict_score === null) {
+    if (result.raw_inflation_pct === null && result.raw_current_account_pct_gdp === null && result.raw_gov_debt_pct_gdp === null) {
       return { name: 'Fiscal Stress', score: null, label: result.warning || 'No IMF data', trend: 'unknown', source: 'IMF' };
     }
     return {
       name: 'Fiscal Stress',
-      score: result.conflict_score,
+      score: null,
+      raw_inflation_pct: result.raw_inflation_pct,
+      raw_current_account_pct_gdp: result.raw_current_account_pct_gdp,
+      raw_gov_debt_pct_gdp: result.raw_gov_debt_pct_gdp,
       label: [
-        result.inflation_pct !== null ? `inflation ${result.inflation_pct}%` : null,
-        result.current_account_pct_gdp !== null ? `CA ${result.current_account_pct_gdp}% GDP` : null,
-        result.gov_debt_pct_gdp !== null ? `debt ${result.gov_debt_pct_gdp}% GDP` : null
-      ].filter(Boolean).join(', ') || result.trend,
-      trend: result.trend,
+        result.raw_inflation_pct !== null ? `inflation ${result.raw_inflation_pct}%` : null,
+        result.raw_current_account_pct_gdp !== null ? `CA ${result.raw_current_account_pct_gdp}% GDP` : null,
+        result.raw_gov_debt_pct_gdp !== null ? `debt ${result.raw_gov_debt_pct_gdp}% GDP` : null
+      ].filter(Boolean).join(', '),
+      trend: 'unknown',
       source: 'IMF'
     };
   } catch (err) {
@@ -1213,12 +1216,13 @@ async function scoreFaoFood(country) {
 async function scoreVdemGovernance(country) {
   try {
     const result = await fetchVdemGovernanceData(country);
-    if (result.score === null) return { name: 'VDem Governance', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'VDem' };
+    if (result.raw_value === null) return { name: 'VDem Governance', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'VDem' };
     return {
       name: 'VDem Governance',
-      score: result.score,
-      label: result.regime ? `${result.regime} — LDI ${result.ldi} (${result.trend})` : `Governance risk ${result.score}/100`,
-      trend: result.trend || 'stable',
+      score: null,
+      raw_value: result.raw_value,
+      label: `V-Dem LDI ${result.raw_value} (${result.date})`,
+      trend: 'unknown',
       source: 'VDem'
     };
   } catch (err) {

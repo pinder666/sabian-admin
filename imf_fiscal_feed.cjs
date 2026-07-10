@@ -39,9 +39,9 @@ async function fetchImfScore(country, date) {
           const raw = await fetchJson('www.imf.org', path);
           const values = raw?.values?.[indicator]?.[imfCode];
           if (values) {
-            // Get latest available year and prior year
+            const currentYear = new Date().getFullYear();
             const years = Object.keys(values).map(Number).sort((a,b) => b-a);
-            const latestYear = years[0];
+            const latestYear = years.find(y => y <= currentYear);
             const priorYear = years[1];
             results[indicator] = {
               latest: parseFloat(values[latestYear]),
@@ -61,60 +61,12 @@ async function fetchImfScore(country, date) {
       return { source: 'IMF', country, conflict_score: null, warning: 'No IMF data available' };
     }
 
-    let score = 0;
-
-    // Inflation component (0-40 points)
-    // Hyperinflation = fiscal collapse signal
-    if (inflation !== undefined && !isNaN(inflation)) {
-      if (inflation >= 100) score += 40;       // hyperinflation
-      else if (inflation >= 50) score += 30;
-      else if (inflation >= 20) score += 20;
-      else if (inflation >= 10) score += 12;
-      else if (inflation >= 5)  score += 5;
-    }
-
-    // Current account deficit (0-30 points)
-    // Severe deficit = import dependency crisis
-    if (currentAccount !== undefined && !isNaN(currentAccount)) {
-      if (currentAccount <= -15) score += 30;
-      else if (currentAccount <= -10) score += 20;
-      else if (currentAccount <= -5)  score += 12;
-      else if (currentAccount <= -2)  score += 5;
-    }
-
-    // Government debt (0-30 points)
-    // Debt > 100% GDP = fiscal trap
-    if (govDebt !== undefined && !isNaN(govDebt)) {
-      if (govDebt >= 150) score += 30;
-      else if (govDebt >= 100) score += 20;
-      else if (govDebt >= 70)  score += 10;
-      else if (govDebt >= 50)  score += 4;
-    }
-
-    score = Math.min(100, score);
-
-    const trend = inflation >= 50 ? 'hyperinflationary crisis' :
-                  inflation >= 20 ? 'severe inflation' :
-                  currentAccount <= -10 ? 'balance of payments crisis' :
-                  govDebt >= 100 ? 'debt trap' :
-                  score >= 30 ? 'fiscal stress' : 'manageable';
-
-    logToHive({
-      source: 'imf_fiscal_feed',
-      level: 'intel',
-      event: 'imf_scored',
-      data: { country, inflation, currentAccount, govDebt, score },
-      tags: ['imf', 'fiscal', country]
-    });
-
     return {
-      source: 'IMF',
+      source: 'imf_weo_datamapper',
       country,
-      conflict_score: score,
-      inflation_pct: inflation !== undefined ? parseFloat(inflation?.toFixed(1)) : null,
-      current_account_pct_gdp: currentAccount !== undefined ? parseFloat(currentAccount?.toFixed(1)) : null,
-      gov_debt_pct_gdp: govDebt !== undefined ? parseFloat(govDebt?.toFixed(1)) : null,
-      trend,
+      raw_inflation_pct: inflation !== undefined ? parseFloat(inflation.toFixed(2)) : null,
+      raw_current_account_pct_gdp: currentAccount !== undefined ? parseFloat(currentAccount.toFixed(2)) : null,
+      raw_gov_debt_pct_gdp: govDebt !== undefined ? parseFloat(govDebt.toFixed(2)) : null,
       data_year: results['PCPIPCH']?.year || targetYear,
       fetched_at: new Date().toISOString()
     };
