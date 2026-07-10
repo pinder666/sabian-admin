@@ -62,7 +62,9 @@ async function fetchWeoHistorical(country) {
     try {
       const json = await httpsGet(url);
       const values = json?.values?.[ind.code]?.[iso3] || {};
+      const currentYear = new Date().getFullYear();
       for (const [year, value] of Object.entries(values)) {
+        if (parseInt(year) > currentYear) continue;
         if (!byYear[year]) byYear[year] = {};
         byYear[year][ind.field] = value !== null ? parseFloat(value) : null;
       }
