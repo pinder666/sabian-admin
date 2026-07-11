@@ -265,6 +265,27 @@
       margin-top: 2rem;
       display: flex; justify-content: flex-end;
     }
+
+    /* DAILY READ */
+    .daily-read {
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      font-family: var(--mono); font-size: 0.78rem;
+      letter-spacing: 0.05em; line-height: 1.8;
+    }
+    .daily-read-header {
+      font-size: 0.68rem; color: var(--dim);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .daily-read-item { color: var(--text); margin-bottom: 0.3rem; }
+    .daily-read-item .country-ref { color: var(--accent); cursor: pointer; }
+    .daily-read-item .country-ref:hover { text-decoration: underline; }
+    .daily-read-annex { margin-top: 0.5rem; color: var(--dim); font-size: 0.72rem; }
   </style>
 </head>
 <body>
@@ -300,6 +321,7 @@
       <button class="filter-btn" onclick="clearFilters()">CLEAR</button>
     </div>
 
+    <div class="daily-read" id="daily-read" style="display:none"></div>
     <div class="summary-bar" id="summary-bar"></div>
 
     <div id="results"></div>
@@ -324,6 +346,10 @@
     let allCountries = [];
     let maxScore = 100;
 
+    function getApiKey() {
+      return localStorage.getItem('sabian_buyer_key') || '';
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('nav-date').textContent = new Date().toISOString().slice(0, 10);
       loadData();
@@ -341,6 +367,7 @@
         // Populate filter dropdowns from live data
         populateFilters();
         render();
+        loadDailyRead();
       } catch (err) {
         document.getElementById('results').innerHTML =
           `<div class="empty-msg">ERROR LOADING DATA: ${escapeHtml(err.message)}</div>`;
@@ -559,6 +586,48 @@
     function escapeHtml(str) {
       if (!str) return '';
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    async function loadDailyRead() {
+      const key = getApiKey();
+      if (!key) return;
+      try {
+        const res = await fetch('/api/explore/read', {
+          headers: { 'Authorization': `Bearer ${key}` }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        renderDailyRead(data);
+      } catch (err) { /* silently skip — section stays hidden */ }
+    }
+
+    function renderDailyRead(data) {
+      const el = document.getElementById('daily-read');
+      if (!data || !data.items || data.items.length === 0) {
+        if (data && data.nstr_text) {
+          el.innerHTML = `<div class="daily-read-header">DAILY READ — ${escapeHtml(data.date)}</div>
+            <div class="daily-read-item" style="color:var(--dim)">${escapeHtml(data.nstr_text)}</div>`;
+          el.style.display = '';
+        }
+        return;
+      }
+      const itemsHtml = data.items.map(item => {
+        let text = escapeHtml(item.text);
+        for (const country of (item.countries || [])) {
+          const safe = escapeHtml(country);
+          text = text.replace(new RegExp(safe, 'g'),
+            `<span class="country-ref" onclick="window.location='intel.html?country=${encodeURIComponent(country)}'">${safe}</span>`);
+        }
+        return `<div class="daily-read-item">${text}</div>`;
+      }).join('');
+      const annexHtml = data.annex_count > 0
+        ? `<div class="daily-read-annex">+ ${data.annex_count} more items in annex</div>`
+        : '';
+      el.innerHTML = `
+        <div class="daily-read-header">DAILY READ — ${escapeHtml(data.date)}</div>
+        ${itemsHtml}${annexHtml}
+      `;
+      el.style.display = '';
     }
 
     function exportCSV() {
