@@ -2998,6 +2998,233 @@ app.get('/api/country/compare/:name', requireTier('buyer'), async (req, res) => 
   }
 });
 
+// ── EXPLORE READ — composed intelligence feed, buyer+ ─────────────────────────
+// GET /api/explore/read
+// Runs queries A-F, composes sentences server-side, returns numbered items.
+// Browser renders item.text directly — no interpretation required.
+
+app.get('/api/explore/read', requireTier('buyer'), async (req, res) => {
+  try {
+    const { createClient } = require('@supabase/supabase-js');
+    const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+    const currentYear = new Date().getFullYear();
+    const today = new Date().toISOString().slice(0, 10);
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().slice(0, 10);
+
+    // DOMAIN_DISPLAY shield — converts raw signal keys to display-safe domain names
+    const DOMAIN_DISPLAY = {
+      gdelt_conflict: 'Conflict', gdelt_conflict_feed: 'Conflict',
+      unhcr_displacement: 'Displacement', unhcr_displacement_stock: 'Displacement',
+      food_security: 'Food Security', ipc_food: 'Food Security',
+      economic_stress: 'Economic Stress', fred_capital_feed: 'Economic Stress',
+      structural_pressure: 'Structural Pressure',
+      corruption_risk: 'Governance Risk', vdem_governance: 'Governance',
+      election_calendar: 'Political Risk', election_calendar_feed: 'Political Risk',
+      displacement: 'Displacement', conflict: 'Conflict',
+      sanctions_pressure: 'Sanctions', sovereignty_risk: 'Sovereignty Risk',
+    };
+    const shieldDomain = (raw) => {
+      if (!raw) return 'Unknown Domain';
+      return DOMAIN_DISPLAY[raw]
+        || DOMAIN_DISPLAY[raw.toLowerCase().replace(/\s+/g, '_')]
+        || raw.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    };
+
+    // ── Query A: 30d convergence movers ──────────────────────────────────────
+    const { data: recentScores, error: rErr } = await sb
+      .from('convergence_scores')
+      .select('country, scan_date, convergence_score')
+      .gte('scan_date', thirtyDaysAgoStr)
+      .order('country', { ascending: true })
+      .order('scan_date', { ascending: false });
+    if (rErr) throw rErr;
+
+    const byCountry30d = {};
+    for (const r of (recentScores || [])) {
+      if (!byCountry30d[r.country]) byCountry30d[r.country] = { newest: r, oldest: r };
+      else byCountry30d[r.country].oldest = r;
+    }
+    const movers = Object.entries(byCountry30d)
+      .filter(([, { newest, oldest }]) => newest.scan_date !== oldest.scan_date)
+      .map(([country, { newest, oldest }]) => ({
+        country,
+        delta: Math.round((newest.convergence_score || 0) - (oldest.convergence_score || 0))
+      }))
+      .sort((a, b) => b.delta - a.delta);
+
+    const top5Countries = movers.slice(0, 5).map(m => m.country);
+
+    // ── Query B: Countries at or near historical maximum ──────────────────────
+    const { data: histScores, error: hErr } = await sb
+      .from('historical_convergence_scores')
+      .select('country, year, score')
+      .gte('year', currentYear - 30)
+      .order('country', { ascending: true })
+      .order('year', { ascending: false });
+    if (hErr) throw hErr;
+
+    const histByCountry = {};
+    for (const r of (histScores || [])) {
+      if (!histByCountry[r.country]) histByCountry[r.country] = [];
+      histByCountry[r.country].push(r);
+    }
+    const historicLevels = [];
+    for (const [country, rows] of Object.entries(histByCountry)) {
+      if (rows.length < 2) continue;
+      const current = rows[0];
+      const prior = rows.slice(1);
+      const priorMax = Math.max(...prior.map(r => r.score || 0));
+      if (!priorMax) continue;
+      if ((current.score || 0) >= priorMax * 0.95) {
+        const refRow = prior.find(r => (r.score || 0) >= priorMax * 0.99);
+        historicLevels.push({ country, current_score: current.score, reference_year: refRow?.year || null });
+      }
+    }
+    historicLevels.sort((a, b) => b.current_score - a.current_score);
+
+    // ── Query C: Active silence — miner_findings, going_dark_event [FIXED] ────
+    const { data: darkFindings, error: dErr } = await sb
+      .from('miner_findings')
+      .select('payload')
+      .eq('category', 'going_dark_event')
+      .filter("payload->>'darkEnd'", 'eq', String(currentYear));
+    if (dErr) console.warn('[explore/read] Query C error:', dErr.message);
+
+    const darkItems = (darkFindings || [])
+      .map(f => ({
+        country:    f.payload?.country,
+        signal:     shieldDomain(f.payload?.signal || f.payload?.signal_key),
+        dark_years: parseInt(f.payload?.darkYears) || 0
+      }))
+      .filter(d => d.country && d.signal)
+      .sort((a, b) => b.dark_years - a.dark_years)
+      .slice(0, 20);
+
+    // ── Query D: Converging countries — 5+ elevated domains ──────────────────
+    const allResult = await getLatestScores();
+    const converging = (allResult.countries || [])
+      .filter(c => (c.active_domains || []).filter(d => d.score >= 65).length >= 5)
+      .map(c => {
+        const elevated = (c.active_domains || [])
+          .filter(d => d.score >= 65)
+          .sort((a, b) => b.score - a.score);
+        return {
+          country:        c.country,
+          elevated_count: elevated.length,
+          total_domains:  (c.active_domains || []).length,
+          top_domains:    elevated.slice(0, 3).map(d => shieldDomain(d.name))
+        };
+      })
+      .sort((a, b) => b.elevated_count - a.elevated_count)
+      .slice(0, 20);
+
+    // ── Query E: Pattern matches — placeholder, analogue engine pending ────────
+
+    // ── Query F: Signal velocity for top-5 movers ────────────────────────────
+    const velocityByCountry = {};
+    if (top5Countries.length > 0) {
+      const { data: readingsData, error: vErr } = await sb
+        .from('signal_readings')
+        .select('country, signal_name, score, scan_date')
+        .in('country', top5Countries)
+        .gte('scan_date', thirtyDaysAgoStr)
+        .order('country', { ascending: true })
+        .order('scan_date', { ascending: false });
+      if (vErr) console.warn('[explore/read] Query F error:', vErr.message);
+
+      const readingsByKey = {};
+      for (const r of (readingsData || [])) {
+        const key = `${r.country}::${r.signal_name}`;
+        if (!readingsByKey[key]) readingsByKey[key] = { newest: r, oldest: r, country: r.country, signal: r.signal_name };
+        else readingsByKey[key].oldest = r;
+      }
+      for (const { newest, oldest, country, signal } of Object.values(readingsByKey)) {
+        if (newest.scan_date === oldest.scan_date) continue;
+        const delta = Math.round((newest.score || 0) - (oldest.score || 0));
+        if (delta <= 0) continue;
+        if (!velocityByCountry[country] || delta > velocityByCountry[country].delta) {
+          velocityByCountry[country] = { country, domain: shieldDomain(signal), delta };
+        }
+      }
+    }
+    const velocityRanked = Object.values(velocityByCountry).sort((a, b) => b.delta - a.delta);
+
+    // ── Compose items ─────────────────────────────────────────────────────────
+    const items = [];
+    let annexCount = 0;
+
+    // Velocity — fastest rise first, remaining to annex
+    for (let i = 0; i < velocityRanked.length; i++) {
+      const v = velocityRanked[i];
+      items.push({
+        type: 'velocity',
+        text: i === 0
+          ? `${v.country} — ${v.domain} up ${v.delta} points in 30 days, the fastest rise of any country this month.`
+          : `${v.country} — ${v.domain} up ${v.delta} points in 30 days.`,
+        countries: [v.country]
+      });
+      if (i > 0) annexCount++;
+    }
+
+    // Historic — top 5 primary, rest annex
+    for (let i = 0; i < historicLevels.length; i++) {
+      const h = historicLevels[i];
+      items.push({
+        type: 'historic',
+        text: h.reference_year
+          ? `${h.country} — score ${h.current_score}, highest since ${h.reference_year}.`
+          : `${h.country} — score ${h.current_score}, highest on record.`,
+        countries: [h.country]
+      });
+      if (i >= 5) annexCount++;
+    }
+
+    // Dark — first item names it the longest, rest to annex
+    for (let i = 0; i < darkItems.length; i++) {
+      const d = darkItems[i];
+      items.push({
+        type: 'dark',
+        text: i === 0
+          ? `${d.country} has been silent on ${d.signal} for ${d.dark_years} years — the longest active silence in the dataset.`
+          : `${d.country} silent on ${d.signal} for ${d.dark_years} years.`,
+        countries: [d.country]
+      });
+      if (i > 0) annexCount++;
+    }
+
+    // Converging — top 3 primary, rest annex
+    for (let i = 0; i < converging.length; i++) {
+      const c = converging[i];
+      items.push({
+        type: 'converging',
+        text: `${c.country} — ${c.elevated_count} of ${c.total_domains} domains elevated. Top: ${c.top_domains.join(', ')}.`,
+        countries: [c.country]
+      });
+      if (i >= 3) annexCount++;
+    }
+
+    // (Query E — pattern matches — items added here when analogue engine ready)
+
+    const cappedItems = items.slice(0, 6);
+    const totalAnnex = items.length - 6 + annexCount;
+
+    res.json({
+      date: today,
+      items: cappedItems,
+      nstr: items.length === 0,
+      nstr_text: items.length === 0
+        ? `No significant developments today. ${darkItems.length > 0 ? darkItems.length + ' dark periods ongoing.' : ''}`
+        : null,
+      annex_count: Math.max(0, totalAnnex)
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── Start ──────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`\nSabian Intelligence Terminal — Port ${PORT}`);
@@ -3011,6 +3238,7 @@ app.listen(PORT, () => {
   console.log(`  GET /public-api/observations/:c — ledger, no auth`);
   console.log(`  GET /public-api/global          — global landing: top 10, crossings, rollup (no auth)`);
   console.log(`\n  API (Bearer auth required)`);
+  console.log(`  GET /api/explore/read           — composed intelligence feed: velocity, historic, dark, converging (buyer+)`);
   console.log(`  GET /health                     — liveness check (no auth)`);
   console.log(`  GET /api/summary                — global threat summary`);
   console.log(`  GET /api/threats                — all countries ranked`);
