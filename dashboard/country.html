@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sabian — Country Detail</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #050c1a;
+      --panel:    #0a1428;
+      --panel2:   #0d1a33;
+      --border:   #152040;
+      --accent:   #1a6fff;
+      --dim:      #8aa0c0;
+      --text:     #c8d8f0;
+      --bright:   #e8f0ff;
+      --critical: #dc2626;
+      --warning:  #f59e0b;
+      --elevated: #eab308;
+      --stable:   #6b7280;
+      --mono:     'Courier New', Consolas, monospace;
+      --sans:     -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    }
+
+    body {
+      background: var(--navy); color: var(--text);
+      font-family: var(--sans); line-height: 1.5;
+      -webkit-font-smoothing: antialiased; min-height: 100vh;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 52px;
+      background: rgba(5,12,26,0.96); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--mono); font-size: 1rem; font-weight: 700;
+      color: var(--bright); letter-spacing: 0.14em; text-transform: uppercase;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-badge { font-family: var(--mono); font-size: 0.7rem; color: var(--dim); letter-spacing: 0.08em; text-transform: uppercase; }
+    #live-dot {
+      display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent); margin-right: 6px; box-shadow: 0 0 6px var(--accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .mode-bar {
+      position: fixed; top: 52px; left: 0; right: 0; z-index: 190;
+      display: flex; align-items: center;
+      background: var(--panel); border-bottom: 1px solid var(--border);
+      padding: 0 2rem; overflow-x: auto;
+    }
+    .mode-bar::-webkit-scrollbar { height: 0; }
+    .mode-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 0.75rem 1.25rem;
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--dim); border-bottom: 2px solid transparent;
+      text-decoration: none; white-space: nowrap;
+    }
+    .mode-btn:hover { color: var(--text); }
+
+    main {
+      padding-top: 110px; padding-bottom: 3rem;
+      max-width: 900px; margin: 0 auto;
+      padding-left: 2rem; padding-right: 2rem;
+    }
+
+    .back-link {
+      display: inline-block; margin-bottom: 1.5rem;
+      font-family: var(--mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--dim); text-decoration: none;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* HEADER */
+    .country-header {
+      margin-bottom: 2rem; padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .country-name-large {
+      font-size: 2rem; font-weight: 700; color: var(--bright);
+      letter-spacing: 0.02em; margin-bottom: 0.5rem;
+    }
+    .country-meta {
+      font-family: var(--mono); font-size: 0.75rem; color: var(--dim);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center;
+    }
+    .risk-badge {
+      display: inline-block; padding: 2px 10px; border-radius: 3px;
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .risk-badge.critical { background: var(--critical); color: #fff; }
+    .risk-badge.warning  { background: var(--warning);  color: #000; }
+    .risk-badge.elevated { background: var(--elevated); color: #000; }
+    .risk-badge.stable   { background: var(--stable);   color: #fff; }
+
+    /* CONVERGENCE */
+    .convergence-section {
+      margin-bottom: 2rem; padding: 1.25rem 1.5rem;
+      background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+    }
+    .section-label {
+      font-family: var(--mono); font-size: 0.68rem; color: var(--dim);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.75rem;
+    }
+    .convergence-row {
+      display: flex; align-items: baseline; gap: 1.25rem;
+    }
+    .convergence-number {
+      font-family: var(--mono); font-size: 2.5rem; font-weight: 700;
+    }
+    .convergence-sentence {
+      font-family: var(--mono); font-size: 0.82rem;
+      color: var(--text); letter-spacing: 0.04em;
+    }
+
+    /* DOMAIN BARS */
+    .domains-section { margin-bottom: 2rem; }
+    .domain-row { margin-bottom: 1.25rem; }
+    .domain-top {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 0.3rem;
+    }
+    .domain-name {
+      font-family: var(--mono); font-size: 0.75rem; font-weight: 600;
+      color: var(--bright); letter-spacing: 0.06em; text-transform: uppercase;
+      min-width: 170px;
+    }
+    .bar-track {
+      flex: 1; height: 8px; background: var(--panel2);
+      border-radius: 2px; overflow: hidden;
+    }
+    .bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
+    .bar-fill.critical { background: var(--critical); }
+    .bar-fill.warning  { background: var(--warning); }
+    .bar-fill.elevated { background: var(--elevated); }
+    .bar-fill.stable   { background: var(--stable); }
+    .domain-score {
+      font-family: var(--mono); font-size: 0.78rem; font-weight: 700;
+      color: var(--bright); min-width: 32px; text-align: right;
+    }
+    .domain-intelligence {
+      font-family: var(--mono); font-size: 0.72rem; color: var(--dim);
+      letter-spacing: 0.04em; padding-left: 170px;
+    }
+
+    .status-msg {
+      font-family: var(--mono); font-size: 0.8rem; color: var(--dim);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 3rem 0; text-align: center;
+    }
+    .error-msg {
+      font-family: var(--mono); font-size: 0.8rem; color: var(--critical);
+      padding: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">SABIAN <span>INTELLIGENCE</span></a>
+    <div class="nav-right">
+      <span class="nav-badge"><span id="live-dot"></span>LIVE</span>
+      <span class="nav-badge" id="nav-date"></span>
+    </div>
+  </nav>
+
+  <div class="mode-bar">
+    <a href="explore.html" class="mode-btn">EXPLORE</a>
+    <a href="intel.html"   class="mode-btn">WATCHLIST</a>
+    <a href="intel.html"   class="mode-btn">THREAT INTELLIGENCE</a>
+    <a href="intel.html"   class="mode-btn">FAMINE RISK</a>
+  </div>
+
+  <main>
+    <a href="javascript:history.back()" class="back-link">← BACK</a>
+    <div id="country-header" class="country-header"></div>
+    <div id="convergence-section"></div>
+    <div id="domain-bars" class="domains-section"></div>
+  </main>
+
+  <script>
+    document.getElementById('nav-date').textContent = new Date().toISOString().slice(0, 10);
+
+    const DOMAIN_DISPLAY = {
+      gdelt_conflict: 'Conflict', gdelt_conflict_feed: 'Conflict',
+      unhcr_displacement: 'Displacement', unhcr_displacement_stock: 'Displacement',
+      food_security: 'Food Security', ipc_food: 'Food Security',
+      economic_stress: 'Economic Stress', fred_capital_feed: 'Economic Stress',
+      structural_pressure: 'Structural Pressure',
+      corruption_risk: 'Governance Risk', vdem_governance: 'Governance',
+      election_calendar: 'Political Risk', election_calendar_feed: 'Political Risk',
+      displacement: 'Displacement', conflict: 'Conflict',
+      sanctions_pressure: 'Sanctions', sovereignty_risk: 'Sovereignty Risk',
+    };
+
+    function shieldDomain(raw) {
+      if (!raw) return '';
+      return DOMAIN_DISPLAY[raw]
+        || DOMAIN_DISPLAY[raw.toLowerCase().replace(/\s+/g, '_')]
+        || raw.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function getApiKey() {
+      return localStorage.getItem('sabian_buyer_key') || '';
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function riskClass(level) {
+      const l = (level || 'stable').toLowerCase();
+      return ['critical','warning','elevated','stable'].includes(l) ? l : 'stable';
+    }
+
+    function scoreClass(score) {
+      if (score >= 81) return 'critical';
+      if (score >= 66) return 'warning';
+      if (score >= 41) return 'elevated';
+      return 'stable';
+    }
+
+    function riskColor(rc) {
+      if (rc === 'critical') return 'var(--critical)';
+      if (rc === 'warning')  return 'var(--warning)';
+      if (rc === 'elevated') return 'var(--elevated)';
+      return 'var(--dim)';
+    }
+
+    async function apiFetch(url, opts) {
+      const res = await fetch(url, opts || {});
+      if (!res.ok) throw new Error(`${res.status}`);
+      return res.json();
+    }
+
+    async function loadCountry() {
+      const params  = new URLSearchParams(window.location.search);
+      const country = params.get('country');
+      if (!country) {
+        document.getElementById('country-header').innerHTML =
+          '<div class="error-msg">No country specified.</div>';
+        return;
+      }
+
+      document.getElementById('country-header').innerHTML =
+        `<div class="status-msg">Loading ${escapeHtml(country)}&hellip;</div>`;
+
+      const key = getApiKey();
+
+      const [threatsRes, histRes, compareRes] = await Promise.allSettled([
+        apiFetch('/public-api/threats'),
+        apiFetch(`/public-api/country/${encodeURIComponent(country)}?days=90`),
+        key
+          ? apiFetch(`/api/country/compare/${encodeURIComponent(country)}`, {
+              headers: { 'Authorization': `Bearer ${key}` }
+            })
+          : Promise.resolve(null)
+      ]);
+
+      const allCountries = threatsRes.status === 'fulfilled'
+        ? (threatsRes.value.countries || []) : [];
+      const current = allCountries.find(
+        c => c.country.toLowerCase() === country.toLowerCase()
+      ) || null;
+
+      const history = histRes.status === 'fulfilled'
+        ? (histRes.value.history || []) : [];
+
+      const comparisons = compareRes.status === 'fulfilled' && compareRes.value
+        ? (compareRes.value.comparisons || {}) : {};
+
+      renderHeader(country, current);
+      renderConvergence(current, history);
+      renderDomains(current, comparisons);
+    }
+
+    function renderHeader(country, current) {
+      const rc       = riskClass(current?.risk_level);
+      const theater  = current?.theater   || '';
+      const scanDate = current?.scan_date || '';
+      const ageYears = current?.data_age_years || 0;
+      const freshness = ageYears > 0
+        ? `Data ${ageYears}yr old` : 'Current';
+
+      document.getElementById('country-header').innerHTML = `
+        <div class="country-name-large">${escapeHtml(country)}</div>
+        <div class="country-meta">
+          <span class="risk-badge ${rc}">${escapeHtml(current?.risk_level || 'STABLE')}</span>
+          ${theater  ? `<span>${escapeHtml(theater)}</span>`           : ''}
+          ${scanDate ? `<span>Updated: ${escapeHtml(scanDate)}</span>` : ''}
+          <span>${escapeHtml(freshness)}</span>
+        </div>
+      `;
+    }
+
+    function renderConvergence(current, history) {
+      const score = current?.convergence_score || 0;
+      const rc    = riskClass(current?.risk_level);
+
+      let sentence = '';
+      if (history.length >= 2) {
+        const sorted = [...history].sort((a, b) =>
+          (a.scan_date || '').localeCompare(b.scan_date || ''));
+        const latest    = sorted[sorted.length - 1];
+        const cutoff    = new Date();
+        cutoff.setDate(cutoff.getDate() - 30);
+        const cutoffStr = cutoff.toISOString().slice(0, 10);
+        const past      = sorted.find(h => (h.scan_date || '') >= cutoffStr) || sorted[0];
+        const nowScore  = latest.score || latest.convergence_score || 0;
+        const pastScore = past.score   || past.convergence_score   || 0;
+        const delta     = Math.round(nowScore - pastScore);
+        if      (delta >  2) sentence = `Score risen ${delta} points in 30 days.`;
+        else if (delta < -2) sentence = `Score fallen ${Math.abs(delta)} points in 30 days.`;
+        else                 sentence = 'Score stable over 30 days.';
+      }
+
+      document.getElementById('convergence-section').innerHTML = `
+        <div class="convergence-section">
+          <div class="section-label">Convergence</div>
+          <div class="convergence-row">
+            <span class="convergence-number" style="color:${riskColor(rc)}">${score}</span>
+            ${sentence ? `<span class="convergence-sentence">${escapeHtml(sentence)}</span>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDomains(current, comparisons) {
+      const domains = (current?.active_domains || [])
+        .filter(d => (d.score || 0) > 0)
+        .sort((a, b) => (b.score || 0) - (a.score || 0));
+
+      const el = document.getElementById('domain-bars');
+
+      if (domains.length === 0) {
+        el.innerHTML = '<div class="status-msg">No domain data.</div>';
+        return;
+      }
+
+      el.innerHTML = `<div class="section-label">Active Domains</div>`;
+
+      domains.forEach(d => {
+        const rawKey  = d.name || '';
+        const display = shieldDomain(rawKey);
+        const score   = d.score || 0;
+        const sc      = scoreClass(score);
+        const cmp     = comparisons[rawKey] || {};
+        const parts   = [cmp.historical_max_label, cmp.change_30d_label].filter(Boolean);
+        const intel   = parts.join(' · ');
+
+        const row = document.createElement('div');
+        row.className = 'domain-row';
+        row.innerHTML = `
+          <div class="domain-top">
+            <span class="domain-name">${escapeHtml(display)}</span>
+            <div class="bar-track">
+              <div class="bar-fill ${sc}" style="width:${score}%"></div>
+            </div>
+            <span class="domain-score">${score}</span>
+          </div>
+          ${intel ? `<div class="domain-intelligence">${escapeHtml(intel)}</div>` : ''}
+        `;
+        el.appendChild(row);
+      });
+    }
+
+    loadCountry();
+  </script>
+
+</body>
+</html>
