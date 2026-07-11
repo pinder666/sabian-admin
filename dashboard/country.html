@@ -70,13 +70,13 @@
     .mode-btn:hover { color: var(--text); }
 
     main {
-      padding-top: 110px; padding-bottom: 3rem;
+      padding-top: 100px; padding-bottom: 3rem;
       max-width: 900px; margin: 0 auto;
       padding-left: 2rem; padding-right: 2rem;
     }
 
     .back-link {
-      display: inline-block; margin-bottom: 1.5rem;
+      display: inline-block; margin-bottom: 0.5rem;
       font-family: var(--mono); font-size: 0.7rem;
       letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--dim); text-decoration: none;
@@ -85,12 +85,12 @@
 
     /* HEADER */
     .country-header {
-      margin-bottom: 2rem; padding-bottom: 1.5rem;
+      margin-bottom: 0.75rem; padding-bottom: 0.75rem;
       border-bottom: 1px solid var(--border);
     }
     .country-name-large {
-      font-size: 2rem; font-weight: 700; color: var(--bright);
-      letter-spacing: 0.02em; margin-bottom: 0.5rem;
+      font-size: 1.6rem; font-weight: 700; color: var(--bright);
+      letter-spacing: 0.02em; margin-bottom: 0.25rem;
     }
     .country-meta {
       font-family: var(--mono); font-size: 0.75rem; color: var(--dim);
@@ -109,12 +109,12 @@
 
     /* CONVERGENCE */
     .convergence-section {
-      margin-bottom: 2rem; padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem; padding: 1rem 1.25rem;
       background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
     }
     .section-label {
       font-family: var(--mono); font-size: 0.68rem; color: var(--dim);
-      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.75rem;
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem;
     }
     .convergence-row {
       display: flex; align-items: baseline; gap: 1.25rem;
@@ -127,8 +127,20 @@
       color: var(--text); letter-spacing: 0.04em;
     }
 
+    /* SPARKLINE */
+    .sparkline-wrap {
+      margin-top: 0.875rem; padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .sparkline-svg { width: 100%; height: 64px; display: block; }
+    .sparkline-year {
+      font-family: var(--mono); font-size: 0.6rem; color: var(--dim);
+      letter-spacing: 0.08em; display: flex; justify-content: space-between;
+      margin-top: 3px;
+    }
+
     /* DOMAIN BARS */
-    .domains-section { margin-bottom: 2rem; }
+    .domains-section { margin-bottom: 1.5rem; }
     .domain-row { margin-bottom: 1.25rem; }
     .domain-top {
       display: flex; align-items: center; gap: 1rem; margin-bottom: 0.3rem;
@@ -154,6 +166,26 @@
     .domain-intelligence {
       font-family: var(--mono); font-size: 0.72rem; color: var(--dim);
       letter-spacing: 0.04em; padding-left: 170px;
+    }
+
+    /* INTEL READ */
+    .intel-section {
+      margin-bottom: 1.5rem; padding: 1rem 1.25rem;
+      background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+    }
+    .intel-item {
+      display: flex; gap: 1.25rem;
+      padding-bottom: 0.625rem; margin-bottom: 0.625rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .intel-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .intel-num {
+      font-family: var(--mono); font-size: 0.65rem; color: var(--dim);
+      letter-spacing: 0.08em; min-width: 22px; padding-top: 1px;
+    }
+    .intel-text {
+      font-family: var(--mono); font-size: 0.76rem; color: var(--text);
+      letter-spacing: 0.04em; line-height: 1.5;
     }
 
     .status-msg {
@@ -189,6 +221,7 @@
     <div id="country-header" class="country-header"></div>
     <div id="convergence-section"></div>
     <div id="domain-bars" class="domains-section"></div>
+    <div id="intel-read"></div>
   </main>
 
   <script>
@@ -241,6 +274,43 @@
       return 'var(--dim)';
     }
 
+    function riskHex(rc) {
+      if (rc === 'critical') return '#dc2626';
+      if (rc === 'warning')  return '#f59e0b';
+      if (rc === 'elevated') return '#eab308';
+      return '#6b7280';
+    }
+
+    function buildSparkline(history, hexColor) {
+      if (history.length < 2) return '';
+      const sorted = [...history].sort((a, b) =>
+        (a.scan_date || '').localeCompare(b.scan_date || ''));
+      const W = 800; const H = 60;
+      const scores = sorted.map(h => h.score || h.convergence_score || 0);
+      const minS   = Math.min(...scores);
+      const maxS   = Math.max(...scores);
+      const range  = maxS - minS || 1;
+      const n      = sorted.length;
+      const pts    = sorted.map((h, i) => {
+        const x = (i / (n - 1)) * W;
+        const y = H - (((h.score || h.convergence_score || 0) - minS) / range) * H;
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      }).join(' ');
+      const lastX = W;
+      const lastY = +(H - ((scores[n - 1] - minS) / range) * H).toFixed(1);
+      const firstYear = (sorted[0].scan_date || '').slice(0, 4);
+      const lastYear  = (sorted[n - 1].scan_date || '').slice(0, 4);
+      return `
+        <div class="sparkline-wrap">
+          <svg class="sparkline-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+            <polyline points="${pts}" fill="none" stroke="${hexColor}" stroke-width="2.5"
+              stroke-linejoin="round" stroke-linecap="round"/>
+            <circle cx="${lastX}" cy="${lastY}" r="5" fill="${hexColor}"/>
+          </svg>
+          <div class="sparkline-year"><span>${firstYear}</span><span>${lastYear}</span></div>
+        </div>`;
+    }
+
     async function apiFetch(url, opts) {
       const res = await fetch(url, opts || {});
       if (!res.ok) throw new Error(`${res.status}`);
@@ -263,7 +333,7 @@
 
       const [threatsRes, histRes, compareRes] = await Promise.allSettled([
         apiFetch('/public-api/threats'),
-        apiFetch(`/public-api/country/${encodeURIComponent(country)}?days=90`),
+        apiFetch(`/public-api/country/${encodeURIComponent(country)}?days=3650`),
         key
           ? apiFetch(`/api/country/compare/${encodeURIComponent(country)}`, {
               headers: { 'Authorization': `Bearer ${key}` }
@@ -286,6 +356,7 @@
       renderHeader(country, current);
       renderConvergence(current, history);
       renderDomains(current, comparisons);
+      renderIntelRead(current, history, comparisons);
     }
 
     function renderHeader(country, current) {
@@ -335,6 +406,7 @@
             <span class="convergence-number" style="color:${riskColor(rc)}">${score}</span>
             ${sentence ? `<span class="convergence-sentence">${escapeHtml(sentence)}</span>` : ''}
           </div>
+          ${buildSparkline(history, riskHex(rc))}
         </div>
       `;
     }
@@ -376,6 +448,69 @@
         `;
         el.appendChild(row);
       });
+    }
+
+    function renderIntelRead(current, history, comparisons) {
+      const el = document.getElementById('intel-read');
+      if (!getApiKey() || Object.keys(comparisons).length === 0) { el.innerHTML = ''; return; }
+
+      const items   = [];
+      const domains = (current?.active_domains || [])
+        .filter(d => (d.score || 0) > 0)
+        .sort((a, b) => (b.score || 0) - (a.score || 0));
+
+      // 1. Domain count — cross-domain synthesis not visible in individual bars
+      if (domains.length > 1) {
+        const top3 = domains.slice(0, 3).map(d => shieldDomain(d.name)).join(', ');
+        items.push(`${domains.length} domains elevated simultaneously. Primary: ${top3}.`);
+      }
+
+      // 2. Top domain with historical context from compare endpoint
+      const top = domains[0];
+      if (top) {
+        const cmp = comparisons[top.name] || {};
+        if (cmp.historical_max_label) {
+          items.push(`${shieldDomain(top.name)} is the primary driver at ${top.score} — ${cmp.historical_max_label}.`);
+        }
+      }
+
+      // 3. Fastest 30d mover across all domains from compare endpoint
+      let fastestDk = null, fastestAbs = 0;
+      Object.entries(comparisons).forEach(([dk, cmp]) => {
+        const abs = typeof cmp.change_30d === 'number' ? Math.abs(cmp.change_30d) : 0;
+        if (abs > fastestAbs) { fastestAbs = abs; fastestDk = dk; }
+      });
+      if (fastestDk && fastestAbs > 2) {
+        const cmp = comparisons[fastestDk];
+        const dir = (cmp.change_30d || 0) > 0 ? 'risen' : 'fallen';
+        items.push(`Fastest move: ${shieldDomain(fastestDk)} has ${dir} ${fastestAbs} points in 30 days.`);
+      }
+
+      // 4. Band entry year — when score first reached this risk level in history
+      const rc        = riskClass(current?.risk_level);
+      const threshold = { critical: 81, warning: 66, elevated: 41 }[rc];
+      if (threshold && history.length >= 2) {
+        const sorted     = [...history].sort((a, b) =>
+          (a.scan_date || '').localeCompare(b.scan_date || ''));
+        const firstAbove = sorted.find(h => (h.score || h.convergence_score || 0) >= threshold);
+        if (firstAbove) {
+          const year  = (firstAbove.scan_date || '').slice(0, 4);
+          const level = (current?.risk_level || '').toUpperCase();
+          items.push(`Score at ${level} level since ${year}.`);
+        }
+      }
+
+      if (items.length === 0) { el.innerHTML = ''; return; }
+
+      el.innerHTML = `
+        <div class="intel-section">
+          <div class="section-label">Intelligence</div>
+          ${items.map((text, i) => `
+            <div class="intel-item">
+              <span class="intel-num">0${i + 1}</span>
+              <span class="intel-text">${escapeHtml(text)}</span>
+            </div>`).join('')}
+        </div>`;
     }
 
     loadCountry();
