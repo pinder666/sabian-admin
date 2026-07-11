@@ -3260,7 +3260,10 @@ function closePatternModal() {
 // ═══ END THREAT INTELLIGENCE ══════════════════════════════════════════════════
 
 
-loadThreats();
+loadThreats().then(() => {
+  const q = new URLSearchParams(window.location.search).get('country');
+  if (q) openDetail(encodeURIComponent(q));
+});
 </script>
 </body>
 </html>
