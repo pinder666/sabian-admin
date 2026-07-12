@@ -3024,6 +3024,14 @@ app.get('/api/explore/read', requireTier('buyer'), async (req, res) => {
       election_calendar: 'Political Risk', election_calendar_feed: 'Political Risk',
       displacement: 'Displacement', conflict: 'Conflict',
       sanctions_pressure: 'Sanctions', sovereignty_risk: 'Sovereignty Risk',
+      unhcr_refugees: 'Refugee Outflows',
+      usda_food_supply: 'Food Supply',
+      fao_food_import: 'Food Imports',
+      satellite_fire: 'Fire Activity',
+      tor_censorship: 'Internet Censorship',
+      prediction_market: 'Forecast Sentiment',
+      night_lights: 'Night-Time Economic Activity',
+      dark_vessel: 'Maritime Anomalies',
     };
     const shieldDomain = (raw) => {
       if (!raw) return 'Unknown Domain';

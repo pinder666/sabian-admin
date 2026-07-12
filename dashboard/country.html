@@ -167,6 +167,19 @@
       font-family: var(--mono); font-size: 0.72rem; color: var(--dim);
       letter-spacing: 0.04em; padding-left: 170px;
     }
+    .domains-toggle {
+      display: block; width: 100%; margin-top: 0.25rem;
+      background: none; border: 1px solid var(--border); border-radius: 3px;
+      padding: 0.5rem; cursor: pointer;
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim);
+    }
+    .domains-toggle:hover { color: var(--accent); border-color: var(--accent); }
+    .domains-more {
+      font-family: var(--mono); font-size: 0.68rem; color: var(--dim);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.5rem 0; text-align: center;
+    }
 
     /* INTEL READ */
     .intel-section {
@@ -220,8 +233,8 @@
     <a href="javascript:history.back()" class="back-link">← BACK</a>
     <div id="country-header" class="country-header"></div>
     <div id="convergence-section"></div>
-    <div id="domain-bars" class="domains-section"></div>
     <div id="intel-read"></div>
+    <div id="domain-bars" class="domains-section"></div>
   </main>
 
   <script>
@@ -237,13 +250,43 @@
       election_calendar: 'Political Risk', election_calendar_feed: 'Political Risk',
       displacement: 'Displacement', conflict: 'Conflict',
       sanctions_pressure: 'Sanctions', sovereignty_risk: 'Sovereignty Risk',
+      unhcr_refugees: 'Refugee Outflows',
+      usda_food_supply: 'Food Supply',
+      fao_food_import: 'Food Imports',
+      satellite_fire: 'Fire Activity',
+      tor_censorship: 'Internet Censorship',
+      prediction_market: 'Forecast Sentiment',
+      night_lights: 'Night-Time Economic Activity',
+      dark_vessel: 'Maritime Anomalies',
+      capital_flows: 'Capital Flows',
+      chokepoint: 'Trade Chokepoint Exposure',
+      climate_stress: 'Climate Stress',
+      conflict_events: 'Conflict',
+      currency_collapse: 'Currency Collapse',
+      cyber_threat: 'Cyber Threat',
+      energy_stress: 'Energy Stress',
+      flood_risk: 'Flood Risk',
+      governance: 'Governance',
+      health_crisis: 'Health Crisis',
+      internet_freedom: 'Information Access',
+      maritime_trade: 'Maritime Trade',
+      military_proximity: 'Military Activity',
+      port_congestion: 'Port Activity',
+      power_grid: 'Power Infrastructure',
+      rail_corridor: 'Rail Infrastructure',
+      resource_conflict: 'Resource Conflict',
+      seismic_risk: 'Seismic Risk',
+      social_volume: 'Social Volume',
+      trade_collapse: 'Trade Disruption',
+      water_stress: 'Water Stress',
     };
 
+    // Fail-closed: unmapped keys return null — callers suppress, raw keys never render
     function shieldDomain(raw) {
-      if (!raw) return '';
+      if (!raw) return null;
       return DOMAIN_DISPLAY[raw]
         || DOMAIN_DISPLAY[raw.toLowerCase().replace(/\s+/g, '_')]
-        || raw.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        || null;
     }
 
     function getApiKey() {
@@ -354,7 +397,7 @@
         ? (compareRes.value.comparisons || {}) : {};
 
       renderHeader(country, current);
-      renderConvergence(current, history);
+      renderConvergence(current, history, comparisons, allCountries);
       renderDomains(current, comparisons);
       renderIntelRead(current, history, comparisons);
     }
@@ -378,11 +421,26 @@
       `;
     }
 
-    function renderConvergence(current, history) {
+    function convergenceWidth(c) {
+      return (c?.active_domains || []).filter(d => (d.score || 0) > 0).length;
+    }
+
+    function renderConvergence(current, history, comparisons, allCountries) {
       const score = current?.convergence_score || 0;
       const rc    = riskClass(current?.risk_level);
 
-      let sentence = '';
+      // Rarity — world position computed live from the threats list
+      let rarity = '';
+      const width = convergenceWidth(current);
+      if (width > 0 && (allCountries || []).length > 1) {
+        const n = allCountries.filter(c => convergenceWidth(c) >= width).length;
+        rarity = n === 1
+          ? `The only country worldwide in convergence this wide — ${width} domains elevated.`
+          : `One of ${n} countries worldwide in convergence this wide — ${width} domains elevated.`;
+      }
+
+      // Movement — 30d delta from history
+      let movement = '';
       if (history.length >= 2) {
         const sorted = [...history].sort((a, b) =>
           (a.scan_date || '').localeCompare(b.scan_date || ''));
@@ -394,10 +452,26 @@
         const nowScore  = latest.score || latest.convergence_score || 0;
         const pastScore = past.score   || past.convergence_score   || 0;
         const delta     = Math.round(nowScore - pastScore);
-        if      (delta >  2) sentence = `Score risen ${delta} points in 30 days.`;
-        else if (delta < -2) sentence = `Score fallen ${Math.abs(delta)} points in 30 days.`;
-        else                 sentence = 'Score stable over 30 days.';
+        if      (delta >  2) movement = `Risen ${delta} points in 30 days`;
+        else if (delta < -2) movement = `Fallen ${Math.abs(delta)} points in 30 days`;
+        else                 movement = 'Stable over 30 days';
       }
+
+      // Attribution — decompose 30d movement by domain; unmapped domains omitted
+      let attribution = '';
+      const movers = Object.entries(comparisons || {})
+        .map(([k, c]) => ({ k, d: typeof c.change_30d === 'number' ? c.change_30d : 0 }))
+        .filter(m => Math.abs(m.d) > 2 && shieldDomain(m.k) !== null)
+        .sort((a, b) => Math.abs(b.d) - Math.abs(a.d));
+      const drivers = movers.filter(m => m.d > 0).slice(0, 2);
+      const offsets = movers.filter(m => m.d < 0).slice(0, 1);
+      if (movement && drivers.length) {
+        attribution = ` — driven by ${drivers.map(m => `${shieldDomain(m.k)} (+${m.d})`).join(' and ')}`;
+        if (offsets.length) attribution += `, offset by ${shieldDomain(offsets[0].k)} (${offsets[0].d})`;
+      }
+
+      const sentence = [rarity, movement ? movement + attribution + '.' : '']
+        .filter(Boolean).join(' ');
 
       document.getElementById('convergence-section').innerHTML = `
         <div class="convergence-section">
@@ -423,14 +497,18 @@
         return;
       }
 
+      const named    = domains.filter(d => shieldDomain(d.name) !== null);
+      const withheld = domains.length - named.length;
+
       el.innerHTML = `<div class="section-label">Active Domains</div>`;
 
-      domains.forEach(d => {
-        const rawKey  = d.name || '';
-        const display = shieldDomain(rawKey);
+      const VISIBLE = 5;
+
+      named.forEach((d, i) => {
+        const display = shieldDomain(d.name);
         const score   = d.score || 0;
         const sc      = scoreClass(score);
-        const cmp     = comparisons[rawKey] || {};
+        const cmp     = comparisons[d.name] || {};
         const parts   = [cmp.historical_max_label, cmp.change_30d_label].filter(Boolean);
         const intel   = parts.join(' · ');
 
@@ -446,8 +524,29 @@
           </div>
           ${intel ? `<div class="domain-intelligence">${escapeHtml(intel)}</div>` : ''}
         `;
+        if (i >= VISIBLE) row.style.display = 'none';
         el.appendChild(row);
       });
+
+      if (named.length > VISIBLE) {
+        const btn = document.createElement('button');
+        btn.className = 'domains-toggle';
+        btn.textContent = `SHOW ALL ${named.length} DOMAINS`;
+        btn.onclick = () => {
+          const rows = el.querySelectorAll('.domain-row');
+          const hidden = rows[VISIBLE].style.display === 'none';
+          rows.forEach((r, i) => { if (i >= VISIBLE) r.style.display = hidden ? '' : 'none'; });
+          btn.textContent = hidden ? 'SHOW TOP 5 ONLY' : `SHOW ALL ${named.length} DOMAINS`;
+        };
+        el.appendChild(btn);
+      }
+
+      if (withheld > 0) {
+        const more = document.createElement('div');
+        more.className = 'domains-more';
+        more.textContent = `+${withheld} ADDITIONAL ELEVATED DOMAIN${withheld === 1 ? '' : 'S'}`;
+        el.appendChild(more);
+      }
     }
 
     function renderIntelRead(current, history, comparisons) {
@@ -461,26 +560,26 @@
 
       // 1. Domain count — cross-domain synthesis not visible in individual bars
       if (domains.length > 1) {
-        const top3 = domains.slice(0, 3).map(d => shieldDomain(d.name)).join(', ');
-        items.push(`${domains.length} domains elevated simultaneously. Primary: ${top3}.`);
+        const top3 = domains.slice(0, 3).map(d => shieldDomain(d.name)).filter(Boolean).join(', ');
+        items.push(`${domains.length} domains elevated simultaneously.${top3 ? ` Primary: ${top3}.` : ''}`);
       }
 
-      // 2. Top domain with historical context from compare endpoint
+      // 2. Top domain with historical context — omitted entirely if unmapped
       const top = domains[0];
-      if (top) {
+      if (top && shieldDomain(top.name) !== null) {
         const cmp = comparisons[top.name] || {};
         if (cmp.historical_max_label) {
           items.push(`${shieldDomain(top.name)} is the primary driver at ${top.score} — ${cmp.historical_max_label}.`);
         }
       }
 
-      // 3. Fastest 30d mover across all domains from compare endpoint
+      // 3. Fastest 30d mover — omitted (never substituted) if its domain is unmapped
       let fastestDk = null, fastestAbs = 0;
       Object.entries(comparisons).forEach(([dk, cmp]) => {
         const abs = typeof cmp.change_30d === 'number' ? Math.abs(cmp.change_30d) : 0;
         if (abs > fastestAbs) { fastestAbs = abs; fastestDk = dk; }
       });
-      if (fastestDk && fastestAbs > 2) {
+      if (fastestDk && fastestAbs > 2 && shieldDomain(fastestDk) !== null) {
         const cmp = comparisons[fastestDk];
         const dir = (cmp.change_30d || 0) > 0 ? 'risen' : 'fallen';
         items.push(`Fastest move: ${shieldDomain(fastestDk)} has ${dir} ${fastestAbs} points in 30 days.`);
