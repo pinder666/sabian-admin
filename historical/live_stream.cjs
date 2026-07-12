@@ -46,7 +46,6 @@ const SIGNAL_NAME_MAP = {
   'IMF Fiscal':        'imf_fiscal',
   'Satellite Fire':    'fire_hotspot',
   'Seismic':           'seismic_risk',
-  'Climate Stress':    'seismic_risk',   // closest available; logged as approximate
 };
 
 function normalizeSignalName(name) {

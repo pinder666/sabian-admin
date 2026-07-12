@@ -138,6 +138,10 @@ const MIN_SIGNALS_FLOOR = 3;
 const SCORE_CENTER = 50;
 const SCORE_SCALE  = 18;
 
+// Year ceiling — computed at runtime, never hardcoded. Data dated after today
+// cannot have been observed; current year itself stays valid (live_stream writes it).
+const CURRENT_YEAR = new Date().getFullYear();
+
 function buildGlobalBaselines(baselines) {
   // Compute cross-country median and IQR per signal.
   // Used as the absolute eye: z-scores against the global distribution
@@ -292,6 +296,10 @@ async function loadAllReadings() {
       // timestamp; .getFullYear() then returns 2013 in Pacific timezone (UTC-7/8).
       // That shifts every score to use the FOLLOWING year's data.
       const year = parseInt(r.date.slice(0, 4));
+      // Future-dated readings are invalid for a historical record (e.g. IMF WEO
+      // projections ingested before the f161048 ceiling). Skip at the single
+      // entry point so thresholds, score reference, and pairs all stay clean.
+      if (year > CURRENT_YEAR) continue;
       if (!raw[r.country]) raw[r.country] = {};
       if (!raw[r.country][r.signal_key]) raw[r.country][r.signal_key] = {};
       if (!raw[r.country][r.signal_key][year]) raw[r.country][r.signal_key][year] = [];
@@ -533,7 +541,10 @@ async function main() {
     for (const byYear of Object.values(ts[country])) {
       for (const year of Object.keys(byYear)) allYears.add(parseInt(year));
     }
-    for (const year of allYears) pairs.push({ country, year });
+    for (const year of allYears) {
+      if (year > CURRENT_YEAR) continue;
+      pairs.push({ country, year });
+    }
   }
   console.log(`  Scoring ${pairs.length} country-year pairs...\n`);
 
