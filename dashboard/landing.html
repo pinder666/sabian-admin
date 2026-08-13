@@ -51,14 +51,15 @@
       border-bottom: 1px solid var(--edge);
     }
     .logo {
-      display: flex;
-      align-items: center;
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--bright);
       text-decoration: none;
+      text-transform: uppercase;
     }
-    .logo img {
-      height: 28px;
-      width: auto;
-    }
+    .logo em { font-style: normal; color: var(--blue); }
 
     .nav-r { display: flex; align-items: center; gap: 1.75rem; }
     .nav-link {
@@ -406,7 +407,7 @@
 <body>
 
 <nav>
-  <a class="logo" href="/"><img src="/dashboard/sabian-logo.jpg" alt="Sabian" /></a>
+  <a class="logo" href="/">SABIAN<em>.</em>AI</a>
   <div class="nav-r">
     <a class="nav-link nav-d" href="#feeds">Feeds</a>
     <a class="btn btn-primary" href="/terminal">Enter Terminal</a>
