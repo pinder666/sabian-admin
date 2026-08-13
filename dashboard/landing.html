@@ -51,15 +51,18 @@
       border-bottom: 1px solid var(--edge);
     }
     .logo {
-      font-family: var(--mono);
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      color: var(--bright);
+      font-family: var(--sans);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
       text-decoration: none;
       text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      line-height: 1;
     }
-    .logo em { font-style: normal; color: var(--blue); }
+    .logo .lg { background: linear-gradient(90deg, #00c8ee, #1a6fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .logo .lw { color: #ffffff; -webkit-text-fill-color: #ffffff; }
 
     .nav-r { display: flex; align-items: center; gap: 1.75rem; }
     .nav-link {
@@ -407,7 +410,7 @@
 <body>
 
 <nav>
-  <a class="logo" href="/">SABIAN<em>.</em>AI</a>
+  <a class="logo" href="/"><span class="lg">S</span><span class="lw">A</span><span class="lg">B</span><span class="lw">I</span><span class="lg">AN</span></a>
   <div class="nav-r">
     <a class="nav-link nav-d" href="#feeds">Feeds</a>
     <a class="btn btn-primary" href="/terminal">Enter Terminal</a>
