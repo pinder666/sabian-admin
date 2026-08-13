@@ -311,6 +311,33 @@ Required in `sabian_core/.env`:
 **LLM and Voice:**
 `OPENROUTER_API_KEY`, `OPENROUTER_MODEL`, `ANTHROPIC_API_KEY`, `ELEVENLABS_API_KEY`, `SABIAN_VOICE_ID` (UgBBYS2sOqTuMpoF3BR0), `HOST_A_US_ID` (cgSgspJ2msm6clMCkdW9), `ELEVENLABS_MODEL_ID`
 
+> **ANTHROPIC_API_KEY — INTENTIONALLY REMOVED 2026-08-13**
+>
+> The key was cleared from Railway (SABIAN COLOSSAL SQUID → sabian-admin → Variables) to stop
+> billing while the terminal is not actively serving buyers. Data collection continues unaffected —
+> all feeds, convergence scoring, grading, and Supabase writes keep running. Only AI briefing
+> generation is paused.
+>
+> **What stops without this key:**
+> - `government_briefing.cjs` — dual-voice DOD-style briefings
+> - `pnsiq_brief.cjs` — PNSIQ intelligence briefs
+> - `education_briefing.cjs` — education vertical briefings
+> - `boardroom_engine.cjs` — boardroom synthesis
+> - `advisor_prompt_loader.cjs` — advisor prompt layer
+> - `/api/timemachine` endpoint in `sabian_api.cjs` — live Claude synthesis on demand
+>
+> **What keeps running without this key (data is safe):**
+> - All external feed agents (GDELT, UNHCR, FRED, Comtrade, V-Dem, Alpha Vantage, ESA, etc.)
+> - `convergence_engine.cjs` — pure math, no LLM
+> - `global_scan.cjs` + `grading_pass.cjs` — data collection and scoring
+> - Supabase persistence — historical data keeps accumulating every day
+> - All API endpoints except the ones listed above
+>
+> **To restore:** Go to Railway → SABIAN COLOSSAL SQUID → sabian-admin → Variables →
+> add `ANTHROPIC_API_KEY` → paste the key from sabian_core/.env or the Anthropic Console
+> (console.anthropic.com → API Keys). Restore when briefing generation is needed for a real buyer
+> or demo — not before. Credits were at $45.87 when removed; top up before restoring.
+
 **Data Feeds:**
 `FRED_API_KEY`, `CENSUS_API_KEY`, `COURTLISTENER_API_TOKEN`, `NEWS_API_KEY`, `GITHUB_TOKEN`
 

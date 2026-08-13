@@ -13,6 +13,7 @@ const { getLatestScores, getHistory, getSignalPatterns, testConnection } = requi
 const { getCountryLedger, getOpenObservations, getLedgerStats } = require('./observation_ledger.cjs');
 const runConvergence = require('./convergence_engine.cjs');
 const runBriefing = require('./government_briefing.cjs');
+const { fetchPortCongestionData } = require('./port_congestion_feed.cjs');
 
 // ── Load signal manifest at startup for source metadata ───────────────────────
 function cleanSourceName(raw) {
@@ -2791,7 +2792,18 @@ cron.schedule('0 6 * * *', () => {
     }
   }, { timezone: 'UTC' });
 
-  console.log('[CRON] Scheduler active — scan 0600 | grade 0630 | stream 0700 | alerts 0730 | patterns 0800 | snapshots 0830 | backup Sun 0200 | anchor Sun 0300 (all UTC)');
+  // Port congestion — runs at 0900 UTC daily, after all other scans complete
+  cron.schedule('0 9 * * *', async () => {
+    console.log('[CRON] Port congestion scan starting — 0900 UTC');
+    try {
+      const result = await fetchPortCongestionData();
+      logToHive({ source: 'sabian_api', level: 'intel', event: 'cron_port_congestion_complete', data: { ports_scored: result.summary.ports_scored, highest: result.summary.highest_risk_port, score: result.summary.highest_risk_score }, tags: ['cron', 'port', 'apparel'] });
+    } catch (err) {
+      logToHive({ source: 'sabian_api', level: 'error', event: 'cron_port_congestion_failed', data: { error: err.message }, tags: ['cron', 'error'] });
+    }
+  }, { timezone: 'UTC' });
+
+  console.log('[CRON] Scheduler active — scan 0600 | grade 0630 | stream 0700 | alerts 0730 | patterns 0800 | snapshots 0830 | ports 0900 | backup Sun 0200 | anchor Sun 0300 (all UTC)');
 } catch (cronErr) {
   console.warn('[CRON] Scheduler not loaded:', cronErr.message);
 }

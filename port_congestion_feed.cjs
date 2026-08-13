@@ -1,110 +1,108 @@
 // port_congestion_feed.cjs
-// Port Congestion Signal — vessel dwell time and port throughput stress
-// Sources: aisstream.io AIS data + GoComet congestion database + static port tier baseline
-// Score 0–100: higher = more congested / disrupted port infrastructure
-// Logic: Port congestion precedes food price spikes, supply chain disruption, and
-//   economic contraction. A country whose major ports are backed up by 5+ days
-//   is experiencing physical economic stress before any GDP data shows it.
-// Cadence: 24h
+// Port Congestion Signal — import delay risk for wholesale apparel
+// Added: 2026-08-13 — highest-value signal for PNSIQ wholesale intelligence
+//
+// Why this matters:
+//   ~40% of US apparel imports arrive via LA/Long Beach from Asia.
+//   Port congestion → delayed goods → missed ship windows → retailer chargebacks.
+//   A brand whose goods sit 8 days at anchor has a chargeback problem they don't know about yet.
+//   This feed surfaces that before the invoice dispute arrives.
+//
+// Key ports (apparel import volume ranked):
+//   Los Angeles (POLA), Long Beach (POLB), New York/NJ, Savannah GA,
+//   Seattle/Tacoma, Miami
+//
+// Sources:
+//   Primary:   FRED API — US import volume from China (monthly, proxy for LA/LB load)
+//   Secondary: BTS Port Performance baselines (hardcoded quarterly averages)
+//   Stub:      Marine Exchange vessel-at-anchor count (add MARINE_EXCHANGE_KEY when ready)
+//              Register free at: https://www.mxps.net/
+//              Or: MarineTraffic API — https://www.marinetraffic.com/en/ais-api-services
+//
+// Score 0–100: higher = more congestion, higher delay/chargeback risk for apparel brands
+// Cadence: daily (FRED monthly data + rolling vessel stub)
 
 require('dotenv').config({ path: './.env' });
 const https = require('https');
 const { logToHive } = require('./logger.cjs');
 
-// Major port countries and their strategic port tier
-// Tier 1 = global hub (Singapore, Rotterdam-equivalent), Tier 5 = minor/regional
-// congestion_sensitivity: how much a disruption matters to the country's economy
-const PORT_BASELINE = {
-  'Singapore':     { tier: 1, ports: ['Singapore'],                    sensitivity: 98, landlocked: false },
-  'China':         { tier: 1, ports: ['Shanghai','Shenzhen','Ningbo'], sensitivity: 95, landlocked: false },
-  'UAE':           { tier: 1, ports: ['Jebel Ali'],                    sensitivity: 92, landlocked: false },
-  'South Korea':   { tier: 1, ports: ['Busan'],                        sensitivity: 88, landlocked: false },
-  'Malaysia':      { tier: 1, ports: ['Port Klang','Tanjung Pelepas'], sensitivity: 85, landlocked: false },
-  'Netherlands':   { tier: 1, ports: ['Rotterdam'],                    sensitivity: 87, landlocked: false },
-  'Germany':       { tier: 1, ports: ['Hamburg'],                      sensitivity: 82, landlocked: false },
-  'USA':           { tier: 1, ports: ['Los Angeles','New York'],       sensitivity: 80, landlocked: false },
-  'United States': { tier: 1, ports: ['Los Angeles','New York'],       sensitivity: 80, landlocked: false },
-  'Japan':         { tier: 1, ports: ['Tokyo','Yokohama'],             sensitivity: 82, landlocked: false },
-  'Belgium':       { tier: 1, ports: ['Antwerp'],                      sensitivity: 85, landlocked: false },
-  'Saudi Arabia':  { tier: 2, ports: ['Jeddah','Dammam'],              sensitivity: 75, landlocked: false },
-  'Egypt':         { tier: 2, ports: ['Port Said','Alexandria'],       sensitivity: 78, landlocked: false },
-  'Turkey':        { tier: 2, ports: ['Mersin','Istanbul'],            sensitivity: 72, landlocked: false },
-  'Indonesia':     { tier: 2, ports: ['Jakarta','Surabaya'],           sensitivity: 70, landlocked: false },
-  'India':         { tier: 2, ports: ['Nhava Sheva','Chennai'],        sensitivity: 72, landlocked: false },
-  'Bangladesh':    { tier: 2, ports: ['Chittagong'],                   sensitivity: 82, landlocked: false },
-  'Vietnam':       { tier: 2, ports: ['Ho Chi Minh City','Hai Phong'], sensitivity: 75, landlocked: false },
-  'Thailand':      { tier: 2, ports: ['Laem Chabang'],                 sensitivity: 73, landlocked: false },
-  'Philippines':   { tier: 2, ports: ['Manila'],                       sensitivity: 70, landlocked: false },
-  'Pakistan':      { tier: 2, ports: ['Karachi'],                      sensitivity: 80, landlocked: false },
-  'Sri Lanka':     { tier: 2, ports: ['Colombo'],                      sensitivity: 85, landlocked: false },
-  'Morocco':       { tier: 2, ports: ['Tanger Med'],                   sensitivity: 70, landlocked: false },
-  'South Africa':  { tier: 2, ports: ['Durban','Cape Town'],           sensitivity: 72, landlocked: false },
-  'Brazil':        { tier: 2, ports: ['Santos','Paranagua'],           sensitivity: 68, landlocked: false },
-  'Colombia':      { tier: 3, ports: ['Cartagena','Buenaventura'],     sensitivity: 65, landlocked: false },
-  'Mexico':        { tier: 2, ports: ['Manzanillo','Veracruz'],        sensitivity: 68, landlocked: false },
-  'Chile':         { tier: 3, ports: ['San Antonio'],                  sensitivity: 65, landlocked: false },
-  'Peru':          { tier: 3, ports: ['Callao'],                       sensitivity: 65, landlocked: false },
-  'Ecuador':       { tier: 3, ports: ['Guayaquil'],                    sensitivity: 62, landlocked: false },
-  'Oman':          { tier: 2, ports: ['Salalah','Sohar'],              sensitivity: 72, landlocked: false },
-  'Qatar':         { tier: 2, ports: ['Hamad Port'],                   sensitivity: 78, landlocked: false },
-  'Kuwait':        { tier: 3, ports: ['Shuwaikh'],                     sensitivity: 70, landlocked: false },
-  'Bahrain':       { tier: 3, ports: ['Khalifa bin Salman'],           sensitivity: 68, landlocked: false },
-  'Iran':          { tier: 3, ports: ['Bandar Abbas'],                 sensitivity: 70, landlocked: false },
-  'Iraq':          { tier: 3, ports: ['Umm Qasr'],                     sensitivity: 75, landlocked: false },
-  'Yemen':         { tier: 3, ports: ['Aden','Hodeidah'],              sensitivity: 85, landlocked: false },
-  'Djibouti':      { tier: 2, ports: ['Port of Djibouti'],             sensitivity: 90, landlocked: false },
-  'Somalia':       { tier: 4, ports: ['Mogadishu'],                    sensitivity: 75, landlocked: false },
-  'Kenya':         { tier: 3, ports: ['Mombasa'],                      sensitivity: 78, landlocked: false },
-  'Tanzania':      { tier: 3, ports: ['Dar es Salaam'],                sensitivity: 72, landlocked: false },
-  'Mozambique':    { tier: 3, ports: ['Beira','Maputo'],               sensitivity: 68, landlocked: false },
-  'South Sudan':   { landlocked: true },
-  'Ethiopia':      { landlocked: true },
-  'Mali':          { landlocked: true },
-  'Niger':         { landlocked: true },
-  'Burkina Faso':  { landlocked: true },
-  'Chad':          { landlocked: true },
-  'CAR':           { landlocked: true },
-  'DRC':           { tier: 4, ports: ['Matadi'],                       sensitivity: 60, landlocked: false },
-  'Nigeria':       { tier: 2, ports: ['Lagos (Apapa)','Tin Can'],      sensitivity: 75, landlocked: false },
-  'Ghana':         { tier: 3, ports: ['Tema'],                         sensitivity: 68, landlocked: false },
-  'Ivory Coast':   { tier: 3, ports: ['Abidjan'],                      sensitivity: 72, landlocked: false },
-  'Senegal':       { tier: 3, ports: ['Dakar'],                        sensitivity: 65, landlocked: false },
-  'Angola':        { tier: 3, ports: ['Luanda'],                       sensitivity: 65, landlocked: false },
-  'Libya':         { tier: 3, ports: ['Tripoli','Benghazi'],           sensitivity: 70, landlocked: false },
-  'Algeria':       { tier: 3, ports: ['Algiers','Oran'],               sensitivity: 65, landlocked: false },
-  'Tunisia':       { tier: 3, ports: ['Tunis-Rades'],                  sensitivity: 65, landlocked: false },
-  'Myanmar':       { tier: 3, ports: ['Yangon'],                       sensitivity: 68, landlocked: false },
-  'Cambodia':      { tier: 4, ports: ['Sihanoukville'],                sensitivity: 60, landlocked: false },
-  'Laos':          { landlocked: true },
-  'Nepal':         { landlocked: true },
-  'Afghanistan':   { landlocked: true },
-  'Kazakhstan':    { landlocked: true },
-  'Uzbekistan':    { landlocked: true },
-  'Kyrgyzstan':    { landlocked: true },
-  'Tajikistan':    { landlocked: true },
-  'Turkmenistan':  { landlocked: true },
-  'Ukraine':       { tier: 3, ports: ['Odessa'],                       sensitivity: 70, landlocked: false },
-  'Russia':        { tier: 2, ports: ['Novorossiysk','Vladivostok'],   sensitivity: 65, landlocked: false },
-  'Turkey':        { tier: 2, ports: ['Mersin','Istanbul'],            sensitivity: 72, landlocked: false },
-  'Greece':        { tier: 2, ports: ['Piraeus'],                      sensitivity: 75, landlocked: false },
-  'Italy':         { tier: 2, ports: ['Genoa','Trieste'],              sensitivity: 70, landlocked: false },
-  'Spain':         { tier: 2, ports: ['Valencia','Barcelona'],         sensitivity: 70, landlocked: false },
-  'Portugal':      { tier: 2, ports: ['Sines'],                        sensitivity: 72, landlocked: false },
-  'Australia':     { tier: 2, ports: ['Sydney','Melbourne'],           sensitivity: 68, landlocked: false },
-  'New Zealand':   { tier: 3, ports: ['Auckland'],                     sensitivity: 65, landlocked: false },
-  'Panama':        { tier: 2, ports: ['Panama City (Balboa)'],         sensitivity: 88, landlocked: false },
-  'Taiwan':        { tier: 2, ports: ['Kaohsiung'],                    sensitivity: 82, landlocked: false },
-  'Israel':        { tier: 3, ports: ['Haifa','Ashdod'],               sensitivity: 72, landlocked: false }
+const FRED_API_KEY           = process.env.FRED_API_KEY;
+const MARINE_EXCHANGE_KEY    = process.env.MARINE_EXCHANGE_KEY || null; // stub — add when ready
+
+// ── Port profiles ─────────────────────────────────────────────────────────────
+// capacity_teu: annual TEU capacity (millions)
+// apparel_share: % of US apparel imports this port handles (approximate)
+// baseline_wait_days: normal average vessel wait days pre-pandemic
+// critical_wait_days: threshold at which chargebacks start occurring (typical ship window = 2 days)
+const PORT_PROFILES = {
+  'Los Angeles': {
+    code: 'POLA', region: 'West Coast', state: 'CA',
+    capacity_teu: 10.7, apparel_share: 0.22,
+    baseline_wait_days: 0.5, critical_wait_days: 3,
+    fred_proxy: 'IMPCH',   // US imports from China — main driver of LA/LB load
+    lat: 33.7366, lon: -118.2614
+  },
+  'Long Beach': {
+    code: 'POLB', region: 'West Coast', state: 'CA',
+    capacity_teu: 9.5, apparel_share: 0.18,
+    baseline_wait_days: 0.5, critical_wait_days: 3,
+    fred_proxy: 'IMPCH',
+    lat: 33.7701, lon: -118.1937
+  },
+  'New York / New Jersey': {
+    code: 'PANYNJ', region: 'East Coast', state: 'NY/NJ',
+    capacity_teu: 9.4, apparel_share: 0.14,
+    baseline_wait_days: 0.3, critical_wait_days: 2,
+    fred_proxy: 'IMPEU',   // US imports from EU — drives NY/NJ garment imports
+    lat: 40.6840, lon: -74.1502
+  },
+  'Savannah': {
+    code: 'GPA', region: 'East Coast', state: 'GA',
+    capacity_teu: 6.1, apparel_share: 0.08,
+    baseline_wait_days: 0.2, critical_wait_days: 2,
+    fred_proxy: 'IMPCH',
+    lat: 32.0809, lon: -81.0912
+  },
+  'Seattle / Tacoma': {
+    code: 'NWSA', region: 'West Coast', state: 'WA',
+    capacity_teu: 4.1, apparel_share: 0.06,
+    baseline_wait_days: 0.3, critical_wait_days: 2,
+    fred_proxy: 'IMPCH',
+    lat: 47.5612, lon: -122.3493
+  },
+  'Miami': {
+    code: 'PortMiami', region: 'Southeast', state: 'FL',
+    capacity_teu: 1.8, apparel_share: 0.04,
+    baseline_wait_days: 0.2, critical_wait_days: 2,
+    fred_proxy: 'IMPMX',   // US imports from Mexico/Latin America — drives Miami apparel
+    lat: 25.7739, lon: -80.1700
+  }
 };
 
-function fetchGoComet(portName) {
+// ── FRED series metadata ──────────────────────────────────────────────────────
+// Maps proxy series to their expected monthly value ranges for scoring
+const FRED_SERIES_META = {
+  'IMPCH': { name: 'US Imports from China',        baseline_bn: 42,  surge_bn: 55  },
+  'IMPEU': { name: 'US Imports from European Union', baseline_bn: 38,  surge_bn: 48  },
+  'IMPMX': { name: 'US Imports from Mexico',        baseline_bn: 35,  surge_bn: 48  }
+};
+
+// ── FRED fetch ────────────────────────────────────────────────────────────────
+function fetchFredSeries(seriesId, months = 6) {
   return new Promise((resolve) => {
-    const slug = portName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const url = `https://api.gocomet.com/v1/port-congestion/${slug}`;
-    https.get(url, {
-      headers: { 'User-Agent': 'SabianIntelligence/3.0' },
-      timeout: 10000
-    }, (res) => {
+    if (!FRED_API_KEY) return resolve(null);
+    const start = new Date();
+    start.setMonth(start.getMonth() - months);
+    const params = new URLSearchParams({
+      series_id:         seriesId,
+      api_key:           FRED_API_KEY,
+      file_type:         'json',
+      observation_start: start.toISOString().slice(0, 10),
+      limit:             String(months + 2),
+      sort_order:        'desc'
+    });
+    const url = `https://api.stlouisfed.org/fred/series/observations?${params}`;
+    https.get(url, { timeout: 12000 }, (res) => {
       let body = '';
       res.on('data', d => body += d);
       res.on('end', () => {
@@ -115,51 +113,171 @@ function fetchGoComet(portName) {
   });
 }
 
-async function fetchPortCongestionData(country) {
-  try {
-    const info = PORT_BASELINE[country];
-    if (!info) return { score: 10, reason: 'no_port_data', trend: 'stable' };
-    if (info.landlocked) return { score: 0, reason: 'landlocked', trend: 'stable' };
+// ── Marine Exchange stub ──────────────────────────────────────────────────────
+// Returns vessels at anchor + average wait hours for a port.
+// Currently returns null — plug in MARINE_EXCHANGE_KEY to activate.
+// Free registration: https://www.mxps.net/
+// Marine Traffic alternative: https://www.marinetraffic.com/en/ais-api-services (100 free credits/mo)
+async function fetchVesselsAtAnchor(portCode) {
+  if (!MARINE_EXCHANGE_KEY) return null;
+  // TODO: implement Marine Exchange API call when key is available
+  // Endpoint pattern: https://api.mxps.net/v1/anchorage?port=POLA&key=<KEY>
+  // Returns: { vessels_at_anchor: 12, avg_wait_hours: 48, updated: "2026-08-13T06:00:00Z" }
+  return null;
+}
 
-    // Try live GoComet data for primary port
-    const primaryPort = info.ports[0];
-    let liveScore = null;
-    const gocometData = await fetchGoComet(primaryPort);
+// ── Score calculation ─────────────────────────────────────────────────────────
+function scoreFromImportVolume(fredData, meta) {
+  if (!fredData || !fredData.observations) return { score: null, reason: 'no_fred_data' };
 
-    if (gocometData && gocometData.congestion_level !== undefined) {
-      // GoComet returns 0-5 congestion level
-      const level = parseFloat(gocometData.congestion_level);
-      liveScore = Math.round((level / 5) * 100);
+  const obs = fredData.observations
+    .filter(o => o.value !== '.' && o.value !== null)
+    .map(o => ({ date: o.date, value: parseFloat(o.value) }));
+
+  if (obs.length < 2) return { score: null, reason: 'insufficient_data' };
+
+  const latest   = obs[0].value;
+  const sixMoAvg = obs.slice(0, 6).reduce((s, o) => s + o.value, 0) / Math.min(obs.length, 6);
+  const trend    = ((latest - sixMoAvg) / sixMoAvg) * 100; // % above 6-month avg
+
+  // Score: 0 = at or below baseline, 100 = at or above surge level
+  const baseline = meta.baseline_bn;
+  const surge    = meta.surge_bn;
+  let volumeScore = Math.round(((latest - baseline) / (surge - baseline)) * 60);
+  volumeScore = Math.max(0, Math.min(60, volumeScore)); // volume component: 0–60
+
+  // Trend bonus: sharp YoY acceleration adds urgency
+  let trendScore = 0;
+  if (trend > 15)      trendScore = 25;
+  else if (trend > 8)  trendScore = 15;
+  else if (trend > 3)  trendScore = 8;
+
+  const total = Math.min(100, volumeScore + trendScore);
+
+  return {
+    score: total,
+    latest_bn: latest,
+    six_mo_avg_bn: Math.round(sixMoAvg * 10) / 10,
+    trend_pct: Math.round(trend * 10) / 10,
+    latest_date: obs[0].date,
+    reason: 'fred_volume_proxy'
+  };
+}
+
+function scoreFromVessels(vesselData, profile) {
+  if (!vesselData || vesselData.vessels_at_anchor == null) return null;
+  const { vessels_at_anchor, avg_wait_hours } = vesselData;
+  const waitDays = avg_wait_hours / 24;
+
+  // Score based on wait days vs port's critical threshold
+  if (waitDays >= profile.critical_wait_days * 3) return 95;
+  if (waitDays >= profile.critical_wait_days * 2) return 80;
+  if (waitDays >= profile.critical_wait_days)     return 65;
+  if (waitDays >= profile.baseline_wait_days * 3) return 40;
+  if (waitDays >= profile.baseline_wait_days * 2) return 20;
+  return 10;
+}
+
+function congestionLabel(score) {
+  if (score == null)  return 'UNKNOWN';
+  if (score >= 80)    return 'SEVERE';
+  if (score >= 60)    return 'HIGH';
+  if (score >= 40)    return 'ELEVATED';
+  if (score >= 20)    return 'MODERATE';
+  return 'NORMAL';
+}
+
+function chargebackRisk(score, apparelShare) {
+  // Higher apparel share + higher congestion = direct chargeback exposure
+  if (score == null) return null;
+  const risk = Math.round(score * apparelShare * 2);
+  return Math.min(100, risk);
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+async function fetchPortCongestionData() {
+  const results = [];
+  const seenSeries = {};
+
+  // Fetch each unique FRED proxy series once
+  for (const profile of Object.values(PORT_PROFILES)) {
+    if (!seenSeries[profile.fred_proxy]) {
+      seenSeries[profile.fred_proxy] = await fetchFredSeries(profile.fred_proxy, 8);
+    }
+  }
+
+  for (const [portName, profile] of Object.entries(PORT_PROFILES)) {
+    const fredData   = seenSeries[profile.fred_proxy];
+    const meta       = FRED_SERIES_META[profile.fred_proxy];
+    const vesselData = await fetchVesselsAtAnchor(profile.code);
+
+    const volumeResult  = scoreFromImportVolume(fredData, meta);
+    const vesselScore   = scoreFromVessels(vesselData, profile);
+
+    // If we have live vessel data, weight it heavily. Otherwise use volume proxy alone.
+    let finalScore;
+    if (vesselScore != null) {
+      finalScore = Math.round(vesselScore * 0.7 + (volumeResult.score || 0) * 0.3);
+    } else {
+      finalScore = volumeResult.score;
     }
 
-    if (liveScore !== null) {
-      const sensitivityMod = (info.sensitivity / 100) * 20;
-      return {
-        score: Math.min(100, liveScore + Math.round(sensitivityMod * (liveScore / 100))),
-        port: primaryPort,
-        congestion_level: gocometData.congestion_level,
-        source: 'GoComet_live',
-        trend: liveScore >= 60 ? 'severe' : liveScore >= 35 ? 'moderate' : 'normal'
-      };
-    }
-
-    // Static tier-based baseline when live data unavailable
-    // Lower tier = better infrastructure = lower baseline congestion risk
-    const tierBaseline = { 1: 15, 2: 25, 3: 38, 4: 52, 5: 65 };
-    const baseScore = tierBaseline[info.tier] || 35;
-
-    return {
-      score: baseScore,
-      port: primaryPort,
-      tier: info.tier,
-      source: 'baseline_tier',
-      trend: baseScore >= 50 ? 'elevated' : baseScore >= 30 ? 'watch' : 'normal'
+    const result = {
+      port:               portName,
+      code:               profile.code,
+      region:             profile.region,
+      state:              profile.state,
+      congestion_score:   finalScore,
+      congestion_label:   congestionLabel(finalScore),
+      apparel_share_pct:  Math.round(profile.apparel_share * 100),
+      chargeback_risk:    chargebackRisk(finalScore, profile.apparel_share),
+      vessels_at_anchor:  vesselData ? vesselData.vessels_at_anchor : null,
+      avg_wait_hours:     vesselData ? vesselData.avg_wait_hours : null,
+      import_volume_bn:   volumeResult.latest_bn   || null,
+      import_trend_pct:   volumeResult.trend_pct   || null,
+      data_date:          volumeResult.latest_date  || new Date().toISOString().slice(0, 10),
+      source:             vesselData ? 'marine_exchange+fred' : 'fred_volume_proxy',
+      live_vessel_data:   vesselData != null,
+      lat:                profile.lat,
+      lon:                profile.lon
     };
 
-  } catch (err) {
-    logToHive({ source: 'port_congestion_feed', level: 'warn', event: 'fetch_error', data: { country, error: err.message } });
-    return { score: null, reason: 'fetch_error', error: err.message };
+    results.push(result);
+
+    logToHive({
+      source: 'port_congestion_feed',
+      level:  finalScore >= 60 ? 'warning' : 'intel',
+      event:  `port_score`,
+      data:   { port: portName, score: finalScore, label: result.congestion_label, chargeback_risk: result.chargeback_risk },
+      tags:   ['port', 'apparel', 'congestion', profile.region.toLowerCase().replace('/', '').replace(' ', '_')]
+    });
   }
+
+  // Sort by congestion score descending — highest risk port first
+  results.sort((a, b) => (b.congestion_score || 0) - (a.congestion_score || 0));
+
+  const summary = {
+    as_of:              new Date().toISOString(),
+    ports_scored:       results.filter(r => r.congestion_score != null).length,
+    ports_severe:       results.filter(r => r.congestion_label === 'SEVERE').length,
+    ports_high:         results.filter(r => r.congestion_label === 'HIGH').length,
+    highest_risk_port:  results[0]?.port || null,
+    highest_risk_score: results[0]?.congestion_score || null,
+    live_vessel_feeds:  results.filter(r => r.live_vessel_data).length,
+    note_vessel_feeds:  MARINE_EXCHANGE_KEY
+      ? 'Marine Exchange live data active'
+      : 'Vessel-at-anchor data not yet active — add MARINE_EXCHANGE_KEY to Railway env vars to enable real-time counts. Register free at https://www.mxps.net/'
+  };
+
+  logToHive({
+    source: 'port_congestion_feed',
+    level:  summary.ports_severe > 0 ? 'warning' : 'intel',
+    event:  'port_scan_complete',
+    data:   summary,
+    tags:   ['port', 'apparel', 'summary']
+  });
+
+  return { ports: results, summary };
 }
 
 module.exports = { fetchPortCongestionData };
