@@ -44,7 +44,20 @@
       text-decoration: none;
       text-transform: uppercase;
       color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
     }
+
+    .live {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px rgba(0,184,212,0.8);
+      flex-shrink: 0;
+      animation: lp 2.5s ease-in-out infinite;
+    }
+    @keyframes lp { 0%,100%{opacity:1} 50%{opacity:0.25} }
 
     .nav-r { display: flex; align-items: center; gap: 2.5rem; }
 
@@ -184,7 +197,7 @@
 <body>
 
 <nav>
-  <a class="logo" href="/">SABIAN</a>
+  <a class="logo" href="/">SABIAN <span class="live"></span></a>
   <div class="nav-r">
     <a class="nav-link" href="mailto:support@sabian.ai">Contact</a>
     <a class="nav-link hi" href="/terminal">Terminal →</a>
