@@ -92,37 +92,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* TICKER — feed names, continuous */
-    .ticker {
-      overflow: hidden;
-      border-bottom: 1px solid var(--edge);
-    }
-    .t-row {
-      display: flex;
-      overflow: hidden;
-      border-bottom: 1px solid var(--edge);
-    }
-    .t-row:last-child { border-bottom: none; }
-    .t-track { overflow: hidden; flex: 1; }
-    .t-inner {
-      display: flex;
-      flex-shrink: 0;
-      animation: tick 48s linear infinite;
-    }
-    .t-row:nth-child(2) .t-inner { animation-duration: 64s; animation-direction: reverse; }
-    @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    @media (prefers-reduced-motion: reduce) { .t-inner { animation: none; } }
-
-    .t-item {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      color: var(--edge2);
-      white-space: nowrap;
-      padding: 0.65rem 1.75rem;
-      letter-spacing: 0.05em;
-    }
-    .t-item::after { content: '·'; padding-left: 1.75rem; color: var(--edge); }
-
     /* FEEDS */
     .feeds-grid {
       display: grid;
@@ -200,15 +169,6 @@
   <div class="s-cell"><div class="s-country">Morocco</div><div class="s-num">32</div></div>
 </div>
 
-<div class="ticker">
-  <div class="t-row">
-    <div class="t-track"><div class="t-inner" id="t1"></div><div class="t-inner" id="t1b"></div></div>
-  </div>
-  <div class="t-row">
-    <div class="t-track"><div class="t-inner" id="t2"></div><div class="t-inner" id="t2b"></div></div>
-  </div>
-</div>
-
 <div class="feeds-grid">
   <div class="f-cell"><div class="f-dot on"></div>GDELT Conflict Events</div>
   <div class="f-cell"><div class="f-dot on"></div>UNHCR Displacement</div>
@@ -238,23 +198,6 @@
 </footer>
 
 <script>
-var R1 = [
-  'GDELT Conflict Events','Sovereign CDS Spreads','UNHCR Displacement','UN Comtrade',
-  'IMF Fiscal Monitor','V-Dem Governance','FRED Capital Flows','SEC EDGAR',
-  'Port Congestion LA/LB','Maritime Chokepoints','Election Calendars','CourtListener Bankruptcy'
-];
-var R2 = [
-  'OpenSky Flight','WHO Health Crisis','EIA Energy','GPS Jamming',
-  'Sanctions Monitor','Currency Collapse','FIRMS Fire Hotspots','Military Proximity',
-  'Port Congestion NY/NJ','Port Congestion Savannah','Exchange Rate Monitor','Resource Conflict'
-];
-
-function buildTick(arr) {
-  return arr.map(function(t) { return '<div class="t-item">'+t+'</div>'; }).join('');
-}
-['t1','t1b'].forEach(function(id) { document.getElementById(id).innerHTML = buildTick(R1); });
-['t2','t2b'].forEach(function(id) { document.getElementById(id).innerHTML = buildTick(R2); });
-
 (async function() {
   try {
     var r = await fetch('/public-api/threats?limit=4');
