@@ -62,47 +62,17 @@
     main {
       flex: 1;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      align-items: center;
       padding: 0 2.5rem;
-      gap: 2.5rem;
     }
 
-    .tagline {
+    .line {
       font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--dim);
-    }
-
-    .stats {
-      display: flex;
-      gap: 3.5rem;
-      flex-wrap: wrap;
-    }
-
-    .stat {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .stat-n {
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text);
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.04em;
-    }
-
-    .stat-l {
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--edge2);
+      line-height: 2;
     }
 
     footer {
@@ -137,7 +107,6 @@
     @media (max-width: 600px) {
       nav, footer { padding: 1.25rem; }
       main { padding: 0 1.25rem; }
-      .stats { gap: 2rem; }
     }
   </style>
 </head>
@@ -151,21 +120,11 @@
 </nav>
 
 <main>
-  <p class="tagline">Continuous signal intelligence.</p>
-  <div class="stats">
-    <div class="stat">
-      <span class="stat-n">217</span>
-      <span class="stat-l">Countries</span>
-    </div>
-    <div class="stat">
-      <span class="stat-n">20+</span>
-      <span class="stat-l">Feeds</span>
-    </div>
-    <div class="stat">
-      <span class="stat-n" id="days">—</span>
-      <span class="stat-l">Days</span>
-    </div>
-  </div>
+  <p class="line">
+    A continuous signal intelligence engine.<br>
+    Reads the data your industry produces.<br>
+    Surfaces what it means.
+  </p>
 </main>
 
 <footer>
@@ -173,9 +132,5 @@
   <a class="f-mail" href="mailto:sabianglobal@gmail.com">sabianglobal@gmail.com</a>
 </footer>
 
-<script>
-  var el = document.getElementById('days');
-  if (el) el.textContent = Math.max(0, Math.floor((Date.now() - new Date('2026-05-26').getTime()) / 86400000));
-</script>
 </body>
 </html>
