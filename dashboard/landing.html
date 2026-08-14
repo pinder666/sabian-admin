@@ -9,11 +9,8 @@
 
     :root {
       --navy:  #050c1a;
-      --panel: #0a1428;
       --edge:  #152040;
       --edge2: #1e2f50;
-      --blue:  #1a6fff;
-      --blue2: #4d8fff;
       --dim:   #8aa0c0;
       --text:  #c8d8f0;
       --mono: 'Courier New', Consolas, monospace;
@@ -21,11 +18,14 @@
     }
 
     html, body {
+      height: 100%;
+    }
+
+    body {
       background: var(--navy);
       color: var(--text);
       font-family: var(--sans);
       -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
@@ -34,15 +34,15 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.25rem 2.5rem;
-      border-bottom: 1px solid var(--edge);
+      padding: 1.5rem 2.5rem;
       flex-shrink: 0;
     }
+
     .logo {
       font-family: var(--sans);
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 800;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-decoration: none;
       text-transform: uppercase;
       line-height: 1;
@@ -52,8 +52,8 @@
 
     .nav-entry {
       font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.14em;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--edge2);
       text-decoration: none;
@@ -61,84 +61,65 @@
     }
     .nav-entry:hover { color: var(--dim); }
 
-    /* SCORES — real data from API */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 0 2.5rem;
+    }
+
     .scores {
       display: flex;
-      align-items: stretch;
-      border-bottom: 1px solid var(--edge);
-      overflow-x: auto;
+      gap: 4rem;
+      flex-wrap: wrap;
     }
+
     .s-cell {
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
-      padding: 1.5rem 2.5rem;
-      border-right: 1px solid var(--edge);
-      flex-shrink: 0;
+      gap: 0.5rem;
     }
+
     .s-country {
       font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: var(--edge2);
     }
+
     .s-num {
       font-family: var(--mono);
-      font-size: 2rem;
+      font-size: 3.5rem;
       font-weight: 700;
       color: var(--text);
       line-height: 1;
       font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
     }
-
-    /* FEEDS */
-    .feeds-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1px;
-      background: var(--edge);
-      flex: 1;
-    }
-    .f-cell {
-      background: var(--navy);
-      padding: 1rem 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--dim);
-      letter-spacing: 0.04em;
-    }
-    .f-dot {
-      width: 4px; height: 4px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      background: var(--edge2);
-    }
-    .f-dot.on { background: var(--blue2); }
 
     footer {
-      border-top: 1px solid var(--edge);
-      padding: 1.25rem 2.5rem;
+      padding: 1.5rem 2.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 1rem;
       flex-shrink: 0;
+      border-top: 1px solid var(--edge);
     }
+
     .f-left {
       font-family: var(--mono);
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--edge2);
     }
+
     .f-mail {
       font-family: var(--mono);
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       letter-spacing: 0.08em;
       color: var(--edge2);
       text-decoration: none;
@@ -146,10 +127,11 @@
     }
     .f-mail:hover { color: var(--dim); }
 
-    @media (max-width: 640px) {
-      nav { padding: 1rem 1.25rem; }
-      .s-cell { padding: 1.25rem 1.5rem; }
-      footer { padding: 1rem 1.25rem; }
+    @media (max-width: 600px) {
+      nav, footer { padding: 1.25rem; }
+      main { padding: 0 1.25rem; }
+      .scores { gap: 2.5rem; }
+      .s-num { font-size: 2.5rem; }
     }
   </style>
 </head>
@@ -162,35 +144,14 @@
   <a class="nav-entry" href="/terminal">Terminal →</a>
 </nav>
 
-<div class="scores" id="scores">
-  <div class="s-cell"><div class="s-country">Sudan</div><div class="s-num">94</div></div>
-  <div class="s-cell"><div class="s-country">Myanmar</div><div class="s-num">79</div></div>
-  <div class="s-cell"><div class="s-country">Haiti</div><div class="s-num">61</div></div>
-  <div class="s-cell"><div class="s-country">Morocco</div><div class="s-num">32</div></div>
-</div>
-
-<div class="feeds-grid">
-  <div class="f-cell"><div class="f-dot on"></div>GDELT Conflict Events</div>
-  <div class="f-cell"><div class="f-dot on"></div>UNHCR Displacement</div>
-  <div class="f-cell"><div class="f-dot on"></div>FRED Capital Flows</div>
-  <div class="f-cell"><div class="f-dot on"></div>Sovereign CDS Spreads</div>
-  <div class="f-cell"><div class="f-dot"></div>UN Comtrade</div>
-  <div class="f-cell"><div class="f-dot"></div>IMF Fiscal Monitor</div>
-  <div class="f-cell"><div class="f-dot"></div>V-Dem Governance</div>
-  <div class="f-cell"><div class="f-dot"></div>SEC EDGAR</div>
-  <div class="f-cell"><div class="f-dot"></div>CourtListener / PACER</div>
-  <div class="f-cell"><div class="f-dot"></div>Maritime / UNCTAD</div>
-  <div class="f-cell"><div class="f-dot on"></div>EIA Energy</div>
-  <div class="f-cell"><div class="f-dot on"></div>Port Congestion</div>
-  <div class="f-cell"><div class="f-dot"></div>WHO Health Crisis</div>
-  <div class="f-cell"><div class="f-dot"></div>Election Calendars</div>
-  <div class="f-cell"><div class="f-dot on"></div>GPS Jamming</div>
-  <div class="f-cell"><div class="f-dot"></div>OpenSky / Flight</div>
-  <div class="f-cell"><div class="f-dot"></div>FIRMS Fire Hotspots</div>
-  <div class="f-cell"><div class="f-dot"></div>Exchange Rate</div>
-  <div class="f-cell"><div class="f-dot"></div>Military Proximity</div>
-  <div class="f-cell"><div class="f-dot on"></div>Chokepoint Monitor</div>
-</div>
+<main>
+  <div class="scores" id="scores">
+    <div class="s-cell"><div class="s-country">Sudan</div><div class="s-num">94</div></div>
+    <div class="s-cell"><div class="s-country">Myanmar</div><div class="s-num">79</div></div>
+    <div class="s-cell"><div class="s-country">Haiti</div><div class="s-num">61</div></div>
+    <div class="s-cell"><div class="s-country">Morocco</div><div class="s-num">32</div></div>
+  </div>
+</main>
 
 <footer>
   <span class="f-left">Sabian Global Inc. · sabian.ai</span>
