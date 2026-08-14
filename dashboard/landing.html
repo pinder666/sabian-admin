@@ -9,32 +9,40 @@
 
     :root {
       --navy:  #050c1a;
+      --panel: #0a1428;
       --edge:  #152040;
       --edge2: #1e2f50;
+      --blue:  #1a6fff;
+      --blue2: #4d8fff;
       --dim:   #8aa0c0;
       --text:  #c8d8f0;
       --bright:#e8f0ff;
+      --green: #00cc88;
       --mono: 'Courier New', Consolas, monospace;
       --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
     }
 
-    html, body { height: 100%; }
+    html, body { min-height: 100%; }
 
     body {
       background: var(--navy);
       color: var(--text);
       font-family: var(--sans);
       -webkit-font-smoothing: antialiased;
-      display: flex;
-      flex-direction: column;
     }
 
+    /* NAV */
     nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.5rem 2.5rem;
-      flex-shrink: 0;
+      padding: 1.1rem 2.5rem;
+      background: rgba(5,12,26,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--edge);
     }
 
     .logo {
@@ -45,11 +53,29 @@
       text-decoration: none;
       text-transform: uppercase;
       line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
     .logo .lg { color: #1a6fff; }
     .logo .lw { color: #ffffff; }
 
-    .nav-entry {
+    .live-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2.4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
+
+    .nav-r {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-link {
       font-family: var(--mono);
       font-size: 0.65rem;
       letter-spacing: 0.16em;
@@ -58,77 +84,124 @@
       text-decoration: none;
       transition: color 0.2s;
     }
-    .nav-entry:hover { color: var(--dim); }
+    .nav-link:hover { color: var(--dim); }
 
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 3rem 2.5rem;
-      gap: 3.5rem;
+    .nav-link.entry { color: var(--dim); }
+    .nav-link.entry:hover { color: var(--bright); }
+
+    /* HERO COPY */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 2.5rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
     }
 
-    .copy {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      max-width: 520px;
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 1.25rem 2rem; }
     }
 
-    .block {
+    .hero-block {
+      border-left: 1px solid var(--blue);
+      padding-left: 1.5rem;
+    }
+
+    .hero-block p {
       font-family: var(--mono);
-      font-size: 0.75rem;
-      letter-spacing: 0.06em;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
       color: var(--dim);
       line-height: 1.9;
     }
 
-    .verticals {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      border-left: 1px solid var(--edge);
-      max-width: 640px;
+    .hero-block p + p {
+      margin-top: 1.25rem;
+    }
+
+    /* VERTICALS */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2.5rem 5rem;
+    }
+
+    @media (max-width: 760px) {
+      .section { padding: 0 1.25rem 4rem; }
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--edge2);
+      margin-bottom: 1rem;
+    }
+
+    .grid {
+      border: 1px solid var(--edge);
+      border-radius: 3px;
+      overflow: hidden;
     }
 
     .v-row {
       display: grid;
-      grid-template-columns: 160px 1fr;
+      grid-template-columns: 180px 1fr;
       border-bottom: 1px solid var(--edge);
+      background: var(--panel);
+      transition: background 0.15s;
     }
-    .v-row:first-child { border-top: 1px solid var(--edge); }
+    .v-row:last-child { border-bottom: none; }
+    .v-row:hover { background: #0d1a30; }
 
     .v-label {
-      font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--edge2);
-      padding: 0.9rem 1.25rem;
-      border-right: 1px solid var(--edge);
       display: flex;
       align-items: center;
+      gap: 0.6rem;
+      padding: 1.1rem 1.25rem;
+      border-right: 1px solid var(--edge);
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--edge2);
+    }
+
+    .v-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--blue2);
+      flex-shrink: 0;
+      animation: pulse 3s ease-in-out infinite;
+      animation-delay: calc(var(--d) * 0.5s);
     }
 
     .v-text {
+      padding: 1.1rem 1.5rem;
       font-family: var(--mono);
       font-size: 0.7rem;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
       color: var(--dim);
-      padding: 0.9rem 1.25rem;
-      line-height: 1.65;
+      line-height: 1.7;
     }
 
+    @media (max-width: 640px) {
+      .v-row { grid-template-columns: 1fr; }
+      .v-label { border-right: none; border-bottom: 1px solid var(--edge); }
+    }
+
+    /* FOOTER */
     footer {
+      border-top: 1px solid var(--edge);
       padding: 1.5rem 2.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 1rem;
-      flex-shrink: 0;
-      border-top: 1px solid var(--edge);
     }
 
     .f-left {
@@ -149,11 +222,9 @@
     }
     .f-mail:hover { color: var(--dim); }
 
-    @media (max-width: 640px) {
-      nav, footer { padding: 1.25rem; }
-      main { padding: 2rem 1.25rem; gap: 2.5rem; }
-      .v-row { grid-template-columns: 1fr; }
-      .v-label { border-right: none; border-bottom: 1px solid var(--edge); padding: 0.65rem 1.25rem; }
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.25rem; }
+      footer { padding: 1.25rem; }
     }
   </style>
 </head>
@@ -162,47 +233,62 @@
 <nav>
   <a class="logo" href="/">
     <span class="lg">S</span><span class="lw">A</span><span class="lg">B</span><span class="lw">I</span><span class="lg">AN</span>
+    <span class="live-dot"></span>
   </a>
-  <a class="nav-entry" href="/terminal">Terminal →</a>
+  <div class="nav-r">
+    <a class="nav-link" href="mailto:support@sabian.ai">Contact</a>
+    <a class="nav-link entry" href="/terminal">Terminal →</a>
+  </div>
 </nav>
 
-<main>
-  <div class="copy">
-    <p class="block">
+<div class="hero">
+  <div class="hero-block">
+    <p>
       The problem with data is never volume.<br>
       It lives in fragments. Systems that were never built<br>
       to speak to each other.
     </p>
-    <p class="block">
+  </div>
+  <div class="hero-block">
+    <p>
       Every answer a business needs<br>
       is already somewhere in that data.<br>
       It just hasn't been read as one thing.
     </p>
   </div>
+</div>
 
-  <div class="verticals">
+<div class="section">
+  <div class="section-label">Where it breaks</div>
+  <div class="grid">
+
     <div class="v-row">
-      <span class="v-label">Financial Services</span>
-      <span class="v-text">Risk models running on market data that hasn't touched the credit ledger. Decisions made from one source when three are speaking.</span>
+      <div class="v-label"><span class="v-dot" style="--d:0"></span>Financial Services</div>
+      <div class="v-text">Risk models running on market data that hasn't touched the credit ledger. Decisions made from one source when three are speaking.</div>
     </div>
+
     <div class="v-row">
-      <span class="v-label">Wholesale / Trade</span>
-      <span class="v-text">Demand signal sitting in a rep's workflow. Inventory in an ERP. Chargeback patterns in a spreadsheet. The same account, three systems, no conversation.</span>
+      <div class="v-label"><span class="v-dot" style="--d:1"></span>Wholesale / Trade</div>
+      <div class="v-text">Demand signal sitting in a rep's workflow. Inventory in an ERP. Chargeback patterns in a spreadsheet. The same account, three systems, no conversation.</div>
     </div>
+
     <div class="v-row">
-      <span class="v-label">Sovereign / Institutional</span>
-      <span class="v-text">Macroeconomic feeds, conflict event data, and credit spreads processed in sequence. Never simultaneously. The correlation is always found after the fact.</span>
+      <div class="v-label"><span class="v-dot" style="--d:2"></span>Sovereign / Institutional</div>
+      <div class="v-text">Macroeconomic feeds, conflict event data, and credit spreads processed in sequence. Never simultaneously. The correlation is always found after the fact.</div>
     </div>
+
     <div class="v-row">
-      <span class="v-label">Supply Chain</span>
-      <span class="v-text">Port congestion data, procurement schedules, and customer delivery windows in separate systems. The delay is visible in each one. The impact isn't visible in any.</span>
+      <div class="v-label"><span class="v-dot" style="--d:3"></span>Supply Chain</div>
+      <div class="v-text">Port congestion data, procurement schedules, and customer delivery windows in separate systems. The delay is visible in each one. The impact isn't visible in any.</div>
     </div>
+
     <div class="v-row">
-      <span class="v-label">Healthcare</span>
-      <span class="v-text">Clinical outcomes, supply chain, and billing operating in isolation. The operational signal that predicts the clinical problem exists. It's just never been in the same room.</span>
+      <div class="v-label"><span class="v-dot" style="--d:4"></span>Healthcare</div>
+      <div class="v-text">Clinical outcomes, supply chain, and billing operating in isolation. The operational signal that predicts the clinical problem exists. It's just never been in the same room.</div>
     </div>
+
   </div>
-</main>
+</div>
 
 <footer>
   <span class="f-left">Sabian Global Inc. · sabian.ai</span>
