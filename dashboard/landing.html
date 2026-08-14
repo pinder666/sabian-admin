@@ -13,6 +13,7 @@
       --edge2: #1e2f50;
       --dim:   #8aa0c0;
       --text:  #c8d8f0;
+      --bright:#e8f0ff;
       --mono: 'Courier New', Consolas, monospace;
       --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
     }
@@ -62,15 +63,17 @@
     main {
       flex: 1;
       display: flex;
-      align-items: center;
-      padding: 0 2.5rem;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 2.5rem;
+      gap: 3.5rem;
     }
 
     .copy {
       display: flex;
       flex-direction: column;
       gap: 2rem;
-      max-width: 480px;
+      max-width: 520px;
     }
 
     .block {
@@ -79,6 +82,42 @@
       letter-spacing: 0.06em;
       color: var(--dim);
       line-height: 1.9;
+    }
+
+    .verticals {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-left: 1px solid var(--edge);
+      max-width: 640px;
+    }
+
+    .v-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      border-bottom: 1px solid var(--edge);
+    }
+    .v-row:first-child { border-top: 1px solid var(--edge); }
+
+    .v-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--edge2);
+      padding: 0.9rem 1.25rem;
+      border-right: 1px solid var(--edge);
+      display: flex;
+      align-items: center;
+    }
+
+    .v-text {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      color: var(--dim);
+      padding: 0.9rem 1.25rem;
+      line-height: 1.65;
     }
 
     footer {
@@ -110,9 +149,11 @@
     }
     .f-mail:hover { color: var(--dim); }
 
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
       nav, footer { padding: 1.25rem; }
-      main { padding: 0 1.25rem; }
+      main { padding: 2rem 1.25rem; gap: 2.5rem; }
+      .v-row { grid-template-columns: 1fr; }
+      .v-label { border-right: none; border-bottom: 1px solid var(--edge); padding: 0.65rem 1.25rem; }
     }
   </style>
 </head>
@@ -129,8 +170,7 @@
   <div class="copy">
     <p class="block">
       The problem with data is never volume.<br>
-      It's that it lives in fragments —<br>
-      systems that were never built<br>
+      It lives in fragments. Systems that were never built<br>
       to speak to each other.
     </p>
     <p class="block">
@@ -139,11 +179,34 @@
       It just hasn't been read as one thing.
     </p>
   </div>
+
+  <div class="verticals">
+    <div class="v-row">
+      <span class="v-label">Financial Services</span>
+      <span class="v-text">Risk models running on market data that hasn't touched the credit ledger. Decisions made from one source when three are speaking.</span>
+    </div>
+    <div class="v-row">
+      <span class="v-label">Wholesale / Trade</span>
+      <span class="v-text">Demand signal sitting in a rep's workflow. Inventory in an ERP. Chargeback patterns in a spreadsheet. The same account, three systems, no conversation.</span>
+    </div>
+    <div class="v-row">
+      <span class="v-label">Sovereign / Institutional</span>
+      <span class="v-text">Macroeconomic feeds, conflict event data, and credit spreads processed in sequence. Never simultaneously. The correlation is always found after the fact.</span>
+    </div>
+    <div class="v-row">
+      <span class="v-label">Supply Chain</span>
+      <span class="v-text">Port congestion data, procurement schedules, and customer delivery windows in separate systems. The delay is visible in each one. The impact isn't visible in any.</span>
+    </div>
+    <div class="v-row">
+      <span class="v-label">Healthcare</span>
+      <span class="v-text">Clinical outcomes, supply chain, and billing operating in isolation. The operational signal that predicts the clinical problem exists. It's just never been in the same room.</span>
+    </div>
+  </div>
 </main>
 
 <footer>
   <span class="f-left">Sabian Global Inc. · sabian.ai</span>
-  <a class="f-mail" href="mailto:sabianglobal@gmail.com">sabianglobal@gmail.com</a>
+  <a class="f-mail" href="mailto:support@sabian.ai">support@sabian.ai</a>
 </footer>
 
 </body>
