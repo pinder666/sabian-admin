@@ -1,5 +1,19 @@
 # SABIAN — Universal Data Intelligence Substrate
 
+---
+
+## LANDING PAGE TERMINAL — BACKUP LINK
+
+**Artifact:** https://claude.ai/code/artifact/49522953-bfbb-44e9-8572-744a778019ad
+
+This is the Sabian landing page terminal — the full multi-page site (Home / Data / Latent / Engine / Sectors / Intelligence / Access). Built in dark terminal aesthetic with canvas animations. If the system crashes or the session is lost, open this URL to resume editing or redeploy.
+
+**To redeploy to Railway:** open the artifact, copy the full HTML source, paste into `index.html` in the Railway project.
+
+---
+
+
+
 Sabian is not a product. It is not an app. It is not a chatbot.
 
 Sabian is the intelligence layer that sits beneath every product built by Jason Wallace. It reads data from any domain, detects patterns across vectors simultaneously, cross-references live global intelligence, accumulates learning in the hive, and delivers what it finds in a single format: a dual-voice podcast briefing between Host A and Sabian.
