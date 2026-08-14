@@ -4,140 +4,148 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sabian</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --navy:  #050c1a;
-      --panel: #0a1428;
-      --edge:  #152040;
-      --edge2: #1e2f50;
-      --blue:  #1a6fff;
-      --dim:   #8aa0c0;
-      --text:  #c8d8f0;
-      --mono: 'Courier New', Consolas, monospace;
-      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --bg:     #060a14;
+      --panel:  #0a0f1e;
+      --border: #162035;
+      --border2:#1d2d47;
+      --cyan:   #00b8d4;
+      --dim:    #3d5570;
+      --text:   #b8cce0;
+      --bright: #e0eeff;
+      --mono: 'Share Tech Mono', 'Courier New', monospace;
     }
 
     body {
-      background: var(--navy);
+      background: var(--bg);
       color: var(--text);
-      font-family: var(--sans);
+      font-family: var(--mono);
       -webkit-font-smoothing: antialiased;
     }
 
+    /* NAV */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 1.1rem 2.5rem;
-      background: rgba(5,12,26,0.96);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--edge);
+      border-bottom: 1px solid var(--border);
     }
 
     .logo {
-      font-family: var(--sans);
-      font-size: 1rem;
-      font-weight: 800;
-      letter-spacing: 0.22em;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.5em;
       text-decoration: none;
       text-transform: uppercase;
+      color: var(--cyan);
     }
-    .logo .lg { color: #1a6fff; }
-    .logo .lw { color: #ffffff; }
 
-    .nav-r { display: flex; align-items: center; gap: 2rem; }
+    .nav-r { display: flex; align-items: center; gap: 2.5rem; }
 
     .nav-link {
       font-family: var(--mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.16em;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--edge2);
+      color: var(--dim);
       text-decoration: none;
+      transition: color 0.2s;
     }
-    .nav-link:hover { color: var(--dim); }
-    .nav-link.hi { color: var(--dim); }
-    .nav-link.hi:hover { color: var(--text); }
+    .nav-link:hover { color: var(--text); }
+    .nav-link.hi { color: var(--text); }
+    .nav-link.hi:hover { color: var(--cyan); }
 
-    .hero {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 5rem 2.5rem 3rem;
+    /* IDENTITY BLOCK */
+    .identity {
+      padding: 5rem 2.5rem 3.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .id-name {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 400;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      text-shadow: 0 0 60px rgba(0,184,212,0.25);
+      line-height: 1;
+      margin-bottom: 1.75rem;
+    }
+
+    .id-rule {
+      width: 100%;
+      height: 1px;
+      background: var(--border2);
+      margin-bottom: 2.5rem;
+    }
+
+    .id-copy {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 4rem;
+      max-width: 900px;
     }
 
-    .hero-block {
-      border-left: 1px solid var(--blue);
-      padding-left: 1.5rem;
+    .id-copy p {
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.85;
+      letter-spacing: 0.04em;
     }
 
-    .hero-block p {
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      color: var(--dim);
-      line-height: 1.9;
-      letter-spacing: 0.03em;
-    }
-
+    /* VERTICALS */
     .section {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 2.5rem 5rem;
+      padding: 3rem 2.5rem 4rem;
     }
 
-    .section-label {
-      font-family: var(--mono);
+    .section-hd {
       font-size: 0.58rem;
-      letter-spacing: 0.28em;
+      letter-spacing: 0.35em;
       text-transform: uppercase;
-      color: var(--edge2);
-      margin-bottom: 1rem;
+      color: var(--dim);
+      margin-bottom: 1.25rem;
     }
 
     .grid {
-      border: 1px solid var(--edge);
-      border-radius: 3px;
-      overflow: hidden;
+      border: 1px solid var(--border);
     }
 
     .v-row {
       display: grid;
-      grid-template-columns: 180px 1fr;
-      border-bottom: 1px solid var(--edge);
+      grid-template-columns: 200px 1fr;
+      border-bottom: 1px solid var(--border);
       background: var(--panel);
     }
     .v-row:last-child { border-bottom: none; }
 
     .v-label {
-      padding: 1.1rem 1.25rem;
-      border-right: 1px solid var(--edge);
-      font-family: var(--mono);
+      padding: 1.1rem 1.5rem;
+      border-right: 1px solid var(--border);
       font-size: 0.6rem;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--edge2);
+      color: var(--cyan);
       display: flex;
       align-items: center;
     }
 
     .v-text {
-      padding: 1.1rem 1.5rem;
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--dim);
-      line-height: 1.7;
+      padding: 1.1rem 1.75rem;
+      font-size: 0.72rem;
+      color: var(--text);
+      line-height: 1.75;
       letter-spacing: 0.03em;
     }
 
+    /* FOOTER */
     footer {
-      border-top: 1px solid var(--edge);
+      border-top: 1px solid var(--border);
       padding: 1.5rem 2.5rem;
       display: flex;
       align-items: center;
@@ -147,28 +155,28 @@
     }
 
     .f-left {
-      font-family: var(--mono);
       font-size: 0.58rem;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--edge2);
+      color: var(--dim);
     }
 
     .f-mail {
-      font-family: var(--mono);
       font-size: 0.58rem;
-      letter-spacing: 0.08em;
-      color: var(--edge2);
+      letter-spacing: 0.1em;
+      color: var(--dim);
       text-decoration: none;
+      transition: color 0.2s;
     }
-    .f-mail:hover { color: var(--dim); }
+    .f-mail:hover { color: var(--text); }
 
     @media (max-width: 760px) {
       nav { padding: 1rem 1.25rem; }
-      .hero { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.25rem 2rem; }
-      .section { padding: 0 1.25rem 3rem; }
+      .identity { padding: 3rem 1.25rem 2.5rem; }
+      .id-copy { grid-template-columns: 1fr; gap: 1.75rem; }
+      .section { padding: 2rem 1.25rem 3rem; }
       .v-row { grid-template-columns: 1fr; }
-      .v-label { border-right: none; border-bottom: 1px solid var(--edge); }
+      .v-label { border-right: none; border-bottom: 1px solid var(--border); }
       footer { padding: 1.25rem; }
     }
   </style>
@@ -176,22 +184,20 @@
 <body>
 
 <nav>
-  <a class="logo" href="/">
-    <span class="lg">S</span><span class="lw">A</span><span class="lg">B</span><span class="lw">I</span><span class="lg">AN</span>
-  </a>
+  <a class="logo" href="/">SABIAN</a>
   <div class="nav-r">
     <a class="nav-link" href="mailto:support@sabian.ai">Contact</a>
     <a class="nav-link hi" href="/terminal">Terminal →</a>
   </div>
 </nav>
 
-<div class="hero">
-  <div class="hero-block">
+<div class="identity">
+  <div class="id-name">SABIAN</div>
+  <div class="id-rule"></div>
+  <div class="id-copy">
     <p>The problem with data is never volume.<br>
     It lives in fragments. Systems that were never built<br>
     to speak to each other.</p>
-  </div>
-  <div class="hero-block">
     <p>Every answer a business needs<br>
     is already somewhere in that data.<br>
     It just hasn't been read as one thing.</p>
@@ -199,7 +205,7 @@
 </div>
 
 <div class="section">
-  <div class="section-label">Where it breaks</div>
+  <div class="section-hd">Where it breaks</div>
   <div class="grid">
     <div class="v-row">
       <div class="v-label">Financial Services</div>
