@@ -66,13 +66,19 @@
       padding: 0 2.5rem;
     }
 
-    .line {
+    .copy {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 480px;
+    }
+
+    .block {
       font-family: var(--mono);
       font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      letter-spacing: 0.06em;
       color: var(--dim);
-      line-height: 2;
+      line-height: 1.9;
     }
 
     footer {
@@ -120,11 +126,19 @@
 </nav>
 
 <main>
-  <p class="line">
-    Every organisation has the same problem:<br>
-    data that doesn't talk to itself.<br><br>
-    Sabian reads across it.
-  </p>
+  <div class="copy">
+    <p class="block">
+      The problem with data is never volume.<br>
+      It's that it lives in fragments —<br>
+      systems that were never built<br>
+      to speak to each other.
+    </p>
+    <p class="block">
+      Every answer a business needs<br>
+      is already somewhere in that data.<br>
+      It just hasn't been read as one thing.
+    </p>
+  </div>
 </main>
 
 <footer>
