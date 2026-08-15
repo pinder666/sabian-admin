@@ -1249,7 +1249,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- PAGE 11 — SOVEREIGN INTELLIGENCE TERMINAL                  -->
 <!-- ═══════════════════════════════════════════════════════════ -->
-<div id="p-terminal" class="page" style="background:#020508">
+<div id="p-terminal" class="pv" style="background:#020508">
   <!-- Terminal nav — purpose-built, no public tabs -->
   <div style="background:#020508;border-bottom:1px solid rgba(255,170,0,.22);height:58px;display:flex;align-items:center;padding:0 8vw;justify-content:space-between;position:sticky;top:0;z-index:100">
     <div style="display:flex;align-items:center;gap:2rem">
@@ -1262,9 +1262,10 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
       <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,170,0,.9);border:1px solid rgba(255,170,0,.35);padding:3px 10px;background:rgba(255,170,0,.06)">Demo</div>
     </div>
     <div style="display:flex;align-items:center;gap:2.5rem">
-      <a href="#term-assess" onclick="document.getElementById('cty-input').focus();return false" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none">Assessment</a>
-      <a href="#term-dossier" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none">Dossier</a>
-      <a href="#term-mandate" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none">Mandate</a>
+      <a href="javascript:void(0)" onclick="termNav('term-assess')" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none;cursor:pointer">Assessment</a>
+      <a href="javascript:void(0)" onclick="termNav('term-briefing')" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none;cursor:pointer">Briefing</a>
+      <a href="javascript:void(0)" onclick="termNav('term-dossier')" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none;cursor:pointer">Dossier</a>
+      <a href="javascript:void(0)" onclick="termNav('term-mandate')" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none;cursor:pointer">Mandate</a>
       <div style="width:1px;height:18px;background:rgba(255,170,0,.15)"></div>
       <span style="font-family:'Courier New',monospace;font-size:11px;color:rgba(255,170,0,.35)" id="term-ts"></span>
       <a href="#home" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,170,0,.35);text-decoration:none">&larr; Exit</a>
@@ -1332,42 +1333,79 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     </div>
   </div>
 
-  <!-- THE LEAD PATTERN -->
-  <div style="padding:3rem 8vw;border-bottom:1px solid rgba(255,170,0,.1)">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;max-width:1000px">
-      <div>
-        <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:1rem">The pattern your current tools miss</div>
-        <h2 style="font-size:1.5rem;color:var(--warn);font-weight:400;line-height:1.4;margin-bottom:1.2rem">Capital flight precedes mass displacement by four years.</h2>
-        <p style="font-size:.9rem;color:var(--text);line-height:1.9;margin-bottom:1rem">That relationship holds across different political systems, different regions, different causes. It is in the data. Sabian Technology measures it across every country, every quarter, going back to before most of your portfolio companies existed.</p>
-        <p style="font-size:.9rem;color:var(--text);line-height:1.9">Your current risk framework sees the displacement. You need the four-year lead.</p>
+  <!-- SAMPLE BRIEFING — THE ACTUAL PRODUCT -->
+  <div id="term-briefing" style="padding:3rem 8vw;border-bottom:1px solid rgba(255,170,0,.1);background:#050a10">
+    <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:.6rem">What you receive</div>
+    <div style="font-size:1.3rem;color:var(--warn);font-weight:400;margin-bottom:2rem">Every briefing is dual-voice audio. Host A interrogates. Sabian answers from verified data only. No speculation. No softening.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:1060px">
+      <!-- Briefing transcript -->
+      <div style="background:#020508;border:1px solid rgba(255,170,0,.15);padding:1.8rem">
+        <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,170,0,.35);margin-bottom:1.4rem;border-bottom:1px solid rgba(255,170,0,.1);padding-bottom:.8rem">Sample · Sudan · 2023-03-14 · Demo transcript</div>
+        <div style="display:flex;flex-direction:column;gap:1.4rem">
+          <div>
+            <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,170,0,.5);margin-bottom:.4rem">Host A</div>
+            <div style="font-size:13px;color:var(--bright);line-height:1.75">Sabian, what is the convergence read on Sudan?</div>
+          </div>
+          <div style="border-left:2px solid rgba(0,200,232,.25);padding-left:1rem">
+            <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(0,200,232,.4);margin-bottom:.4rem">Sabian</div>
+            <div style="font-size:13px;color:var(--bright);line-height:1.75">CRITICAL. Score 84. Capital flight has been at maximum for 26 consecutive months. Population displacement is at 95. Electronic Warfare Activity reached 78 in the 72 hours prior to this briefing — the highest in the monitored period. The decision window is under 30 days.</div>
+          </div>
+          <div>
+            <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,170,0,.5);margin-bottom:.4rem">Host A</div>
+            <div style="font-size:13px;color:var(--bright);line-height:1.75">What changes the read?</div>
+          </div>
+          <div style="border-left:2px solid rgba(0,200,232,.25);padding-left:1rem">
+            <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(0,200,232,.4);margin-bottom:.4rem">Sabian</div>
+            <div style="font-size:13px;color:var(--bright);line-height:1.75">Nothing in the current indicator stack. Fiscal stress at 91. Governance at 89. The causal chain is complete. This pattern has been in the system since Q3 2022. The market prices this after the event. You are reading it now.</div>
+          </div>
+          <div>
+            <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,170,0,.5);margin-bottom:.4rem">Host A</div>
+            <div style="font-size:13px;color:var(--bright);line-height:1.75">Sixty seconds. Excellent work.</div>
+          </div>
+        </div>
+        <div style="margin-top:1.4rem;padding-top:1rem;border-top:1px solid rgba(255,170,0,.08);display:flex;align-items:center;gap:.8rem">
+          <div style="width:32px;height:32px;border:1px solid rgba(255,170,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:default">
+            <div style="width:0;height:0;border-style:solid;border-width:5px 0 5px 9px;border-color:transparent transparent transparent rgba(255,170,0,.6);margin-left:2px"></div>
+          </div>
+          <div>
+            <div style="font-family:'Courier New',monospace;font-size:11px;color:rgba(255,170,0,.5)">Full briefing — audio MP3</div>
+            <div style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);letter-spacing:.1em;text-transform:uppercase">Available under active contract</div>
+          </div>
+        </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:1px;background:rgba(255,170,0,.06)">
-        <div style="background:#020508;padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center">
+      <!-- Lead indicators — right column -->
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:.8rem">What Sabian reads that your current tools do not</div>
+        <div style="background:#020508;border:1px solid rgba(255,170,0,.1);padding:1.2rem 1.4rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1px">
           <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Capital flight indicator</div>
-          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--green)">4-year lead</div>
+          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--green);white-space:nowrap">4-year lead</div>
         </div>
-        <div style="background:#020508;padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center">
+        <div style="background:#020508;border:1px solid rgba(255,170,0,.1);border-top:none;padding:1.2rem 1.4rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1px">
           <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Electronic Warfare Activity</div>
-          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--green)">24–72 hour lead</div>
+          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--green);white-space:nowrap">24–72 hr lead</div>
         </div>
-        <div style="background:#020508;padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center">
-          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Going-dark (reporting stops)</div>
-          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--green)">Leading indicator</div>
+        <div style="background:#020508;border:1px solid rgba(255,170,0,.1);border-top:none;padding:1.2rem 1.4rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1px">
+          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Going-dark on economic reporting</div>
+          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--green);white-space:nowrap">Leading indicator</div>
         </div>
-        <div style="background:#020508;padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center">
+        <div style="background:#020508;border:1px solid rgba(255,170,0,.1);border-top:none;padding:1.2rem 1.4rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1px">
           <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Fiscal stress + currency stress</div>
-          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--green)">18–24 month lead on ratings action</div>
+          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--green);white-space:nowrap">18–24 month lead on rating</div>
         </div>
-        <div style="background:#020508;padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center">
-          <div style="font-family:'Courier New',monospace;font-size:12px;color:rgba(255,170,0,.4)">Oxford Analytica report published</div>
-          <div style="font-family:'Courier New',monospace;font-size:12px;color:rgba(255,34,68,.6)">Event already priced</div>
+        <div style="background:#020508;border:1px solid rgba(255,34,68,.12);border-top:none;padding:1.2rem 1.4rem;display:flex;justify-content:space-between;align-items:center;gap:1rem">
+          <div style="font-family:'Courier New',monospace;font-size:12px;color:rgba(255,170,0,.35)">Ratings agency action published</div>
+          <div style="font-family:'Courier New',monospace;font-size:12px;color:rgba(255,34,68,.6);white-space:nowrap">Event already priced</div>
+        </div>
+        <div style="margin-top:1.5rem;padding:1.2rem 1.4rem;border:1px solid rgba(0,255,136,.12);background:rgba(0,255,136,.03)">
+          <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(0,255,136,.4);margin-bottom:.4rem">Methodology</div>
+          <div style="font-family:'Courier New',monospace;font-size:12px;color:var(--text);line-height:1.7">Published equation. Same formula for every country. No Western bias. Every band crossing timestamped and graded: HIT, MISS, or PARTIAL. You are buying a track record, not a confidence claim.</div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- RETROACTIVE CASE -->
-  <div style="padding:3rem 8vw;border-bottom:1px solid rgba(255,170,0,.1);background:#050a10">
+  <div style="padding:3rem 8vw;border-bottom:1px solid rgba(255,170,0,.1)">
     <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:1rem">What Sabian Technology was reading — before the event</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;max-width:1000px;align-items:start">
       <div>
@@ -1402,25 +1440,6 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
           </div>
           <div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid rgba(255,34,68,.12);font-family:'Courier New',monospace;font-size:10px;color:rgba(255,34,68,.4);letter-spacing:.1em;text-transform:uppercase">Band crossing logged · Graded: HIT</div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- METHODOLOGY — What earns trust -->
-  <div style="padding:3rem 8vw;border-bottom:1px solid rgba(255,170,0,.1)">
-    <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:1rem">The methodology</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem;max-width:900px">
-      <div>
-        <div style="font-size:14px;color:var(--bright);margin-bottom:.6rem;font-family:'Courier New',monospace">Published equation.</div>
-        <p style="font-size:.85rem;color:var(--text);line-height:1.8">Every weight. Every source category. Every null-redistribution rule. Your analyst can reproduce any score from the published methodology. No black box. No proprietary opacity you cannot defend to your investment committee.</p>
-      </div>
-      <div>
-        <div style="font-size:14px;color:var(--bright);margin-bottom:.6rem;font-family:'Courier New',monospace">Same methodology for every country.</div>
-        <p style="font-size:.85rem;color:var(--text);line-height:1.8">The US scores by the same equation as Chad. Singapore scores by the same equation as Myanmar. No geopolitical exemptions. No Western thumb on the scale. That is what allows you to take the output to your board.</p>
-      </div>
-      <div>
-        <div style="font-size:14px;color:var(--bright);margin-bottom:.6rem;font-family:'Courier New',monospace">An accuracy record, not a claim.</div>
-        <p style="font-size:.85rem;color:var(--text);line-height:1.8">Every band crossing is timestamped. Every 30, 60, or 90-day decision window is graded at close: HIT, MISS, or PARTIAL. You are not buying a confidence claim. You are buying a documented track record.</p>
       </div>
     </div>
   </div>
@@ -2710,6 +2729,9 @@ function drawSecIso(){
   }
   frame();
 }
+
+/* ══ TERMINAL IN-PAGE NAV ══ */
+function termNav(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 
 /* ══ TERMINAL TIMESTAMP ══ */
 (function(){
