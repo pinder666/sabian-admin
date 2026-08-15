@@ -1259,6 +1259,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
         <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 7px var(--green)"></div>
         <span style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,170,0,.55)">Authorized terminal</span>
       </div>
+      <div style="font-family:'Courier New',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,170,0,.9);border:1px solid rgba(255,170,0,.35);padding:3px 10px;background:rgba(255,170,0,.06)">Demo</div>
     </div>
     <div style="display:flex;align-items:center;gap:2.5rem">
       <a href="#term-assess" onclick="document.getElementById('cty-input').focus();return false" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none">Assessment</a>
@@ -1324,6 +1325,10 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
       <!-- 16 indicators -->
       <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:1rem">Indicator breakdown</div>
       <div id="assess-indicators" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:rgba(255,170,0,.06)"></div>
+      <div id="assess-demo-note" style="display:none;margin-top:1.2rem;align-items:center;justify-content:space-between;gap:2rem;padding:1rem 1.4rem;border:1px solid rgba(255,170,0,.18);background:rgba(255,170,0,.03);flex-wrap:wrap">
+        <span style="font-family:'Courier New',monospace;font-size:12px;color:rgba(255,170,0,.6)">Demo assessment. Live data, real-time monitoring, and dossier production are available under a full access contract.</span>
+        <a href="mailto:support@sabian.ai?subject=Full Access — Terminal" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--warn);text-decoration:none;white-space:nowrap">Request full access &rarr;</a>
+      </div>
     </div>
   </div>
 
@@ -2782,6 +2787,8 @@ function runAssessment(){
       +'<span style="font-family:\'Courier New\',monospace;font-size:13px;color:'+c+';white-space:nowrap">'+v+' '+trendArrow(v)+'</span>';
     grid.appendChild(cell);
   });
+  var note=document.getElementById('assess-demo-note');
+  if(note)note.style.display='flex';
   out.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
