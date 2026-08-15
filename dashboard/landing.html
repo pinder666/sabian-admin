@@ -1112,17 +1112,17 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
 <div style="height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;background:#020508">
   <div style="width:min(400px,88vw)">
     <div style="border:1px solid rgba(255,34,68,.25);background:#020508;padding:2.5rem">
-      <div style="font-size:.38rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,34,68,.5);margin-bottom:2rem;font-family:'Courier New',Consolas,monospace">Sabian Technology &middot; Restricted Access</div>
+      <div style="font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,34,68,.5);margin-bottom:2rem;font-family:'Courier New',Consolas,monospace">Sabian Technology &middot; Restricted Access</div>
       <div style="display:flex;gap:0;margin-bottom:.75rem">
         <input id="gate-code" type="password" placeholder="Enter access code" autocomplete="off"
-          style="flex:1;background:rgba(255,34,68,.03);border:1px solid rgba(255,34,68,.3);border-right:none;padding:13px 16px;color:var(--bright);font-family:'Courier New',Consolas,monospace;font-size:.82rem;letter-spacing:.06em;outline:none;caret-color:var(--crit);width:100%;box-sizing:border-box"
+          style="flex:1;background:rgba(255,34,68,.03);border:1px solid rgba(255,34,68,.3);border-right:none;padding:14px 18px;color:var(--bright);font-family:'Courier New',Consolas,monospace;font-size:15px;letter-spacing:.04em;outline:none;caret-color:var(--crit);width:100%;box-sizing:border-box"
           onkeydown="if(event.key==='Enter')checkGateCode()">
         <button onclick="checkGateCode()"
-          style="background:rgba(255,34,68,.08);border:1px solid rgba(255,34,68,.3);color:var(--crit);font-family:'Courier New',Consolas,monospace;font-size:.72rem;letter-spacing:.14em;padding:13px 20px;cursor:pointer;white-space:nowrap">
+          style="background:rgba(255,34,68,.08);border:1px solid rgba(255,34,68,.3);color:var(--crit);font-family:'Courier New',Consolas,monospace;font-size:13px;letter-spacing:.1em;padding:14px 22px;cursor:pointer;white-space:nowrap">
           Enter
         </button>
       </div>
-      <div id="gate-err" style="font-size:.72rem;color:var(--crit);font-family:'Courier New',Consolas,monospace;display:none">Access denied.</div>
+      <div id="gate-err" style="font-size:13px;color:var(--crit);font-family:'Courier New',Consolas,monospace;display:none">Access denied.</div>
     </div>
   </div>
 </div>
