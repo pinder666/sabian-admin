@@ -16,15 +16,16 @@ This is the Sabian Technology landing page terminal — 8-page multi-page site b
 
 ## SESSION CHECKPOINT — 2026-08-14
 
-### Current pages (8 nav tabs)
+### Current pages (9 nav tabs)
 1. **Home** — convergence streams canvas (5 industry streams flowing to one point), 2 hero buttons: "Request access →" and "See it live ↓" (links to Intelligence page)
 2. **Data** — fragmented data types, Gartner stats strip (897 apps / 29% / 70% / 40%)
 3. **Latent** — "The answer is already in your data. Sabian Technology reads the combination." — silo argument removed from headline
 4. **Engine** — "The world built the infrastructure. Sabian Technology reads what it cannot." — rewritten with research data: $725B / 897 apps / 29% / 70%
 5. **Sectors** — "Five sectors. One reading position." — silo argument removed, sector-specific framing
 6. **Intelligence** — Theoritic Intelligence definition. 2-column asymmetric layout: reactive+predictive stacked left (faded), Theoritic dominant right. Three-condition definition written out.
-7. **Access** — "Access is by conversation." White paper direct download button (green, links to white paper artifact). Contact button.
-8. **Security** — NEW PAGE. Hero: "We hold a read position. Not your data." Architecture canvas: 5 company vaults, Sabian Technology center, cyan read-only particles flowing inward, green finding pulses outward. Two commitments (read-only / isolated). One-way intelligence statement. What we do / what we never do. Four auth cards. Compliance row.
+7. **Agents** — NEW PAGE. Hero: "We deploy the agent. You receive the finding." Canvas: dispatch flow animation (endpoint box → execution layers lighting up → finding box). Three phases: Mission Briefing / Deployment / Reporting. Six mission cards by vertical (Wholesale/Sovereign/Healthcare/Energy/Defense/Custom). Finding format JSON. CTA: "Discuss a mission →". No source names, no trade secrets — client sees the mission model only.
+8. **Access** — "Access is by conversation." White paper direct download button (green, links to white paper artifact). Contact button.
+9. **Security** — Hero: "We hold a read position. Not your data." Architecture canvas: 5 company vaults, Sabian Technology center, cyan read-only particles flowing inward, green finding pulses outward. Two commitments (read-only / isolated). One-way intelligence statement. What we do / what we never do. Four auth cards. Compliance row.
 
 ### White paper (separate artifact)
 Print-ready 5-page PDF-on-demand. Pages: Cover · The Bet ($725B / energy crisis) · The Gap (897/29%/40% agentic crisis / sovereign) · The Category (Theoritic Intelligence + 3-column ecosystem: Amazon built / Meta released / Sabian occupies) · The Window (18-36 months / Palantir validation). Save as PDF button using `window.print()`.
@@ -41,11 +42,11 @@ Font: 'Courier New', Consolas, monospace
 - **No silo argument repeated** — Data page establishes it once. Every other page assumes it landed.
 - **No three equal columns by default** — vary layouts: 2-col, 4-col, asymmetric
 
-### What still needs to be built (from audit)
+### What still needs to be built
 - [ ] How clients connect — three paths (CRM OAuth, CSV, API key) with animated particles on Engine page
-- [ ] AI agents page — infrastructure exists: `agent_receiver.cjs`, `deploy_smart_agent.cjs`, `llm_router.cjs`. Story: agents land at a URL, receive a task, execute against full Sabian stack, report back. Position as deployable intelligence units. New nav tab or Engine sub-section.
+- [x] AI agents page — DONE. 9th nav tab. Mission model: Sabian deploys agents FOR clients. Canvas dispatch flow animation. Six mission cards by vertical. No trade secrets exposed.
 - [ ] Historical depth (237 years, 1789 to present) — visual timeline on Intelligence page using V-Dem governance data
-- [ ] 3rd party reading story — "data your operation generates that no one told us to read" (FIRMS fire, GPS jamming, dark vessel, OpenSky, night lights) — most powerful theoritic intelligence demonstration
+- [ ] 3rd party reading story — "data your operation generates that no one told us to read" — most powerful theoritic intelligence demonstration. Keep source names off site.
 - [ ] "Sabian Technology" name audit — some pages may still say just "Sabian" in body copy
 
 ---
