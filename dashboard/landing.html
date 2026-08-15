@@ -1250,32 +1250,41 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
 <!-- PAGE 11 — SOVEREIGN INTELLIGENCE TERMINAL                  -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <div id="p-terminal" class="page" style="background:#020508">
-  <!-- Nav -->
-  <div class="nav" style="background:#020508;border-bottom:1px solid rgba(255,170,0,.12)"><div class="nav-i">
-    <img class="lnd-logo" src="/uploads/logo/sabian-logo.png" alt="Sabian">
-    <div class="nt">
-      <a class="np" href="#home">Home</a>
-      <a class="np" href="#data">Data</a>
-      <a class="np" href="#latent">Latent</a>
-      <a class="np" href="#solution">Engine</a>
-      <a class="np" href="#verticals">Sectors</a>
-      <a class="np" href="#theoritic">Intelligence</a>
-      <a class="np" href="#agents">Agents</a>
-      <a class="np" href="#access">Access</a>
-      <a class="np" href="#security">Security</a>
+  <!-- Terminal nav — purpose-built, no public tabs -->
+  <div style="background:#020508;border-bottom:1px solid rgba(255,170,0,.22);height:58px;display:flex;align-items:center;padding:0 8vw;justify-content:space-between;position:sticky;top:0;z-index:100">
+    <div style="display:flex;align-items:center;gap:2rem">
+      <img class="lnd-logo" src="/uploads/logo/sabian-logo.png" alt="Sabian" style="opacity:.85">
+      <div style="width:1px;height:20px;background:rgba(255,170,0,.18)"></div>
+      <div style="display:flex;align-items:center;gap:.55rem">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 7px var(--green)"></div>
+        <span style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,170,0,.55)">Authorized terminal</span>
+      </div>
     </div>
-    <div class="nav-r"><span style="font-family:'Courier New',Consolas,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,170,0,.5)">Session authorized</span></div>
-  </div></div>
+    <div style="display:flex;align-items:center;gap:2.5rem">
+      <a href="#term-assess" onclick="document.getElementById('cty-input').focus();return false" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none">Assessment</a>
+      <a href="#term-dossier" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none">Dossier</a>
+      <a href="#term-mandate" style="font-family:'Courier New',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,170,0,.6);text-decoration:none">Mandate</a>
+      <div style="width:1px;height:18px;background:rgba(255,170,0,.15)"></div>
+      <span style="font-family:'Courier New',monospace;font-size:11px;color:rgba(255,170,0,.35)" id="term-ts"></span>
+      <a href="#home" style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,170,0,.35);text-decoration:none">&larr; Exit</a>
+    </div>
+  </div>
 
   <!-- HERO -->
   <div style="padding:4rem 8vw 3.5rem;border-bottom:1px solid rgba(255,170,0,.1)">
-    <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:1.4rem" id="term-ts"></div>
+    <div style="display:flex;align-items:center;gap:2rem;margin-bottom:1.6rem;flex-wrap:wrap">
+      <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,170,0,.35)">Live since May 2026</div>
+      <div style="width:1px;height:14px;background:rgba(255,170,0,.15)"></div>
+      <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,170,0,.35)">3 months of recorded baseline</div>
+      <div style="width:1px;height:14px;background:rgba(255,170,0,.15)"></div>
+      <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,170,0,.35)">160 countries · 16 indicators</div>
+    </div>
     <h1 style="font-size:clamp(1.8rem,4vw,3rem);color:var(--warn);font-weight:400;line-height:1.25;max-width:780px;margin-bottom:1.4rem">Capital leaves four years before people do.<br>Sabian Technology reads both.</h1>
-    <p style="font-size:1rem;color:var(--text);max-width:620px;line-height:1.9">Your current country risk view is a ratings action waiting to happen. Sabian Technology monitors 160 countries continuously across 16 live indicators. By the time a ratings agency moves, the pattern has been in our system for months. This terminal gives you that read — before the market prices it.</p>
+    <p style="font-size:1rem;color:var(--text);max-width:640px;line-height:1.9">Your current country risk view is a ratings action waiting to happen. By the time a ratings agency moves, the pattern has been in our system for months. Run a country assessment below. Request a dossier. Commission a monitoring mandate. Every assessment draws on three months of continuously recorded baseline — the system has been watching before you arrived.</p>
   </div>
 
   <!-- COUNTRY ASSESSMENT MODULE -->
-  <div style="padding:3rem 8vw;border-bottom:1px solid rgba(255,170,0,.1)">
+  <div id="term-assess" style="padding:3rem 8vw;border-bottom:1px solid rgba(255,170,0,.1)">
     <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:1rem">Country assessment</div>
     <div style="display:flex;gap:0;max-width:560px;margin-bottom:1.5rem">
       <input id="cty-input" type="text" placeholder="Enter country name" autocomplete="off"
@@ -1412,7 +1421,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
   </div>
 
   <!-- COMMISSION -->
-  <div style="padding:3rem 8vw;border-bottom:1px solid rgba(255,170,0,.1)">
+  <div id="term-mandate" style="padding:3rem 8vw;border-bottom:1px solid rgba(255,170,0,.1)">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;max-width:1000px">
       <div>
         <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:1rem">Commission a monitoring mandate</div>
@@ -1437,9 +1446,80 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     </div>
   </div>
 
-  <div class="foot" style="background:#020508;border-top:1px solid rgba(255,170,0,.1)">
-    <span style="color:rgba(255,170,0,.35);font-family:'Courier New',monospace;font-size:11px;letter-spacing:.12em">Sabian Technology · Authorized session · <span id="term-ts2"></span></span>
-    <a href="mailto:support@sabian.ai" style="color:rgba(255,170,0,.35);font-family:'Courier New',monospace;font-size:11px;letter-spacing:.1em">support@sabian.ai</a>
+  <!-- DOSSIER -->
+  <div id="term-dossier" style="padding:3rem 8vw;border-bottom:1px solid rgba(255,170,0,.1);background:#050a10">
+    <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:1rem">Intelligence dossier</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;max-width:1060px">
+      <div>
+        <h2 style="font-size:1.4rem;color:var(--warn);font-weight:400;line-height:1.4;margin-bottom:1.1rem">The document your committee can hold.</h2>
+        <p style="font-size:.9rem;color:var(--text);line-height:1.9;margin-bottom:.9rem">The terminal is your read. The dossier is what you take out of it. Twelve pages. Blockchain-stamped. Every assessment, every indicator decomposition, every band crossing — compiled, coded, and signed by the system. The stamp is traceable. Every page carries a unique code that references back to the exact Sabian Technology dataset that produced it.</p>
+        <p style="font-size:.9rem;color:var(--text);line-height:1.9;margin-bottom:1.5rem">Your investment committee, your board, your government counterpart — they can verify this document was produced at the exact time and date stated. It is not a report someone wrote. It is a record the system produced and signed. That distinction is what makes it defensible.</p>
+        <a href="mailto:support@sabian.ai?subject=Dossier Request — Terminal" style="font-family:'Courier New',monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--warn);text-decoration:none;border:1px solid rgba(255,170,0,.3);padding:13px 24px;background:rgba(255,170,0,.04);display:inline-block">Request a dossier &rarr;</a>
+      </div>
+      <div>
+        <div style="border:1px solid rgba(255,170,0,.15);padding:1.5rem;margin-bottom:1px">
+          <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,170,0,.4);margin-bottom:1rem">12-page dossier — contents</div>
+          <div style="display:flex;flex-direction:column;gap:0">
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">01</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Executive summary — country, score, band, decision window</span>
+            </div>
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">02</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Convergence score decomposition — all 16 indicators, weights, contribution</span>
+            </div>
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">03</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Historical trajectory — score over 3 months, all band crossings timestamped</span>
+            </div>
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">04</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Capital flight lead analysis — 4-year pattern vs current reading</span>
+            </div>
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">05</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Conflict & security assessment — event-level breakdown</span>
+            </div>
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">06</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Governance trajectory — institutional stability, going-dark events</span>
+            </div>
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">07</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Fiscal & economic stress — debt position, currency stress, fiscal cascade</span>
+            </div>
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">08</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Trade & sanctions exposure — corridor risk, indirect holdings footprint</span>
+            </div>
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">09</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Electronic Warfare Activity — 72-hour lead analysis, geographic concentration</span>
+            </div>
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">10</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Comparative context — vs corridor neighbors and peer economies</span>
+            </div>
+            <div style="padding:.55rem 0;border-bottom:1px solid rgba(255,170,0,.07);display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">11</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Decision window summary — what changes the thesis, recommended horizon</span>
+            </div>
+            <div style="padding:.55rem 0;display:flex;gap:1rem;align-items:baseline">
+              <span style="font-family:'Courier New',monospace;font-size:10px;color:rgba(255,170,0,.3);min-width:20px">12</span>
+              <span style="font-family:'Courier New',monospace;font-size:12px;color:var(--text)">Methodology & verification — published equation, blockchain stamp, dossier code</span>
+            </div>
+          </div>
+        </div>
+        <div style="background:#020508;border:1px solid rgba(255,170,0,.1);border-top:none;padding:.9rem 1.5rem;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-family:'Courier New',monospace;font-size:11px;color:rgba(255,170,0,.35);letter-spacing:.12em;text-transform:uppercase">Blockchain-stamped · Tamper-proof · Uniquely coded</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#020508;padding:1.5rem 8vw;border-top:1px solid rgba(255,170,0,.12);display:flex;align-items:center;justify-content:space-between">
+    <span style="color:rgba(255,170,0,.3);font-family:'Courier New',monospace;font-size:11px;letter-spacing:.12em">Sabian Technology · Authorized session · <span id="term-ts2"></span></span>
+    <a href="mailto:support@sabian.ai" style="color:rgba(255,170,0,.3);font-family:'Courier New',monospace;font-size:11px;letter-spacing:.1em;text-decoration:none">support@sabian.ai</a>
   </div>
 </div>
 
