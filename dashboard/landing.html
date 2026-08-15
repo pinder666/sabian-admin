@@ -1,252 +1,2111 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sabian</title>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+﻿<title>Sabian</title>
+<style>
+:root{
+  --bg:#040810;--panel:#070d1a;--panel2:#0a1222;
+  --border:#0e1c30;--border2:#152640;
+  --cyan:#00c8e8;--green:#00ff88;--warn:#ffaa00;--crit:#ff2244;
+  --text:#8aaccc;--bright:#cce4f8;--white:#eef6ff;--dim:#2a4060;
+  --f:'Courier New',Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-smoothing:antialiased}
+.pv{display:none}.pv.active{display:block;min-height:100vh}
 
-    :root {
-      --bg:     #060a14;
-      --panel:  #0a0f1e;
-      --border: #162035;
-      --border2:#1d2d47;
-      --cyan:   #00b8d4;
-      --dim:    #3d5570;
-      --text:   #b8cce0;
-      --bright: #e0eeff;
-      --mono: 'Share Tech Mono', 'Courier New', monospace;
-    }
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;height:60px;display:flex;align-items:center;gap:10px;padding:0 24px;border-bottom:1px solid var(--border2);background:rgba(4,8,16,0.96);backdrop-filter:blur(6px)}
+.nav-brand{text-decoration:none;display:flex;align-items:center}
+.nav-logo-img{width:clamp(90px,11vw,150px);height:auto;display:block;filter:drop-shadow(0 0 18px rgba(0,200,232,.85)) drop-shadow(0 0 6px rgba(0,100,255,.6))}
+.nav-sep{width:1px;height:14px;background:var(--border2);margin:0 2px}
+.nav-pages{display:flex}
+.np{font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);text-decoration:none;padding:4px 12px;border:1px solid transparent;border-radius:1px;transition:color .12s,border-color .12s,background .12s;white-space:nowrap}
+.np:hover{color:var(--text)}.np.on{color:var(--cyan);border-color:rgba(0,200,232,.2);background:rgba(0,200,232,.05)}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:4px}
+.nav-cta{font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:5px 14px;border:1px solid rgba(0,200,232,.3);color:var(--cyan);background:rgba(0,200,232,.05)}
+.nav-cta:hover{background:rgba(0,200,232,.12)}
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--mono);
-      -webkit-font-smoothing: antialiased;
-    }
+/* ── SECTION LABELS ── */
+.pg-label{display:flex;align-items:center;gap:12px;padding:0 28px;height:36px;border-bottom:1px solid var(--border);font-size:.5rem;letter-spacing:.32em;text-transform:uppercase;background:var(--panel)}
+.pg-label::before{content:'';width:16px;height:1px;background:var(--dim)}
+.pg-label.cy{color:var(--cyan)}.pg-label.g{color:var(--green)}.pg-label.d{color:var(--dim)}.pg-label.w{color:var(--warn)}
+.pg-label-r{margin-left:auto}
 
-    /* NAV */
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.1rem 2.5rem;
-      border-bottom: 1px solid var(--border);
-    }
+/* ── UTILITY ── */
+.mch{height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border);flex-shrink:0}
+.mch-l{font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan)}
+.mch-r{font-size:.44rem;letter-spacing:.18em;text-transform:uppercase}
+.cl{color:var(--green)}.cw{color:var(--warn)}.cc{color:var(--cyan)}.cr{color:var(--crit)}
+.mc{display:grid;gap:1px;background:var(--border)}
+.mc2{grid-template-columns:1fr 1fr}.mc3{grid-template-columns:repeat(3,1fr)}
+.mcc{background:var(--panel)}.mcd{background:var(--bg)}
+.foot{height:38px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);background:var(--panel);font-size:.48rem;letter-spacing:.14em;color:var(--dim)}
+.foot a{color:var(--dim);text-decoration:none}
 
-    .logo {
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      font-weight: 400;
-      letter-spacing: 0.5em;
-      text-decoration: none;
-      text-transform: uppercase;
-      color: var(--cyan);
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-    }
+/* ══════════════════════════════════════
+   PAGE 1 — LANDING
+══════════════════════════════════════ */
+.lnd-hero{min-height:calc(100vh - 44px);display:flex;flex-direction:column;justify-content:flex-end;padding:5vw 8vw 6vw;position:relative;overflow:hidden}
+.lnd-logo{display:none}
+.lnd-line{width:min(380px,60vw);height:1px;background:var(--border2);position:relative;overflow:hidden;margin-bottom:3rem}
+.lnd-line::after{content:'';position:absolute;left:-100%;top:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:sw 3.2s ease-in-out infinite}
+@keyframes sw{0%{left:-40%}100%{left:140%}}
+.lnd-h1{font-size:clamp(3rem,8.5vw,7.5rem);color:var(--white);letter-spacing:-.02em;line-height:1.0;margin-bottom:2rem;font-weight:800}
+.lnd-sub{font-size:clamp(.95rem,1.6vw,1.25rem);color:var(--text);line-height:1.9;letter-spacing:.03em;max-width:640px;margin-bottom:3rem}
+.lnd-nav{display:flex;gap:16px;flex-wrap:wrap}
+.lnd-pg-btn{font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;padding:10px 22px;border:1px solid var(--border2);color:var(--dim);transition:all .15s}
+.lnd-pg-btn:hover,.lnd-pg-btn.primary{color:var(--cyan);border-color:rgba(0,200,232,.3);background:rgba(0,200,232,.05)}
+.lnd-pg-btn.primary{color:var(--white);border-color:rgba(0,200,232,.5);background:rgba(0,200,232,.09)}
+/* Background canvas */
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.35;pointer-events:none}
 
-    .live {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--cyan);
-      box-shadow: 0 0 8px rgba(0,184,212,0.8);
-      flex-shrink: 0;
-      animation: lp 2.5s ease-in-out infinite;
-    }
-    @keyframes lp { 0%,100%{opacity:1} 50%{opacity:0.25} }
+/* ══════════════════════════════════════
+   PAGE 2 — DATA
+══════════════════════════════════════ */
+.data-hero{padding:2rem 8vw 1.75rem;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(0,200,232,.03) 0%,transparent 60%)}
+.pg-tag{font-size:.52rem;letter-spacing:.35em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.25rem;display:flex;align-items:center;gap:12px}
+.pg-tag::before{content:'';width:14px;height:1px;background:var(--cyan)}
+.pg-h1{font-size:clamp(1.6rem,4vw,3rem);color:var(--white);letter-spacing:.05em;line-height:1.3;margin-bottom:1rem}
+.pg-sub{font-size:clamp(.85rem,1.4vw,1.1rem);color:var(--text);line-height:2;letter-spacing:.03em;max-width:600px}
 
-    .nav-r { display: flex; align-items: center; gap: 2.5rem; }
+/* Data type cards */
+.dtype-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
+.dtype{background:var(--panel);padding:1.25rem 1.5rem}
+.dtype-tag{font-size:.48rem;letter-spacing:.3em;text-transform:uppercase;color:var(--cyan);margin-bottom:.75rem}
+.dtype-h{font-size:1.25rem;color:var(--white);letter-spacing:.04em;margin-bottom:.75rem}
+.dtype-p{font-size:.88rem;color:var(--text);line-height:1.9}
+.dtype-ex{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:.72rem;color:var(--dim);line-height:1.75;letter-spacing:.03em}
+.dtype-ex span{color:var(--bright)}
 
-    .nav-link {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--dim);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-link:hover { color: var(--text); }
-    .nav-link.hi { color: var(--text); }
-    .nav-link.hi:hover { color: var(--cyan); }
+/* Storage diagram */
+.storage-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.storage-side{background:var(--panel);padding:2rem 2rem}
+.storage-h{font-size:.88rem;color:var(--white);letter-spacing:.06em;margin-bottom:1rem}
+.silo{border:1px solid var(--border2);background:var(--bg);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+.silo-n{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text)}
+.silo-ct{font-size:.58rem;color:var(--dim)}
+.silo-status{font-size:.44rem;letter-spacing:.18em;text-transform:uppercase}
+.silo.iso .silo-status{color:var(--warn)}.silo.conn .silo-status{color:var(--green)}
+.storage-note{font-size:.78rem;color:var(--dim);line-height:1.9;margin-top:1.25rem;letter-spacing:.03em}
+.storage-note strong{color:var(--text);font-weight:400}
 
-    /* IDENTITY BLOCK */
-    .identity {
-      padding: 5rem 2.5rem 3.5rem;
-      border-bottom: 1px solid var(--border);
-    }
+/* Stream panel on data page */
+.stream-wrap{background:var(--bg);overflow:hidden}
+.stream{padding:12px 18px;display:flex;flex-direction:column;gap:3px;height:240px;overflow:hidden;font-size:.65rem}
+.sl{color:var(--dim);white-space:nowrap;overflow:hidden;line-height:1.7}
+.sl .ts2{color:var(--border2)}.sl .key{color:var(--text)}.sl .src{color:var(--dim)}
+.sl.new{animation:fi .25s ease;color:var(--bright)}
+@keyframes fi{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 
-    .id-name {
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 400;
-      letter-spacing: 0.45em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      text-shadow: 0 0 60px rgba(0,184,212,0.25);
-      line-height: 1;
-      margin-bottom: 1.75rem;
-    }
+/* ══════════════════════════════════════
+   PAGE 3 — LATENT DATA
+══════════════════════════════════════ */
+.lat-hero{padding:4rem 8vw 3rem;border-bottom:1px solid var(--border)}
+.lat-quote{font-size:clamp(1.4rem,3vw,2.4rem);color:var(--white);line-height:1.55;letter-spacing:.04em;margin-bottom:1.5rem;max-width:750px}
+.lat-quote strong{color:var(--cyan);font-weight:400}
+.lat-note{font-size:clamp(.85rem,1.4vw,1.05rem);color:var(--text);line-height:2;letter-spacing:.03em;max-width:580px}
 
-    .id-rule {
-      width: 100%;
-      height: 1px;
-      background: var(--border2);
-      margin-bottom: 2.5rem;
-    }
+/* Latent table */
+.lt-hd{display:grid;grid-template-columns:140px 1fr 90px 1fr;background:var(--panel);border-bottom:1px solid var(--border)}
+.lt-hc{padding:.6rem 1.5rem;border-right:1px solid var(--border);font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.lt-hc:last-child{border-right:none}
+.ltr{display:grid;grid-template-columns:140px 1fr 90px 1fr;border-bottom:1px solid var(--border);background:var(--bg)}
+.ltr:last-child{border-bottom:none}
+.ltr-yr{padding:1.25rem 1.5rem;border-right:1px solid var(--border);font-size:.7rem;letter-spacing:.12em;color:var(--dim);line-height:1.75}
+.ltr-raw{padding:1.25rem 1.5rem;border-right:1px solid var(--border);font-size:.68rem;color:var(--text);line-height:1.9;font-variant-numeric:tabular-nums}
+.ltr-proc{padding:.75rem 1rem;border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.lpb{width:100%;height:1px;background:var(--border2);position:relative;overflow:hidden}
+.lpb::after{content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:sw2 1.8s ease-in-out infinite}
+@keyframes sw2{0%{left:-100%}100%{left:100%}}
+.lplbl{font-size:.46rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+.ltr-out{padding:1.25rem 1.5rem}
+.lo-lbl{font-size:.46rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:.4rem}
+.lo-val{font-size:.88rem;color:var(--green);letter-spacing:.06em}
+.lo-sub{font-size:.68rem;color:var(--text);margin-top:.3rem;line-height:1.75}
 
-    .id-copy {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      max-width: 900px;
-    }
+/* Business equivalent */
+.biz-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.biz{background:var(--panel);padding:2rem 1.75rem}
+.biz-tag{font-size:.46rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem}
+.biz-raw{font-size:.7rem;color:var(--text);line-height:1.85;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.biz-pbar{width:100%;height:1px;background:var(--border2);position:relative;overflow:hidden;margin-bottom:1rem}
+.biz-pbar::after{content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:sw2 2.2s ease-in-out infinite}
+.biz-out{font-size:.82rem;color:var(--green);letter-spacing:.04em}
 
-    .id-copy p {
-      font-size: 0.85rem;
-      color: var(--text);
-      line-height: 1.85;
-      letter-spacing: 0.04em;
-    }
+/* ══════════════════════════════════════
+   PAGE 4 — WHAT WE DO
+══════════════════════════════════════ */
+.sol-hero{padding:4rem 8vw 3rem;border-bottom:1px solid var(--border)}
 
-    /* VERTICALS */
-    .section {
-      padding: 3rem 2.5rem 4rem;
-    }
+/* Revelation */
+.rev-wrap{background:var(--bg);position:relative;overflow:hidden}
+.rev-top{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.rev-stream{background:var(--bg)}
+.rev-output{background:var(--bg);display:flex;flex-direction:column}
+.rev-idle{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:var(--dim);font-size:.68rem;letter-spacing:.14em;gap:8px;padding:2rem;min-height:200px;text-align:center}
+.rev-act{display:none;flex:1;padding:1.5rem;flex-direction:column;gap:12px;min-height:200px}
+.rev-step{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.rev-bar{width:100%;height:1px;background:var(--border2);position:relative;overflow:hidden}
+.rev-bar::after{content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+.rev-bar.run::after{animation:sw 1s ease forwards}
+.rev-result{display:none;border:1px solid rgba(0,200,232,.2);background:rgba(0,200,232,.04);padding:1.25rem;margin-top:.5rem}
+.rr-label{font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:.75rem}
+.rr-line{font-size:.75rem;color:var(--text);line-height:2}
+.rr-em{color:var(--warn)}
+.rr-score{font-size:1.6rem;color:var(--crit);letter-spacing:.06em;margin-top:.5rem}
+.rr-note{font-size:.6rem;color:var(--dim);margin-top:.4rem;line-height:1.8;letter-spacing:.05em}
 
-    .section-hd {
-      font-size: 0.58rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--dim);
-      margin-bottom: 1.25rem;
-    }
+/* Pipeline */
+.pipeline{display:flex;align-items:center;padding:2rem 2.5rem;gap:0;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.ps{display:flex;flex-direction:column;gap:5px;padding:14px 20px;border:1px solid var(--border);background:var(--panel);min-width:110px}
+.ps.on{border-color:rgba(0,200,232,.35);background:rgba(0,200,232,.05)}
+.ps-lbl{font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.ps.on .ps-lbl{color:var(--cyan)}
+.ps-val{font-size:.9rem;color:var(--bright);letter-spacing:.06em}
+.ps.on .ps-val{color:var(--cyan)}
+.parr{font-size:.75rem;color:var(--cyan);padding:0 10px;flex-shrink:0;opacity:.35}
 
-    .grid {
-      border: 1px solid var(--border);
-    }
+/* Statement rows */
+.strow{display:grid;grid-template-columns:160px 1fr;border-bottom:1px solid var(--border)}
+.strow:last-child{border-bottom:none}
+.st-lbl{padding:1.5rem 1.25rem;border-right:1px solid var(--border);font-size:.5rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;background:var(--panel)}
+.st-txt{padding:1.5rem 2rem;font-size:1rem;color:var(--bright);line-height:1.9;letter-spacing:.03em}
+.st-txt strong{color:var(--white);font-weight:400}
 
-    .v-row {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      border-bottom: 1px solid var(--border);
-      background: var(--panel);
-    }
-    .v-row:last-child { border-bottom: none; }
+/* ══════════════════════════════════════
+   PAGE 5 — VERTICALS
+══════════════════════════════════════ */
+.vert-hero{padding:4rem 8vw 3rem;border-bottom:1px solid var(--border)}
 
-    .v-label {
-      padding: 1.1rem 1.5rem;
-      border-right: 1px solid var(--border);
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      display: flex;
-      align-items: center;
-    }
+/* Radar + signal panel */
+.sig-band{display:grid;grid-template-columns:260px 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
+.radar-wrap{background:var(--bg)}
+.sigs-wrap{background:var(--bg)}
+.sig-cards{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;background:var(--border)}
+.sigc{background:var(--panel);padding:1.25rem 1.25rem}
+.sigc-n{font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:.5rem}
+.sigc-v{font-size:1.6rem;font-weight:bold;letter-spacing:.04em;line-height:1;margin-bottom:.5rem;font-variant-numeric:tabular-nums}
+.sigc-m{font-size:.5rem;color:var(--dim)}
+.sigc canvas{display:block;width:100%;height:24px;margin:.5rem 0}
 
-    .v-text {
-      padding: 1.1rem 1.75rem;
-      font-size: 0.72rem;
-      color: var(--text);
-      line-height: 1.75;
-      letter-spacing: 0.03em;
-    }
+/* Verticals table */
+.vrow{display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid var(--border);background:var(--panel)}
+.vrow:last-child{border-bottom:none}
+.vlbl{padding:1.25rem 1.5rem;border-right:1px solid var(--border);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center}
+.vtxt{padding:1.25rem 2rem;font-size:.88rem;color:var(--text);line-height:1.95}
 
-    /* FOOTER */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 1.5rem 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
+/* Band bar */
+.bband{display:flex;gap:2rem;padding:1.5rem 2rem;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.bi{display:flex;align-items:center;gap:8px}
+.bdot{width:6px;height:6px;border-radius:50%}
+.bn{font-size:1.4rem;font-weight:bold;font-variant-numeric:tabular-nums}
+.bl{font-size:.48rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.btot{margin-left:auto}
 
-    .f-left {
-      font-size: 0.58rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--dim);
-    }
+@media(max-width:1100px){#ind-board{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){#ind-board{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1100px){.dtype-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){
+  .dtype-row,.storage-row,.biz-row,.sig-cards,.mc2,.mc3,.lt-hd,.ltr,.sig-band{grid-template-columns:1fr}
+  .lt-hc,.ltr-yr,.ltr-raw,.ltr-proc{border-right:none;border-bottom:1px solid var(--border)}
+  .strow,.vrow{grid-template-columns:1fr}
+  .st-lbl,.vlbl{border-right:none;border-bottom:1px solid var(--border)}
+  .pipeline{flex-direction:column}.parr{transform:rotate(90deg)}
+  .lnd-hero{padding:4rem 6vw}
+  .lnd-wordmark{letter-spacing:.4em}
+}
+</style>
 
-    .f-mail {
-      font-size: 0.58rem;
-      letter-spacing: 0.1em;
-      color: var(--dim);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .f-mail:hover { color: var(--text); }
 
-    @media (max-width: 760px) {
-      nav { padding: 1rem 1.25rem; }
-      .identity { padding: 3rem 1.25rem 2.5rem; }
-      .id-copy { grid-template-columns: 1fr; gap: 1.75rem; }
-      .section { padding: 2rem 1.25rem 3rem; }
-      .v-row { grid-template-columns: 1fr; }
-      .v-label { border-right: none; border-bottom: 1px solid var(--border); }
-      footer { padding: 1.25rem; }
-    }
-  </style>
-</head>
-<body>
-
-<nav>
-  <a class="logo" href="/">SABIAN <span class="live"></span></a>
-  <div class="nav-r">
-    <a class="nav-link" href="mailto:support@sabian.ai">Contact</a>
-    <a class="nav-link hi" href="/terminal">Terminal →</a>
+<!-- ════════════════════════════════════════
+     PAGE 1 · LANDING
+════════════════════════════════════════ -->
+<div id="p-home" class="pv">
+<nav class="nav">
+  <a class="nav-brand" href="#home"><img class="nav-logo-img" alt="Sabian"></a>
+  <span class="nav-sep"></span>
+  <div class="nav-pages">
+    <a class="np on" href="#home">Home</a>
+    <a class="np" href="#data">Data</a>
+    <a class="np" href="#latent">Latent</a>
+    <a class="np" href="#solution">Engine</a>
+    <a class="np" href="#verticals">Sectors</a>
+    <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#access">Access</a>
+    <a class="np" href="#security">Security</a>
   </div>
+  <div class="nav-r"><a class="nav-cta" href="mailto:support@sabian.ai">Contact</a></div>
 </nav>
 
-<div class="identity">
-  <div class="id-name">SABIAN</div>
-  <div class="id-rule"></div>
-  <div class="id-copy">
-    <p>The problem with data is never volume.<br>
-    It lives in fragments. Systems that were never built<br>
-    to speak to each other.</p>
-    <p>Every answer a business needs<br>
-    is already somewhere in that data.<br>
-    It just hasn't been read as one thing.</p>
+<div class="lnd-hero">
+  <canvas id="hero-canvas"></canvas>
+  <img class="lnd-logo" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAYGBgYHBgcICAcKCwoLCg8ODAwODxYQERAREBYiFRkVFRkVIh4kHhweJB42KiYmKjY+NDI0PkxERExfWl98fKcBBgYGBgcGBwgIBwoLCgsKDw4MDA4PFhAREBEQFiIVGRUVGRUiHiQeHB4kHjYqJiYqNj40MjQ+TERETF9aX3x8p//CABEIAfQB9AMBIgACEQEDEQH/xAAyAAEBAAMBAQEAAAAAAAAAAAAABQIDBAYBBwEBAQEBAQEAAAAAAAAAAAAAAAQDAgEF/9oADAMBAAIQAxAAAALygAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADpqb4wl1pzCElB6umeBAWd1U8Bf1EVXqS0eUNjzWvR9s9J2598S7F04wZ0+fZIz0AAAAAAAAAAAAAAAAAApacadssJdc9Qs8b8m/rOedKe8M/2niy7CuzrZeO3ln3xhVkV/n2eNpTbtOOrCZb1zhUeDvn26+fRQqnjVZ9DLSMJKQAAAAAAAAAAAAAAAAADu76MYVnZ83xke+8N7WGvv8fBee/pn5v6maZQrOy+OFbywNlSLTgr8/V4+K2ajpm7Mu+rPfy6cY/HJjrcw+a7JpY+bcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//xAAC/9oADAMBAAIAAwAAACEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0wggAoYwM4AEMAAAAAAAAAAAAAAAAAABUwmQCh98x0J9YAAAAAAAAAAAAAAAAAAAwmwCS83dwefZUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/xAAC/9oADAMBAAIAAwAAABDzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz7jzTzHHz7b/zzzzzzzzzzzzzzzzzzzzxzyvTRGmn2ahZ/wA888888888888888888+rb8gUuGfpmxQ888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888/8QAMREAAgICAQEGAwYHAAAAAAAAAQIDBAURABITITFBUWEGEBYVIjJAkeEgVHGAgpDB/9oACAECAQE/AP7qcdgbN6DtxIkaEkDfnrn0pN/ORfwRfCtmSJHNiMdSg60TrfJPhO2qMUnjYgfh0Rv5RxvJIkaDbMwAHqTzJYOxj4UlaRXUnTa8jynVe3ZigQgM58TzKYaxjhGzsrox11DyPKmMktVLVhZFAgXZB8Tob/KUkr38DFUNpInRyTv+pPPpfqVuxvxu4Gwuv3PGBUkEaIOj883ALEmIhMgQPGR1HwHcOYjEpQmmmS0Jz2RHQoA9/XjElmJHiefDVUSXHsP+CBd7PqeUrn2xFk6sh73JeLfkPL9OYFSuZrKw0QXBH+J4JY8i+Sxsx+8rkxn2/Y8xUTw4vNxuNMisCPcKfylHBxWqscxvxxlt/cI2Ro69eYzGVsZO9l8hEwEZGu4f95M4kmlceDOT+p+d6jXycFJlvRp0R+x3sD3HMZj6uKllsPkI3HZlddw8wfU8kbqd29WJ5WuRYjDQunQ80zdRXfrwZxpMrWtvEsfSOh9eanjxQQfE0EqSJ2cvU+wRoEqQeW7bV83NYiYErMSPQjlqzQfG3bEUqbng7xsb3rQ2PX/QX//EAC4RAAICAQIEAwYHAAAAAAAAAAECAwQRAAUSIUFREDFhBhMVIkCRFiAyVHGAkP/aAAgBAwEBPwD+1Nzd4KsvuuBnbGTjpr8QRftpPySb/AkjqIXOCRnSe0FcsA0TqD18HdURnY4Cgkn0GqO6w3JXjVGUgZGeo1ZnWvA8rAkKPIaobnDcLqqlWXoe2rF5ILFeEoSZTgHtzx9Jaaapu0lgQNIrIMY/gDXx7hI95UdFJ886BBAI8j47XMYU3GQIXKuDwjrzOtx3FrcccTVzEOMHiY6UYUD01vk5SssK/qlbGPQatVvhslGdByUBZPU9dbsQ22TkHIIUj7jRjemtG7GORUBxq/Ikl/a3Q5VmUj7j6S3ur153iFR3C4+YHzyM9tXr096JYVpupLg99RKUiRT0UDxqWpqMtoGq78T+o8tXrljcI44Upup4we+kHCijsANT1pNx3OVW4kjjXAOO2jtQShPXVy+fmXPRhpXll2OWNkbjTC4wckAjVaus21xQyAjijA9RqvBbW7VheNsRS8jjljOf8C//xAA7EAACAQICBQgHBgcAAAAAAAABAgMABBESBRMhMTMGEEFSYXKBkRQiMkJQUXE1U2KCoKEgI0NUkrHB/9oACAEBAAE/Av1W9rCJX27hWqhHuLWrg6ieVauDqJ5c+gNGxOhuZUDbcEB/3WltGQz2zukYEiDEYdPZzwwRapPUBxHTWpi+7XyrUxfdr5VJbRMpwUA1oSKOXSCrIgYZTsNcora3iigMcKIcx9kYc0Sax1WhDFlwyCp49XIR0dHNZxq7MWGOFNBCQRkFOhRyp6Kj2un1FXUcYhJCAfBrD+p4Vfcb8v8AAiNI6ou9jgK/l2Nj+GKOtEXhu7TM/tqcGrSdr6Neyp7uOK/Q8ycBe5z2uOoTGtBfang1cpuBb9881jH7T+App8LlU6P+1ex4oG+XNYb5PCtbhPkPSuyr2LFc46N9RcRO8KvOA3h8GtZhG5x3GtbCffXzrWQddPOmjilXcD20wysR8jXJ611t2ZTuiH7muUl1lhjtx75xP0Fcn7rVXmrO6UfuK5SWueBJxvQ4H6HmTgL3KsygkOYjd01rIOunnTYshyneNhrQH2kvdauU3At++eZQIYe6KLEsW6caQiaH6jbTKVYg9FWG+Twq9OE4PZUTiWPHzox6u4VfxDCrzgN4fCbPgD61PxpO8a0La+j2CY+0/rnxr0+x/u4f8xWmmgF8k9vKjE4E5TjtFKY76xHVljqWNopHjbepwNJwF7nPa8BK0H9reD1ym4Fv3zVnHmlx6tM6LvYCrhoXiYZ17NtWMntJ4ir6PBw/zqw3yeFX3G/LVpLkfKdzVNFnyHpVqvOA3h8GsmjGfMQN2+tZB10861kHXTzp7iFVxzA9gq1WOW7iErhVL+sTWkdJ20dlLqp42cjBQrA7+fQGkIkhkgmlVcDiuY4b6076ObsSQyo2dfWynHaKhni1S+sBgOmtZB10861kHXTzqS5iRdjAnsrQk0cekFaRwowO07K5RXNvLFAI5kc5j7Jxq0MSRbXXE9tXMmslJ6Nw5onySK1XDQvC3rr8xtqydVL5mAq8ZWl2HHZzQXKMgzNgau5ozFlDA4/rtf/EACgQAAIBAgQFBQEBAAAAAAAAAAABESExEEFxoVFhsfDxUIGRwdGgIP/aAAgBAQABPyH+rdgy0stvnSPEDxgd3hxnRBUE1rqsUZsVGNpLbSbnh54eLTITVCef2OVRDf0U4Z05YNS5uuglZdCPebRguhAoT5kLOc0kmXlGESTs5vke6k1VKM/Ru97koaP8KMlVHN0F2k4/WL7JZ66IrUNg7b+mOZph9S0feuGF57LlVbIeoi2710eG0D4GQ9RDKrsHbOJuur0bK7w3wL750PECwU7J9MazuxfBEu82kTRqGVutN5EB8F+z9BuqZR4gLB8gUhd64CTbSV2KidpWP46pCY3aP7F5ZoNoGInDStfInwuoTmPyyTRJuur0mfuMAUKj8Vsdr/YvWEIg+9B1cxyn8YmmH9ZGy9MZ1+fXAO9cCDa1XvkQi15wTmmlNC6Lz2XICssPVG0FjQV0yvcmJsH7TU3XV6NyHweIHiA1cmZJMys9Ci7K0YYCsmmNbA+hIuVRV0bBhQyHEt5KaaLHiB4gNDyEqi4/vwloT+jnDGnIphOlyiEJnKbGDeEOuglK0WF0VtBKJcCS1pGqrgmFJo5pJMEMrObf3a//xAAnEAEAAgAFAwMFAQAAAAAAAAABABEQITFRYUFx8FCBkSCgobHhwf/aAAgBAQABPxD7rfNvSE6roQOI+6fzg60Nxa5WltYAzFD8uFBkKsZ3EKMTF2L64qq04y18jyEEBFBvgjcbpm/DbQazYZrKNytNhXuw7tamd2BWSsLLh201UxyJOnGL3OjBrEIbjFMikazp09G090tVusj5fo548c9IT/0z+5GJ/ew+q3KU7e4Ha9Ri51x6agvlcH/aekqNosF5XmDffCFbJpDdcp8XsnhNno1iUBuBoyuJ/Brg68sG5dTkJqgh7qpmE1c0IzPuK8sc03EJGYjWJAXZ1cHSADQMy0hRuHSbVoAbrNUQLu6vyzOSK+ytwBbUGzpAlZle08rzE9LzZFHOG7b6Ej+vPm7jwmz0kC81U+ZTztYH+Hyy+0MhM8Oz8uTKINOOrNPvKpSs5a+ismo3XxXNbCpoFlX/AAhNJSwO3zNDGkjwTWnlUUQgbyvM8fuzSwh2dLBL5T5qpPCbPRnbklqDe6vF10EMDIUvtDDGJHepXS5eN9k3Q4z4dzVobJt9oJ11ZPeTxWK64uu1SZnszykbJjQxAN1umb5tyLFArIJkiinGAl6e+WTDS5oCMDrQSg1e8BNCVBduBu/zdKdRYgyfRUFdtffa/wD/2Q==" alt="Sabian">
+  <div class="lnd-line"></div>
+  <div style="font-size:.42rem;letter-spacing:.46em;text-transform:uppercase;color:var(--dim);margin-bottom:1.2rem">Sabian Technology · Theoritic Intelligence · <span id="hero-conv" style="color:var(--crit)">341</span> patterns active</div>
+  <h1 class="lnd-h1">World leaders in<br><span style="color:var(--cyan)">theoritic intelligence.</span></h1>
+  <p class="lnd-sub">Every organisation is surrounded by intelligence it cannot access — not because anything is missing, but because no one has ever read it from the outside, as one complete thing. Sabian Technology is the world's first theoritic intelligence company. We sit outside your data. We read all of it. We have no stake in what it says.</p>
+  <div class="lnd-nav">
+    <a class="lnd-pg-btn primary" href="#access">Request access →</a>
+    <a class="lnd-pg-btn" href="#theoritic">See it live ↓</a>
+  </div>
+</div>
+<div class="foot"><span>Sabian Global Inc. · sabian.ai</span><a href="mailto:support@sabian.ai">support@sabian.ai</a></div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 2 · DATA
+════════════════════════════════════════ -->
+<div id="p-data" class="pv">
+<nav class="nav">
+  <a class="nav-brand" href="#home"><img class="nav-logo-img" alt="Sabian"></a>
+  <span class="nav-sep"></span>
+  <div class="nav-pages">
+    <a class="np" href="#home">Home</a>
+    <a class="np on" href="#data">Data</a>
+    <a class="np" href="#latent">Latent</a>
+    <a class="np" href="#solution">Engine</a>
+    <a class="np" href="#verticals">Sectors</a>
+    <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#access">Access</a>
+    <a class="np" href="#security">Security</a>
+  </div>
+  <div class="nav-r"><a class="nav-cta" href="mailto:support@sabian.ai">Contact</a></div>
+</nav>
+
+<div class="data-hero">
+  <div class="pg-tag">Understanding data</div>
+  <h1 class="pg-h1">Data existed before AI.<br>The question is whether AI can read it.</h1>
+  <p class="pg-sub">For decades, organisations collected data in separate systems. When AI arrived, it met those same walls. The opportunity is not AI — it is giving AI something it can actually read.</p>
+</div>
+
+<!-- ERA TIMELINE -->
+<div class="pg-label d">How data has evolved · from fragmentation to intelligence</div>
+<div style="position:relative;border-bottom:1px solid var(--border);overflow:hidden;background:var(--bg)">
+  <canvas id="era-canvas" style="display:block;width:100%"></canvas>
+</div>
+
+<div class="pg-label cy" style="margin-top:1px">Types of data</div>
+<div class="dtype-row">
+  <div class="dtype">
+    <div class="dtype-tag">Structured</div>
+    <div class="dtype-h">Rows &amp; Columns</div>
+    <p class="dtype-p">Data that lives in defined fields. Databases, spreadsheets, records systems. Every entry has a schema. Every record has a place. The most common form of business data. The easiest to query in isolation.</p>
+  </div>
+  <div class="dtype">
+    <div class="dtype-tag">Unstructured</div>
+    <div class="dtype-h">Freeform Signal</div>
+    <p class="dtype-p">Emails, documents, call transcripts, sensor readings, images. No fixed schema. The majority of data generated by any organisation is unstructured. Almost none of it is read systematically.</p>
+    <div class="dtype-ex">e.g. <span>Sales call recording · Support email · Delivery photo · Field note</span></div>
+  </div>
+  <div class="dtype">
+    <div class="dtype-tag">Semi-Structured</div>
+    <div class="dtype-h">Partial Schema</div>
+    <p class="dtype-p">Data with some structure but no rigid schema. JSON exports, XML feeds, event logs, API responses. It knows what it is, but different records carry different fields. Cross-system comparison is difficult.</p>
+    <div class="dtype-ex">e.g. <span>API event log · System export · Webhook payload · Telemetry feed</span></div>
+  </div>
+  <div class="dtype" style="border-left:1px solid rgba(255,170,0,.12);background:rgba(255,170,0,.02)">
+    <div class="dtype-tag" style="color:var(--warn)">Fragmented</div>
+    <div class="dtype-h" style="color:var(--warn)">Never Read Together</div>
+    <p class="dtype-p">Data that exists correctly across all three forms above — structured, unstructured, semi-structured — held in systems that have never spoken to each other. The fourth problem. Not a data quality problem. A reading problem.</p>
+    <div class="dtype-ex" style="border-top:1px solid rgba(255,170,0,.12)">e.g. <span style="color:var(--warn)">CRM + ERP + Finance + Risk · All accurate · All isolated</span></div>
   </div>
 </div>
 
-<div class="section">
-  <div class="section-hd">Where it breaks</div>
-  <div class="grid">
-    <div class="v-row">
-      <div class="v-label">Financial Services</div>
-      <div class="v-text">Risk models running on market data that hasn't touched the credit ledger. Decisions made from one source when three are speaking.</div>
+<!-- FRAGMENTATION STATS -->
+<div style="background:var(--panel);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.9rem 2.5rem;display:flex;align-items:center;gap:2.5rem;flex-wrap:wrap">
+  <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)">The reality · Gartner 2026</div>
+  <div style="width:1px;height:28px;background:var(--border)"></div>
+  <div><div style="font-size:1.35rem;color:var(--warn);font-variant-numeric:tabular-nums;line-height:1">897</div><div style="font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:.2rem">avg enterprise applications</div></div>
+  <div style="width:1px;height:28px;background:var(--border)"></div>
+  <div><div style="font-size:1.35rem;color:var(--warn);font-variant-numeric:tabular-nums;line-height:1">29%</div><div style="font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:.2rem">can interface with each other</div></div>
+  <div style="width:1px;height:28px;background:var(--border)"></div>
+  <div><div style="font-size:1.35rem;color:var(--crit);font-variant-numeric:tabular-nums;line-height:1">70%</div><div style="font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:.2rem">discover infrastructure gaps after launching AI</div></div>
+  <div style="width:1px;height:28px;background:var(--border)"></div>
+  <div><div style="font-size:1.35rem;color:var(--crit);font-variant-numeric:tabular-nums;line-height:1">40%</div><div style="font-size:.42rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:.2rem">agentic AI projects canceled by 2027</div></div>
+</div>
+
+<!-- SILO EXPLANATION -->
+<div style="border-bottom:1px solid var(--border);background:var(--panel)">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
+    <div style="background:var(--panel);padding:2rem 2.5rem">
+      <div style="font-size:.48rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-bottom:1rem">What is a legacy system</div>
+      <p style="font-size:.92rem;color:var(--bright);line-height:2;margin-bottom:1rem">A company that has been operating for any length of time is running on multiple systems. One for each function. Each chosen at a different point in time, by a different team, to solve a different problem. As the business grew, it did not replace its systems. It added to them.</p>
+      <p style="font-size:.88rem;color:var(--text);line-height:2">What a company looks like after 20 years of operation is a collection of accurate, well-maintained systems that have never spoken to each other. Each one correct. None of them aware of what the others know.</p>
     </div>
-    <div class="v-row">
-      <div class="v-label">Wholesale / Trade</div>
-      <div class="v-text">Demand signal sitting in a rep's workflow. Inventory in an ERP. Chargeback patterns in a spreadsheet. The same account, three systems, no conversation.</div>
+    <div style="background:rgba(255,34,68,.03);padding:2rem 2.5rem;border-left:1px solid rgba(255,34,68,.1)">
+      <div style="font-size:.48rem;letter-spacing:.3em;text-transform:uppercase;color:var(--crit);margin-bottom:1rem">What this means in practice</div>
+      <p style="font-size:.92rem;color:var(--bright);line-height:2;margin-bottom:1rem">The same entity exists in three of those systems simultaneously. In one, it is your highest-value account. In another, it has unresolved issues. In a third, it shows a consistent pattern of declining engagement.</p>
+      <p style="font-size:.88rem;color:var(--text);line-height:2">Every team reads from their own system. Every decision is made from a partial view. The information needed to see the full picture exists. It is in the combination of all three. It has never been read that way.</p>
     </div>
-    <div class="v-row">
-      <div class="v-label">Sovereign / Institutional</div>
-      <div class="v-text">Macroeconomic feeds, conflict event data, and credit spreads processed in sequence. Never simultaneously. The correlation is always found after the fact.</div>
+  </div>
+  <div style="padding:.7rem 1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px">
+    <span style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)">Each system below is recording correctly. The data is accurate. None of them can see the others.</span>
+  </div>
+</div>
+
+<!-- SILO CANVAS - FULL WIDTH -->
+<div style="background:var(--bg);border-bottom:1px solid var(--border)">
+  <div style="height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border)">
+    <span style="font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)">Legacy systems · each recording · none connected</span>
+    <span style="font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--crit)">Isolated</span>
+  </div>
+  <canvas id="silo-canvas" style="display:block;width:100%;height:200px"></canvas>
+  <div style="padding:.7rem 1.5rem;border-top:1px solid var(--border)">
+    <span style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)">AI does not fix this. Feed an AI one system and it tells you about one system. The structure stays exactly where it was.</span>
+  </div>
+</div>
+
+<div class="pg-label" style="margin-top:1px;background:var(--bg);border-bottom:1px solid var(--border);padding:.55rem 1.25rem;font-size:.52rem;letter-spacing:.26em;text-transform:uppercase;color:var(--green)">Sabian Technology · reading the same data · right now</div>
+<div style="background:var(--bg);border-bottom:1px solid var(--border)">
+  <div style="height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border)">
+    <span style="font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--green)">Pattern detection · active</span>
+    <span style="font-size:.44rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)">Reading all systems simultaneously</span>
+  </div>
+  <canvas id="sabian-live-canvas" style="display:block;width:100%;height:240px"></canvas>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-top:1px solid var(--border)">
+    <div style="background:var(--panel);padding:.8rem 1.5rem">
+      <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:.3rem">What the technology sees</div>
+      <div style="font-size:.72rem;color:var(--dim);line-height:1.7">Every system. Every record. Read simultaneously as one thing.</div>
     </div>
-    <div class="v-row">
-      <div class="v-label">Supply Chain</div>
-      <div class="v-text">Port congestion data, procurement schedules, and customer delivery windows in separate systems. The delay is visible in each one. The impact isn't visible in any.</div>
+    <div style="background:rgba(0,255,136,.04);padding:.8rem 1.5rem;border-left:1px solid rgba(0,255,136,.15);border-right:1px solid rgba(0,255,136,.15)">
+      <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:.3rem">What surfaces</div>
+      <div style="font-size:.72rem;color:var(--bright);line-height:1.7">The pattern that was always in the combination. Now visible. The connection that no single system could show.</div>
     </div>
-    <div class="v-row">
-      <div class="v-label">Healthcare</div>
-      <div class="v-text">Clinical outcomes, supply chain, and billing operating in isolation. The operational signal that predicts the clinical problem exists. It's just never been in the same room.</div>
+    <div style="background:var(--panel);padding:.8rem 1.5rem">
+      <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:.3rem">Not reactive</div>
+      <div style="font-size:.72rem;color:var(--dim);line-height:1.7">Not waiting for a question. Already reading. Already finding.</div>
     </div>
   </div>
 </div>
 
-<footer>
-  <span class="f-left">Sabian Global Inc. · sabian.ai</span>
-  <a class="f-mail" href="mailto:support@sabian.ai">support@sabian.ai</a>
-</footer>
+<!-- AI OPPORTUNITY -->
+<div class="pg-label g" style="margin-top:1px">The opportunity · what changes when the data is unified</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)">
+  <div style="background:var(--panel);padding:2rem 1.75rem">
+    <div style="font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Before unification</div>
+    <div style="font-size:1.1rem;color:var(--text);letter-spacing:.04em;margin-bottom:.75rem;line-height:1.4">AI reads one system.<br>Tells you about one system.</div>
+    <div style="font-size:.82rem;color:var(--dim);line-height:1.9">The model is exceptional. The data it receives is a fragment. Every decision it makes is a decision made in the dark about the other systems.</div>
+  </div>
+  <div style="background:rgba(0,200,232,.04);padding:2rem 1.75rem;border:1px solid rgba(0,200,232,.12)">
+    <div style="font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);margin-bottom:.75rem">After unification</div>
+    <div style="font-size:1.1rem;color:var(--white);letter-spacing:.04em;margin-bottom:.75rem;line-height:1.4">AI reads every system.<br>Simultaneously. As one thing.</div>
+    <div style="font-size:.82rem;color:var(--text);line-height:1.9">The same model. Better data. The correlation that was always in the combined signal. Finally visible. Not a threat to performance. The engine behind it.</div>
+  </div>
+  <div style="background:var(--panel);padding:2rem 1.75rem">
+    <div style="font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem">What surfaces</div>
+    <div style="font-size:1.1rem;color:var(--bright);letter-spacing:.04em;margin-bottom:.75rem;line-height:1.4">Decisions no single<br>system could make.</div>
+    <div style="font-size:.82rem;color:var(--dim);line-height:1.9">Patterns detected before they compound. Risk visible before it lands. The structure surfaced before it becomes a problem. This is not AI replacing decisions. It is AI finally having the data to inform them.</div>
+  </div>
+</div>
 
-</body>
-</html>
+<div class="pg-label cy" style="margin-top:1px">Next · the latent concept</div>
+<div style="padding:2rem 8vw;border-bottom:1px solid var(--border)">
+  <p style="font-size:1rem;color:var(--text);line-height:2;max-width:640px">The era of AI is not threatened by data volume. It is limited by data fragmentation. Unify the data and the model does the rest.</p>
+  <a href="#latent" style="display:inline-block;margin-top:1.5rem;font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);text-decoration:none;padding:10px 22px;border:1px solid rgba(0,200,232,.3)">The latent concept →</a>
+</div>
+<div class="foot"><span>Sabian Global Inc. · sabian.ai</span><a href="mailto:support@sabian.ai">support@sabian.ai</a></div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 3 · LATENT DATA
+════════════════════════════════════════ -->
+<div id="p-latent" class="pv">
+<nav class="nav">
+  <a class="nav-brand" href="#home"><img class="nav-logo-img" alt="Sabian"></a>
+  <span class="nav-sep"></span>
+  <div class="nav-pages">
+    <a class="np" href="#home">Home</a>
+    <a class="np" href="#data">Data</a>
+    <a class="np on" href="#latent">Latent</a>
+    <a class="np" href="#solution">Engine</a>
+    <a class="np" href="#verticals">Sectors</a>
+    <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#access">Access</a>
+    <a class="np" href="#security">Security</a>
+  </div>
+  <div class="nav-r"><a class="nav-cta" href="mailto:support@sabian.ai">Contact</a></div>
+</nav>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
+  <div style="background:var(--bg);padding:4rem 5vw 3.5rem">
+    <div style="font-size:.52rem;letter-spacing:.35em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.5rem;display:flex;align-items:center;gap:12px"><span style="display:inline-block;width:14px;height:1px;background:var(--cyan)"></span>Latent structure</div>
+    <h1 style="font-size:clamp(1.8rem,4vw,3.5rem);color:var(--white);letter-spacing:.03em;line-height:1.2;margin-bottom:1.5rem">The answer is already in your data.<br>Sabian reads the combination.</h1>
+    <p style="font-size:clamp(.88rem,1.4vw,1.05rem);color:var(--text);line-height:2;max-width:520px">The pattern that tells you which customer is leaving, which supplier is failing, which risk is building — it exists right now. Not in any one system. In the intersection of all of them. Sabian reads the intersection. That is where the intelligence was always hiding.</p>
+  </div>
+  <div style="background:var(--panel);display:flex;flex-direction:column">
+    <div style="padding:1.75rem 2rem;border-bottom:1px solid var(--border);flex:1">
+      <div style="font-size:.46rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.55rem">What this means for you</div>
+      <div style="font-size:.92rem;color:var(--white);line-height:1.7">The decision you have been making from one system has had a better answer in the combination of all your systems the entire time.</div>
+    </div>
+    <div style="padding:1.75rem 2rem;border-bottom:1px solid var(--border);flex:1">
+      <div style="font-size:.46rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);margin-bottom:.55rem">What Sabian Technology surfaces</div>
+      <div style="font-size:.92rem;color:var(--bright);line-height:1.7">The structure that exists in the combination of your data. Not in any one system. In what connects all of them, read simultaneously.</div>
+    </div>
+    <div style="padding:1.75rem 2rem;flex:1">
+      <div style="font-size:.46rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green);margin-bottom:.55rem">What you can do with it</div>
+      <div style="font-size:.92rem;color:var(--green);line-height:1.7">Act before the signal becomes a crisis. Stop finding out 47 days after the pattern was clear. Get told what to do, not just what happened.</div>
+    </div>
+  </div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div style="background:var(--panel);padding:1.5rem 1.75rem">
+    <div style="font-size:.43rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.65rem">The answer that sat unread for 30 years</div>
+    <div style="font-size:1.6rem;color:var(--warn);letter-spacing:.03em;line-height:1.15;margin-bottom:.65rem">Not missing.<br>Never read.</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.85">A 1970 dataset contained every alignment of a conflict that hadn't happened yet. The answer to who would split from whom was in the combination. It was not read until 2002. Thirty years of decisions made without the full picture.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.5rem 1.75rem;border-left:1px solid rgba(255,34,68,.18);border-right:1px solid rgba(255,34,68,.18)">
+    <div style="font-size:.43rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.65rem">The risk signal before the 2008 crisis</div>
+    <div style="font-size:1.6rem;color:var(--crit);letter-spacing:.03em;line-height:1.15;margin-bottom:.65rem">Found after.<br>Was there before.</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.85">The signal of systemic collapse was embedded in combined financial data years before 2008. The structure existed. It was never read simultaneously. Every institution saw its own fragment. None saw the combination.</div>
+  </div>
+  <div style="background:rgba(0,200,232,.04);padding:1.5rem 1.75rem;border:1px solid rgba(0,200,232,.12)">
+    <div style="font-size:.43rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);margin-bottom:.65rem">What Sabian Technology does differently</div>
+    <div style="font-size:1.6rem;color:var(--cyan);letter-spacing:.03em;line-height:1.15;margin-bottom:.65rem">Reads all of it.<br>At once.</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.85">The same structure exists in your systems right now. We connect every source simultaneously. The pattern that has been sitting in your combined data becomes readable. You find out what it means and what to do.</div>
+  </div>
+</div>
+
+<!-- WAVE DEMO: raw signal → pattern detected → meaning -->
+<div style="background:var(--bg);border-bottom:1px solid var(--border)">
+  <div style="height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border)">
+    <span style="font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan)">Signal · Pattern Detection · Live</span>
+    <span style="font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green)">Reading</span>
+  </div>
+  <canvas id="wave-canvas" style="display:block;width:100%;height:180px"></canvas>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)">
+    <div style="background:var(--panel);padding:.85rem 1.25rem;text-align:center">
+      <div style="font-size:.46rem;letter-spacing:.26em;text-transform:uppercase;color:var(--dim);margin-bottom:.4rem">Three channels</div>
+      <div style="font-size:.72rem;color:var(--text)">Three separate systems streaming simultaneously. Each channel is accurate. Each is reading only its own data.</div>
+    </div>
+    <div style="background:var(--panel);padding:.85rem 1.25rem;text-align:center;border-left:1px solid rgba(0,200,232,.2);border-right:1px solid rgba(0,200,232,.2)">
+      <div style="font-size:.46rem;letter-spacing:.26em;text-transform:uppercase;color:var(--cyan);margin-bottom:.4rem">Latent structure</div>
+      <div style="font-size:.72rem;color:var(--bright)">The markers show where the same timing recurs across all three channels. A structure that exists only in the combination. Invisible in any single source.</div>
+    </div>
+    <div style="background:var(--panel);padding:.85rem 1.25rem;text-align:center">
+      <div style="font-size:.46rem;letter-spacing:.26em;text-transform:uppercase;color:var(--green);margin-bottom:.4rem">Sabian Technology Intelligence</div>
+      <div style="font-size:.72rem;color:var(--green)">The latent structure is surfaced. What the combination means becomes readable. The connection that was always there. Now visible.</div>
+    </div>
+  </div>
+</div>
+
+<!-- WIFI WAVE SECTION -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:1px">
+  <div style="background:var(--bg)">
+    <div style="height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border)">
+      <span style="font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)">2.4 GHz · Signal · 1971</span>
+      <span style="font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--warn)">Unread</span>
+    </div>
+    <canvas id="wifi-canvas" style="display:block;width:100%;height:120px"></canvas>
+    <div style="padding:.85rem 1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.66rem;color:var(--dim);line-height:1.85">This signal existed for 26 years. The latent structure was present in the electromagnetic data. It was real. Nobody had scanned for it yet.</div>
+    </div>
+  </div>
+  <div style="background:var(--bg)">
+    <div style="height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border)">
+      <span style="font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan)">2.4 GHz · Pattern Read · 1997</span>
+      <span style="font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green)">WiFi</span>
+    </div>
+    <canvas id="wifi-canvas2" style="display:block;width:100%;height:120px"></canvas>
+    <div style="padding:.85rem 1.25rem;border-top:1px solid var(--border)">
+      <div style="font-size:.66rem;color:var(--text);line-height:1.85">Same signal. Same data. The latent structure was surfaced. A $200 billion industry appeared from data that already existed. The signal did not change. The reading of it did.</div>
+    </div>
+  </div>
+</div>
+
+<!-- NOT CHATGPT -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:1px">
+  <div style="background:var(--panel);padding:2.5rem 2.5rem">
+    <div style="font-size:.48rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-bottom:1rem">What this is not</div>
+    <div style="font-size:1.1rem;color:var(--text);line-height:1.5;margin-bottom:1rem">Waiting for a question.<br>Reading one system at a time.<br>Missing the structure in the combination.</div>
+    <div style="font-size:.82rem;color:var(--dim);line-height:2">A model fed one system tells you about one system. It reads what it receives. The latent structure that lives across systems is not in its view. The structure that changes what every individual number means stays exactly where it was.</div>
+  </div>
+  <div style="background:rgba(0,200,232,.04);padding:2.5rem 2.5rem;border:1px solid rgba(0,200,232,.12)">
+    <div style="font-size:.48rem;letter-spacing:.3em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">What this is</div>
+    <div style="font-size:1.1rem;color:var(--white);line-height:1.5;margin-bottom:1rem">Scanning for latent structure.<br>Reading every system simultaneously.<br>Surfacing what is already there.</div>
+    <div style="font-size:.82rem;color:var(--text);line-height:2">The technology does not wait for a question. It reads every source simultaneously and looks for what connects them. The relationships, correlations, and patterns that exist in the combination but are invisible in any single source. What it surfaces is what was always there.</div>
+  </div>
+</div>
+
+<div style="padding:2rem 8vw;border-bottom:1px solid var(--border)">
+  <a href="#solution" style="display:inline-block;font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);text-decoration:none;padding:10px 22px;border:1px solid rgba(0,200,232,.3)">How we read it →</a>
+</div>
+<div class="foot"><span>Sabian Global Inc. · sabian.ai</span><a href="mailto:support@sabian.ai">support@sabian.ai</a></div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 4 · ENGINE — WHAT WE DO
+════════════════════════════════════════ -->
+<div id="p-solution" class="pv">
+<nav class="nav">
+  <a class="nav-brand" href="#home"><img class="nav-logo-img" alt="Sabian"></a>
+  <span class="nav-sep"></span>
+  <div class="nav-pages">
+    <a class="np" href="#home">Home</a>
+    <a class="np" href="#data">Data</a>
+    <a class="np" href="#latent">Latent</a>
+    <a class="np on" href="#solution">Engine</a>
+    <a class="np" href="#verticals">Sectors</a>
+    <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#access">Access</a>
+    <a class="np" href="#security">Security</a>
+  </div>
+  <div class="nav-r"><a class="nav-cta" href="mailto:support@sabian.ai">Contact</a></div>
+</nav>
+
+<div class="sol-hero">
+  <div class="pg-tag">The Sabian Technology engine</div>
+  <h1 class="pg-h1">The world built the infrastructure.<br>Sabian Technology reads what it cannot.</h1>
+  <p class="pg-sub" style="font-size:clamp(.85rem,1.4vw,1.05rem);color:var(--text);line-height:2;letter-spacing:.03em;max-width:640px;margin-top:1rem">Four companies committed $725 billion to AI infrastructure in 2026. The models are capable. The compute exists. What does not exist is a position outside an organisation's data that reads all of it simultaneously with no stake in the result. 897 enterprise applications on average. 29% able to interface. 70% discovering the gap only after they launch AI. Sabian Technology occupies the position that infrastructure alone cannot create.</p>
+</div>
+
+<!-- CONNECTION FLOW — how a client connects -->
+<div class="pg-label cy">How to connect · three steps</div>
+<div style="display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;align-items:stretch;gap:1px;background:var(--border);border-bottom:1px solid var(--border)">
+  <div style="background:var(--panel);padding:2rem 2rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">01 · Your data</div>
+    <div style="font-size:.96rem;color:var(--white);line-height:1.4;margin-bottom:.75rem">Your systems stay where they are.</div>
+    <div style="font-size:.78rem;color:var(--dim);line-height:1.9">CRM. ERP. Finance. Risk. Operations. Any combination of systems you already run. We connect via API. Nothing moves. Nothing changes on your side. We read. You keep control.</div>
+  </div>
+  <div style="background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--cyan);opacity:.35">→</div>
+  <div style="background:rgba(0,200,232,.04);padding:2rem 2rem;border:1px solid rgba(0,200,232,.12)">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);margin-bottom:.75rem">02 · Sabian Technology</div>
+    <div style="font-size:.96rem;color:var(--white);line-height:1.4;margin-bottom:.75rem">We sit outside. We read everything simultaneously.</div>
+    <div style="font-size:.78rem;color:var(--text);line-height:1.9">The engine connects to every source at once. No integration project. No data warehouse. The structure that was always latent in the combination of your systems becomes readable for the first time.</div>
+  </div>
+  <div style="background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--green);opacity:.35">→</div>
+  <div style="background:rgba(0,255,136,.03);padding:2rem 2rem;border:1px solid rgba(0,255,136,.15)">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem">03 · Intelligence surfaced</div>
+    <div style="font-size:.96rem;color:var(--bright);line-height:1.4;margin-bottom:.75rem">What matters. When it matters. Before it compounds.</div>
+    <div style="font-size:.78rem;color:var(--dim);line-height:1.9">Pattern confirmed. Signal delivered. The engine does not stop reading. You receive what is there — not a response to a question, but a finding that already existed in your data.</div>
+  </div>
+</div>
+
+<!-- Live demonstration -->
+<div class="pg-label cy">Live · watch what happens when data is connected</div>
+<div class="rev-top">
+  <div class="rev-stream mcd">
+    <div class="mch"><span class="mch-l">Raw data · six systems · arriving now</span><span class="mch-r cl">Receiving</span></div>
+    <div class="stream" id="stream-sol" style="height:240px;padding:12px 18px;font-size:.65rem"></div>
+  </div>
+  <div class="rev-output mcd">
+    <div class="mch"><span class="mch-l">Cross-system intelligence output</span><span class="mch-r cw" id="rev2-status">Awaiting correlation</span></div>
+    <div class="rev-idle" id="rev2-idle">
+      <div style="font-size:1.4rem;opacity:.12">⬡</div>
+      <div>Systems not yet correlated</div>
+      <div style="opacity:.4;font-size:.56rem">Six isolated feeds · no shared intelligence</div>
+    </div>
+    <div class="rev-act" id="rev2-act">
+      <div class="rev-step" id="rev2-step">Initialising...</div>
+      <div class="rev-bar" id="rev2-bar"></div>
+      <div class="rev-result" id="rev2-result">
+        <div id="rr-finding-wrap"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mch" style="border-top:1px solid var(--border)"><span class="mch-l">Engine · Reading Active</span><span class="mch-r cl">Live</span></div>
+<div id="sweep-term" style="height:160px;overflow:hidden;padding:6px 12px;background:#040810;font-family:'Courier New',monospace;font-size:.48rem;letter-spacing:.05em;line-height:1.7;border-bottom:1px solid var(--border)"></div>
+
+<div class="pg-label d" style="margin-top:1px">The three things that stay latent when data is not connected</div>
+<div class="strow"><div class="st-lbl">The problem</div><div class="st-txt">The problem with data is never volume. <strong>It lives in fragments.</strong> Systems that were never built to speak to each other. Finance separated from operations. Risk separated from strategy.</div></div>
+<div class="strow"><div class="st-lbl">The latency</div><div class="st-txt">Every answer a business needs is already in that data. Every bottleneck. Every risk. Every pattern. <strong>It is latent. It is waiting.</strong> It has never been read as one thing.</div></div>
+<div class="strow"><div class="st-lbl">The AI ceiling</div><div class="st-txt">AI cannot read fragmented data. Feed it one system and it tells you about one system. <strong>The latent intelligence stays latent.</strong> No model surfaces what it cannot see.</div></div>
+<div class="strow"><div class="st-lbl" style="color:var(--cyan)">The cost</div><div class="st-txt">Every day the data is not read in combination is a day a decision is made without the full picture. <strong>The intelligence was there.</strong> The window closed. The 2008 signal was in the data three years before anyone read it simultaneously.</div></div>
+
+<div style="padding:1.25rem 2rem;border-bottom:1px solid var(--border);background:rgba(0,200,232,.03);border-top:1px solid rgba(0,200,232,.08);display:flex;align-items:flex-start;gap:2rem;flex-wrap:wrap">
+  <div style="font-size:.44rem;letter-spacing:.26em;text-transform:uppercase;color:var(--cyan);padding-top:.2rem;white-space:nowrap">The context</div>
+  <div style="font-size:.82rem;color:var(--text);line-height:1.95;flex:1">The four largest technology companies committed <span style="color:var(--white)">$725 billion</span> to AI infrastructure in 2026 alone. Analysts project <span style="color:var(--white)">$5.3 trillion</span> from 2025 to 2030. Every dollar of it is building inference capacity — the ability to run AI on data, continuously, at scale. The reading layer determines whether that inference produces intelligence. <span style="color:var(--bright)">Sabian runs on the same infrastructure. We are not competing with it. We are the layer that makes it useful.</span></div>
+</div>
+
+<div class="pg-label d" style="margin-top:1px">The pipeline · how data moves through the engine</div>
+<div class="pipeline">
+  <div class="ps"><div class="ps-lbl">Your data</div><div class="ps-val">Isolated</div></div>
+  <div class="parr">→</div>
+  <div class="ps on"><div class="ps-lbl">Intake</div><div class="ps-val">All systems</div></div>
+  <div class="parr">→</div>
+  <div class="ps on"><div class="ps-lbl">Normalise</div><div class="ps-val">One schema</div></div>
+  <div class="parr">→</div>
+  <div class="ps on"><div class="ps-lbl">Correlate</div><div class="ps-val">Cross-domain</div></div>
+  <div class="parr">→</div>
+  <div class="ps on"><div class="ps-lbl">Surface</div><div class="ps-val">Intelligence</div></div>
+</div>
+
+<div style="padding:2rem 8vw;border-bottom:1px solid var(--border)">
+  <a href="#verticals" style="display:inline-block;font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);text-decoration:none;padding:10px 22px;border:1px solid rgba(0,200,232,.3)">Where it applies →</a>
+</div>
+<div class="foot"><span>Sabian Global Inc. · sabian.ai</span><a href="mailto:support@sabian.ai">support@sabian.ai</a></div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 5 · VERTICALS
+════════════════════════════════════════ -->
+<div id="p-verticals" class="pv">
+<nav class="nav">
+  <a class="nav-brand" href="#home"><img class="nav-logo-img" alt="Sabian"></a>
+  <span class="nav-sep"></span>
+  <div class="nav-pages">
+    <a class="np" href="#home">Home</a>
+    <a class="np" href="#data">Data</a>
+    <a class="np" href="#latent">Latent</a>
+    <a class="np" href="#solution">Engine</a>
+    <a class="np on" href="#verticals">Sectors</a>
+    <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#access">Access</a>
+    <a class="np" href="#security">Security</a>
+  </div>
+  <div class="nav-r"><a class="nav-cta" href="mailto:support@sabian.ai">Contact</a></div>
+</nav>
+
+<div class="vert-hero">
+  <div class="pg-tag">Industries we work with</div>
+  <h1 class="pg-h1">Five sectors.<br>One reading position.</h1>
+  <p class="pg-sub" style="font-size:clamp(.85rem,1.4vw,1.05rem);color:var(--text);line-height:2;max-width:640px;margin-top:1rem">Each industry generates a different kind of signal. The latent structure in wholesale is not the same as sovereign. Healthcare does not move like supply chain. What is constant: every sector holds intelligence in the combination of its data that no single system can see.</p>
+</div>
+
+<!-- Radar + live signal cards -->
+<div class="pg-label cy">Live signal detection · across active verticals</div>
+<div style="border-bottom:1px solid var(--border)">
+  <div class="sigs-wrap" style="background:var(--bg)">
+    <div class="mch"><span class="mch-l">Signal Cards · Live</span><span class="mch-r cl">Updating</span></div>
+    <div class="sig-cards">
+      <div class="sigc"><div class="sigc-n">Patterns active</div><div class="sigc-v" style="color:var(--crit)" id="sc1">14</div><canvas id="sg0" width="120" height="24"></canvas><div class="sigc-m">critical · trend ↑</div></div>
+      <div class="sigc"><div class="sigc-n">Signals detected</div><div class="sigc-v" style="color:var(--cyan)" id="sc2">341</div><canvas id="sg1" width="120" height="24"></canvas><div class="sigc-m">today · all systems</div></div>
+      <div class="sigc"><div class="sigc-n">Risk signal</div><div class="sigc-v" style="color:var(--warn)">67%</div><canvas id="sg2" width="120" height="24"></canvas><div class="sigc-m">elevated · 7d window</div></div>
+      <div class="sigc"><div class="sigc-n">Convergence events</div><div class="sigc-v" style="color:var(--warn)">23</div><canvas id="sg3" width="120" height="24"></canvas><div class="sigc-m">warning · 30d trend</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="pg-label cy" style="margin-top:1px">The evidence</div>
+
+<!-- FACT STRIP -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-top:1px">
+  <div style="background:var(--panel);padding:1.75rem 1.5rem">
+    <div style="font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Forrester Research</div>
+    <div style="font-size:2.8rem;color:var(--cyan);letter-spacing:.04em;line-height:1;margin-bottom:.5rem">73%</div>
+    <div style="font-size:.78rem;color:var(--text);line-height:1.85">of enterprise data goes completely unused for analytics. Collected, stored, never read.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.75rem 1.5rem">
+    <div style="font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Netskope Cloud Report</div>
+    <div style="font-size:2.8rem;color:var(--warn);letter-spacing:.04em;line-height:1;margin-bottom:.5rem">900+</div>
+    <div style="font-size:.78rem;color:var(--text);line-height:1.85">separate systems the average enterprise runs. Each holding a fragment of the same business truth.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.75rem 1.5rem">
+    <div style="font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Gartner</div>
+    <div style="font-size:2.8rem;color:var(--crit);letter-spacing:.04em;line-height:1;margin-bottom:.5rem">$12.9M</div>
+    <div style="font-size:.78rem;color:var(--text);line-height:1.85">average annual cost of poor data quality per organisation. Not from lack of data. From failure to read it.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.75rem 1.5rem">
+    <div style="font-size:.48rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">McKinsey Global Institute</div>
+    <div style="font-size:2.8rem;color:var(--green);letter-spacing:.04em;line-height:1;margin-bottom:.5rem">&lt;50%</div>
+    <div style="font-size:.78rem;color:var(--text);line-height:1.85">of structured enterprise data is actively used in decisions. The rest is present. Not yet read as one thing.</div>
+  </div>
+</div>
+
+<!-- INDUSTRY GRID -->
+<div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--panel)" id="ind-stage-wrap">
+  <div class="mch"><span class="mch-l">Industries we work with</span><span class="mch-r cw">Active</span></div>
+  <canvas id="ind-canvas" height="280" style="display:block;width:100%"></canvas>
+</div>
+
+<div class="pg-label d" style="margin-top:1px">What the engine finds · sector by sector</div>
+
+<!-- Wholesale -->
+<div style="display:grid;grid-template-columns:180px 1fr 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border)">
+  <div style="background:var(--panel);padding:1.5rem 1.25rem;display:flex;align-items:center">
+    <span style="font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)">Wholesale / Trade</span>
+  </div>
+  <div style="background:var(--panel);padding:1.5rem 2rem;border-left:1px solid rgba(255,34,68,.12)">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--crit);margin-bottom:.5rem">Before</div>
+    <div style="font-size:.88rem;color:var(--text);line-height:1.9">Style 4412 cut from line. 23 rep quote requests over 6 weeks — in the rep's workflow, in email threads, in the order system. Three systems. No conversation between them. The demand signal sat unread until the cut was already done.</div>
+  </div>
+  <div style="background:rgba(0,255,136,.03);padding:1.5rem 2rem;border-left:1px solid rgba(0,255,136,.15)">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:.5rem">After</div>
+    <div style="font-size:.88rem;color:var(--bright);line-height:1.9">Style 4412 cut. 23 rep quote requests in 6 weeks. Demand signal exists. — surfaced from the combination before the cut decision was final. Not a post-mortem. A live read.</div>
+  </div>
+</div>
+
+<!-- Sovereign -->
+<div style="display:grid;grid-template-columns:180px 1fr 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border)">
+  <div style="background:var(--panel);padding:1.5rem 1.25rem;display:flex;align-items:center">
+    <span style="font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)">Sovereign / Institutional</span>
+  </div>
+  <div style="background:var(--panel);padding:1.5rem 2rem;border-left:1px solid rgba(255,34,68,.12)">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--crit);margin-bottom:.5rem">Before</div>
+    <div style="font-size:.88rem;color:var(--text);line-height:1.9">Macroeconomic feeds, credit spread data, and geopolitical event logs processed in sequence. Never simultaneously. The correlation between the macro signal and the credit spread move was found six days after the window closed.</div>
+  </div>
+  <div style="background:rgba(0,255,136,.03);padding:1.5rem 2rem;border-left:1px solid rgba(0,255,136,.15)">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:.5rem">After</div>
+    <div style="font-size:.88rem;color:var(--bright);line-height:1.9">
+      <div style="margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)">
+        <span style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)">2026 · IFSWF Annual Review</span>
+        <div style="font-size:.82rem;color:var(--bright);margin-top:.35rem;line-height:1.9">Sovereign wealth funds committed $120 billion to AI infrastructure in 2025–2026. $404 billion in total direct deals — AI taking approximately a third. The IFSWF 2026 Annual Review is titled: <em style="color:var(--cyan);font-style:normal">"Concentration and Convergence: Sovereign Wealth Fund Investment in an Age of Geopolitics and AI."</em> These funds are the primary capital source behind the global AI infrastructure buildout. They are funding infrastructure they cannot independently read.</div>
+      </div>
+      <div>Credit spread movement correlates with macro signal visible 6 days prior. Window: 48 hours. The combination of geopolitical feed, corporate filings, commodity prices, and credit spreads — read simultaneously, from outside — is the only surface on which that window exists. It is not visible inside any single system.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Ecommerce -->
+<div style="display:grid;grid-template-columns:180px 1fr 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border)">
+  <div style="background:var(--panel);padding:1.5rem 1.25rem;display:flex;align-items:center">
+    <span style="font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)">Ecommerce / Retail</span>
+  </div>
+  <div style="background:var(--panel);padding:1.5rem 2rem;border-left:1px solid rgba(255,34,68,.12)">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--crit);margin-bottom:.5rem">Before</div>
+    <div style="font-size:.88rem;color:var(--text);line-height:1.9">Return spike in size M appeared in the logistics system. Inventory allocation decision was in the warehouse system 60 days earlier. Customer complaints were in the CRM. No system could see the others. Next season pre-orders were already live.</div>
+  </div>
+  <div style="background:rgba(0,255,136,.03);padding:1.5rem 2rem;border-left:1px solid rgba(0,255,136,.15)">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--green);margin-bottom:.5rem">After</div>
+    <div style="font-size:.88rem;color:var(--bright);line-height:1.9">Return spike in size M traces to inventory allocation 60 days ago. Next season at risk. — traced back across three systems before the next season allocation was locked.</div>
+  </div>
+</div>
+
+<!-- Supply Chain + Healthcare in original compact form -->
+<div class="vrow"><div class="vlbl">Supply Chain</div><div class="vtxt">Port congestion data, procurement schedules, and customer delivery windows held in separate systems. The delay is visible in each one. The customer impact is not visible in any of them — until they are read together, simultaneously.</div></div>
+<div class="vrow"><div class="vlbl">Financial Services</div><div class="vtxt">Risk models running on market data that has never touched the credit ledger. The correlation between market position and credit exposure is always found after the event. The signal was in the combined data the entire time.</div></div>
+
+<div class="pg-label d" style="margin-top:1px">Signal classification · today</div>
+<div class="bband">
+  <div class="bi"><div class="bdot" style="background:var(--crit)"></div><div><div class="bn" style="color:var(--crit)">14</div><div class="bl">Critical</div></div></div>
+  <div class="bi"><div class="bdot" style="background:var(--warn)"></div><div><div class="bn" style="color:var(--warn)">47</div><div class="bl">Warning</div></div></div>
+  <div class="bi"><div class="bdot" style="background:var(--cyan)"></div><div><div class="bn" style="color:var(--cyan)">183</div><div class="bl">Elevated</div></div></div>
+  <div class="bi"><div class="bdot" style="background:var(--green)"></div><div><div class="bn" style="color:var(--green)">97</div><div class="bl">Stable</div></div></div>
+  <div class="bi btot"><div><div class="bn" style="color:var(--text)">341</div><div class="bl">Latent signals surfaced today</div></div></div>
+</div>
+
+<div class="foot"><span>Sabian Global Inc. · sabian.ai</span><a href="mailto:support@sabian.ai">support@sabian.ai</a></div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PAGE 6 · THEORITIC INTELLIGENCE
+════════════════════════════════════════ -->
+<div id="p-theoritic" class="pv">
+<nav class="nav">
+  <a class="nav-brand" href="#home"><img class="nav-logo-img" alt="Sabian"></a>
+  <span class="nav-sep"></span>
+  <div class="nav-pages">
+    <a class="np" href="#home">Home</a>
+    <a class="np" href="#data">Data</a>
+    <a class="np" href="#latent">Latent</a>
+    <a class="np" href="#solution">Engine</a>
+    <a class="np" href="#verticals">Sectors</a>
+    <a class="np on" href="#theoritic">Intelligence</a>
+    <a class="np" href="#access">Access</a>
+    <a class="np" href="#security">Security</a>
+  </div>
+  <div class="nav-r"><a class="nav-cta" href="mailto:support@sabian.ai">Contact</a></div>
+</nav>
+
+<!-- HERO -->
+<div style="position:relative;background:var(--bg);min-height:68vh;display:flex;flex-direction:column;justify-content:flex-end;padding:6vw 8vw 4.5vw;overflow:hidden;border-bottom:1px solid var(--border)">
+  <canvas id="th-hero-c" style="position:absolute;inset:0;width:100%;height:100%;opacity:.52;pointer-events:none"></canvas>
+  <div style="position:relative;z-index:1">
+    <div style="font-size:.42rem;letter-spacing:.46em;text-transform:uppercase;color:var(--dim);margin-bottom:1.5rem">Sabian Technology</div>
+    <h1 style="font-size:clamp(2.2rem,6.5vw,5.5rem);color:var(--white);font-weight:800;line-height:1;letter-spacing:-.02em;margin-bottom:1.5rem">Theoritic<br><span style="color:var(--cyan)">Intelligence.</span></h1>
+  </div>
+</div>
+
+<!-- WHAT THEORITIC INTELLIGENCE MEANS -->
+<div style="display:grid;grid-template-columns:1fr 1.75fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border)">
+  <div style="display:grid;grid-template-rows:1fr 1fr;gap:1px;background:var(--border)">
+    <div style="background:var(--panel);padding:1.75rem 2rem;opacity:.55">
+      <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Reactive intelligence</div>
+      <div style="font-size:.88rem;color:var(--text);line-height:1.4;margin-bottom:.75rem">Waits for a question. Reads what you give it. Finds what you knew to look for.</div>
+      <div style="font-size:.68rem;color:var(--dim);line-height:1.8;margin-bottom:.75rem">The question is the ceiling. You can only find what you know to ask.</div>
+      <div style="font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(42,64,96,0.6)">Standard AI · ChatGPT · Current tools</div>
+    </div>
+    <div style="background:var(--panel);padding:1.75rem 2rem;opacity:.55;border-top:1px solid var(--border)">
+      <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Predictive intelligence</div>
+      <div style="font-size:.88rem;color:var(--text);line-height:1.4;margin-bottom:.75rem">Extrapolates forward from what it receives. Still confined to the silo it is given.</div>
+      <div style="font-size:.68rem;color:var(--dim);line-height:1.8;margin-bottom:.75rem">An accurate forecast from incomplete data is still an incomplete forecast.</div>
+      <div style="font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(42,64,96,0.6)">Forecasting tools · BI platforms · ML models</div>
+    </div>
+  </div>
+  <div style="background:rgba(0,200,232,.05);padding:3rem 3.5rem;border:1px solid rgba(0,200,232,.18);display:flex;flex-direction:column;justify-content:center">
+    <div style="font-size:.44rem;letter-spacing:.32em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.25rem">Theoritic intelligence</div>
+    <div style="font-size:1.25rem;color:var(--white);line-height:1.55;margin-bottom:1.5rem">Reads every system simultaneously from outside. No question required. Surfaces what was always there.</div>
+    <div style="font-size:.88rem;color:var(--text);line-height:2;margin-bottom:1.5rem">Three conditions. Position outside the data. Simultaneous scope across all systems at once. No stake in the finding. When all three hold, the structure that was always latent in the combination becomes readable for the first time.</div>
+    <div style="font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)">Sabian Technology · the only category of its kind</div>
+  </div>
+</div>
+
+<!-- THE PROBLEM DEMONSTRATED -->
+<div class="mch" style="border-top:1px solid var(--border)">
+  <span class="mch-l">The problem theoritic intelligence solves</span>
+  <span class="mch-r cc">Live · Interact</span>
+</div>
+<div style="position:relative;background:var(--bg)">
+  <canvas id="th-prob-c" height="380" style="display:block;width:100%"></canvas>
+  <div style="position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);z-index:5">
+    <button id="th-prob-btn" style="font-family:'Courier New',Consolas,monospace;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;padding:13px 36px;border:1px solid rgba(0,200,232,.4);background:rgba(4,8,16,.9);color:#00c8e8;cursor:pointer;white-space:nowrap">THEORITIC READ &#x2192;</button>
+  </div>
+  <div id="th-finding" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;pointer-events:none;opacity:0;transition:opacity .5s;padding:2rem"></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border)">
+  <div style="padding:.65rem 1.5rem;border-right:1px solid var(--border)"><span style="font-size:.44rem;letter-spacing:.2em;text-transform:uppercase;color:#ff2244">Inside the data &#xB7; fragmented &#xB7; siloed &#xB7; biased</span></div>
+  <div style="padding:.65rem 1.5rem"><span style="font-size:.44rem;letter-spacing:.2em;text-transform:uppercase;color:#00ff88">Theoritic read &#xB7; outside &#xB7; neutral &#xB7; complete</span></div>
+</div>
+
+<!-- HOW THE READING WORKS -->
+<div class="mch" style="border-top:1px solid var(--border)">
+  <span class="mch-l">How theoritic reading works</span>
+  <span class="mch-r" style="color:var(--green)">Reading &#xB7; Active</span>
+</div>
+<canvas id="th-flow-c" height="270" style="display:block;width:100%;border-bottom:1px solid var(--border)"></canvas>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)">
+  <div style="background:var(--panel);padding:.75rem 1.5rem;text-align:center"><span style="font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)">Your systems &#xB7; inside &#xB7; isolated</span></div>
+  <div style="background:var(--panel);padding:.75rem 1.5rem;text-align:center"><span style="font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)">Sabian Technology &#xB7; outside &#xB7; reading all simultaneously</span></div>
+  <div style="background:var(--panel);padding:.75rem 1.5rem;text-align:center"><span style="font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green)">Intelligence &#xB7; surfaced &#xB7; live</span></div>
+</div>
+
+<!-- WHERE THE WORLD IS MOVING -->
+<div class="mch" style="border-top:1px solid var(--border)">
+  <span class="mch-l">Where the world is moving</span>
+  <span class="mch-r" style="color:var(--warn)">Now</span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border)">
+  <div style="background:var(--panel);padding:2rem 2.5rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--warn);margin-bottom:.75rem">Agentic AI &#xB7; the next problem</div>
+    <div style="font-size:1rem;color:var(--white);line-height:1.5;margin-bottom:.75rem">AI agents will make decisions at machine speed. The reading layer they act on determines whether those decisions are intelligent or precisely wrong — at scale, instantly.</div>
+    <div style="font-size:.8rem;color:var(--dim);line-height:1.9;margin-bottom:.75rem">An agent fed fragmented, siloed data executes fragmented decisions faster than any human can intervene. Precisely wrong, at scale. The reading layer comes before the agent. It is the most critical architectural decision in the agentic era. Theoritic intelligence is that layer.</div>
+    <div style="border-top:1px solid var(--border);padding-top:.75rem;font-size:.72rem;color:var(--dim);line-height:1.85">The organisations that build their agent stack on a unified, outside-in reading of their data will outperform those that do not. The gap compounds at machine speed.</div>
+  </div>
+  <div style="background:var(--panel);padding:2rem 2.5rem;border-left:1px solid var(--border)">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--warn);margin-bottom:.75rem">Data sovereignty &#xB7; your data stays yours</div>
+    <div style="font-size:1rem;color:var(--white);line-height:1.5;margin-bottom:.75rem">Sabian Technology reads your data through API connections. Your source data never moves. Never leaves your infrastructure. The intelligence layer sits outside. The data stays inside.</div>
+    <div style="font-size:.8rem;color:var(--dim);line-height:1.9">For clients with strict residency requirements — sovereign funds, defence, regulated industries — the model itself can be deployed within your own environment. The intelligence never needs to cross a border.</div>
+  </div>
+  <div style="background:var(--bg);padding:2rem 2.5rem;border-top:1px solid var(--border)">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--warn);margin-bottom:.75rem">Chain of custody &#xB7; immutable record</div>
+    <div style="font-size:1rem;color:var(--white);line-height:1.5;margin-bottom:.75rem">Every Sabian Technology intelligence output is timestamped and recorded on-chain. Immutable. Independently verifiable. It exists outside the organisation that received it.</div>
+    <div style="font-size:.8rem;color:var(--dim);line-height:1.9;margin-bottom:.75rem">When a board asks "when did we know?" — Sabian Technology can answer with a chain of custody that no internal system can produce. As AI-generated data proliferates, provenance becomes a legal question. This is the answer.</div>
+    <div style="font-family:Courier New,monospace;font-size:.58rem;color:var(--dim);background:var(--bg);border:1px solid var(--border);padding:.65rem 1rem;line-height:2">
+      <div style="color:var(--green)">0x3f7a · INTELLIGENCE OUTPUT · 2025-08-14T14:22:07Z</div>
+      <div>FINDING: Demand signal confirmed · Wholesale · Style 4412</div>
+      <div>HASH: a1b4c9e2f3d8 · CHAIN: CONFIRMED · VERIFIABLE</div>
+    </div>
+  </div>
+  <div style="background:var(--bg);padding:2rem 2.5rem;border-top:1px solid var(--border);border-left:1px solid var(--border)">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--warn);margin-bottom:.75rem">Real-time &#xB7; the standard has arrived</div>
+    <div style="font-size:1rem;color:var(--white);line-height:1.5;margin-bottom:.75rem">The decision window has narrowed to hours. Batch intelligence is commercially and legally inadequate. A monthly report is a record of what you missed.</div>
+    <div style="font-size:.8rem;color:var(--dim);line-height:1.9">Sabian Technology reads live. Signals surface as they appear in the data. The weekly brief and monthly dossier are scheduled exports from a terminal that never stops reading — not a report someone wrote last week.</div>
+  </div>
+</div>
+
+<div style="background:var(--panel);border:1px solid var(--border2);margin:0;padding:1.25rem 2rem;border-bottom:1px solid var(--border)">
+  <div style="font-size:.44rem;letter-spacing:.3em;text-transform:uppercase;color:var(--cyan);margin-bottom:.75rem">External validation · Gartner 2026</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)">
+    <div style="background:var(--bg);padding:1rem 1.25rem">
+      <div style="font-size:1.5rem;color:var(--warn);font-variant-numeric:tabular-nums;line-height:1">$752B</div>
+      <div style="font-size:.42rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-top:.25rem">agentic AI market by 2029</div>
+      <div style="font-size:.58rem;color:var(--dim);margin-top:.3rem">119% CAGR · Gartner</div>
+    </div>
+    <div style="background:var(--bg);padding:1rem 1.25rem;border-left:1px solid var(--border)">
+      <div style="font-size:1.5rem;color:var(--crit);font-variant-numeric:tabular-nums;line-height:1">40%+</div>
+      <div style="font-size:.42rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-top:.25rem">agentic projects canceled by 2027</div>
+      <div style="font-size:.58rem;color:var(--dim);margin-top:.3rem">Primary driver: data fragmentation · Gartner</div>
+    </div>
+    <div style="background:var(--bg);padding:1rem 1.25rem;border-left:1px solid var(--border)">
+      <div style="font-size:.78rem;color:var(--cyan);line-height:1.6;margin-top:.15rem">"By 2030, universal semantic layers will be treated as critical infrastructure."</div>
+      <div style="font-size:.48rem;color:var(--dim);margin-top:.4rem;letter-spacing:.1em">— Gartner · Top Data &amp; Analytics Predictions</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div style="height:220px;display:flex;align-items:center;justify-content:center;border-top:1px solid var(--border)">
+  <a href="mailto:support@sabian.ai" style="font-family:'Courier New',Consolas,monospace;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;padding:18px 52px;border:1px solid rgba(0,200,232,.35);background:rgba(0,200,232,.06);color:#00c8e8;text-decoration:none">CONTACT &#x2192;</a>
+</div>
+
+<div class="foot"><span>Sabian Global Inc. &#xB7; sabian.ai</span><a href="mailto:support@sabian.ai">support@sabian.ai</a></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 7 · ACCESS
+════════════════════════════════════════ -->
+<div id="p-access" class="pv">
+<nav class="nav">
+  <a class="nav-brand" href="#home"><img class="nav-logo-img" alt="Sabian"></a>
+  <span class="nav-sep"></span>
+  <div class="nav-pages">
+    <a class="np" href="#home">Home</a>
+    <a class="np" href="#data">Data</a>
+    <a class="np" href="#latent">Latent</a>
+    <a class="np" href="#solution">Engine</a>
+    <a class="np" href="#verticals">Sectors</a>
+    <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np on" href="#access">Access</a>
+    <a class="np" href="#security">Security</a>
+  </div>
+  <div class="nav-r"><a class="nav-cta" href="mailto:support@sabian.ai">Contact</a></div>
+</nav>
+
+<div style="min-height:calc(100vh - 98px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 8vw;text-align:center;border-bottom:1px solid var(--border);gap:2.5rem">
+  <div style="font-size:.42rem;letter-spacing:.46em;text-transform:uppercase;color:var(--dim)">Sabian Technology</div>
+  <div style="max-width:480px;text-align:left;border-left:2px solid var(--border2);padding-left:1.5rem">
+    <div style="font-size:.82rem;color:var(--bright);line-height:2;margin-bottom:.3rem">Access is by conversation.</div>
+    <div style="font-size:.72rem;color:var(--dim);line-height:1.9">The process begins with contact.</div>
+  </div>
+  <div style="max-width:480px;width:100%;border:1px solid rgba(0,200,232,.15);padding:1.5rem 2rem;text-align:left">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:.5rem">White Paper</div>
+    <div style="font-size:.84rem;color:var(--bright);line-height:1.7;margin-bottom:.75rem">Theoritic Intelligence — the full definition, the case, and why it is a new category.</div>
+    <a href="https://claude.ai/code/artifact/0590f912-5efa-47a2-9a08-42a3f7e44a7a" target="_blank" rel="noopener" style="font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green);text-decoration:none">↓ Download white paper →</a>
+  </div>
+  <a href="mailto:support@sabian.ai?subject=Discovery%20%E2%80%94%20Access%20Request" style="font-family:'Courier New',Consolas,monospace;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;padding:20px 60px;border:1px solid rgba(0,200,232,.4);background:rgba(0,200,232,.07);color:#00c8e8;text-decoration:none">CONTACT &#x2192;</a>
+</div>
+
+<div class="foot"><span>Sabian Global Inc. &#xB7; sabian.ai</span><a href="mailto:support@sabian.ai">support@sabian.ai</a></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 8 · SECURITY
+════════════════════════════════════════ -->
+<div id="p-security" class="pv">
+<nav class="nav">
+  <a class="nav-brand" href="#home"><img class="nav-logo-img" alt="Sabian Technology"></a>
+  <span class="nav-sep"></span>
+  <div class="nav-pages">
+    <a class="np" href="#home">Home</a>
+    <a class="np" href="#data">Data</a>
+    <a class="np" href="#latent">Latent</a>
+    <a class="np" href="#solution">Engine</a>
+    <a class="np" href="#verticals">Sectors</a>
+    <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#access">Access</a>
+    <a class="np on" href="#security">Security</a>
+  </div>
+  <div class="nav-r"><a class="nav-cta" href="mailto:support@sabian.ai">Contact</a></div>
+</nav>
+
+<!-- HERO -->
+<div style="position:relative;min-height:52vh;display:flex;flex-direction:column;justify-content:flex-end;padding:5vw 8vw 4vw;overflow:hidden;border-bottom:1px solid var(--border);background:var(--bg)">
+  <canvas id="sec-hero-c" style="position:absolute;inset:0;width:100%;height:100%;opacity:.4;pointer-events:none"></canvas>
+  <div style="position:relative;z-index:1">
+    <div style="font-size:.42rem;letter-spacing:.46em;text-transform:uppercase;color:var(--dim);margin-bottom:1.25rem">Sabian Technology · Data Security</div>
+    <h1 class="pg-h1" style="font-size:clamp(2rem,5vw,4rem);letter-spacing:-.01em;line-height:1.1;margin-bottom:1.25rem">We hold a read position.<br><span style="color:var(--green)">Not your data.</span></h1>
+    <p style="font-size:clamp(.9rem,1.5vw,1.1rem);color:var(--text);line-height:2;max-width:580px">Every breach at a vendor means the vendor had a copy. We never take a copy. The credential you issue connects us to your systems for reading. Nothing moves to our infrastructure. When you revoke it, the connection ends. There is nothing left on our side to secure, audit, or breach.</p>
+  </div>
+</div>
+
+<!-- ARCHITECTURE CANVAS — main isolation diagram -->
+<div class="pg-label g">Architecture · how data stays in place</div>
+<div style="position:relative;background:var(--bg);border-bottom:1px solid var(--border)">
+  <canvas id="sec-iso-c" height="420" style="display:block;width:100%"></canvas>
+  <div style="position:absolute;bottom:1.5rem;right:2rem;display:flex;gap:1.5rem;align-items:center">
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:18px;height:1px;background:rgba(0,200,232,0.4);border-top:1px dashed rgba(0,200,232,0.4)"></div><span style="font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)">Read only</span></div>
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:var(--green);opacity:.7"></div><span style="font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)">Finding returned</span></div>
+  </div>
+</div>
+
+<!-- THREE COMMITMENTS — 2-col + 1 full -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border)">
+  <div style="background:var(--panel);padding:2.5rem 3rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green);margin-bottom:1rem">Read-only. Always.</div>
+    <div style="font-size:1rem;color:var(--white);line-height:1.6;margin-bottom:1rem">We connect via credentials that carry no write access.</div>
+    <div style="font-size:.84rem;color:var(--text);line-height:2">We cannot modify your data. We cannot add to it, remove from it, or restructure it. We read. That is the entire access. If the connection dropped tomorrow, nothing in your systems would have changed.</div>
+  </div>
+  <div style="background:var(--panel);padding:2.5rem 3rem;border-left:1px solid var(--border2)">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green);margin-bottom:1rem">Isolated. By architecture.</div>
+    <div style="font-size:1rem;color:var(--white);line-height:1.6;margin-bottom:1rem">Your data is scoped to your organisation alone.</div>
+    <div style="font-size:.84rem;color:var(--text);line-height:2">Every company that connects to Sabian Technology is assigned a unique identifier. No other organisation shares your space. Cross-company access is not a policy restriction. It is architecturally impossible.</div>
+  </div>
+</div>
+<div style="background:rgba(0,255,136,.03);padding:2.5rem 8vw;border-bottom:1px solid rgba(0,255,136,.1)">
+  <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green);margin-bottom:1rem">One-way intelligence.</div>
+  <div style="max-width:760px">
+    <div style="font-size:1.05rem;color:var(--white);line-height:1.7;margin-bottom:1rem">What we read stays in your infrastructure. What returns to you is a signal, not a copy of your data.</div>
+    <div style="font-size:.88rem;color:var(--text);line-height:2">The intelligence travels. Your data does not. This is not a privacy setting you configure. It is the structure of how the reading works. Sabian Technology occupies a position outside your data. It reads from that position. The finding is what crosses back. Your raw data never does.</div>
+  </div>
+</div>
+
+<!-- WHAT WE NEVER DO -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border)">
+  <div style="background:var(--panel);padding:2.5rem 3rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:1.5rem">What we do</div>
+    <div style="display:flex;flex-direction:column;gap:.75rem">
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--green);font-size:.7rem;margin-top:.15rem;flex-shrink:0">+</span><span style="font-size:.84rem;color:var(--text);line-height:1.75">Connect via read-only credentials you issue and can revoke at any time</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--green);font-size:.7rem;margin-top:.15rem;flex-shrink:0">+</span><span style="font-size:.84rem;color:var(--text);line-height:1.75">Read across your connected systems simultaneously</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--green);font-size:.7rem;margin-top:.15rem;flex-shrink:0">+</span><span style="font-size:.84rem;color:var(--text);line-height:1.75">Return a finding — a signal — scoped to your organisation</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--green);font-size:.7rem;margin-top:.15rem;flex-shrink:0">+</span><span style="font-size:.84rem;color:var(--text);line-height:1.75">Log every access request with timestamp and authentication</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--green);font-size:.7rem;margin-top:.15rem;flex-shrink:0">+</span><span style="font-size:.84rem;color:var(--text);line-height:1.75">Isolate your data completely from every other client</span></div>
+    </div>
+  </div>
+  <div style="background:rgba(255,34,68,.03);padding:2.5rem 3rem;border-left:1px solid rgba(255,34,68,.1)">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--crit);margin-bottom:1.5rem">What we never do</div>
+    <div style="display:flex;flex-direction:column;gap:.75rem">
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--crit);font-size:.7rem;margin-top:.15rem;flex-shrink:0">x</span><span style="font-size:.84rem;color:var(--text);line-height:1.75">Sell your data to any third party, ever</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--crit);font-size:.7rem;margin-top:.15rem;flex-shrink:0">x</span><span style="font-size:.84rem;color:var(--text);line-height:1.75">Share your data with another client or organisation</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--crit);font-size:.7rem;margin-top:.15rem;flex-shrink:0">x</span><span style="font-size:.84rem;color:var(--text);line-height:1.75">Use your data to train models or improve our systems</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--crit);font-size:.7rem;margin-top:.15rem;flex-shrink:0">x</span><span style="font-size:.84rem;color:var(--text);line-height:1.75">Store a copy of your data outside your designated infrastructure</span></div>
+      <div style="display:flex;gap:12px;align-items:flex-start"><span style="color:var(--crit);font-size:.7rem;margin-top:.15rem;flex-shrink:0">x</span><span style="font-size:.84rem;color:var(--text);line-height:1.75">Write to, modify, or delete anything in your systems</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTHENTICATION -->
+<div class="pg-label d">Authentication and access control</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)">
+  <div style="background:var(--panel);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Unique key per client</div>
+    <div style="font-size:.88rem;color:var(--bright);line-height:1.8">Every organisation receives a unique authentication key. It cannot be used to access another company's data under any circumstances.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Session enforcement</div>
+    <div style="font-size:.88rem;color:var(--bright);line-height:1.8">Authentication is enforced at every request. There is no persistent open connection. Every session is independently validated.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Revocable access</div>
+    <div style="font-size:.88rem;color:var(--bright);line-height:1.8">You control the credentials. You can revoke access at any time. When you do, the connection ends immediately and completely.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Access logging</div>
+    <div style="font-size:.88rem;color:var(--bright);line-height:1.8">Every access attempt is logged with IP address, timestamp, and request path. Unauthorised attempts are flagged immediately.</div>
+  </div>
+</div>
+
+<!-- COMPLIANCE -->
+<div style="background:var(--panel);padding:2rem 8vw;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:3rem;flex-wrap:wrap">
+  <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)">Framework alignment</div>
+  <div style="width:1px;height:28px;background:var(--border)"></div>
+  <div style="font-size:.78rem;color:var(--text);line-height:1.8">Read-only, no-copy architecture aligns with <span style="color:var(--bright)">GDPR</span> and the <span style="color:var(--bright)">EU AI Act</span> (in effect August 2026). Sector-specific frameworks including <span style="color:var(--bright)">financial services</span> and <span style="color:var(--bright)">healthcare</span> are supported by the same architectural principle: your data stays in your infrastructure. We do not make compliance claims on your behalf. We build the architecture that supports yours.</div>
+</div>
+
+<div class="foot"><span>Sabian Global Inc. · sabian.ai</span><a href="mailto:support@sabian.ai">support@sabian.ai</a></div>
+</div>
+
+<script>
+/* ══ ROUTER ══ */
+var pages={home:'p-home',data:'p-data',latent:'p-latent',solution:'p-solution',verticals:'p-verticals',theoritic:'p-theoritic',access:'p-access',security:'p-security'};
+var started={};
+function navigate(hash){
+  var pg=pages[hash]||'p-home';
+  Object.values(pages).forEach(function(id){document.getElementById(id).classList.toggle('active',id===pg);});
+  window.scrollTo(0,0);
+  if(pg==='p-solution'&&!started.sol){started.sol=true;setTimeout(startRev,5000);}
+  if(pg==='p-verticals'&&!started.vert){started.vert=true;}
+  if(pg==='p-security'&&!started.sec){started.sec=true;drawSecIso();}
+}
+window.addEventListener('hashchange',function(){navigate(location.hash.replace('#',''));});
+navigate(location.hash.replace('#','')||'home');
+(function(){
+  var h=document.querySelector('.lnd-logo');
+  if(!h)return;
+  function stripBlack(){
+    try{
+      var can=document.createElement('canvas');
+      can.width=h.naturalWidth||500;can.height=h.naturalHeight||500;
+      var ctx=can.getContext('2d');
+      ctx.drawImage(h,0,0);
+      var d=ctx.getImageData(0,0,can.width,can.height),px=d.data;
+      for(var i=0;i<px.length;i+=4){
+        var lum=px[i]*0.299+px[i+1]*0.587+px[i+2]*0.114;
+        if(lum<40)px[i+3]=0;
+        else if(lum<75)px[i+3]=Math.floor((lum-40)/35*255);
+      }
+      ctx.putImageData(d,0,0);
+      var url=can.toDataURL('image/png');
+      document.querySelectorAll('.nav-logo-img').forEach(function(el){el.src=url;});
+    }catch(e){
+      document.querySelectorAll('.nav-logo-img').forEach(function(el){el.src=h.src;});
+    }
+  }
+  if(h.complete&&h.naturalWidth)stripBlack();
+  else h.addEventListener('load',stripBlack);
+})();
+
+/* ══ UTILS ══ */
+function rnd(a,b){return a+Math.random()*(b-a)}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function pad(n){return n<10?'0'+n:''+n}
+function ts(){var d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())+'.'+Math.floor(Math.random()*999).toString().padStart(3,'0')}
+
+/* ══ HERO CANVAS — CONVERGENCE STREAMS ══ */
+var hc=document.getElementById('hero-canvas');
+var hParticles=[];
+var hSrc=[
+  {label:'WHOLESALE',fx:.04,fy:.18},
+  {label:'SOVEREIGN',fx:.25,fy:-.01},
+  {label:'ECOMMERCE',fx:.78,fy:-.01},
+  {label:'HEALTHCARE',fx:.99,fy:.32},
+  {label:'SUPPLY CHAIN',fx:.52,fy:1.01},
+];
+function drawHero(){
+  var el=document.getElementById('p-home');
+  if(!el||!el.classList.contains('active'))return;
+  var p=hc.parentElement;hc.width=p.offsetWidth;hc.height=p.offsetHeight;
+  var ctx=hc.getContext('2d'),w=hc.width,h=hc.height;
+  var cx=w*.36,cy=h*.58;
+  ctx.clearRect(0,0,w,h);
+  hSrc.forEach(function(s){
+    var sx=s.fx*w,sy=s.fy*h;
+    ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(cx,cy);
+    ctx.strokeStyle='rgba(0,200,232,0.07)';ctx.lineWidth=1;ctx.stroke();
+    var lx=sx+(cx-sx)*.15,ly=sy+(cy-sy)*.15+2;
+    ctx.fillStyle='rgba(0,200,232,0.22)';ctx.font='8px Courier New,monospace';
+    ctx.fillText(s.label,lx,ly);
+  });
+  var glow=ctx.createRadialGradient(cx,cy,0,cx,cy,52);
+  glow.addColorStop(0,'rgba(0,200,232,0.28)');
+  glow.addColorStop(.5,'rgba(0,200,232,0.08)');
+  glow.addColorStop(1,'rgba(0,200,232,0)');
+  ctx.fillStyle=glow;ctx.beginPath();ctx.arc(cx,cy,52,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(cx,cy,3,0,Math.PI*2);ctx.fillStyle='rgba(0,200,232,0.9)';ctx.fill();
+  var now=Date.now();
+  hParticles=hParticles.filter(function(b){return now-b.t<2400;});
+  hParticles.forEach(function(b){
+    var age=(now-b.t)/2400,a=Math.max(0,1-age);
+    var px=b.sx+(cx-b.sx)*age,py=b.sy+(cy-b.sy)*age;
+    ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,200,232,'+a.toFixed(2)+')';
+    ctx.shadowColor='rgba(0,200,232,.85)';ctx.shadowBlur=5*(1-age);
+    ctx.fill();ctx.shadowBlur=0;
+  });
+}
+setInterval(function(){
+  if(!document.getElementById('p-home').classList.contains('active'))return;
+  var s=hSrc[Math.floor(Math.random()*hSrc.length)];
+  var w=window.innerWidth,h2=window.innerHeight;
+  hParticles.push({sx:s.fx*w+(Math.random()-.5)*w*.06,sy:s.fy*h2+(Math.random()-.5)*h2*.06,t:Date.now()});
+},300);
+setInterval(drawHero,30);
+
+/* ══ STREAMS ══ */
+var accts=[44821,12203,98441,73010,55293],srcs=['SRC_A','SRC_B','SRC_C','SRC_D','SRC_E','SRC_F'];
+var linegens=[
+  function(){return 'ACCT_'+pick(accts)+'  TXN_AMT:$'+rnd(100,9999).toFixed(2)+'  FREQ_DELTA:-'+rnd(.1,3.2).toFixed(1)},
+  function(){return 'REC_'+Math.floor(rnd(1000,9999))+'  LEVEL:'+Math.floor(rnd(100,9999))+'  STATUS:ACTIVE'},
+  function(){return 'CUST_'+pick(accts)+' CONTACT_AGE:'+Math.floor(rnd(1,90))+'d  SCORE:'+Math.floor(rnd(50,99))},
+  function(){return 'ROUTE_'+Math.floor(rnd(100,500))+'  DELAY:+'+Math.floor(rnd(1,8))+'h  STATUS:EN_ROUTE'},
+  function(){return 'PO_'+Math.floor(rnd(10000,99999))+'  SUPP_SCORE:'+rnd(40,95).toFixed(1)+'  RISK:LOW'},
+];
+function addToStream(el,max){
+  if(!el)return;
+  var ln=document.createElement('div');ln.className='sl new';
+  var t=ts(),k=pick(linegens)(),sc=pick(srcs);
+  ln.innerHTML='<span class="ts2">'+t+'</span>  <span class="key">'+k+'</span>  <span class="src">['+sc+']</span>';
+  el.insertBefore(ln,el.firstChild);
+  if(el.children.length>max)el.removeChild(el.lastChild);
+  ln.addEventListener('animationend',function(){ln.classList.remove('new');});
+}
+var s1=document.getElementById('stream-data');
+var s2=document.getElementById('stream-sol');
+setInterval(function(){addToStream(s1,14);addToStream(s2,14);},500);
+for(var i=0;i<10;i++){addToStream(s1,14);addToStream(s2,14);}
+
+/* ══ REVELATION (solution page) ══ */
+var REV_FINDINGS=[
+  {sector:'Wholesale',label:'Demand Signal · Style 4412',lines:['SOURCE A → Style 4412 <span class="rr-em">cut from production line</span>','SOURCE B → <span class="rr-em">23 rep quote requests</span> across 6-week window','SOURCE C → Reorder pattern confirmed across distribution data'],score:'Demand signal exists.',note:'Style 4412 cut. 23 rep quote requests in 6 weeks. The demand existed across three systems. Never read in combination until now.'},
+  {sector:'Sovereign',label:'Macro Signal · Credit Spread',lines:['SOURCE A → Credit spread movement <span class="rr-em">correlated</span> with macro signal','SOURCE B → Macro signal visible <span class="rr-em">6 days prior</span> to spread move','SOURCE C → Window confirmed: <span class="rr-em">48 hours</span>'],score:'Window: 48 hours.',note:'Credit spread movement correlates with macro signal visible 6 days prior. The correlation was in the combined data. Never surfaced in any single system.'},
+  {sector:'Ecommerce',label:'Return Spike · Size M',lines:['SOURCE A → Return spike in <span class="rr-em">size M</span> — 3× baseline','SOURCE B → Inventory allocation decision: <span class="rr-em">60 days prior</span>','SOURCE C → Next season exposure confirmed across pre-orders'],score:'Next season at risk.',note:'Return spike in size M traces to inventory allocation 60 days ago. The signal was already in the combined data. Next season at risk.'}
+];
+var rev2done=false;var revFindIdx=0;
+function startRev(){
+  if(rev2done)return;rev2done=true;
+  var idle=document.getElementById('rev2-idle');
+  var act=document.getElementById('rev2-act');
+  var st=document.getElementById('rev2-status');
+  if(idle)idle.style.display='none';
+  if(act)act.style.display='flex';
+  var fi=REV_FINDINGS[revFindIdx%REV_FINDINGS.length];revFindIdx++;
+  [{t:0,lbl:'Connecting SOURCE A → SOURCE B...'},{t:1500,lbl:'Connecting SOURCE B → SOURCE C...',bar:true},{t:3000,lbl:'Reading all systems as one event stream...'},{t:5000,lbl:'Surfacing latent intelligence...'},{t:7000,lbl:'Intelligence active.',reveal:true}]
+  .forEach(function(s){
+    setTimeout(function(){
+      var step=document.getElementById('rev2-step');
+      var bar=document.getElementById('rev2-bar');
+      var status=document.getElementById('rev2-status');
+      if(step)step.textContent=s.lbl;
+      if(s.bar&&bar)bar.classList.add('run');
+      if(s.reveal){
+        var r=document.getElementById('rev2-result');
+        var wrap=document.getElementById('rr-finding-wrap');
+        if(wrap){
+          var html='<div class="rr-label">'+fi.sector+' · '+fi.label+'</div>';
+          fi.lines.forEach(function(l){html+='<div class="rr-line">'+l+'</div>';});
+          html+='<div class="rr-score">'+fi.score+'</div>';
+          html+='<div class="rr-note">'+fi.note+'</div>';
+          wrap.innerHTML=html;
+        }
+        if(r)r.style.display='block';
+        if(status){status.textContent='Intelligence Active';status.style.color='var(--green)';}
+      }
+    },s.t);
+  });
+}
+
+/* ══ READING TERMINAL (verticals page) ══ */
+var TERM_SRCS=['A','B','C','D','E'];
+var TERM_EVT=[
+  function(){var a=pick(TERM_SRCS),b=pick(TERM_SRCS.filter(function(x){return x!==a;}));return{txt:'SRC_'+a+' → SRC_'+b+'  PATTERN ACTIVE',act:'ACTION WINDOW: '+Math.floor(rnd(4,21))+'d',col:'#00c8e8'};},
+  function(){var a=pick(TERM_SRCS);return{txt:'SRC_'+a+'       SIGNAL RISING',act:'ESCALATING',col:'#ffaa00'};},
+  function(){var a=pick(TERM_SRCS),b=pick(TERM_SRCS.filter(function(x){return x!==a;}));return{txt:'SRC_'+a+' → SRC_'+b+'  STRUCTURE FOUND',act:'BRIEFING QUEUED',col:'#00ff88'};},
+  function(){var a=pick(TERM_SRCS),b=pick(TERM_SRCS.filter(function(x){return x!==a;}));return{txt:'SRC_'+a+' → SRC_'+b+'  CONVERGENCE',act:'CONFIRMED',col:'#00ff88'};},
+  function(){var a=pick(TERM_SRCS);return{txt:'SRC_'+a+'       CORRELATION',act:'REVIEW REQUIRED',col:'#ff2244'};},
+  function(){var a=pick(TERM_SRCS),b=pick(TERM_SRCS.filter(function(x){return x!==a;}));return{txt:'SRC_'+a+' → SRC_'+b+'  CROSS-READ',act:'IN PROGRESS',col:'#2a4060'};},
+];
+function addTermLine(){
+  var el=document.getElementById('sweep-term');if(!el)return;
+  var ev=pick(TERM_EVT)();
+  var ln=document.createElement('div');
+  ln.style.cssText='padding:2px 0;border-bottom:1px solid rgba(14,28,48,0.6);white-space:nowrap;overflow:hidden;opacity:0;transition:opacity .4s';
+  ln.innerHTML='<span style="color:rgba(42,64,96,0.9)">'+ts()+'</span>  <span style="color:'+ev.col+'">'+ev.txt+'</span>  <span style="color:rgba(42,64,96,0.8)">· '+ev.act+'</span>';
+  el.insertBefore(ln,el.firstChild);
+  setTimeout(function(){ln.style.opacity='1';},20);
+  while(el.children.length>10)el.removeChild(el.lastChild);
+}
+setInterval(function(){
+  if(!document.getElementById('p-solution').classList.contains('active'))return;
+  addTermLine();
+},1100);
+for(var ti=0;ti<9;ti++)addTermLine();
+
+/* ══ SPARKLINES ══ */
+var sgD=[[],[],[],[]];
+var sgC=['#ff2244','#00c8e8','#ffaa00','#ffaa00'];
+for(var i=0;i<4;i++)for(var j=0;j<20;j++)sgD[i].push(.5);
+function drawSparklines(){
+  for(var i=0;i<4;i++){
+    sgD[i].push(Math.max(.05,Math.min(.95,sgD[i][sgD[i].length-1]+(Math.random()-.46)*.14)));
+    if(sgD[i].length>20)sgD[i].shift();
+    var c=document.getElementById('sg'+i);if(!c)continue;
+    var ctx=c.getContext('2d'),w=c.width,h=c.height;
+    ctx.fillStyle='#040810';ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle=sgC[i];ctx.lineWidth=1.5;
+    ctx.shadowColor=sgC[i];ctx.shadowBlur=3;
+    ctx.beginPath();
+    sgD[i].forEach(function(v,j){var x=j*(w/19),y=h-v*h;j===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+    ctx.stroke();ctx.shadowBlur=0;
+  }
+}
+
+/* ══ INDUSTRY STARFIELD ══ */
+var S=['Financial Services','Banking','Insurance','Asset Management','Private Equity','Sovereign Wealth','Institutional Investment','Pension Funds','Hedge Funds','Family Office','Endowments','Fintech','Payment Processing','Venture Capital','Investment Banking','Wealth Management','Credit Unions','Cryptocurrency','Wholesale / Trade','Retail','E-Commerce','FMCG','Luxury Goods','Direct-to-Consumer','Franchise','Import / Export','Distribution','B2B Commerce','Manufacturing','Automotive','Aerospace','Electronics','Semiconductors','Industrial Equipment','Heavy Machinery','Consumer Goods','Chemicals','Textiles','Apparel','Footwear','Furniture','Paper & Packaging','Supply Chain','Logistics','Freight','Port Operations','Fleet Management','Cold Chain','Last Mile','Warehousing','3PL','Reverse Logistics','Healthcare','Pharmaceuticals','Medical Devices','Biotech','Clinical Research','Human Performance','Hospitals','Telemedicine','Genomics','Veterinary','Aged Care','Diagnostics','Mental Health','Energy','Oil & Gas','Mining','Renewables','Utilities','Nuclear','Hydrogen','Petrochemicals','Water Management','Commodities','Government','Defense','Intelligence','Public Services','Regulatory Bodies','Law Enforcement','Emergency Services','Border Control','Central Banking','Agriculture','Food & Beverage','Agritech','Aquaculture','Forestry','Animal Husbandry','Real Estate','Construction','PropTech','Architecture','Facilities Management','Urban Planning','REITs','Telecommunications','Technology','Cybersecurity','SaaS','Cloud Infrastructure','AI & Machine Learning','Data Centers','IoT','Robotics','Hardware','Legal','Compliance','Risk Consultancy','RegTech','AML / KYC','Forensic Accounting','Shipping','Aviation','Rail','Urban Transit','Space','Media','Broadcasting','Streaming','Publishing','Advertising','Gaming','Sports','Music','Film & TV','Education','Higher Education','EdTech','Training & Development','E-Learning','Consulting','Accounting','HR & Staffing','Recruitment','Research & Analytics','Hospitality','Hotels','Tourism','Travel','Restaurants','Events','NGO / Non-profit','Philanthropy','Social Enterprise'];
+var GS=[[0,17],[18,27],[28,41],[42,51],[52,64],[65,74],[75,83],[84,89],[90,96],[97,106],[107,112],[113,117],[118,126],[127,131],[132,136],[137,142],[143,145]];
+var GC=['#00c8e8','#00ff88','#8aaccc','#ffaa00','#00ff88','#ffaa00','#8aaccc','#00c8e8','#ffaa00','#00c8e8','#ff2244','#8aaccc','#00ff88','#00c8e8','#8aaccc','#ffaa00','#00ff88'];
+function gc(i){for(var g=0;g<GS.length;g++)if(i>=GS[g][0]&&i<=GS[g][1])return GC[g];return'#8aaccc';}
+(function(){
+  var c=document.getElementById('ind-canvas');
+  if(!c)return;
+  var wrap=document.getElementById('ind-stage-wrap');
+  var w=0,cx=0,cy=0,h=280;
+  var ctx=c.getContext('2d');
+  var stars=S.map(function(s,i){return{s:s,col:gc(i),x:(Math.random()-0.5)*1.6,y:(Math.random()-0.5)*1.6,z:Math.random()*1.8+0.2,spd:rnd(0.0008,0.002)};});
+  function draw(){
+    if(!document.getElementById('p-verticals').classList.contains('active')){requestAnimationFrame(draw);return;}
+    var newW=wrap.offsetWidth;
+    if(newW>0&&newW!==w){w=newW;c.width=w;cx=w/2;cy=h/2;}
+    if(!w){requestAnimationFrame(draw);return;}
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle='#040810';ctx.fillRect(0,0,w,h);
+    stars.forEach(function(p){
+      p.z-=p.spd;
+      if(p.z<=0.05){p.z=1.8+Math.random()*0.4;p.x=(Math.random()-0.5)*1.6;p.y=(Math.random()-0.5)*1.6;}
+      var scale=1/p.z;
+      var sx=cx+p.x*cx*scale*0.75,sy=cy+p.y*cy*scale*0.75;
+      if(sx<-10||sx>w+10||sy<-10||sy>h+10)return;
+      var bright=Math.min(1,Math.max(0,(1.8-p.z)/1.6));
+      var fs=Math.round(Math.max(8,bright*12));
+      ctx.globalAlpha=Math.min(1,bright*1.1);
+      ctx.font='600 '+fs+'px Courier New';
+      ctx.fillStyle=p.col;
+      ctx.fillText(p.s,sx,sy);
+      ctx.globalAlpha=1;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══ ERA TIMELINE CANVAS ══ */
+var eraCanvasW=0;
+var eraT=0;
+var ERAS=[
+  {label:'Legacy Systems',year:'1990s–2000s',col:'#2a4060',desc:'One system per function. Accurate. Isolated.'},
+  {label:'Cloud & SaaS',year:'2010s',col:'#00c8e8',desc:'900+ apps per enterprise. More data. More walls.'},
+  {label:'Big Data',year:'2015–2020',col:'#ffaa00',desc:'Data lakes, dashboards. Volume solved. Fragmentation ignored.'},
+  {label:'AI Ceiling',year:'2020–2024',col:'#ff2244',desc:'AI reads what it receives. Fragmented data in. Fragmented output.'},
+  {label:'Theoritic Intelligence',year:'2025 →',col:'#00ff88',desc:'Every system read as one. The intelligence always in the combination. Now surfaced.'},
+];
+function drawEraCanvas(){
+  var c=document.getElementById('era-canvas');if(!c)return;
+  if(!document.getElementById('p-data').classList.contains('active'))return;
+  var wrap=c.parentElement,newW=wrap.offsetWidth;
+  var h=260;
+  if(newW!==eraCanvasW){eraCanvasW=newW;c.width=newW;c.height=h;}
+  var ctx=c.getContext('2d'),w=c.width;
+  ctx.fillStyle='#040810';ctx.fillRect(0,0,w,h);
+  eraT+=0.5;
+  var n=ERAS.length,padX=Math.max(16,w*0.04),segW=(w-padX*2)/(n-1);
+  var axisY=h*0.52;
+  // horizontal axis
+  ctx.strokeStyle='rgba(42,64,96,0.5)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(padX,axisY);ctx.lineTo(w-padX,axisY);ctx.stroke();
+  ERAS.forEach(function(era,i){
+    var x=padX+i*segW;
+    var isFirst=i===0,isLast=i===n-1;
+    // connector line to next
+    if(!isLast){
+      var nx=padX+(i+1)*segW;
+      var prog=Math.min(1,Math.max(0,(eraT-i*40)/60));
+      ctx.strokeStyle=i===n-2?'rgba(0,255,136,0.35)':'rgba(42,64,96,0.3)';
+      ctx.lineWidth=1;ctx.setLineDash([3,5]);
+      ctx.beginPath();ctx.moveTo(x,axisY);ctx.lineTo(x+(nx-x)*prog,axisY);ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    // node dot
+    var pulse=Math.sin(eraT*0.06-i*1.2)*0.3+0.7;
+    var r=isLast?7:4;
+    ctx.beginPath();ctx.arc(x,axisY,r,0,Math.PI*2);
+    ctx.fillStyle=era.col;
+    ctx.shadowColor=era.col;ctx.shadowBlur=isLast?18*pulse:6*pulse;
+    ctx.fill();ctx.shadowBlur=0;
+    // Clip each era to its own horizontal zone so text never overlaps neighbours
+    var zoneL=isFirst?0:x-segW*0.5;
+    var zoneR=isLast?w:x+segW*0.5;
+    ctx.save();
+    ctx.beginPath();ctx.rect(zoneL,0,zoneR-zoneL,h);ctx.clip();
+    var align=isFirst?'left':isLast?'right':'center';
+    ctx.textAlign=align;
+    var tx=x;
+    // year
+    ctx.font='8px Courier New,monospace';
+    ctx.fillStyle='rgba(42,64,96,0.9)';
+    ctx.fillText(era.year,tx,axisY-16);
+    // era label
+    ctx.font=(isLast?'bold ':'')+'10px Courier New,monospace';
+    ctx.fillStyle=era.col;
+    ctx.fillText(era.label,tx,axisY-28);
+    // desc below — word-wrap within zone width
+    ctx.font='8px Courier New,monospace';
+    ctx.fillStyle='rgba(138,172,200,0.65)';
+    var maxW=Math.max((zoneR-zoneL)-16,60);
+    var words=era.desc.split(' '),line='',lines=[],lineH=13;
+    words.forEach(function(wd){
+      var test=line+(line?' ':'')+wd;
+      if(ctx.measureText(test).width>maxW&&line){lines.push(line);line=wd;}
+      else line=test;
+    });
+    if(line)lines.push(line);
+    lines.slice(0,4).forEach(function(l,li){ctx.fillText(l,tx,axisY+20+li*lineH);});
+    ctx.textAlign='left';
+    ctx.restore();
+  });
+}
+
+/* ══ TICKERS ══ */
+setInterval(function(){
+  var e;
+  e=document.getElementById('sc1');if(e)e.textContent=Math.floor(rnd(12,17));
+  e=document.getElementById('sc2');if(e)e.textContent=Math.floor(rnd(335,350));
+  e=document.getElementById('hero-conv');if(e)e.textContent=Math.floor(rnd(338,347));
+},2800);
+
+/* ══ ENGINE PAGE — re-enable demo on revisit ══ */
+window.addEventListener('hashchange',function(){
+  if(location.hash==='#solution'){rev2done=false;setTimeout(startRev,5000);}
+});
+
+/* ══ SABIAN LIVE CANVAS ══ */
+var sabT=0,sabCanW=0,sabFlashT=0,sabFlashOn=false,sabPatIdx=0,sabLastPat=0;
+var SAB_PATS=[
+  {lbl:'CONVERGENCE DETECTED',detail:'SOURCE A · SOURCE B · SOURCE C',conf:'',col:'#ff2244'},
+  {lbl:'PATTERN SURFACED',detail:'SOURCE B · SOURCE D · SOURCE A',conf:'',col:'#ffaa00'},
+  {lbl:'SIGNAL FOUND',detail:'SOURCE C · SOURCE A · SOURCE B',conf:'',col:'#00ff88'},
+  {lbl:'STRUCTURE IDENTIFIED',detail:'SOURCE A · SOURCE C · SOURCE D',conf:'',col:'#00c8e8'},
+];
+function sabHex(h){return parseInt(h.slice(1,3),16)+','+parseInt(h.slice(3,5),16)+','+parseInt(h.slice(5,7),16);}
+function drawSabianCanvas(){
+  var c=document.getElementById('sabian-live-canvas');if(!c)return;
+  if(!document.getElementById('p-data').classList.contains('active'))return;
+  var pw=c.parentElement.offsetWidth;
+  if(pw!==sabCanW){sabCanW=pw;c.width=pw;c.height=240;}
+  var ctx=c.getContext('2d'),w=c.width,h=240;
+  ctx.fillStyle='rgba(4,8,16,0.14)';ctx.fillRect(0,0,w,h);
+  sabT+=0.016;
+  var lanes=[
+    {n:'SRC_A',col:'#1a4870',yl:70},
+    {n:'SRC_B',col:'#0e3055',yl:128},
+    {n:'SRC_C',col:'#162840',yl:186},
+  ];
+  var recs=['ORDER_7821','ACCOUNT_4821','SHIP_3341','TRANS_5512','CONT_6617','TRACK_8821','REV_2291','REC_9901'];
+  lanes.forEach(function(lane,i){
+    ctx.font='8px Courier New,monospace';ctx.fillStyle='rgba(42,80,128,0.55)';
+    ctx.fillText(lane.n,8,lane.yl-5);
+    ctx.strokeStyle='rgba(14,28,48,0.7)';ctx.lineWidth=1;ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(0,lane.yl+12);ctx.lineTo(w,lane.yl+12);ctx.stroke();
+    for(var p=0;p<7;p++){
+      var px=((sabT*55+p*148+i*44)%(w+120))-120;
+      if(px>-110&&px<w){
+        ctx.fillStyle='rgba(22,44,74,0.75)';ctx.fillRect(px,lane.yl-8,100,16);
+        ctx.font='7px Courier New,monospace';ctx.fillStyle='rgba(60,100,150,0.8)';
+        ctx.fillText(recs[(p+i*2)%recs.length],px+4,lane.yl+3);
+      }
+    }
+  });
+  var patInterval=200;
+  if(sabT*60-sabLastPat>patInterval){sabLastPat=sabT*60;sabFlashOn=true;sabFlashT=0;sabPatIdx=(sabPatIdx+1)%SAB_PATS.length;}
+  if(sabFlashOn){
+    sabFlashT++;
+    var fp=Math.min(sabFlashT/18,1);
+    var fo=sabFlashT>90?Math.max(0,1-(sabFlashT-90)/35):1;
+    if(sabFlashT>125)sabFlashOn=false;
+    var pat=SAB_PATS[sabPatIdx];
+    var rgb=sabHex(pat.col);
+    var cx=w*0.5;
+    lanes.forEach(function(lane){
+      ctx.fillStyle='rgba('+rgb+','+(0.12*fp*fo)+')';
+      ctx.fillRect(cx-65,lane.yl-10,130,20);
+      ctx.strokeStyle='rgba('+rgb+','+(0.5*fp*fo)+')';
+      ctx.lineWidth=1;ctx.strokeRect(cx-65,lane.yl-10,130,20);
+    });
+    ctx.strokeStyle='rgba('+rgb+','+(0.3*fp*fo)+')';ctx.lineWidth=1;ctx.setLineDash([3,5]);
+    ctx.beginPath();ctx.moveTo(cx,lanes[0].yl+10);ctx.lineTo(cx,lanes[2].yl-10);ctx.stroke();
+    ctx.setLineDash([]);
+    var ipx=cx-150,ipy=h/2-32;
+    ctx.fillStyle='rgba(4,8,16,'+(0.92*fp*fo)+')';ctx.fillRect(ipx,ipy,300,64);
+    ctx.strokeStyle='rgba('+rgb+','+(0.85*fp*fo)+')';ctx.lineWidth=1.5;ctx.strokeRect(ipx,ipy,300,64);
+    ctx.font='10px Courier New,monospace';ctx.fillStyle='rgba('+rgb+','+fo+')';
+    ctx.fillText('▸ '+pat.lbl,ipx+10,ipy+20);
+    ctx.font='8px Courier New,monospace';ctx.fillStyle='rgba(138,172,204,'+fo+')';
+    ctx.fillText(pat.detail,ipx+10,ipy+36);
+    ctx.fillStyle='rgba('+rgb+','+(0.7*fo)+')';
+    ctx.fillText('CONFIDENCE · '+pat.conf,ipx+10,ipy+52);
+  }
+  ctx.font='8px Courier New,monospace';ctx.fillStyle='rgba(0,200,232,0.35)';
+  ctx.fillText('SABIAN · READING · '+(Math.floor(sabT*8.3)%9999)+' RECORDS PROCESSED',10,14);
+}
+
+/* ══ SILO CANVAS ══ */
+var siloT=0,siloCanvasW=0;
+function drawSiloCanvas(){
+  var c=document.getElementById('silo-canvas');if(!c)return;
+  if(!document.getElementById('p-data').classList.contains('active'))return;
+  var pw=c.parentElement.offsetWidth;
+  if(pw!==siloCanvasW){siloCanvasW=pw;c.width=pw;c.height=230;}
+  var ctx=c.getContext('2d'),w=c.width,h=230;
+  ctx.fillStyle='rgba(4,8,16,0.18)';ctx.fillRect(0,0,w,h);
+  siloT+=0.016;
+  var sys=[
+    {n:'SYSTEM A',s:'Operations · Records · Output'},
+    {n:'SYSTEM B',s:'Accounts · History · Contacts'},
+    {n:'SYSTEM C',s:'Movement · Events · Status'},
+    {n:'SYSTEM D',s:'Exposure · Assessment · Score'},
+    {n:'SYSTEM E',s:'Signals · Rates · Events'},
+  ];
+  var rowH=h/sys.length;
+  sys.forEach(function(sys,i){
+    var y0=Math.floor(i*rowH),y1=Math.floor((i+1)*rowH),rh=y1-y0;
+    ctx.fillStyle=i%2?'rgba(7,13,26,0.85)':'rgba(10,18,34,0.85)';
+    ctx.fillRect(0,y0,w,rh);
+    if(i>0){ctx.strokeStyle='#0e1c30';ctx.lineWidth=1;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(0,y0);ctx.lineTo(w,y0);ctx.stroke();}
+    var lw=Math.min(148,w*0.34);
+    ctx.fillStyle='rgba(14,28,48,0.55)';ctx.fillRect(0,y0,lw,rh);
+    ctx.strokeStyle='#0e1c30';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(lw,y0);ctx.lineTo(lw,y1);ctx.stroke();
+    ctx.font='9px Courier New,monospace';ctx.fillStyle='#3a5878';ctx.fillText(sys.n,8,y0+rh*0.42);
+    ctx.font='7px Courier New,monospace';ctx.fillStyle='#1e3558';ctx.fillText(sys.s,8,y0+rh*0.68);
+    var wx=lw+6,ww=w-lw-74,cy=y0+rh/2,amp=rh*0.3;
+    ctx.strokeStyle='#1a3858';ctx.lineWidth=1.3;ctx.setLineDash([]);
+    ctx.beginPath();
+    for(var x=wx;x<wx+ww;x++){
+      var t=((x-wx)/ww)*Math.PI*5+siloT+i*1.4;
+      var yy=cy+Math.sin(t)*amp*0.7+Math.sin(t*1.9+i)*amp*0.3;
+      x===wx?ctx.moveTo(x,yy):ctx.lineTo(x,yy);
+    }
+    ctx.stroke();
+    ctx.strokeStyle='rgba(255,34,68,0.5)';ctx.lineWidth=1;ctx.setLineDash([3,4]);
+    ctx.beginPath();ctx.moveTo(w-72,y0+3);ctx.lineTo(w-72,y1-3);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font='8px Courier New,monospace';ctx.fillStyle='rgba(255,34,68,0.7)';
+    ctx.fillText('ISOLATED',w-68,y0+rh/2+3);
+  });
+}
+
+/* ══ WAVE CANVAS ══ */
+var waveT=0,wifiT=0;
+var waveCanvasW=0,wifiCanvasW=0;
+function drawWave(){
+  var c=document.getElementById('wave-canvas');if(!c)return;
+  if(!document.getElementById('p-latent').classList.contains('active'))return;
+  var pw=c.parentElement.offsetWidth;
+  if(pw!==waveCanvasW){waveCanvasW=pw;c.width=pw;c.height=180;}
+  var ctx=c.getContext('2d'),w=c.width,h=180;
+  ctx.fillStyle='rgba(4,8,16,0.15)';ctx.fillRect(0,0,w,h);
+  waveT+=0.025;
+  var z1=Math.floor(w/3),z2=Math.floor(2*w/3);
+  var chans=[
+    {col:'#00c8e8',r:'0,200,232',freq:1.2,amp:0.18,off:0},
+    {col:'#ffaa00',r:'255,170,0',freq:0.8,amp:0.14,off:1.5},
+    {col:'#00ff88',r:'0,255,136',freq:1.6,amp:0.12,off:3.0},
+  ];
+  // Zone dividers
+  ctx.strokeStyle='rgba(14,28,48,0.9)';ctx.lineWidth=1;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(z1,0);ctx.lineTo(z1,h);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(z2,0);ctx.lineTo(z2,h);ctx.stroke();
+  // Zone labels
+  ctx.font='8px Courier New,monospace';
+  ctx.fillStyle='rgba(42,64,96,0.8)';ctx.fillText('CHANNELS · READING',8,13);
+  ctx.fillStyle='rgba(0,200,232,0.55)';ctx.fillText('LATENT STRUCTURE',z1+8,13);
+  ctx.fillStyle='rgba(0,255,136,0.6)';ctx.fillText('SABIAN INTELLIGENCE',z2+8,13);
+  // Draw waves — dim in zone 1, normal in zone 2, bright in zone 3
+  chans.forEach(function(ch,ci){
+    var cy=h*(0.25+ci*0.25);
+    [0,1,2].forEach(function(zone){
+      var x0=zone===0?0:zone===1?z1:z2;
+      var x1=zone===0?z1:zone===1?z2:w;
+      ctx.globalAlpha=zone===0?0.35:1;
+      ctx.strokeStyle=ch.col;ctx.lineWidth=zone===2?2:1.4;
+      if(zone===2){ctx.shadowColor=ch.col;ctx.shadowBlur=5;}
+      ctx.beginPath();
+      for(var x=x0;x<=x1;x++){
+        var t=x/w*Math.PI*10+waveT;
+        var y=cy+Math.sin(t*ch.freq+ch.off)*h*ch.amp;
+        x===x0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.stroke();ctx.shadowBlur=0;ctx.globalAlpha=1;
+    });
+  });
+  // Zone 2: alignment markers at 2 fixed structural points
+  var ap=[z1+Math.floor((z2-z1)*0.3), z1+Math.floor((z2-z1)*0.7)];
+  ap.forEach(function(ax){
+    ctx.strokeStyle='rgba(0,200,232,0.25)';ctx.lineWidth=1;ctx.setLineDash([3,4]);
+    ctx.beginPath();ctx.moveTo(ax,18);ctx.lineTo(ax,h-4);ctx.stroke();
+    ctx.setLineDash([]);
+    chans.forEach(function(ch,ci){
+      var cy=h*(0.25+ci*0.25);
+      var t=ax/w*Math.PI*10+waveT;
+      var ay=cy+Math.sin(t*ch.freq+ch.off)*h*ch.amp;
+      ctx.fillStyle=ch.col;ctx.shadowColor=ch.col;ctx.shadowBlur=8;
+      ctx.beginPath();ctx.arc(ax,ay,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    });
+  });
+  // Zone 3: glowing structural connections — filled bands across all channels
+  var gx=[z2+Math.floor((w-z2)*0.25), z2+Math.floor((w-z2)*0.65)];
+  gx.forEach(function(gp){
+    if(gp>w-10)return;
+    ctx.fillStyle='rgba(0,255,136,0.06)';
+    ctx.fillRect(gp-18,18,36,h-22);
+    ctx.strokeStyle='rgba(0,255,136,0.35)';ctx.lineWidth=1;ctx.setLineDash([]);
+    ctx.strokeRect(gp-18,18,36,h-22);
+    var y0,y2;
+    chans.forEach(function(ch,ci){
+      var cy=h*(0.25+ci*0.25);
+      var t=gp/w*Math.PI*10+waveT;
+      var gy=cy+Math.sin(t*ch.freq+ch.off)*h*ch.amp;
+      if(ci===0)y0=gy;if(ci===2)y2=gy;
+      ctx.fillStyle=ch.col;ctx.shadowColor=ch.col;ctx.shadowBlur=10;
+      ctx.beginPath();ctx.arc(gp,gy,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    });
+    ctx.strokeStyle='rgba(0,255,136,0.3)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(gp,y0);ctx.lineTo(gp,y2);ctx.stroke();
+  });
+}
+
+function drawWifiCanvas(){
+  var c1=document.getElementById('wifi-canvas');
+  var c2=document.getElementById('wifi-canvas2');
+  if(!c1||!c2)return;
+  if(!document.getElementById('p-latent').classList.contains('active'))return;
+  wifiT+=0.04;
+  [
+    {c:c1,col:'#2a4060',label:'UNREAD',glitch:true},
+    {c:c2,col:'#00c8e8',label:'PATTERN · WIFI',glitch:false},
+  ].forEach(function(cfg){
+    var pw=cfg.c.parentElement.offsetWidth;
+    cfg.c.width=pw;cfg.c.height=120;
+    var ctx=cfg.c.getContext('2d'),w=cfg.c.width,h=120;
+    ctx.fillStyle='#040810';ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle=cfg.col;ctx.lineWidth=1.5;
+    if(!cfg.glitch){ctx.shadowColor=cfg.col;ctx.shadowBlur=6;}
+    ctx.beginPath();
+    for(var x=0;x<w;x++){
+      var t=x/w*Math.PI*12+wifiT;
+      var glitchNoise=cfg.glitch?(Math.random()-0.5)*12:0;
+      var y=h/2+Math.sin(t*2.4)*h*0.28+Math.sin(t*0.7)*h*0.08+glitchNoise;
+      x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();ctx.shadowBlur=0;
+    ctx.font='9px Courier New,monospace';
+    ctx.fillStyle=cfg.glitch?'rgba(42,64,96,0.7)':'rgba(0,200,232,0.6)';
+    ctx.fillText(cfg.label,10,14);
+  });
+}
+
+/* ══ MAIN LOOP ══ */
+function loop(){
+  requestAnimationFrame(loop);
+  drawHero();
+  if(document.getElementById('p-verticals').classList.contains('active')){drawSparklines();}
+  if(document.getElementById('p-data').classList.contains('active')){drawEraCanvas();drawSiloCanvas();drawSabianCanvas();}
+  if(document.getElementById('p-latent').classList.contains('active')){drawWave();drawWifiCanvas();}
+}
+loop();
+
+/* ══ THEORITIC HERO CANVAS ══ */
+(function(){
+  var c=document.getElementById('th-hero-c');
+  if(!c)return;
+  var ctx=c.getContext('2d');
+  var w,h,cx,cy;
+  function resize(){
+    w=c.parentElement.offsetWidth;
+    h=c.parentElement.offsetHeight||500;
+    c.width=w;c.height=h;
+    cx=w/2;cy=h/2;
+  }
+  resize();
+  var NODES=[
+    {n:'CRM',col:'#00c8e8'},{n:'ERP',col:'#00ff88'},
+    {n:'Finance',col:'#ffaa00'},{n:'Logistics',col:'#8aaccc'},
+    {n:'Risk',col:'#00c8e8'},{n:'Operations',col:'#00ff88'},
+    {n:'Market Data',col:'#ffaa00'},{n:'Procurement',col:'#8aaccc'}
+  ];
+  var nodeR,scanA=0,particles=[];
+  function getNodes(){
+    nodeR=Math.min(w,h)*0.3;
+    return NODES.map(function(nd,i){
+      var a=(i/NODES.length)*Math.PI*2;
+      return{n:nd.n,col:nd.col,a:a,x:cx+Math.cos(a)*nodeR,y:cy+Math.sin(a)*nodeR};
+    });
+  }
+  var nodes=getNodes();
+  function draw(){
+    if(!document.getElementById('p-theoritic').classList.contains('active')){requestAnimationFrame(draw);return;}
+    resize();nodes=getNodes();
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle='#040810';ctx.fillRect(0,0,w,h);
+    scanA+=0.009;
+    var ringR=Math.min(w,h)*0.43;
+    // Outer ring
+    ctx.beginPath();ctx.arc(cx,cy,ringR,0,Math.PI*2);
+    ctx.strokeStyle='rgba(0,200,232,0.1)';ctx.lineWidth=1;ctx.stroke();
+    // Scan sweep
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(scanA);
+    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,ringR,-0.55,0,false);ctx.closePath();
+    ctx.fillStyle='rgba(0,200,232,0.05)';ctx.fill();
+    // Scan line
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(ringR,0);
+    ctx.strokeStyle='rgba(0,200,232,0.35)';ctx.lineWidth=1;ctx.stroke();
+    ctx.restore();
+    // Particles flowing inward
+    if(Math.random()<0.25&&particles.length<50){
+      var ni=Math.floor(Math.random()*nodes.length);
+      var nd2=nodes[ni];
+      particles.push({x:nd2.x,y:nd2.y,tx:cx,ty:cy,col:nd2.col,t:0,spd:rnd(0.008,0.018)});
+    }
+    particles.forEach(function(p,i){
+      p.t+=p.spd;
+      if(p.t>1){particles.splice(i,1);return;}
+      var px=p.x+(p.tx-p.x)*p.t;
+      var py=p.y+(p.ty-p.y)*p.t;
+      var a=Math.sin(p.t*Math.PI);
+      ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);
+      ctx.fillStyle=p.col;ctx.globalAlpha=a*0.8;ctx.fill();ctx.globalAlpha=1;
+    });
+    // Nodes
+    nodes.forEach(function(nd){
+      var diff=((scanA-nd.a)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+      var lit=diff<0.7;
+      // Connection line
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(nd.x,nd.y);
+      ctx.strokeStyle=lit?nd.col+'55':'rgba(14,28,48,0.4)';
+      ctx.lineWidth=lit?1.2:0.5;ctx.stroke();
+      // Dot
+      ctx.beginPath();ctx.arc(nd.x,nd.y,lit?5:3,0,Math.PI*2);
+      ctx.fillStyle=lit?nd.col:'rgba(14,28,48,0.95)';
+      ctx.shadowColor=lit?nd.col:'transparent';ctx.shadowBlur=lit?14:0;
+      ctx.fill();ctx.shadowBlur=0;
+      // Label
+      ctx.font='600 9px Courier New';ctx.fillStyle=lit?nd.col:'rgba(42,64,96,0.5)';
+      var lx=nd.x+(Math.cos(nd.a)>0?8:-ctx.measureText(nd.n).width-8);
+      ctx.fillText(nd.n,lx,nd.y+3);
+    });
+    // Center engine
+    var cp=Math.sin(scanA*4)*0.25+0.75;
+    ctx.beginPath();ctx.arc(cx,cy,5*cp,0,Math.PI*2);
+    ctx.fillStyle='#00c8e8';ctx.shadowColor='#00c8e8';ctx.shadowBlur=18*cp;ctx.fill();ctx.shadowBlur=0;
+    ctx.font='700 11px Courier New';ctx.fillStyle='rgba(0,200,232,0.75)';ctx.textAlign='center';
+    ctx.fillText('THE STRUCTURE',cx,cy+20);
+    ctx.font='600 7px Courier New';ctx.fillStyle='rgba(0,200,232,0.35)';
+    ctx.fillText('latent · across every system',cx,cy+34);
+    ctx.textAlign='left';
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══ THEORITIC PROBLEM CANVAS — SPLIT VIEW + INTERACTIVE ══ */
+(function(){
+  var c=document.getElementById('th-prob-c');
+  var btn=document.getElementById('th-prob-btn');
+  var findDiv=document.getElementById('th-finding');
+  if(!c||!btn)return;
+  var ctx=c.getContext('2d');
+  var w,h=380;
+  var mode=0,transP=0,transitioning=false;
+  var t=0,scanA=0;
+  var findingT=0,findingVisible=false;
+  var resetTimer=null;
+
+  var SRCS=[
+    {n:'CRM',col:'#00c8e8'},{n:'ERP',col:'#00ff88'},
+    {n:'Finance',col:'#ffaa00'},{n:'Risk',col:'#ff2244'},
+    {n:'Ops',col:'#8aaccc'},{n:'Market',col:'#00c8e8'}
+  ];
+
+  function getW(){return c.parentElement.offsetWidth;}
+
+  function getNodes(side,half){
+    var cx=half/2+(side===1?half:0);
+    var cy=h/2;
+    var nr=Math.min(half,h)*0.26;
+    return SRCS.map(function(s,i){
+      var a=(i/SRCS.length)*Math.PI*2;
+      return{n:s.n,col:s.col,a:a,x:cx+Math.cos(a)*nr,y:cy+Math.sin(a)*nr,cx:cx,cy:cy,nr:nr,siloR:nr*0.55};
+    });
+  }
+
+  var leftParticles=[],rightParticles=[];
+
+  btn.onclick=function(){
+    if(mode===0){
+      mode=1;transP=0;transitioning=true;
+      btn.textContent='RESET';btn.style.color='#00ff88';btn.style.borderColor='rgba(0,255,136,0.4)';
+      setTimeout(function(){findingVisible=true;findingT=0;},1800);
+    }else{
+      mode=0;transP=0;transitioning=true;
+      btn.textContent='THEORITIC READ →';btn.style.color='#00c8e8';btn.style.borderColor='rgba(0,200,232,0.4)';
+      findingVisible=false;findDiv.style.opacity='0';
+      if(resetTimer)clearTimeout(resetTimer);
+    }
+  };
+
+  var FINDING=[
+    'READING ALL SOURCES…',
+    'CORRELATION DETECTED',
+    'Account cluster 14 — Payment velocity ↓ 31% [CRM]',
+    'Cross-reference: Support escalations ↑ 18% [ERP]',
+    'Cross-reference: Delivery delays ↑ 24% [Ops]',
+    'Compound signal: 91 days pre-churn',
+    '――――――――――――――――――――――――――――',
+    'NEVER VISIBLE IN ANY SINGLE SYSTEM'
+  ];
+
+  function draw(){
+    if(!document.getElementById('p-theoritic').classList.contains('active')){requestAnimationFrame(draw);return;}
+    w=getW();c.width=w;
+    ctx.clearRect(0,0,w,h);ctx.fillStyle='#040810';ctx.fillRect(0,0,w,h);
+    t++;scanA+=0.007;
+    if(transitioning){transP=Math.min(1,transP+0.018);if(transP>=1)transitioning=false;}
+    var prog=mode===1?transP:1-transP;
+
+    var half=w/2;
+
+    // Left side — FRAGMENTED
+    ctx.save();ctx.beginPath();ctx.rect(0,0,half-0.5,h);ctx.clip();
+    var leftNodes=getNodes(0,half);
+    // Silo bubbles fade as read activates
+    leftNodes.forEach(function(nd){
+      var siloA=(1-prog)*0.22;
+      if(siloA>0.01){
+        ctx.beginPath();ctx.arc(nd.x,nd.y,nd.siloR,0,Math.PI*2);
+        ctx.strokeStyle='rgba(255,34,68,'+siloA+')';ctx.lineWidth=1;
+        ctx.setLineDash([3,5]);ctx.stroke();ctx.setLineDash([]);
+      }
+      // Orbiting particles inside silo
+      if(leftParticles.length<30&&Math.random()<0.1){
+        leftParticles.push({ndIdx:leftNodes.indexOf(nd),a:Math.random()*Math.PI*2,spd:rnd(0.02,0.05),r:rnd(10,nd.siloR*0.7)});
+      }
+      ctx.beginPath();ctx.arc(nd.x,nd.y,4,0,Math.PI*2);
+      ctx.fillStyle=nd.col;ctx.shadowColor=nd.col;ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;
+      ctx.font='600 9px Courier New';ctx.fillStyle=nd.col;
+      ctx.fillText(nd.n,nd.x+7,nd.y+3);
+    });
+    leftParticles.forEach(function(p){
+      p.a+=p.spd;
+      var nd=leftNodes[p.ndIdx%leftNodes.length];
+      var px=nd.x+Math.cos(p.a)*p.r;
+      var py=nd.y+Math.sin(p.a)*p.r;
+      var inSilo=Math.sqrt((px-nd.x)*(px-nd.x)+(py-nd.y)*(py-nd.y))<nd.siloR;
+      if((1-prog)>0.1&&!inSilo)return;
+      ctx.beginPath();ctx.arc(px,py,1,0,Math.PI*2);ctx.fillStyle=nd.col+'77';ctx.fill();
+    });
+    ctx.font='600 9px Courier New';ctx.fillStyle='rgba(255,34,68,0.5)';ctx.textAlign='center';
+    ctx.fillText('INSIDE THE DATA',half/2,h-22);ctx.textAlign='left';
+    ctx.restore();
+
+    // Center divider
+    ctx.beginPath();ctx.moveTo(half,0);ctx.lineTo(half,h);
+    ctx.strokeStyle='rgba(42,64,96,0.4)';ctx.lineWidth=1;ctx.setLineDash([4,8]);ctx.stroke();ctx.setLineDash([]);
+
+    // Right side — THEORITIC READ
+    ctx.save();ctx.beginPath();ctx.rect(half+0.5,0,half-0.5,h);ctx.clip();
+    var rightNodes=getNodes(1,half);
+    var rcx=rightNodes[0].cx,rcy=rightNodes[0].cy,rnr=rightNodes[0].nr;
+    // Connections between nodes (fade in)
+    for(var i=0;i<rightNodes.length;i++){
+      for(var j=i+1;j<rightNodes.length;j++){
+        var flash=Math.sin(t*0.04+i*0.7+j*0.9)*0.4+0.6;
+        ctx.beginPath();ctx.moveTo(rightNodes[i].x,rightNodes[i].y);ctx.lineTo(rightNodes[j].x,rightNodes[j].y);
+        ctx.strokeStyle='rgba(0,200,232,'+(prog*0.25*flash)+')';ctx.lineWidth=0.8;ctx.stroke();
+      }
+    }
+    // Sabian outer ring
+    var ringR=rnr*1.62;
+    if(prog>0.05){
+      ctx.beginPath();ctx.arc(rcx,rcy,ringR,0,Math.PI*2);
+      ctx.strokeStyle='rgba(0,200,232,'+(prog*0.35)+')';ctx.lineWidth=1.5;ctx.stroke();
+      // Scan on theoritic side
+      ctx.save();ctx.translate(rcx,rcy);ctx.rotate(scanA*1.2);
+      ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,ringR,-0.5,0,false);ctx.closePath();
+      ctx.fillStyle='rgba(0,200,232,'+(prog*0.05)+')';ctx.fill();
+      ctx.restore();
+      // SABIAN label
+      ctx.font='600 8px Courier New';ctx.fillStyle='rgba(0,200,232,'+(prog*0.55)+')';ctx.textAlign='center';
+      ctx.fillText('SABIAN TECHNOLOGY',rcx,rcy-ringR-8);ctx.textAlign='left';
+    }
+    // Particles flowing between nodes
+    if(prog>0.4&&rightParticles.length<20&&Math.random()<0.15){
+      var na=Math.floor(Math.random()*rightNodes.length);
+      var nb=(na+1+Math.floor(Math.random()*(rightNodes.length-1)))%rightNodes.length;
+      rightParticles.push({x:rightNodes[na].x,y:rightNodes[na].y,tx:rightNodes[nb].x,ty:rightNodes[nb].y,col:rightNodes[na].col,t:0});
+    }
+    rightParticles.forEach(function(p,i){
+      p.t+=0.022;if(p.t>1){rightParticles.splice(i,1);return;}
+      var px=p.x+(p.tx-p.x)*p.t,py=p.y+(p.ty-p.y)*p.t;
+      ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);
+      ctx.fillStyle=p.col;ctx.globalAlpha=Math.sin(p.t*Math.PI)*prog;ctx.fill();ctx.globalAlpha=1;
+    });
+    rightNodes.forEach(function(nd){
+      ctx.beginPath();ctx.arc(nd.x,nd.y,4,0,Math.PI*2);
+      ctx.fillStyle=nd.col;ctx.shadowColor=nd.col;ctx.shadowBlur=prog>0.5?12:6;ctx.fill();ctx.shadowBlur=0;
+      ctx.font='600 9px Courier New';ctx.fillStyle=nd.col;ctx.fillText(nd.n,nd.x+7,nd.y+3);
+    });
+    ctx.font='600 9px Courier New';ctx.fillStyle='rgba(0,255,136,'+(prog*0.7+0.15)+')';ctx.textAlign='center';
+    ctx.fillText('THEORITIC READ',half+half/2,h-22);ctx.textAlign='left';
+    ctx.restore();
+
+    // Finding overlay
+    if(findingVisible){
+      findingT++;
+      var fo=Math.min(1,findingT/25);
+      findDiv.style.opacity=fo;
+      if(findingT===1){
+        var html='<div style="background:rgba(4,8,16,0.96);border:1px solid rgba(0,255,136,0.4);padding:1.5rem 2rem;max-width:440px;font-family:Courier New,monospace">';
+        FINDING.forEach(function(line,i){
+          var col=i===0?'rgba(0,200,232,0.8)':i===1?'#00ff88':i===7?'#ffaa00':'rgba(138,172,200,0.85)';
+          var sz=i===1?'10':'8.5';
+          var fw=i===1?'900':'400';
+          html+='<div style="font-size:'+sz+'px;color:'+col+';font-weight:'+fw+';line-height:2;letter-spacing:0.06em">'+line+'</div>';
+        });
+        html+='</div>';
+        findDiv.innerHTML=html;
+      }
+      if(findingT===240){
+        resetTimer=setTimeout(function(){
+          if(mode===1){btn.click();}
+        },500);
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══ THEORITIC FLOW CANVAS ══ */
+(function(){
+  var c=document.getElementById('th-flow-c');
+  if(!c)return;
+  var ctx=c.getContext('2d');
+  var w,h=270;
+  var FLOW_SRCS=['CRM','ERP','Finance','Logistics','Risk','Market'];
+  var FLOW_COLS=['#00c8e8','#00ff88','#ffaa00','#8aaccc','#ff2244','#00c8e8'];
+  var INTEL=['Pattern A-7: Supply risk correlated with FX pressure','Signal: Churn precursor detected in SRC_B x SRC_D','Cross-source: Q3 margin compression — 3 systems','Alert: Counterparty exposure elevated','Brief queued: 12-page monthly dossier'];
+  var particles=[];
+  var outParticles=[];
+  var t=0;
+  var scanA=0;
+
+  function draw(){
+    if(!document.getElementById('p-theoritic').classList.contains('active')){requestAnimationFrame(draw);return;}
+    w=c.parentElement.offsetWidth;c.width=w;
+    ctx.clearRect(0,0,w,h);ctx.fillStyle='#040810';ctx.fillRect(0,0,w,h);
+    t++;scanA+=0.008;
+
+    var leftX=Math.round(w*0.18);
+    var midX=Math.round(w*0.5);
+    var rightX=Math.round(w*0.82);
+    var cy=h/2;
+    var ringR=Math.min(h*0.35,80);
+
+    // Source labels + nodes
+    FLOW_SRCS.forEach(function(s,i){
+      var y=h*0.12+i*(h*0.76/(FLOW_SRCS.length-1));
+      var col=FLOW_COLS[i];
+      // Node dot
+      ctx.beginPath();ctx.arc(leftX,y,4,0,Math.PI*2);
+      ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;
+      // Label
+      ctx.font='600 9px Courier New';ctx.fillStyle=col;ctx.textAlign='right';
+      ctx.fillText(s,leftX-10,y+3);ctx.textAlign='left';
+      // Spawn particles toward center
+      if(Math.random()<0.15&&particles.length<60){
+        particles.push({x:leftX,y:y,col:col,t:0,spd:rnd(0.006,0.014)});
+      }
+    });
+
+    // Particles to center
+    particles.forEach(function(p,i){
+      p.t+=p.spd;
+      if(p.t>1){particles.splice(i,1);return;}
+      var px=p.x+(midX-p.x)*p.t;
+      var py=p.y+(cy-p.y)*p.t;
+      var a=Math.sin(p.t*Math.PI);
+      ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);ctx.fillStyle=p.col;ctx.globalAlpha=a*0.75;ctx.fill();ctx.globalAlpha=1;
+    });
+
+    // Sabian ring in center
+    ctx.beginPath();ctx.arc(midX,cy,ringR,0,Math.PI*2);
+    ctx.strokeStyle='rgba(0,200,232,0.25)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.beginPath();ctx.arc(midX,cy,ringR*1.18,0,Math.PI*2);
+    ctx.strokeStyle='rgba(0,200,232,0.08)';ctx.lineWidth=1;ctx.stroke();
+    // Rotating inner ring
+    ctx.save();ctx.translate(midX,cy);ctx.rotate(scanA);
+    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,ringR,-0.4,0,false);ctx.closePath();
+    ctx.fillStyle='rgba(0,200,232,0.07)';ctx.fill();ctx.restore();
+    // Labels
+    ctx.font='700 10px Courier New';ctx.fillStyle='#00c8e8';ctx.textAlign='center';
+    ctx.fillText('SABIAN',midX,cy-4);
+    ctx.font='600 8px Courier New';ctx.fillStyle='rgba(0,200,232,0.45)';
+    ctx.fillText('THEORITIC READ',midX,cy+10);ctx.textAlign='left';
+
+    // Output particles to right
+    if(Math.random()<0.12&&outParticles.length<25){
+      var col2=FLOW_COLS[Math.floor(Math.random()*FLOW_COLS.length)];
+      var oa=Math.random()*Math.PI*2;
+      var ex=midX+Math.cos(oa)*ringR;var ey=cy+Math.sin(oa)*ringR;
+      outParticles.push({x:ex,y:ey,tx:rightX,ty:h*0.15+Math.random()*h*0.7,col:col2,t:0,spd:rnd(0.006,0.012)});
+    }
+    outParticles.forEach(function(p,i){
+      p.t+=p.spd;
+      if(p.t>1){outParticles.splice(i,1);return;}
+      var px=p.x+(p.tx-p.x)*p.t,py=p.y+(p.ty-p.y)*p.t;
+      ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);ctx.fillStyle=p.col;ctx.globalAlpha=Math.sin(p.t*Math.PI)*0.8;ctx.fill();ctx.globalAlpha=1;
+    });
+
+    // Intelligence output
+    var intelIdx=Math.floor(t/180)%INTEL.length;
+    var lineY=h*0.18;
+    ctx.font='600 8px Courier New';
+    INTEL.forEach(function(line,i){
+      var isActive=i===intelIdx;
+      var col3=isActive?'#00ff88':'rgba(42,64,96,0.6)';
+      ctx.fillStyle=col3;
+      ctx.fillText(line,rightX+14,lineY+i*26);
+      if(isActive){
+        ctx.beginPath();ctx.arc(rightX+6,lineY+i*26-4,2.5,0,Math.PI*2);
+        ctx.fillStyle='#00ff88';ctx.shadowColor='#00ff88';ctx.shadowBlur=6;ctx.fill();ctx.shadowBlur=0;
+      }
+    });
+    // Right label
+    ctx.font='600 8px Courier New';ctx.fillStyle='rgba(0,255,136,0.45)';ctx.textAlign='center';
+    ctx.fillText('INTELLIGENCE',rightX+60,h-22);ctx.textAlign='left';
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══ SECURITY CANVAS — ISOLATION DIAGRAM ══ */
+var secParts=[],secPulses=[],secComps=[];
+function drawSecIso(){
+  var el=document.getElementById('p-security');
+  if(!el||!el.classList.contains('active'))return;
+  var iso=document.getElementById('sec-iso-c');
+  if(!iso)return;
+  var p=iso.parentElement;iso.width=p.offsetWidth;iso.height=420;
+  var ctx=iso.getContext('2d'),w=iso.width,h=iso.height;
+  var cx=w/2,cy=h/2,r=Math.min(w,h)*.36;
+  var companies=['WHOLESALE','SOVEREIGN','ECOMMERCE','HEALTHCARE','INDUSTRIAL'];
+  secComps=companies.map(function(n,i){
+    var a=(i/companies.length)*Math.PI*2-Math.PI/2;
+    return{label:n,nx:cx+Math.cos(a)*r,ny:cy+Math.sin(a)*r};
+  });
+  function frame(){
+    if(!document.getElementById('p-security').classList.contains('active'))return;
+    requestAnimationFrame(frame);
+    ctx.clearRect(0,0,w,h);
+    var now=Date.now();
+    secComps.forEach(function(s){
+      // Dashed read line
+      ctx.setLineDash([5,10]);ctx.beginPath();ctx.moveTo(s.nx,s.ny);ctx.lineTo(cx,cy);
+      ctx.strokeStyle='rgba(0,200,232,0.12)';ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);
+      // Company box
+      var bw=82,bh=32;
+      ctx.strokeStyle='rgba(0,200,232,0.28)';ctx.lineWidth=1;
+      ctx.strokeRect(s.nx-bw/2,s.ny-bh/2,bw,bh);
+      ctx.fillStyle='rgba(0,200,232,0.05)';ctx.fillRect(s.nx-bw/2,s.ny-bh/2,bw,bh);
+      ctx.fillStyle='rgba(0,200,232,0.5)';ctx.font='7px Courier New,monospace';ctx.textAlign='center';
+      ctx.fillText(s.label,s.nx,s.ny+2.5);
+      ctx.fillStyle='rgba(42,64,96,0.8)';ctx.font='6px Courier New,monospace';
+      ctx.fillText('YOUR DATA',s.nx,s.ny+12);
+    });
+    // Sabian center
+    var g=ctx.createRadialGradient(cx,cy,0,cx,cy,36);
+    g.addColorStop(0,'rgba(0,200,232,0.18)');g.addColorStop(1,'rgba(0,200,232,0)');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,36,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='rgba(0,200,232,0.55)';ctx.lineWidth=1;
+    ctx.strokeRect(cx-52,cy-20,104,40);ctx.fillStyle='rgba(0,200,232,0.07)';ctx.fillRect(cx-52,cy-20,104,40);
+    ctx.fillStyle='rgba(0,200,232,0.95)';ctx.font='7px Courier New,monospace';ctx.textAlign='center';
+    ctx.fillText('SABIAN TECHNOLOGY',cx,cy+2.5);ctx.fillStyle='rgba(42,64,96,0.9)';ctx.font='6px Courier New,monospace';
+    ctx.fillText('READ ONLY · OUTSIDE',cx,cy+12);
+    // Read particles (inward)
+    secParts=secParts.filter(function(b){return now-b.t<1900;});
+    secParts.forEach(function(b){
+      var age=(now-b.t)/1900,a=Math.max(0,1-age);
+      ctx.beginPath();ctx.arc(b.sx+(cx-b.sx)*age,b.sy+(cy-b.sy)*age,1.5,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,200,232,'+a.toFixed(2)+')';ctx.shadowColor='rgba(0,200,232,.7)';ctx.shadowBlur=4*a;ctx.fill();ctx.shadowBlur=0;
+    });
+    // Finding pulses (outward, green — signal not data)
+    secPulses=secPulses.filter(function(b){return now-b.t<1400;});
+    secPulses.forEach(function(b){
+      var age=(now-b.t)/1400,a=Math.max(0,1-age);
+      ctx.beginPath();ctx.arc(cx+(b.tx-cx)*age,cy+(b.ty-cy)*age,1.2,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,255,136,'+a.toFixed(2)+')';ctx.shadowColor='rgba(0,255,136,.7)';ctx.shadowBlur=3*a;ctx.fill();ctx.shadowBlur=0;
+    });
+    ctx.textAlign='left';
+  }
+  setInterval(function(){
+    if(!document.getElementById('p-security').classList.contains('active'))return;
+    var s=secComps[Math.floor(Math.random()*secComps.length)];
+    secParts.push({sx:s.nx+(Math.random()-.5)*16,sy:s.ny+(Math.random()-.5)*16,t:Date.now()});
+  },260);
+  setInterval(function(){
+    if(!document.getElementById('p-security').classList.contains('active'))return;
+    var s=secComps[Math.floor(Math.random()*secComps.length)];
+    secPulses.push({tx:s.nx,ty:s.ny,t:Date.now()});
+  },700);
+  /* Hero canvas — ambient glow */
+  var hc2=document.getElementById('sec-hero-c');
+  if(hc2){
+    var hp=hc2.parentElement;hc2.width=hp.offsetWidth;hc2.height=hp.offsetHeight;
+    var hx=hc2.getContext('2d'),hw=hc2.width,hh=hc2.height;
+    var hAngle=0;
+    setInterval(function(){
+      if(!document.getElementById('p-security').classList.contains('active'))return;
+      hc2.width=hw;hx.clearRect(0,0,hw,hh);
+      var sx=(Math.sin(hAngle)*0.5+0.5)*hw;
+      var gr=hx.createLinearGradient(sx-180,0,sx+180,0);
+      gr.addColorStop(0,'rgba(0,255,136,0)');gr.addColorStop(.5,'rgba(0,255,136,0.06)');gr.addColorStop(1,'rgba(0,255,136,0)');
+      hx.fillStyle=gr;hx.fillRect(0,0,hw,hh);hAngle+=0.008;
+    },40);
+  }
+  frame();
+}
+
+</script>
+</body></html>

@@ -4,11 +4,49 @@
 
 ## LANDING PAGE TERMINAL — BACKUP LINK
 
-**Artifact:** https://claude.ai/code/artifact/49522953-bfbb-44e9-8572-744a778019ad
+**Artifact (terminal):** https://claude.ai/code/artifact/49522953-bfbb-44e9-8572-744a778019ad
+**Artifact (white paper):** https://claude.ai/code/artifact/0590f912-5efa-47a2-9a08-42a3f7e44a7a
+**Local source file:** `C:\Users\user\AppData\Local\Temp\claude\C--Users-user\076a550f-566b-468a-914d-3f5c9cc9b276\scratchpad\sabian-terminal-v3.html`
 
-This is the Sabian landing page terminal — the full multi-page site (Home / Data / Latent / Engine / Sectors / Intelligence / Access). Built in dark terminal aesthetic with canvas animations. If the system crashes or the session is lost, open this URL to resume editing or redeploy.
+This is the Sabian Technology landing page terminal — 8-page multi-page site built as a dark terminal aesthetic SPA with canvas animations and hash-based routing.
 
-**To redeploy to Railway:** open the artifact, copy the full HTML source, paste into `index.html` in the Railway project.
+**To go live:** `dashboard/landing.html` in this repo IS the live terminal. The server (`sabian_api.cjs`) serves it at `/`. Push this repo to Railway — it deploys automatically.
+
+---
+
+## SESSION CHECKPOINT — 2026-08-14
+
+### Current pages (8 nav tabs)
+1. **Home** — convergence streams canvas (5 industry streams flowing to one point), 2 hero buttons: "Request access →" and "See it live ↓" (links to Intelligence page)
+2. **Data** — fragmented data types, Gartner stats strip (897 apps / 29% / 70% / 40%)
+3. **Latent** — "The answer is already in your data. Sabian Technology reads the combination." — silo argument removed from headline
+4. **Engine** — "The world built the infrastructure. Sabian Technology reads what it cannot." — rewritten with research data: $725B / 897 apps / 29% / 70%
+5. **Sectors** — "Five sectors. One reading position." — silo argument removed, sector-specific framing
+6. **Intelligence** — Theoritic Intelligence definition. 2-column asymmetric layout: reactive+predictive stacked left (faded), Theoritic dominant right. Three-condition definition written out.
+7. **Access** — "Access is by conversation." White paper direct download button (green, links to white paper artifact). Contact button.
+8. **Security** — NEW PAGE. Hero: "We hold a read position. Not your data." Architecture canvas: 5 company vaults, Sabian Technology center, cyan read-only particles flowing inward, green finding pulses outward. Two commitments (read-only / isolated). One-way intelligence statement. What we do / what we never do. Four auth cards. Compliance row.
+
+### White paper (separate artifact)
+Print-ready 5-page PDF-on-demand. Pages: Cover · The Bet ($725B / energy crisis) · The Gap (897/29%/40% agentic crisis / sovereign) · The Category (Theoritic Intelligence + 3-column ecosystem: Amazon built / Meta released / Sabian occupies) · The Window (18-36 months / Palantir validation). Save as PDF button using `window.print()`.
+
+### Design system
+CSS vars: `--bg:#040810 --panel:#070d1a --cyan:#00c8e8 --green:#00ff88 --warn:#ffaa00 --crit:#ff2244`
+Font: 'Courier New', Consolas, monospace
+
+### Hard rules for this project
+- **Company name:** Sabian Technology (never just "Sabian" alone in body copy)
+- **No em dashes anywhere** — use periods or line breaks
+- **No vendor names on site** — no Supabase, Muse, Glimmer, Paperclip, Llama etc.
+- **Keep technology broad** — no specific signal counts or domain numbers
+- **No silo argument repeated** — Data page establishes it once. Every other page assumes it landed.
+- **No three equal columns by default** — vary layouts: 2-col, 4-col, asymmetric
+
+### What still needs to be built (from audit)
+- [ ] How clients connect — three paths (CRM OAuth, CSV, API key) with animated particles on Engine page
+- [ ] AI agents page — infrastructure exists: `agent_receiver.cjs`, `deploy_smart_agent.cjs`, `llm_router.cjs`. Story: agents land at a URL, receive a task, execute against full Sabian stack, report back. Position as deployable intelligence units. New nav tab or Engine sub-section.
+- [ ] Historical depth (237 years, 1789 to present) — visual timeline on Intelligence page using V-Dem governance data
+- [ ] 3rd party reading story — "data your operation generates that no one told us to read" (FIRMS fire, GPS jamming, dark vessel, OpenSky, night lights) — most powerful theoritic intelligence demonstration
+- [ ] "Sabian Technology" name audit — some pages may still say just "Sabian" in body copy
 
 ---
 
