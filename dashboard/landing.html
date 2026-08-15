@@ -1108,63 +1108,21 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
   <div class="nav-r"><a href="#sovereign" style="font-family:'Courier New',Consolas,monospace;font-size:.42rem;letter-spacing:.22em;text-transform:uppercase;color:var(--warn);text-decoration:none;padding:7px 16px;border:1px solid rgba(255,170,0,.28);background:rgba(255,170,0,.05)">Access Terminal</a></div>
 </nav>
 
-<!-- TERMINAL GATE — MILITARY LOCK SCREEN -->
-<div style="height:calc(100vh - 60px);display:flex;flex-direction:column;align-items:center;justify-content:center;background:#020508;position:relative;overflow:hidden">
-  <!-- Radar canvas -->
-  <canvas id="sov-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
-  <!-- Scan lines overlay -->
-  <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.18) 3px,rgba(0,0,0,0.18) 4px);pointer-events:none;z-index:1"></div>
-  <!-- Gate content -->
-  <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:min(480px,88vw)">
-    <!-- Top crosshair -->
-    <div style="display:flex;align-items:center;gap:0;margin-bottom:3rem;width:100%">
-      <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(255,34,68,.35))"></div>
-      <div style="width:6px;height:6px;border:1px solid rgba(255,34,68,.6);margin:0 8px;transform:rotate(45deg)"></div>
-      <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,rgba(255,34,68,.35))"></div>
-    </div>
-    <!-- Terminal box -->
-    <div style="width:100%;border:1px solid rgba(255,34,68,.22);background:rgba(2,5,8,0.92);padding:2.5rem 2.5rem">
-      <!-- Header bar -->
-      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:1.25rem;border-bottom:1px solid rgba(255,34,68,.15);margin-bottom:1.75rem">
-        <div style="font-size:.38rem;letter-spacing:.42em;text-transform:uppercase;color:rgba(255,34,68,.55)">SBN-TERM · SIT-CLASS-A</div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <div id="gate-pulse" style="width:5px;height:5px;background:var(--crit);border-radius:50%"></div>
-          <div style="font-size:.38rem;letter-spacing:.28em;text-transform:uppercase;color:var(--crit)">RESTRICTED</div>
-        </div>
+<!-- TERMINAL GATE -->
+<div style="height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;background:#020508">
+  <div style="width:min(400px,88vw)">
+    <div style="border:1px solid rgba(255,34,68,.25);background:#020508;padding:2.5rem">
+      <div style="font-size:.38rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,34,68,.5);margin-bottom:2rem;font-family:'Courier New',Consolas,monospace">Sabian Technology &middot; Restricted Access</div>
+      <div style="display:flex;gap:0;margin-bottom:.75rem">
+        <input id="gate-code" type="password" placeholder="Enter access code" autocomplete="off"
+          style="flex:1;background:rgba(255,34,68,.03);border:1px solid rgba(255,34,68,.3);border-right:none;padding:13px 16px;color:var(--bright);font-family:'Courier New',Consolas,monospace;font-size:.82rem;letter-spacing:.06em;outline:none;caret-color:var(--crit);width:100%;box-sizing:border-box"
+          onkeydown="if(event.key==='Enter')checkGateCode()">
+        <button onclick="checkGateCode()"
+          style="background:rgba(255,34,68,.08);border:1px solid rgba(255,34,68,.3);color:var(--crit);font-family:'Courier New',Consolas,monospace;font-size:.72rem;letter-spacing:.14em;padding:13px 20px;cursor:pointer;white-space:nowrap">
+          Enter
+        </button>
       </div>
-      <!-- Main denial text -->
-      <div style="font-size:.38rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,34,68,.45);margin-bottom:.75rem">Authorization check</div>
-      <div style="font-size:1.4rem;color:var(--crit);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.75rem;font-weight:700">Clearance insufficient.</div>
-      <!-- Redacted bars -->
-      <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.75rem">
-        <div style="height:7px;background:rgba(255,34,68,.12);position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,34,68,.18) 0px,rgba(255,34,68,.18) 12px,transparent 12px,transparent 16px)"></div></div>
-        <div style="height:7px;width:72%;background:rgba(255,34,68,.08);position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,34,68,.12) 0px,rgba(255,34,68,.12) 12px,transparent 12px,transparent 16px)"></div></div>
-        <div style="height:7px;width:88%;background:rgba(255,34,68,.1);position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,34,68,.15) 0px,rgba(255,34,68,.15) 12px,transparent 12px,transparent 16px)"></div></div>
-      </div>
-      <!-- Log notice -->
-      <div style="padding:.75rem 1rem;border-left:2px solid rgba(255,34,68,.4);background:rgba(255,34,68,.04);margin-bottom:1.75rem">
-        <div style="font-size:.52rem;color:rgba(255,34,68,.7);letter-spacing:.12em;text-transform:uppercase;line-height:1.9">This session has been logged.<br>Unauthorised access attempts are recorded.</div>
-      </div>
-      <!-- Code input -->
-      <div style="margin-bottom:1rem">
-        <div style="font-size:.38rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,34,68,.4);margin-bottom:.6rem">Enter access code</div>
-        <div style="display:flex;gap:0">
-          <input id="gate-code" type="password" placeholder="_ _ _ _ _ _ _ _ _ _" autocomplete="off" style="flex:1;background:rgba(255,34,68,.03);border:1px solid rgba(255,34,68,.28);border-right:none;padding:10px 14px;color:var(--crit);font-family:'Courier New',Consolas,monospace;font-size:.55rem;letter-spacing:.35em;text-transform:uppercase;outline:none;caret-color:var(--crit)" onkeydown="if(event.key==='Enter')checkGateCode()">
-          <button onclick="checkGateCode()" style="background:rgba(255,34,68,.07);border:1px solid rgba(255,34,68,.28);color:var(--crit);font-family:'Courier New',Consolas,monospace;font-size:.4rem;letter-spacing:.22em;text-transform:uppercase;padding:10px 16px;cursor:pointer">Submit</button>
-        </div>
-        <div id="gate-err" style="font-size:.4rem;color:var(--crit);letter-spacing:.18em;text-transform:uppercase;margin-top:.6rem;display:none">Authorization failed &mdash; access denied.</div>
-      </div>
-      <!-- Request link -->
-      <div style="border-top:1px solid rgba(255,34,68,.1);padding-top:1.25rem;display:flex;align-items:center;justify-content:space-between">
-        <div style="font-size:.36rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,34,68,.3)">No code</div>
-        <a href="mailto:support@sabian.ai?subject=Terminal Access Request" style="font-size:.38rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,34,68,.55);text-decoration:none;border:1px solid rgba(255,34,68,.22);padding:7px 16px;background:rgba(255,34,68,.04)">Request clearance &rarr;</a>
-      </div>
-    </div>
-    <!-- Bottom crosshair -->
-    <div style="display:flex;align-items:center;gap:0;margin-top:3rem;width:100%">
-      <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(255,34,68,.35))"></div>
-      <div style="width:6px;height:6px;border:1px solid rgba(255,34,68,.6);margin:0 8px;transform:rotate(45deg)"></div>
-      <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,rgba(255,34,68,.35))"></div>
+      <div id="gate-err" style="font-size:.72rem;color:var(--crit);font-family:'Courier New',Consolas,monospace;display:none">Access denied.</div>
     </div>
   </div>
 </div>
@@ -1443,7 +1401,7 @@ function navigate(hash){
   if(pg==='p-solution'&&!started.sol){started.sol=true;setTimeout(startRev,5000);}
   if(pg==='p-verticals'&&!started.vert){started.vert=true;}
   if(pg==='p-agents'&&!started.agt){started.agt=true;drawAgents();}
-  if(pg==='p-sovereign'&&!started.sov){started.sov=true;drawSovCanvas();}
+  if(pg==='p-sovereign'&&!started.sov){started.sov=true;}
   if(pg==='p-security'&&!started.sec){started.sec=true;drawSecIso();}
 }
 function checkGateCode(){
