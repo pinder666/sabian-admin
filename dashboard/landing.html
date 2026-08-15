@@ -212,6 +212,8 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
   .pipeline{flex-direction:column}.parr{transform:rotate(90deg)}
   .lnd-hero{padding:4rem 6vw}
   .lnd-wordmark{letter-spacing:.4em}
+  .agt-flow-grid{display:grid;grid-template-columns:1fr}
+  .agt-feed-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 
@@ -230,6 +232,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#solution">Engine</a>
     <a class="np" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#agents">Agents</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
   </div>
@@ -266,6 +269,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#solution">Engine</a>
     <a class="np" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#agents">Agents</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
   </div>
@@ -421,6 +425,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#solution">Engine</a>
     <a class="np" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#agents">Agents</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
   </div>
@@ -548,6 +553,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np on" href="#solution">Engine</a>
     <a class="np" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#agents">Agents</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
   </div>
@@ -654,6 +660,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#solution">Engine</a>
     <a class="np on" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#agents">Agents</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
   </div>
@@ -796,6 +803,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#solution">Engine</a>
     <a class="np" href="#verticals">Sectors</a>
     <a class="np on" href="#theoritic">Intelligence</a>
+    <a class="np" href="#agents">Agents</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
   </div>
@@ -927,7 +935,121 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
 </div>
 
 <!-- ════════════════════════════════════════
-     PAGE 7 · ACCESS
+     PAGE 7 · AGENTS
+════════════════════════════════════════ -->
+<div id="p-agents" class="pv">
+<nav class="nav">
+  <a class="nav-brand" href="#home"><img class="nav-logo-img" alt="Sabian Technology"></a>
+  <span class="nav-sep"></span>
+  <div class="nav-pages">
+    <a class="np" href="#home">Home</a>
+    <a class="np" href="#data">Data</a>
+    <a class="np" href="#latent">Latent</a>
+    <a class="np" href="#solution">Engine</a>
+    <a class="np" href="#verticals">Sectors</a>
+    <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np on" href="#agents">Agents</a>
+    <a class="np" href="#access">Access</a>
+    <a class="np" href="#security">Security</a>
+  </div>
+  <div class="nav-r"><a class="nav-cta" href="mailto:support@sabian.ai">Contact</a></div>
+</nav>
+
+<div class="pg-label cy">Agent dispatch &middot; autonomous intelligence units</div>
+
+<!-- DISPATCH CANVAS -->
+<div style="position:relative;width:100%;height:400px;background:var(--bg);overflow:hidden;border-bottom:1px solid var(--border)">
+  <canvas id="agt-canvas" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+  <div style="position:absolute;left:0;top:0;width:27%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 2rem;pointer-events:none">
+    <div style="font-size:.44rem;letter-spacing:.38em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.25rem;display:flex;align-items:center;gap:10px"><span style="display:inline-block;width:12px;height:1px;background:var(--cyan)"></span>Agents</div>
+    <h1 style="font-size:clamp(1.5rem,3.2vw,2.4rem);color:var(--white);letter-spacing:.04em;line-height:1.2;margin-bottom:1rem">We deploy<br>the agent.<br><span style="color:var(--green)">You receive<br>the finding.</span></h1>
+    <p style="font-size:clamp(.78rem,1.2vw,.92rem);color:var(--text);line-height:2;letter-spacing:.02em">Sabian Technology builds and deploys AI agents on your behalf. Each one has a mission. It runs. It reports. You never touch the infrastructure.</p>
+  </div>
+</div>
+
+<!-- THREE PHASES -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);margin-top:1px">
+  <div style="background:var(--panel);padding:2rem 2rem">
+    <div style="font-size:.44rem;letter-spacing:.32em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">01 &middot; Mission briefing</div>
+    <div style="font-size:1.1rem;color:var(--white);letter-spacing:.04em;margin-bottom:.75rem">You state the mission.</div>
+    <p style="font-size:.82rem;color:var(--text);line-height:1.95">Not a software requirement. Not a data spec. You tell us what you need the agent to watch for. We scope it, configure it, and deploy it. You never see the infrastructure.</p>
+  </div>
+  <div style="background:var(--panel2);padding:2rem 2rem;border-left:1px solid var(--border);border-right:1px solid var(--border)">
+    <div style="font-size:.44rem;letter-spacing:.32em;text-transform:uppercase;color:var(--warn);margin-bottom:1rem">02 &middot; Deployment</div>
+    <div style="font-size:1.1rem;color:var(--white);letter-spacing:.04em;margin-bottom:.75rem">The agent goes to work.</div>
+    <p style="font-size:.82rem;color:var(--text);line-height:1.95">Sabian Technology deploys the agent into position. It runs continuously against the full sovereign intelligence stack. Pattern memory included. Historical depth included. It does not stop until conditions change or the mission is complete.</p>
+  </div>
+  <div style="background:var(--panel);padding:2rem 2rem">
+    <div style="font-size:.44rem;letter-spacing:.32em;text-transform:uppercase;color:var(--green);margin-bottom:1rem">03 &middot; Reporting</div>
+    <div style="font-size:1.1rem;color:var(--white);letter-spacing:.04em;margin-bottom:.75rem">The finding reaches you.</div>
+    <p style="font-size:.82rem;color:var(--text);line-height:1.95">When the agent finds something that meets the mission threshold, it delivers the finding directly to you. One structured result. The consequence stated. The agent remains in position.</p>
+  </div>
+</div>
+
+<!-- WHAT MISSIONS LOOK LIKE -->
+<div class="pg-label d" style="margin-top:1px">What a mission looks like</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);margin-top:1px">
+  <div style="background:var(--panel);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Wholesale &middot; Standing mission</div>
+    <div style="font-size:.88rem;color:var(--bright);letter-spacing:.02em;line-height:1.65;margin-bottom:.75rem">Watch the supply corridors this company depends on. Report when pressure crosses threshold. Do not report noise.</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.9">The agent runs continuously. The buyer gets a finding when something real changes. Not a daily summary. Not a dashboard. A finding.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Sovereign &middot; Standing mission</div>
+    <div style="font-size:.88rem;color:var(--bright);letter-spacing:.02em;line-height:1.65;margin-bottom:.75rem">Monitor governance trajectory across these six markets. Flag when any diverges from its historical path. State the consequence.</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.9">237 years of depth. The agent knows what normal looks like for each market going back to 1789. A break is a break. It will find it.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Healthcare &middot; Standing mission</div>
+    <div style="font-size:.88rem;color:var(--bright);letter-spacing:.02em;line-height:1.65;margin-bottom:.75rem">Watch external signals that correlate with this facility's supply chain delays. Report when a pattern forms before the delay arrives.</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.9">The agent reads data the operation generates without knowing it generates. It finds the signal before the symptom reaches procurement.</div>
+  </div>
+  <div style="background:var(--bg);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Energy &middot; On-demand mission</div>
+    <div style="font-size:.88rem;color:var(--bright);letter-spacing:.02em;line-height:1.65;margin-bottom:.75rem">Before Q4 procurement: read every pressure signal on the corridors we buy from. Return the exposure picture now.</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.9">Deployed once. Executes fully. Returns one structured finding. The agent does not linger when the mission is complete.</div>
+  </div>
+  <div style="background:var(--bg);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Defense &middot; Standing mission</div>
+    <div style="font-size:.88rem;color:var(--bright);letter-spacing:.02em;line-height:1.65;margin-bottom:.75rem">Watch this operating area. Alert on any pattern consistent with pre-incident signatures from the last five years.</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.9">The agent has the full historical record. It knows what the noise looked like before the last three incidents. That pattern recognition is the mission.</div>
+  </div>
+  <div style="background:var(--bg);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Any vertical &middot; Custom mission</div>
+    <div style="font-size:.88rem;color:var(--bright);letter-spacing:.02em;line-height:1.65;margin-bottom:.75rem">The mission is yours to define. Sabian Technology scopes, builds, deploys, and operates the agent on your behalf.</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.9">The intelligence stack does not change between clients. What changes is the question the agent is sent to answer.</div>
+  </div>
+</div>
+
+<!-- FINDING FORMAT -->
+<div style="display:grid;grid-template-columns:1fr 1.6fr;gap:1px;background:var(--border);margin-top:1px">
+  <div style="background:var(--panel);padding:2.5rem 2rem;display:flex;flex-direction:column;justify-content:center">
+    <div style="font-size:.44rem;letter-spacing:.32em;text-transform:uppercase;color:var(--green);margin-bottom:1rem">The finding</div>
+    <h2 style="font-size:1.6rem;color:var(--white);letter-spacing:.04em;line-height:1.3;margin-bottom:1rem">One finding.<br>Not a report.</h2>
+    <p style="font-size:.85rem;color:var(--text);line-height:2">The agent does not produce a dashboard. It does not produce a summary with caveats. It states what it found, what the data says, how confident the reading is, and what the consequence is if the finding holds. That is the entire output. Sabian Technology operates the agent. You receive the result.</p>
+    <div style="margin-top:2rem">
+      <a href="#access" style="font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,200,232,.3);padding:8px 20px;background:rgba(0,200,232,.05)">Discuss a mission &rarr;</a>
+    </div>
+  </div>
+  <div style="background:var(--bg);padding:2.5rem 2.5rem;display:flex;align-items:center">
+    <div style="width:100%;font-family:'Courier New',monospace;font-size:.75rem;line-height:2;border:1px solid var(--border2);padding:1.5rem 2rem;background:var(--panel)">
+      <div style="color:var(--dim);margin-bottom:.5rem;font-size:.5rem;letter-spacing:.28em;text-transform:uppercase">Agent finding · structured response</div>
+      <div style="color:var(--dim)">&#x7B;</div>
+      <div style="padding-left:1.5rem"><span style="color:var(--cyan)">"finding"</span><span style="color:var(--dim)">:</span> <span style="color:var(--text)">"Vessel traffic through Strait of Hormuz down 23% over 14 days. Three tankers dark. Correlated with ACLED spike in adjacent grid. Pattern consistent with Q3 2019 precursor."</span><span style="color:var(--dim)">,</span></div>
+      <div style="padding-left:1.5rem"><span style="color:var(--cyan)">"confidence"</span><span style="color:var(--dim)">:</span> <span style="color:var(--green)">0.91</span><span style="color:var(--dim)">,</span></div>
+      <div style="padding-left:1.5rem"><span style="color:var(--cyan)">"sources"</span><span style="color:var(--dim)">: [</span><span style="color:var(--warn)">"AIS"</span><span style="color:var(--dim)">, </span><span style="color:var(--warn)">"ACLED"</span><span style="color:var(--dim)">, </span><span style="color:var(--warn)">"GDELT"</span><span style="color:var(--dim)">],</span></div>
+      <div style="padding-left:1.5rem"><span style="color:var(--cyan)">"consequence"</span><span style="color:var(--dim)">:</span> <span style="color:var(--text)">"Energy cost exposure elevated for Q4 procurement windows."</span><span style="color:var(--dim)">,</span></div>
+      <div style="padding-left:1.5rem"><span style="color:var(--cyan)">"timestamp"</span><span style="color:var(--dim)">:</span> <span style="color:var(--dim)">"2026-08-14T09:41:00Z"</span></div>
+      <div style="color:var(--dim)">&#x7D;</div>
+    </div>
+  </div>
+</div>
+
+<div class="foot"><span>Sabian Global Inc. &middot; sabian.ai</span><a href="mailto:support@sabian.ai">support@sabian.ai</a></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 8 · ACCESS
 ════════════════════════════════════════ -->
 <div id="p-access" class="pv">
 <nav class="nav">
@@ -940,6 +1062,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#solution">Engine</a>
     <a class="np" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#agents">Agents</a>
     <a class="np on" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
   </div>
@@ -1081,7 +1204,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
 
 <script>
 /* ══ ROUTER ══ */
-var pages={home:'p-home',data:'p-data',latent:'p-latent',solution:'p-solution',verticals:'p-verticals',theoritic:'p-theoritic',access:'p-access',security:'p-security'};
+var pages={home:'p-home',data:'p-data',latent:'p-latent',solution:'p-solution',verticals:'p-verticals',theoritic:'p-theoritic',agents:'p-agents',access:'p-access',security:'p-security'};
 var started={};
 function navigate(hash){
   var pg=pages[hash]||'p-home';
@@ -1089,6 +1212,7 @@ function navigate(hash){
   window.scrollTo(0,0);
   if(pg==='p-solution'&&!started.sol){started.sol=true;setTimeout(startRev,5000);}
   if(pg==='p-verticals'&&!started.vert){started.vert=true;}
+  if(pg==='p-agents'&&!started.agt){started.agt=true;drawAgents();}
   if(pg==='p-security'&&!started.sec){started.sec=true;drawSecIso();}
 }
 window.addEventListener('hashchange',function(){navigate(location.hash.replace('#',''));});
@@ -2022,6 +2146,95 @@ loop();
 
 /* ══ SECURITY CANVAS — ISOLATION DIAGRAM ══ */
 var secParts=[],secPulses=[],secComps=[];
+function drawAgents(){
+  var c=document.getElementById('agt-canvas');
+  if(!c)return;
+  var p=c.parentElement;
+  c.width=p.offsetWidth;c.height=p.offsetHeight;
+  var ctx=c.getContext('2d'),w=c.width,h=c.height;
+  var z1=w*0.28,z2=w*0.72,cx=(z1+z2)/2;
+  var feeds=['PATTERN MEMORY · ACTIVE','LIVE SIGNALS · READING','HISTORICAL DEPTH · 1789','MACRO CONTEXT · INJECTED','SOVEREIGN VECTORS · CROSS-REF','MARITIME CORRIDOR · SCANNING','CONFLICT GRID · ACTIVE','GOVERNANCE LAYER · READING'];
+  var feedGlow=new Array(feeds.length).fill(0);
+  var agtParts=[];
+  function spawnTask(){
+    var fi=Math.floor(Math.random()*feeds.length);
+    var fy=h*(0.14+fi/(feeds.length-1)*0.72);
+    agtParts.push({x:z1*0.46,y:h*0.5,tx:cx,ty:fy,t:Date.now(),dur:750,type:'task',fi:fi,lit:false});
+  }
+  function spawnFinding(fi){
+    var fy=h*(0.14+fi/(feeds.length-1)*0.72);
+    agtParts.push({x:cx,y:fy,tx:z2+(w-z2)*0.5,ty:h*0.5,t:Date.now(),dur:600,type:'find',fi:fi});
+  }
+  function frame(){
+    if(!document.getElementById('p-agents').classList.contains('active'))return;
+    requestAnimationFrame(frame);
+    ctx.clearRect(0,0,w,h);
+    var now=Date.now();
+    // zone dividers
+    ctx.strokeStyle='rgba(14,28,48,0.9)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(z1,0);ctx.lineTo(z1,h);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(z2,0);ctx.lineTo(z2,h);ctx.stroke();
+    // zone labels
+    ctx.font='7px Courier New,monospace';ctx.textAlign='center';
+    ctx.fillStyle='rgba(0,200,232,0.4)';ctx.fillText('AGENT ENDPOINT',z1*0.5,14);
+    ctx.fillStyle='rgba(0,200,232,0.28)';ctx.fillText('SOVEREIGN STACK',cx,14);
+    ctx.fillStyle='rgba(0,255,136,0.4)';ctx.fillText('FINDING RETURNED',z2+(w-z2)*0.5,14);
+    // endpoint box
+    var ex=z1*0.5,ey=h*0.5;
+    ctx.strokeStyle='rgba(0,200,232,0.32)';ctx.lineWidth=1;
+    ctx.strokeRect(ex-50,ey-22,100,44);
+    ctx.fillStyle='rgba(0,200,232,0.04)';ctx.fillRect(ex-50,ey-22,100,44);
+    ctx.fillStyle='rgba(0,200,232,0.65)';ctx.font='6.5px Courier New,monospace';ctx.textAlign='center';
+    ctx.fillText('POST /agent',ex,ey-5);
+    ctx.fillStyle='rgba(42,64,96,0.9)';ctx.font='6px Courier New,monospace';
+    ctx.fillText('{ task, query }',ex,ey+6);
+    if(Math.floor(now/500)%2){ctx.fillStyle='rgba(0,200,232,0.85)';ctx.fillRect(ex+26,ey+10,5,1.5);}
+    // finding box
+    var fx2=z2+(w-z2)*0.5,fy2=h*0.5;
+    var fGlow=agtParts.filter(function(b){return b.type==='find'&&(now-b.t)<b.dur+300;}).length>0?1:0;
+    ctx.strokeStyle=fGlow?'rgba(0,255,136,0.5)':'rgba(0,255,136,0.25)';ctx.lineWidth=1;
+    ctx.strokeRect(fx2-50,fy2-28,100,56);
+    ctx.fillStyle=fGlow?'rgba(0,255,136,0.07)':'rgba(0,255,136,0.03)';ctx.fillRect(fx2-50,fy2-28,100,56);
+    if(fGlow){var rg=ctx.createRadialGradient(fx2,fy2,0,fx2,fy2,40);rg.addColorStop(0,'rgba(0,255,136,0.12)');rg.addColorStop(1,'rgba(0,255,136,0)');ctx.fillStyle=rg;ctx.fillRect(fx2-50,fy2-28,100,56);}
+    ctx.fillStyle='rgba(0,255,136,0.6)';ctx.font='6px Courier New,monospace';ctx.textAlign='center';
+    ctx.fillText('{ finding,',fx2,fy2-10);ctx.fillText('confidence,',fx2,fy2);ctx.fillText('sources }',fx2,fy2+10);
+    // feeds
+    feeds.forEach(function(f,i){
+      var fy=h*(0.14+i/(feeds.length-1)*0.72);
+      var gl=feedGlow[i];
+      if(gl>0)feedGlow[i]=Math.max(0,gl-0.016);
+      ctx.globalAlpha=0.28+gl*0.72;
+      ctx.fillStyle=gl>0.05?'rgba(0,200,232,0.95)':'rgba(42,64,96,0.75)';
+      ctx.font='6.5px Courier New,monospace';ctx.textAlign='center';
+      ctx.fillText(f,cx,fy+2.5);
+      // feed line
+      ctx.strokeStyle=gl>0.05?('rgba(0,200,232,'+(gl*0.35)+')'):'rgba(14,28,48,0.5)';
+      ctx.lineWidth=gl>0.05?1:0.5;ctx.setLineDash(gl>0.05?[]:[4,6]);
+      ctx.beginPath();ctx.moveTo(z1+10,fy);ctx.lineTo(z2-10,fy);ctx.stroke();ctx.setLineDash([]);
+      ctx.globalAlpha=1;
+    });
+    // particles
+    agtParts=agtParts.filter(function(b){return now-b.t<b.dur+400;});
+    agtParts.forEach(function(b){
+      var age=(now-b.t)/b.dur;if(age>1)return;
+      var px=b.x+(b.tx-b.x)*age,py=b.y+(b.ty-b.y)*age;
+      var col=b.type==='task'?'0,200,232':'0,255,136';
+      var alpha=Math.max(0,0.9-age*0.4);
+      ctx.beginPath();ctx.arc(px,py,2.2,0,Math.PI*2);
+      ctx.fillStyle='rgba('+col+','+alpha+')';
+      ctx.shadowColor='rgba('+col+',0.8)';ctx.shadowBlur=6*alpha;ctx.fill();ctx.shadowBlur=0;
+      // trail
+      var trail=Math.min(age,0.15);
+      ctx.beginPath();ctx.moveTo(b.x+(b.tx-b.x)*(age-trail),b.y+(b.ty-b.y)*(age-trail));ctx.lineTo(px,py);
+      ctx.strokeStyle='rgba('+col+','+alpha*0.3+')';ctx.lineWidth=1;ctx.stroke();
+      if(b.type==='task'&&age>0.88&&!b.lit){b.lit=true;feedGlow[b.fi]=1;setTimeout(function(){spawnFinding(b.fi);},250+Math.random()*150);}
+    });
+    ctx.textAlign='left';
+  }
+  setInterval(function(){if(!document.getElementById('p-agents').classList.contains('active'))return;spawnTask();},380);
+  frame();
+}
+
 function drawSecIso(){
   var el=document.getElementById('p-security');
   if(!el||!el.classList.contains('active'))return;
