@@ -6,48 +6,134 @@
 
 **Artifact (terminal):** https://claude.ai/code/artifact/49522953-bfbb-44e9-8572-744a778019ad
 **Artifact (white paper):** https://claude.ai/code/artifact/0590f912-5efa-47a2-9a08-42a3f7e44a7a
-**Local source file:** `C:\Users\user\AppData\Local\Temp\claude\C--Users-user\076a550f-566b-468a-914d-3f5c9cc9b276\scratchpad\sabian-terminal-v3.html`
-
-This is the Sabian Technology landing page terminal — 8-page multi-page site built as a dark terminal aesthetic SPA with canvas animations and hash-based routing.
-
-**To go live:** `dashboard/landing.html` in this repo IS the live terminal. The server (`sabian_api.cjs`) serves it at `/`. Push this repo to Railway — it deploys automatically.
+**Live file (push to deploy):** `dashboard/landing.html` — server (`sabian_api.cjs`) serves it at `/`. Push this repo to Railway and it deploys automatically.
 
 ---
 
-## SESSION CHECKPOINT — 2026-08-14
+## SESSION CHECKPOINT — 2026-08-17 (CURRENT — supersedes everything below where they conflict)
 
-### Current pages (9 nav tabs)
-1. **Home** — convergence streams canvas (5 industry streams flowing to one point), 2 hero buttons: "Request access →" and "See it live ↓" (links to Intelligence page)
-2. **Data** — fragmented data types, Gartner stats strip (897 apps / 29% / 70% / 40%)
-3. **Latent** — "The answer is already in your data. Sabian Technology reads the combination." — silo argument removed from headline
-4. **Engine** — "The world built the infrastructure. Sabian Technology reads what it cannot." — rewritten with research data: $725B / 897 apps / 29% / 70%
-5. **Sectors** — "Five sectors. One reading position." — silo argument removed, sector-specific framing
-6. **Intelligence** — Theoritic Intelligence definition. 2-column asymmetric layout: reactive+predictive stacked left (faded), Theoritic dominant right. Three-condition definition written out.
-7. **Agents** — NEW PAGE. Hero: "We deploy the agent. You receive the finding." Canvas: dispatch flow animation (endpoint box → execution layers lighting up → finding box). Three phases: Mission Briefing / Deployment / Reporting. Six mission cards by vertical (Wholesale/Sovereign/Healthcare/Energy/Defense/Custom). Finding format JSON. CTA: "Discuss a mission →". No source names, no trade secrets — client sees the mission model only.
-8. **Access** — "Access is by conversation." White paper direct download button (green, links to white paper artifact). Contact button.
-9. **Security** — Hero: "We hold a read position. Not your data." Architecture canvas: 5 company vaults, Sabian Technology center, cyan read-only particles flowing inward, green finding pulses outward. Two commitments (read-only / isolated). One-way intelligence statement. What we do / what we never do. Four auth cards. Compliance row.
+### Ground truth established this session (audited, verified)
+- **Engine:** 48 weighted signals computed (not 16, not 8). Last full scan covered **202 entries** in `countries_canonical` — includes territories, disputed zones, and defunct states. **Never state a country or signal count publicly.** The site now says "Global coverage" only.
+- **Signal integrity:** see `SIGNAL_INTEGRITY_2026_08_17 (1).md` (operator-verified 2026-08-17). 7 signals are World Bank proxies under intelligence-register names; 3 dead (sanctions ends 2005, elections end 2020, social unrest removed with ACLED); 2 a year behind (UCDP v24.1 vs v25.1, EIA 2023 vs 2024). Section 7A flags ~15 more suspected proxies (sovereign_cds sharpest) — NOT yet source-verified. 26 of 47 historical fetchers call only api.worldbank.org; 19 call genuine domain sources.
+- **Equation mismatch (HIGHEST-SEVERITY OPEN ITEM):** `convergence_engine.cjs` computes `peak3*0.5 + weightedAvg*0.35 + breadthBoost`, but the published decomposition/METHODOLOGY describes a pure weighted average. Weight sum is actually 1.14 (structural_pressure double-counted), not the asserted 1.00.
+- **Sudan 2023 case:** no stored artifact anywhere; DOD dossier and site gave contradictory dates. Landing page now labels it "Reconstruction / Illustrative" — restore hard claims only after a real, saved re-run.
+- **Chain anchoring is REAL:** per-row SHA-256 chains + weekly anchor with RFC 3161 timestamp (freetsa) + OpenTimestamps Bitcoin submission (`historical/chain_anchor.cjs`, cron Sun 0300). Whether any anchor has CONFIRMED on-chain = check `chain_anchors.ots_confirmed` in Supabase.
+- **Two terminals:** `dashboard/landing.html` demo terminal = 20 preloaded countries, no API calls (string-hash fabrication for unknown countries REMOVED 2026-08-17 — now returns "NOT IN DEMO SET"). The REAL wired terminal is `dashboard/index.html`, served at `/terminal`.
+- **API security:** `sabian_api.cjs` has hardcoded fallback keys (`sabian_key`, `test_key`, `sabian_user_2026`) if env vars unset. VERIFY Railway env vars are set; remove fallbacks.
+- **Saved scan record:** only 6 scan files, latest 2026-06-25. Check Supabase `convergence_scores` for July–August rows to confirm Railway crons actually ran.
+- **ANTHROPIC_API_KEY:** present in local `.env`; removed from Railway only. Scoring/grading/anchoring are all LLM-free; dossier degrades cleanly without it; briefings and QA hard-fail.
+
+### Landing page changes applied 2026-08-17
+1. Home CTA: "Request a briefing →" (was "Request access"). 2. Security/Advisory learning contradiction reconciled (pattern-level only, no client records). 3. "Tamper-evident" (was tamper-proof). 4. "Electronic Warfare Activity" removed everywhere → "Information blackout" (IODA/OONI/Tor-backed); "Sanctions Exposure" → "Capital Flows"; "Resource Conflict" display name → "Resource Dependency". 5. Sudan block reframed as illustrative reconstruction; "accuracy record / Published / Reproducible" removed; broken 90-day arithmetic removed. 6. Assessment widget no longer fabricates scores for unknown countries; demo label shown BEFORE running. 7. "160 countries · 16 indicators" → "Global coverage"; "continuously" removed pending cron verification. 8. "Published equation" → "Published methodology"; "buying a track record" → "record is inspectable under access". 9. NEW terminal section: 30-day API credential offer ("The terminal is the window. Access is the credential."). 10. NEW Security page blocks: Custody model (Connected / Resident / Sovereign), terminal one-way data statement, audit-without-our-cooperation (chain anchoring). 11. Security architecture graphic rebuilt as an animated pipeline: 193-country dot field (DATA IN) → SABIAN TERMINAL (live READING/REPORTING ticker) → entity boxes (FINDINGS OUT), with directional marching dash lines both sides. 12. PUBLIC right column is GENERIC categories under "BUILT FOR" (Underwriters / Sovereign Funds / Institutional Investors / Government Agencies / Risk & Advisory Desks / Defense) — the specific 8-segment buyer list (political risk underwriters, trade credit carriers, syndicates & MGAs, broker desks, SWFs, institutional, export credit agencies, defense/IC) is PRIVATE: deck, outreach, and gated surfaces only. Broker fan-out/champion logic never appears anywhere public. 13. Home hero rewritten: h1 = "The terminal that reads the world. Continuously." + concrete sub (193 countries daily, published methodology, sealed/graded record, inspectable). "World leaders" and "world's first" removed sitewide; the old abstract "Every organisation is surrounded by intelligence..." paragraph is gone. Rule applied: every home-hero sentence must be backable by the system. 14. Fake "341 patterns active" counter removed (it was a random-number timer, 338–347). No simulated liveness remains on the home hero.
+
+### This-week backend fix list (in order)
+1. Verify Railway env keys; delete hardcoded API-key fallbacks in `sabian_api.cjs`
+2. Make published equation = running equation (fix engine or fix METHODOLOGY + decomposition); fix 1.14 weight sum / structural_pressure double-count
+3. Signal renames per SIGNAL_INTEGRITY section 8 Problem A + build signal contracts (Problem B: no silent nulls, declared fallbacks, staleness = failure)
+4. Update UCDP to v25.1; pull EIA 2024; stand up real OFAC SDN sanctions feed
+5. Re-run Sudan 2023 with saved artifact, or keep it retired
+6. PNSIQ ingest vs Security-page promise: scope to "findings, never records" or change what ingest persists
+7. Verify scan continuity July–Aug in Supabase; check `chain_anchors.ots_confirmed`
+8. Source-verify the ~15 section-7A suspects (sovereign_cds first)
+
+### Buyer order (terminal product, decided 2026-08-17)
+1. **Political-risk / trade-credit underwriters + broker political-risk desks** — best fit for 30-day API credential; prospect list DOES NOT EXIST YET, build first
+2. **Sovereign wealth / institutional frontier-exposure risk desks** — parallel track
+3. **Defense/IC (SOFWERX/DIU map in SABIAN_DOD_DOSSIER_v2.md)** — after a quarter of ledger history + commercial logos; dossier numbers are stale (8 signals/47 countries era) and must be reconciled before ANY defense contact
+- NOT terminal buyers: healthcare, PNSIQ/wholesale, VRTX, education (they consume Sabian components, separate pipelines)
+
+### Offer (locked)
+30 days connected behind the terminal: API credential to their side, read everything the system reads. The front page is marketing only; the credential is the product. Custody tiers: Connected (read across the wire) / Resident (reader in their cloud account) / Sovereign (engine + model inside their perimeter, air-gap capable — never name Muse/Glimmer publicly).
+
+---
+
+## SESSION CHECKPOINT — 2026-08-16 (historical)
+
+### File locations
+- **Live copy:** `sabian_core/dashboard/landing.html` — this IS the deployed file. Edit here, push, it's live.
+- **Scratchpad working copy:** `C:\Users\user\AppData\Local\Temp\claude\C--Users-user\076a550f-566b-468a-914d-3f5c9cc9b276\scratchpad\sabian-terminal-v3.html` — session scratchpad, may be gone if session closed. Trust `dashboard/landing.html` as source of truth.
+
+### How the router works (critical — read before touching anything)
+All pages use `class="pv"`. The JS router adds/removes `class="active"` on hash change. **Using `class="page"` instead of `class="pv"` breaks everything — content shows on all pages simultaneously.**
+
+```js
+var pages = {
+  home:'p-home', data:'p-data', latent:'p-latent', solution:'p-solution',
+  verticals:'p-verticals', theoritic:'p-theoritic', agents:'p-agents',
+  access:'p-access', sovereign:'p-sovereign', security:'p-security', terminal:'p-terminal'
+}
+```
+
+Nav clicks set `location.hash`. Terminal nav uses `termNav(id)` with `scrollIntoView` — this bypasses the router because the terminal is a single scrollable page inside one hash, not multiple hash routes.
+
+### Current pages — 9 public nav tabs + 1 authorized terminal
+
+**Public (visible in nav):**
+1. **Home** — convergence streams canvas (5 industry streams flowing to one point). Hero: "World leaders in theoritic intelligence." Two buttons: "Request access →" and "See it live ↓" (anchors to Intelligence page).
+2. **Data** — fragmented data types. Gartner stats strip: 897 apps / 29% data used / 70% decisions without data / 40% wrong.
+3. **Latent** — "The answer is already in your data. Sabian Technology reads the combination." Silo argument established here once — never repeated on other pages.
+4. **Solution** (router key: `solution`) — "The world built the infrastructure. Sabian Technology reads what it cannot." Research stats: $725B / 897 apps / 29% / 70%. Connection paths: CRM OAuth / CSV / API key.
+5. **Verticals** (router key: `verticals`) — "Five sectors. One reading position." Sector-specific framing. No silo argument repeated.
+6. **Theoritic** (router key: `theoritic`) — Theoritic Intelligence definition. 2-column asymmetric layout: reactive+predictive stacked left (faded), Theoritic dominant right. Three-condition definition.
+7. **Agents** — "We deploy the agent. You receive the finding." Canvas: dispatch flow animation. Three phases: Mission Briefing / Deployment / Reporting. Six mission cards by vertical (Wholesale / Sovereign / Healthcare / Energy / Defense / Custom). Finding format shown as JSON. No source names, no trade secrets exposed.
+8. **Access** — "Access is by conversation." White paper direct download (green button). Contact button. No form — access is by conversation.
+9. **Security** — "We hold a read position. Not your data." Architecture canvas: 5 company vaults, Sabian Technology center, cyan read-only particles flowing inward, green finding pulses outward. What we do / what we never do. Four auth cards. Compliance row.
+
+**Authorized (hidden — not in nav):**
+10. **Terminal** (router key: `terminal`) — Internal authorized terminal. Background: `#020508`. Accessed via gate code `SABIAN-TERM` typed on the Access page input. On correct code: `location.hash='#terminal'`. Hero: "World leaders in theoritic intelligence." Terminal nav uses `termNav(id)` with `scrollIntoView` — does not interact with the main router. Sections scroll within the terminal page, not separate hash routes.
+
+**Parked (in router, not in nav):**
+- **Sovereign** (router key: `sovereign`) — exists in router, not yet built out. Reserved for sovereign wealth / government vertical front door.
+
+### Logo — critical fix applied 2026-08-16
+The logo was invisible in the terminal nav. Root cause: it had `class="lnd-logo"` which has `display:none` in the CSS (lnd-logo is the hidden source image processed by the canvas logo renderer).
+
+**Fix applied:**
+```html
+<!-- WRONG — invisible -->
+<img class="lnd-logo" ...>
+
+<!-- CORRECT — visible -->
+<img class="nav-logo-img" alt="Sabian" style="opacity:.85;width:clamp(70px,9vw,120px);height:auto;display:block">
+```
+
+`nav-logo-img` is the class used by the JS canvas processor to populate the visible logo. Always use `nav-logo-img` for logo images that should be visible. `lnd-logo` is the hidden source — never make it visible directly.
 
 ### White paper (separate artifact)
-Print-ready 5-page PDF-on-demand. Pages: Cover · The Bet ($725B / energy crisis) · The Gap (897/29%/40% agentic crisis / sovereign) · The Category (Theoritic Intelligence + 3-column ecosystem: Amazon built / Meta released / Sabian occupies) · The Window (18-36 months / Palantir validation). Save as PDF button using `window.print()`.
+Print-ready 5-page PDF-on-demand. Pages: Cover · The Bet ($725B / energy crisis) · The Gap (897/29%/40% agentic crisis / sovereign) · The Category (Theoritic Intelligence + 3-column ecosystem: Amazon built / Meta released / Sabian occupies) · The Window (18-36 months / Palantir validation). Save as PDF via `window.print()`.
 
 ### Design system
-CSS vars: `--bg:#040810 --panel:#070d1a --cyan:#00c8e8 --green:#00ff88 --warn:#ffaa00 --crit:#ff2244`
-Font: 'Courier New', Consolas, monospace
+```
+CSS vars:
+--bg:     #040810    (page background)
+--panel:  #070d1a    (card/panel surfaces)
+--cyan:   #00c8e8    (primary accent — links, highlights)
+--green:  #00ff88    (positive signals, CTAs)
+--warn:   #ffaa00    (caution)
+--crit:   #ff2244    (critical)
 
-### Hard rules for this project
-- **Company name:** Sabian Technology (never just "Sabian" alone in body copy)
-- **No em dashes anywhere** — use periods or line breaks
-- **No vendor names on site** — no Supabase, Muse, Glimmer, Paperclip, Llama etc.
-- **Keep technology broad** — no specific signal counts or domain numbers
-- **No silo argument repeated** — Data page establishes it once. Every other page assumes it landed.
-- **No three equal columns by default** — vary layouts: 2-col, 4-col, asymmetric
+Terminal background: #020508 (slightly darker than --bg)
+Font: 'Courier New', Consolas, monospace — everywhere, no exceptions
+```
+
+### Hard rules — do not break these
+- **Company name:** Sabian Technology. Never "Sabian" alone in body copy. Always the full name.
+- **No em dashes** — use periods or line breaks instead.
+- **No vendor names on site** — no Supabase, Muse, Paperclip, Llama, ElevenLabs, Railway etc.
+- **No specific signal counts or domain numbers** — keep technology broad.
+- **Silo argument lives on Data page only** — every other page assumes it landed. Never repeat.
+- **No three equal columns** — vary layouts: 2-col, 4-col, asymmetric. Three equal columns reads as template.
+- **Access page = button only** — no form, no input asking for email or name. "Access is by conversation."
+- **Intelligence/Theoritic page = canvas not text** — the definition is shown visually, not as a wall of text.
+- **Never guide user to contact in copy** — the contact is a button, not a sentence that says "contact us."
+- **Terminal gate code: `SABIAN-TERM`** — do not change or expose this in any public-facing copy.
 
 ### What still needs to be built
-- [ ] How clients connect — three paths (CRM OAuth, CSV, API key) with animated particles on Engine page
-- [x] AI agents page — DONE. 9th nav tab. Mission model: Sabian deploys agents FOR clients. Canvas dispatch flow animation. Six mission cards by vertical. No trade secrets exposed.
-- [ ] Historical depth (237 years, 1789 to present) — visual timeline on Intelligence page using V-Dem governance data
-- [ ] 3rd party reading story — "data your operation generates that no one told us to read" — most powerful theoritic intelligence demonstration. Keep source names off site.
-- [ ] "Sabian Technology" name audit — some pages may still say just "Sabian" in body copy
+- [ ] Historical depth — 237 years (1789 to present) visual timeline on Intelligence/Theoritic page using V-Dem governance data
+- [ ] 3rd party reading story — "data your operation generates that no one told us to read" — most powerful theoritic demonstration. Source names stay off site.
+- [ ] Sovereign page — front door for sovereign wealth / government vertical. Exists in router, not yet built.
+- [ ] "Sabian Technology" name audit — some pages may still say just "Sabian" in body copy. Sweep needed.
+- [ ] Restore Anthropic API key on Railway — key removed 2026-08-13 to stop billing. Briefing engine is dark until restored. See env vars section below for instructions.
 
 ---
 
