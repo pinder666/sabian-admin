@@ -14,6 +14,7 @@ const { getCountryLedger, getOpenObservations, getLedgerStats } = require('./obs
 const runConvergence = require('./convergence_engine.cjs');
 const runBriefing = require('./government_briefing.cjs');
 const { fetchPortCongestionData } = require('./port_congestion_feed.cjs');
+const pnsiqRoutes = require('./pnsiq_routes.cjs');
 
 // ── Load signal manifest at startup for source metadata ───────────────────────
 function cleanSourceName(raw) {
@@ -3244,6 +3245,9 @@ app.get('/api/explore/read', requireTier('buyer'), async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// ── PNSIQ connector routes (internal tier — Bearer SMART_SABIAN_API_KEY) ───────
+app.use('/api/pnsiq', requireTier('internal'), pnsiqRoutes);
 
 // ── Start ──────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {

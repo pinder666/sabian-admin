@@ -234,6 +234,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
     <a class="np" href="#agents">Agents</a>
+    <a class="np" href="#advisory">Advisory</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
       </div>
@@ -271,6 +272,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
     <a class="np" href="#agents">Agents</a>
+    <a class="np" href="#advisory">Advisory</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
       </div>
@@ -427,6 +429,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
     <a class="np" href="#agents">Agents</a>
+    <a class="np" href="#advisory">Advisory</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
       </div>
@@ -555,6 +558,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
     <a class="np" href="#agents">Agents</a>
+    <a class="np" href="#advisory">Advisory</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
       </div>
@@ -662,6 +666,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np on" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
     <a class="np" href="#agents">Agents</a>
+    <a class="np" href="#advisory">Advisory</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
       </div>
@@ -805,6 +810,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#verticals">Sectors</a>
     <a class="np on" href="#theoritic">Intelligence</a>
     <a class="np" href="#agents">Agents</a>
+    <a class="np" href="#advisory">Advisory</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
       </div>
@@ -1050,6 +1056,132 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
 </div>
 
 <!-- ════════════════════════════════════════
+     PAGE · ADVISORY
+════════════════════════════════════════ -->
+<div id="p-advisory" class="pv">
+<nav class="nav">
+  <a class="nav-brand" href="#home"><img class="nav-logo-img" alt="Sabian Technology"></a>
+  <span class="nav-sep"></span>
+  <div class="nav-pages">
+    <a class="np" href="#home">Home</a>
+    <a class="np" href="#data">Data</a>
+    <a class="np" href="#latent">Latent</a>
+    <a class="np" href="#solution">Engine</a>
+    <a class="np" href="#verticals">Sectors</a>
+    <a class="np" href="#theoritic">Intelligence</a>
+    <a class="np" href="#agents">Agents</a>
+    <a class="np on" href="#advisory">Advisory</a>
+    <a class="np" href="#access">Access</a>
+    <a class="np" href="#security">Security</a>
+  </div>
+  <div class="nav-r"><a href="#sovereign" style="font-family:'Courier New',Consolas,monospace;font-size:.42rem;letter-spacing:.22em;text-transform:uppercase;color:var(--warn);text-decoration:none;padding:7px 16px;border:1px solid rgba(255,170,0,.28);background:rgba(255,170,0,.05)">Access Terminal</a></div>
+</nav>
+
+<div class="pg-label cy">Advisory &middot; engaged intelligence</div>
+
+<!-- LIVE ENGAGEMENT SIMULATION CANVAS -->
+<div style="position:relative;width:100%;height:440px;background:var(--bg);overflow:hidden;border-bottom:1px solid var(--border)">
+  <canvas id="adv-canvas" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+  <div style="position:absolute;left:0;top:0;width:26%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 2rem;pointer-events:none;z-index:2">
+    <div style="font-size:.44rem;letter-spacing:.38em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.25rem;display:flex;align-items:center;gap:10px"><span style="display:inline-block;width:12px;height:1px;background:var(--cyan)"></span>Advisory</div>
+    <h1 style="font-size:clamp(1.35rem,2.8vw,2.1rem);color:var(--white);letter-spacing:.04em;line-height:1.2;margin-bottom:1rem">Sabian reads<br>your data.<br><span style="color:var(--green)">We tell you<br>what it says.</span></h1>
+    <p style="font-size:clamp(.72rem,1.05vw,.86rem);color:var(--text);line-height:2;letter-spacing:.02em">We connect to your operation. We read what the data cannot say about itself. We build what the finding requires. The simulation to the right is Sabian reading three live engagements.</p>
+  </div>
+</div>
+
+<!-- PAIN STAT STRIP -->
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);margin-top:1px">
+  <div style="background:var(--panel);padding:2rem 2rem;display:flex;flex-direction:column;gap:.5rem">
+    <div style="font-size:clamp(2.2rem,4vw,3rem);color:var(--crit);letter-spacing:.02em;font-weight:700">60%</div>
+    <div style="font-size:.78rem;color:var(--bright);letter-spacing:.04em">Of cost increases were visible in the data before they became P&amp;L events.</div>
+    <div style="font-size:.72rem;color:var(--text);line-height:1.8;margin-top:.25rem">No one was reading it. The signal existed. The system to read it did not. Sabian reads what no single team is watching simultaneously.</div>
+  </div>
+  <div style="background:var(--panel2);padding:2rem 2rem;display:flex;flex-direction:column;gap:.5rem;border-left:1px solid var(--border);border-right:1px solid var(--border)">
+    <div style="font-size:clamp(2.2rem,4vw,3rem);color:var(--warn);letter-spacing:.02em;font-weight:700">34 days</div>
+    <div style="font-size:.78rem;color:var(--bright);letter-spacing:.04em">Average lag between signal and executive decision. Any industry.</div>
+    <div style="font-size:.72rem;color:var(--text);line-height:1.8;margin-top:.25rem">The data existed. It moved through the wrong hands, at the wrong speed. Sabian puts the finding in front of the right person before the window closes.</div>
+  </div>
+  <div style="background:var(--panel);padding:2rem 2rem;display:flex;flex-direction:column;gap:.5rem">
+    <div style="font-size:clamp(2.2rem,4vw,3rem);color:var(--cyan);letter-spacing:.02em;font-weight:700">110 days</div>
+    <div style="font-size:.78rem;color:var(--bright);letter-spacing:.04em">Average lead time on market signals before a competitive event is confirmed.</div>
+    <div style="font-size:.72rem;color:var(--text);line-height:1.8;margin-top:.25rem">The signal is there 110 days before the news. Sabian reads it at Day 1. The organisations that act at Day 1 are not lucky. They have a different intelligence layer.</div>
+  </div>
+</div>
+
+<!-- HOW AN ENGAGEMENT WORKS -->
+<div class="pg-label d" style="margin-top:1px">How an engagement works</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);margin-top:1px">
+  <div style="background:var(--panel);padding:2rem 2rem">
+    <div style="font-size:.44rem;letter-spacing:.32em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">01 &middot; Assessment</div>
+    <div style="font-size:1.1rem;color:var(--white);letter-spacing:.04em;margin-bottom:.75rem">We read first.</div>
+    <p style="font-size:.82rem;color:var(--text);line-height:1.95">Sabian connects to your data. Not a questionnaire. Not a workshop. We read the operation as it exists today. At the end of the assessment you receive one structured briefing: what your data says, what it is costing you, and what needs to happen. Fixed scope. Fixed time.</p>
+  </div>
+  <div style="background:var(--panel2);padding:2rem 2rem;border-left:1px solid var(--border);border-right:1px solid var(--border)">
+    <div style="font-size:.44rem;letter-spacing:.32em;text-transform:uppercase;color:var(--warn);margin-bottom:1rem">02 &middot; Deployment</div>
+    <div style="font-size:1.1rem;color:var(--white);letter-spacing:.04em;margin-bottom:.75rem">Agents go to work.</div>
+    <p style="font-size:.82rem;color:var(--text);line-height:1.95">Where the finding requires a standing watch, we deploy agents. They monitor continuously. They do not produce dashboards. They produce findings when something real happens. Sabian Technology operates the infrastructure. You receive the result.</p>
+  </div>
+  <div style="background:var(--panel);padding:2rem 2rem">
+    <div style="font-size:.44rem;letter-spacing:.32em;text-transform:uppercase;color:var(--green);margin-bottom:1rem">03 &middot; Advisory</div>
+    <div style="font-size:1.1rem;color:var(--white);letter-spacing:.04em;margin-bottom:.75rem">We stay in position.</div>
+    <p style="font-size:.82rem;color:var(--text);line-height:1.95">The standing relationship keeps Sabian Technology oriented to your operation. As new questions surface, the next agent deploys. As your operation changes, the intelligence layer changes with it. The engagement does not end when the assessment does.</p>
+  </div>
+</div>
+
+<!-- ENGAGEMENT CASES -->
+<div class="pg-label d" style="margin-top:1px">What engagements look like</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);margin-top:1px">
+  <div style="background:var(--panel);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Operations &middot; Assessment</div>
+    <div style="font-size:.9rem;color:var(--bright);letter-spacing:.02em;line-height:1.65;margin-bottom:.85rem">"We know we have exposure somewhere. We have no idea where. Read the operation and tell us exactly what it says."</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.95">Sabian connects to the data. Assessment delivers: the revenue vectors leaking silently, the vendor cost absorption nobody flagged, the accounts at the edge of recovery, and the operational pattern building for months before it becomes a P&L event. One briefing. All of it. Nothing withheld.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Market position &middot; Standing agents</div>
+    <div style="font-size:.9rem;color:var(--bright);letter-spacing:.02em;line-height:1.65;margin-bottom:.85rem">"Watch the signals that precede what happens to our market. Tell us before it reaches our numbers."</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.95">Sabian deploys agents across the relevant signal layer. Regulatory filings, competitor movement, macro indicators, sector-specific correlations. The agent reports when a pattern forms. Not when the event is confirmed. 110-day average lead. The finding arrives while there is still a window to act.</div>
+  </div>
+  <div style="background:var(--panel);padding:1.75rem 1.75rem">
+    <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Executive &middot; Standing advisory</div>
+    <div style="font-size:.9rem;color:var(--bright);letter-spacing:.02em;line-height:1.65;margin-bottom:.85rem">"I need to know what I do not know. Not a dashboard. An advisor that reads everything and tells me what matters."</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.95">The standing advisory relationship keeps Sabian Technology oriented to the operation continuously. As the organisation changes, the intelligence layer changes with it. The finding reaches the executive before it reaches anyone else. That timing difference is the product.</div>
+  </div>
+</div>
+
+<!-- WHAT WE BRING -->
+<div style="display:grid;grid-template-columns:1fr 1.8fr;gap:1px;background:var(--border);margin-top:1px">
+  <div style="background:var(--panel);padding:2.5rem 2rem;display:flex;flex-direction:column;justify-content:center">
+    <div style="font-size:.44rem;letter-spacing:.32em;text-transform:uppercase;color:var(--green);margin-bottom:1rem">What no other firm brings</div>
+    <h2 style="font-size:clamp(1.35rem,2.4vw,1.9rem);color:var(--white);letter-spacing:.04em;line-height:1.3;margin-bottom:1rem">The intelligence<br>already exists.<br><span style="color:var(--cyan)">Nobody else<br>can read it.</span></h2>
+    <p style="font-size:.82rem;color:var(--text);line-height:2">Every organisation generates data that describes exactly what is happening and why. Most of it is never read. Sabian is the only system built to read across the whole of it simultaneously. That is what we bring to an engagement. Not a methodology. A reading.</p>
+  </div>
+  <div style="background:var(--bg);padding:2.5rem 2.5rem;display:flex;flex-direction:column;gap:1.75rem;justify-content:center">
+    <div style="border-left:2px solid var(--cyan);padding-left:1.5rem">
+      <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);margin-bottom:.5rem">Depth</div>
+      <div style="font-size:.86rem;color:var(--bright);line-height:1.75">237 years. Governance, trade, conflict, and economic data from 1789 to present. When we say this pattern has a precedent, we can show you the precedent and the exact conditions that preceded it. No other advisory firm operates with this depth.</div>
+    </div>
+    <div style="border-left:2px solid var(--warn);padding-left:1.5rem">
+      <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--warn);margin-bottom:.5rem">Cross-entity intelligence</div>
+      <div style="font-size:.86rem;color:var(--bright);line-height:1.75">Sabian reads across every engagement simultaneously. No client data crosses to any other client. But the patterns that emerge from all of them feed one intelligence layer. Every engagement makes the next one sharper. That compounding is the moat.</div>
+    </div>
+    <div style="border-left:2px solid var(--green);padding-left:1.5rem">
+      <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green);margin-bottom:.5rem">One finding. Not a report.</div>
+      <div style="font-size:.86rem;color:var(--bright);line-height:1.75">We do not produce slide decks. We do not produce summaries with caveats. We deliver one finding, the verified consequence, and the one action. That is the entire output. The engagement is structured around decisions, not deliverables.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem;background:var(--panel);border-top:1px solid var(--border);text-align:center;gap:1.5rem">
+  <div style="font-size:.44rem;letter-spacing:.38em;text-transform:uppercase;color:var(--dim)">Sabian Technology &middot; Advisory</div>
+  <div style="font-size:clamp(1.4rem,2.6vw,2rem);color:var(--white);letter-spacing:.04em">Engagements begin with a conversation.</div>
+  <a href="#access" style="font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,200,232,.3);padding:12px 32px;background:rgba(0,200,232,.05)">Begin a conversation &rarr;</a>
+</div>
+
+<div class="foot"><span>Sabian Global Inc. &middot; sabian.ai</span><a href="mailto:support@sabian.ai">support@sabian.ai</a></div>
+</div>
+
+<!-- ════════════════════════════════════════
      PAGE 8 · ACCESS
 ════════════════════════════════════════ -->
 <div id="p-access" class="pv">
@@ -1102,6 +1234,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
     <a class="np" href="#verticals">Sectors</a>
     <a class="np" href="#theoritic">Intelligence</a>
     <a class="np" href="#agents">Agents</a>
+    <a class="np" href="#advisory">Advisory</a>
     <a class="np" href="#access">Access</a>
     <a class="np" href="#security">Security</a>
       </div>
@@ -1549,7 +1682,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
 
 <script>
 /* ══ ROUTER ══ */
-var pages={home:'p-home',data:'p-data',latent:'p-latent',solution:'p-solution',verticals:'p-verticals',theoritic:'p-theoritic',agents:'p-agents',access:'p-access',sovereign:'p-sovereign',security:'p-security',terminal:'p-terminal'};
+var pages={home:'p-home',data:'p-data',latent:'p-latent',solution:'p-solution',verticals:'p-verticals',theoritic:'p-theoritic',agents:'p-agents',advisory:'p-advisory',access:'p-access',sovereign:'p-sovereign',security:'p-security',terminal:'p-terminal'};
 var started={};
 function navigate(hash){
   var pg=pages[hash]||'p-home';
@@ -1558,6 +1691,7 @@ function navigate(hash){
   if(pg==='p-solution'&&!started.sol){started.sol=true;setTimeout(startRev,5000);}
   if(pg==='p-verticals'&&!started.vert){started.vert=true;}
   if(pg==='p-agents'&&!started.agt){started.agt=true;drawAgents();}
+  if(pg==='p-advisory'&&!started.adv){started.adv=true;drawAdvisory();}
   if(pg==='p-sovereign'&&!started.sov){started.sov=true;}
   if(pg==='p-security'&&!started.sec){started.sec=true;drawSecIso();}
 }
@@ -2642,6 +2776,158 @@ function drawAgents(){
     ctx.textAlign='left';
   }
   setInterval(function(){if(!document.getElementById('p-agents').classList.contains('active'))return;spawnTask();},380);
+  frame();
+}
+
+function drawAdvisory(){
+  var c=document.getElementById('adv-canvas');
+  if(!c)return;
+  var par=c.parentElement;
+  c.width=par.offsetWidth;c.height=par.offsetHeight;
+  var ctx=c.getContext('2d'),W=c.width,H=c.height;
+
+  var sectors=[
+    {name:'ENTERPRISE · OPERATIONS',col:'#00c8e8',
+     streams:['ACCOUNTS RECEIVABLE','COST CENTRES','VENDOR DATA','CREDITS / RETURNS','WORKFLOW'],
+     finding:'$2.1M AR — 90+ days overdue.\n14 accounts. All approved same channel.\n6 already unrecoverable.',
+     consequence:'CONSEQUENCE: Recovery window on remaining 8 accounts: 34 days. Visible in data from Day 1.'},
+    {name:'MARKET-FACING ORGANISATION',col:'#00ff88',
+     streams:['REVENUE STREAMS','MARGIN DATA','COMPETITOR SIGNALS','PRICING','DEMAND PATTERN'],
+     finding:'Regulatory signal in 3 adjacent markets.\nHistorical correlation to price compression:\n0.84 confidence. Average lead: 110 days.',
+     consequence:'CONSEQUENCE: Pricing window is 60 days before compression reaches your market.'},
+    {name:'EXECUTIVE LEADERSHIP',col:'#ffaa00',
+     streams:['P&L SIGNALS','SUPPLIER CONTRACTS','COST CENTRES','OPERATIONS','MACRO CONTEXT'],
+     finding:'Service margin compressed 12% over 8 months.\n6 vendors, same category. Absorption silent.\nData shows it from Month 1. No one flagged it.',
+     consequence:'CONSEQUENCE: $840k cumulative exposure. Recoverable this quarter if action starts now.'}
+  ];
+
+  var cur=0,sFrames=0,SLIM=340;
+  var pts=[];
+  var typed='',tCons='',fIdx=0,cIdx=0,tAcc=0,phase='finding';
+
+  function reset(){pts=[];typed='';tCons='';fIdx=0;cIdx=0;tAcc=0;phase='finding';sFrames=0;}
+
+  function spawn(){
+    var s=sectors[cur],N=s.streams.length;
+    var lane=Math.floor(Math.random()*N);
+    var lH=H*0.66/N;
+    pts.push({x:W*0.285,y:H*0.17+lane*lH+lH*0.5+(Math.random()-0.5)*5,
+      tx:W*0.42,spd:1.6+Math.random()*2,r:1.6+Math.random()*2,
+      a:0.65+Math.random()*0.3,out:false,otx:0,oty:0});
+  }
+
+  var rid=null;
+  function frame(){
+    rid=requestAnimationFrame(frame);
+    var el=document.getElementById('p-advisory');
+    if(!el||!el.classList.contains('active')){cancelAnimationFrame(rid);return;}
+    var s=sectors[cur],ac=s.col;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#040810';ctx.fillRect(0,0,W,H);
+    sFrames++;
+    if(sFrames>SLIM){cur=(cur+1)%sectors.length;reset();s=sectors[cur];ac=s.col;}
+
+    // SECTOR BADGE
+    ctx.font='8px "Courier New"';ctx.fillStyle=ac;ctx.globalAlpha=0.6;
+    ctx.fillText('ACTIVE ENGAGEMENT',W*0.63,18);
+    ctx.font='bold 12px "Courier New"';ctx.fillStyle='#fff';ctx.globalAlpha=0.9;
+    ctx.fillText(s.name,W*0.63,34);ctx.globalAlpha=1;
+
+    // STREAM LANES (right of hero text overlay, from ~28% of width)
+    var N=s.streams.length,sTop=H*0.17,sH=H*0.66,lH=sH/N;
+    ctx.font='8.5px "Courier New"';
+    for(var i=0;i<N;i++){
+      var ly=sTop+i*lH+lH*0.5;
+      ctx.beginPath();ctx.moveTo(W*0.285,ly);ctx.lineTo(W*0.4,ly);
+      ctx.strokeStyle=ac;ctx.globalAlpha=0.07;ctx.lineWidth=1;ctx.stroke();
+      ctx.fillStyle=ac;ctx.globalAlpha=0.28;ctx.fillText(s.streams[i],W*0.285,ly-6);
+    }ctx.globalAlpha=1;
+
+    // SABIAN NODE
+    var t=Date.now()/1000,ncx=W*0.455,ncy=H*0.5,nr=28;
+    for(var ri=0;ri<3;ri++){
+      var rr=nr+14+ri*14+((t*18+ri*50)%42);
+      var ra=Math.max(0,0.2-(rr-nr)/100);
+      ctx.beginPath();ctx.arc(ncx,ncy,rr,0,Math.PI*2);
+      ctx.strokeStyle=ac;ctx.globalAlpha=ra;ctx.lineWidth=1;ctx.stroke();
+    }ctx.globalAlpha=1;
+    var g=ctx.createRadialGradient(ncx,ncy,0,ncx,ncy,nr);
+    g.addColorStop(0,ac+'55');g.addColorStop(1,ac+'0a');
+    ctx.beginPath();ctx.arc(ncx,ncy,nr,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+    ctx.strokeStyle=ac;ctx.globalAlpha=0.6;ctx.lineWidth=1.5;ctx.stroke();ctx.globalAlpha=1;
+    ctx.font='bold 9px "Courier New"';ctx.fillStyle=ac;ctx.textAlign='center';
+    ctx.fillText('SABIAN',ncx,ncy-3);
+    var states=['READING','CROSS-REF','PATTERN','FINDING'];
+    ctx.font='7.5px "Courier New"';ctx.fillStyle='#fff';ctx.globalAlpha=0.45;
+    ctx.fillText(states[Math.floor(t*0.55)%4],ncx,ncy+10);
+    ctx.textAlign='left';ctx.globalAlpha=1;
+
+    // DIVIDER
+    ctx.beginPath();ctx.moveTo(W*0.55,H*0.06);ctx.lineTo(W*0.55,H*0.93);
+    ctx.strokeStyle=ac;ctx.globalAlpha=0.1;ctx.lineWidth=1;ctx.stroke();ctx.globalAlpha=1;
+
+    // FINDING OUTPUT PANEL
+    var fx=W*0.585,fy=H*0.09;
+    ctx.font='8px "Courier New"';ctx.fillStyle='#00ff88';ctx.globalAlpha=0.55;
+    ctx.fillText('FINDING OUTPUT',fx,fy);ctx.globalAlpha=1;
+
+    var fullF=s.finding,fullC=s.consequence;
+    if(phase==='finding'){
+      tAcc+=1.3;
+      while(tAcc>=1&&fIdx<fullF.length){typed+=fullF[fIdx];fIdx++;tAcc--;}
+      if(fIdx>=fullF.length){phase='consequence';tAcc=0;}
+    } else if(phase==='consequence'){
+      tAcc+=1.1;
+      while(tAcc>=1&&cIdx<fullC.length){tCons+=fullC[cIdx];cIdx++;tAcc--;}
+    }
+
+    var ty=fy+18;
+    var flines=typed.split('\n');
+    ctx.font='11px "Courier New"';ctx.fillStyle='#c8d8e8';
+    flines.forEach(function(ln){ctx.fillText(ln,fx,ty);ty+=19;});
+    if(tCons){
+      ty+=8;
+      // wrap consequence text
+      var words=tCons.split(' '),line='',maxW=W*0.37;
+      ctx.font='bold 10px "Courier New"';ctx.fillStyle=ac;ctx.globalAlpha=0.9;
+      words.forEach(function(w){
+        var test=line+(line?' ':'')+w;
+        if(ctx.measureText(test).width>maxW&&line){ctx.fillText(line,fx,ty);ty+=17;line=w;}
+        else{line=test;}
+      });
+      if(line){ctx.fillText(line,fx,ty);}
+      ctx.globalAlpha=1;
+    }
+    // cursor blink
+    if(phase!=='hold'){
+      var blink=Math.floor(t*2)%2===0;
+      if(blink){
+        var lastLine=flines[flines.length-1]||'';
+        ctx.font='11px "Courier New"';
+        ctx.fillStyle=ac;ctx.fillRect(fx+ctx.measureText(lastLine).width,fy+18+(flines.length-1)*19-13,5,12);
+      }
+    }
+
+    // PARTICLES
+    if(pts.length<50&&Math.random()<0.38)spawn();
+    pts=pts.filter(function(p){return p.a>0.02;});
+    pts.forEach(function(p){
+      if(!p.out){
+        p.x+=p.spd;
+        if(p.x>=p.tx){
+          p.out=true;p.x=ncx;p.y=ncy;
+          p.otx=W*0.565;p.oty=fy+15+Math.random()*H*0.55;
+          p.spd=2+Math.random()*1.8;p.a=0.75;
+        }
+      } else {
+        var ddx=p.otx-p.x,ddy=p.oty-p.y,dd=Math.sqrt(ddx*ddx+ddy*ddy);
+        if(dd<4){p.a-=0.04;}else{p.x+=ddx/dd*p.spd;p.y+=ddy/dd*p.spd;}
+      }
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.out?'#00ff88':ac;ctx.globalAlpha=p.a*0.8;ctx.fill();ctx.globalAlpha=1;
+    });
+  }
+  setInterval(function(){if(!document.getElementById('p-advisory').classList.contains('active'))return;spawn();},360);
   frame();
 }
 
