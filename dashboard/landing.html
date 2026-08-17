@@ -1134,7 +1134,7 @@ body{background:var(--bg);font-family:var(--f);color:var(--text);-webkit-font-sm
   <div style="background:var(--panel);padding:1.75rem 1.75rem">
     <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Operations &middot; Assessment</div>
     <div style="font-size:.9rem;color:var(--bright);letter-spacing:.02em;line-height:1.65;margin-bottom:.85rem">"We know we have exposure somewhere. We have no idea where. Read the operation and tell us exactly what it says."</div>
-    <div style="font-size:.74rem;color:var(--text);line-height:1.95">Sabian connects to the data. Assessment delivers: the revenue vectors leaking silently, the vendor cost absorption nobody flagged, the accounts at the edge of recovery, and the operational pattern building for months before it becomes a P&L event. One briefing. All of it. Nothing withheld.</div>
+    <div style="font-size:.74rem;color:var(--text);line-height:1.95">Sabian connects to the data. Assessment delivers: the revenue vectors leaking silently, the vendor cost absorption that has been compounding for months, the enterprise accounts whose payment behaviour broke from contract six months ago, and the operational pattern that will become a P&L event next quarter. One briefing. All of it. Nothing withheld.</div>
   </div>
   <div style="background:var(--panel);padding:1.75rem 1.75rem">
     <div style="font-size:.44rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem">Market position &middot; Standing agents</div>
@@ -2789,16 +2789,16 @@ function drawAdvisory(){
   var sectors=[
     {name:'ENTERPRISE · OPERATIONS',col:'#00c8e8',
      streams:['ACCOUNTS RECEIVABLE','COST CENTRES','VENDOR DATA','CREDITS / RETURNS','WORKFLOW'],
-     finding:'$2.1M AR — 90+ days overdue.\n14 accounts. All approved same channel.\n6 already unrecoverable.',
-     consequence:'CONSEQUENCE: Recovery window on remaining 8 accounts: 34 days. Visible in data from Day 1.'},
+     finding:'Account flagged internally as "strong relationship."\nPayment behaviour broke from contract at Month 4.\nNo team saw all the data. Sabian read it on Day 1.',
+     consequence:'CONSEQUENCE: The organisation was not structured to see it. Sabian is.'},
     {name:'MARKET-FACING ORGANISATION',col:'#00ff88',
      streams:['REVENUE STREAMS','MARGIN DATA','COMPETITOR SIGNALS','PRICING','DEMAND PATTERN'],
-     finding:'Regulatory signal in 3 adjacent markets.\nHistorical correlation to price compression:\n0.84 confidence. Average lead: 110 days.',
-     consequence:'CONSEQUENCE: Pricing window is 60 days before compression reaches your market.'},
+     finding:'Signal appeared in adjacent market.\n3 prior instances — same pattern, same lead time.\nAnalysis team flagged it at Day 87. Sabian at Day 3.',
+     consequence:'CONSEQUENCE: 84-day advantage is not luck. It is a different intelligence layer.'},
     {name:'EXECUTIVE LEADERSHIP',col:'#ffaa00',
      streams:['P&L SIGNALS','SUPPLIER CONTRACTS','COST CENTRES','OPERATIONS','MACRO CONTEXT'],
-     finding:'Service margin compressed 12% over 8 months.\n6 vendors, same category. Absorption silent.\nData shows it from Month 1. No one flagged it.',
-     consequence:'CONSEQUENCE: $840k cumulative exposure. Recoverable this quarter if action starts now.'}
+     finding:'18% margin compression over 11 months.\n9 contracts, same approval chain. No single person\nsaw all 9. Pattern visible in data from Month 1.',
+     consequence:'CONSEQUENCE: The structure of the organisation made it invisible. Sabian has no blind spots.'}
   ];
 
   var cur=0,sFrames=0,SLIM=340;
