@@ -2789,16 +2789,16 @@ function drawAdvisory(){
   var sectors=[
     {name:'ENTERPRISE · OPERATIONS',col:'#00c8e8',
      streams:['ACCOUNTS RECEIVABLE','COST CENTRES','VENDOR DATA','CREDITS / RETURNS','WORKFLOW'],
-     finding:'$47M in AR — 90+ days overdue.\n3 enterprise accounts. One flagged internally\nas "strong relationship." Pattern broke 6 months ago.',
-     consequence:'CONSEQUENCE: Payment behaviour diverged from contract at Month 4. Data showed it. Nobody read it.'},
+     finding:'Account flagged internally as "strong relationship."\nPayment behaviour broke from contract at Month 4.\nNo team saw all the data. Sabian read it on Day 1.',
+     consequence:'CONSEQUENCE: The organisation was not structured to see it. Sabian is.'},
     {name:'MARKET-FACING ORGANISATION',col:'#00ff88',
      streams:['REVENUE STREAMS','MARGIN DATA','COMPETITOR SIGNALS','PRICING','DEMAND PATTERN'],
-     finding:'Regulatory signal in 3 adjacent markets.\nHistorical correlation to price compression:\n0.84 confidence. Average lead: 110 days.',
-     consequence:'CONSEQUENCE: Pricing window is 60 days before compression reaches your market. Competitors will move first.'},
+     finding:'Signal appeared in adjacent market.\n3 prior instances — same pattern, same lead time.\nAnalysis team flagged it at Day 87. Sabian at Day 3.',
+     consequence:'CONSEQUENCE: 84-day advantage is not luck. It is a different intelligence layer.'},
     {name:'EXECUTIVE LEADERSHIP',col:'#ffaa00',
      streams:['P&L SIGNALS','SUPPLIER CONTRACTS','COST CENTRES','OPERATIONS','MACRO CONTEXT'],
-     finding:'Operating margin compressed 18% over 11 months.\n9 vendor contracts, same category, same approval chain.\n$12M cumulative. Visible in data from Month 1.',
-     consequence:'CONSEQUENCE: $12M absorbed silently. Recoverable this quarter if renegotiation starts now.'}
+     finding:'18% margin compression over 11 months.\n9 contracts, same approval chain. No single person\nsaw all 9. Pattern visible in data from Month 1.',
+     consequence:'CONSEQUENCE: The structure of the organisation made it invisible. Sabian has no blind spots.'}
   ];
 
   var cur=0,sFrames=0,SLIM=340;
