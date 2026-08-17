@@ -1100,7 +1100,7 @@ async function scoreFloodRisk(country) {
 async function scorePortCongestion(country) {
   try {
     const result = await fetchPortCongestionData(country);
-    if (result.score === null) return { name: 'Port Congestion', score: null, label: result.reason || 'No data', trend: 'unknown', source: 'GoComet' };
+    if (typeof result?.score !== 'number' || !isFinite(result.score)) return { name: 'Port Congestion', score: null, label: result?.reason || 'No per-country port read', trend: 'unknown', source: 'GoComet' };
     if (result.reason === 'landlocked') return { name: 'Port Congestion', score: 0, label: 'Landlocked — no port exposure', trend: 'stable', source: 'GoComet' };
     return {
       name: 'Port Congestion',
@@ -1496,6 +1496,10 @@ async function runConvergence(country, date) {
       { weight: WEIGHTS.prediction_market,      ...predictionMarketResult }
     ].map(s => ({
       ...s,
+      // Hard guard: a signal score is a finite number or null. Anything else
+      // (undefined, NaN from a broken feed) becomes null so it cannot poison
+      // the aggregate arithmetic. One bad feed must never blank the scan.
+      score: (typeof s.score === 'number' && isFinite(s.score)) ? s.score : null,
       freshness_window_hrs: FRESHNESS_WINDOWS[s.name]?.hours  || null,
       freshness_cadence:    FRESHNESS_WINDOWS[s.name]?.cadence || null,
       live: s.score !== null
