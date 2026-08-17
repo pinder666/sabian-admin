@@ -3004,8 +3004,8 @@ function drawSecIso(){
   });
   var lastRead='',lastReport='';
   function frame(){
-    if(!document.getElementById('p-security').classList.contains('active'))return;
     requestAnimationFrame(frame);
+    if(!document.getElementById('p-security').classList.contains('active'))return;
     ctx.clearRect(0,0,w,h);
     var now=Date.now();
     // Column headers
